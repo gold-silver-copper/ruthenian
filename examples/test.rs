@@ -1,6 +1,7 @@
 use ruthenian::*;
 
 fn main() {
+    /*
     let guessed_noun = ISV::decline_noun("czjelovjek", &Case::Gen, &Number::Singular);
     println!("{:#?}", guessed_noun.0);
     let guessed_noun = ISV::decline_noun("djenj", &Case::Gen, &Number::Singular);
@@ -43,11 +44,19 @@ fn main() {
         true,
     );
     println!("{:#?}", guessed_adj);
+    */
 
-    let verbiki = ["uczitj", "bratj", "spatj", "obritj", "datj", "kuszatj"];
+    let verbiki = [
+        "uczitj",
+        "bratj",
+        "vernutj",
+        "risovatj",
+        "plevatj",
+        "tancevatj",
+    ];
 
     for verbik in verbiki {
-        let guessed_verb = ISV::conjugate_verb(
+        let guessed_verb = RUTH::conjugate_verb(
             verbik,
             &Person::First,
             &Number::Singular,
@@ -55,7 +64,7 @@ fn main() {
             &Tense::Present,
         );
         println!("{:#?}", guessed_verb);
-        let guessed_verb = ISV::conjugate_verb(
+        let guessed_verb = RUTH::conjugate_verb(
             verbik,
             &Person::Second,
             &Number::Singular,
@@ -63,7 +72,7 @@ fn main() {
             &Tense::Present,
         );
         println!("{:#?}", guessed_verb);
-        let guessed_verb = ISV::conjugate_verb(
+        let guessed_verb = RUTH::conjugate_verb(
             verbik,
             &Person::Third,
             &Number::Singular,
@@ -71,7 +80,7 @@ fn main() {
             &Tense::Present,
         );
         println!("{:#?}", guessed_verb);
-        let guessed_verb = ISV::conjugate_verb(
+        let guessed_verb = RUTH::conjugate_verb(
             verbik,
             &Person::First,
             &Number::Plural,
@@ -79,7 +88,7 @@ fn main() {
             &Tense::Present,
         );
         println!("{:#?}", guessed_verb);
-        let guessed_verb = ISV::conjugate_verb(
+        let guessed_verb = RUTH::conjugate_verb(
             verbik,
             &Person::Second,
             &Number::Plural,
@@ -87,7 +96,7 @@ fn main() {
             &Tense::Present,
         );
         println!("{:#?}", guessed_verb);
-        let guessed_verb = ISV::conjugate_verb(
+        let guessed_verb = RUTH::conjugate_verb(
             verbik,
             &Person::Third,
             &Number::Plural,
@@ -97,11 +106,11 @@ fn main() {
         println!("{:#?}", guessed_verb);
     }
 
-    let lik = ISV::l_participle("buditi", &Gender::Feminine, &Number::Singular);
+    let lik = RUTH::l_participle("buditi", &Gender::Feminine, &Number::Singular);
     println!("{:#?}", lik);
 
-    println!("{:#?}", ISVUTILS::string_without_last_n("daj", 2));
-    let guessed_noun = ISV::decline_noun("sluga", &Case::Ins, &Number::Singular);
+    //println!("{:#?}", ISVUTILS::string_without_last_n("daj", 2));
+    let guessed_noun = RUTH::decline_noun("sluga", &Case::Ins, &Number::Singular);
     println!("{:#?}", guessed_noun.0);
 
     //println!("{:#?}", ISV::feminine_nouns);

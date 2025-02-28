@@ -1,3 +1,5 @@
+use crate::grammar::*;
+
 #[derive(Debug, PartialEq, Clone)]
 pub struct CaseEndings {
     pub nom_sg: &'static str,
@@ -13,6 +15,29 @@ pub struct CaseEndings {
     pub loc_pl: &'static str,
     pub dat_pl: &'static str,
     pub ins_pl: &'static str,
+}
+
+impl CaseEndings {
+    pub fn ending(&self, case: &Case, number: &Number) -> &str {
+        match number {
+            Number::Singular => match case {
+                Case::Nom => self.nom_sg,
+                Case::Acc => self.acc_sg,
+                Case::Gen => self.gen_sg,
+                Case::Loc => self.loc_sg,
+                Case::Dat => self.dat_sg,
+                Case::Ins => self.ins_sg,
+            },
+            Number::Plural => match case {
+                Case::Nom => self.nom_pl,
+                Case::Acc => self.acc_pl,
+                Case::Gen => self.gen_pl,
+                Case::Loc => self.loc_pl,
+                Case::Dat => self.dat_pl,
+                Case::Ins => self.ins_pl,
+            },
+        }
+    }
 }
 
 pub const ANIMATE_HARD_ENDINGS: CaseEndings = CaseEndings {
@@ -107,12 +132,12 @@ pub const NEUTER_SOFT_ENDINGS: CaseEndings = CaseEndings {
     loc_pl: "ah",  // Locative Plural
 };
 pub const FEMININE_HARD_ENDINGS: CaseEndings = CaseEndings {
-    nom_sg: "a",   // Nominative Singular
-    acc_sg: "u",   // Accusative Singular
-    gen_sg: "y",   // Genitive Singular
-    dat_sg: "je",  // Dative Singular
-    ins_sg: "oju", // Instrumental Singular
-    loc_sg: "je",  // Locative Singular
+    nom_sg: "a",  // Nominative Singular
+    acc_sg: "u",  // Accusative Singular
+    gen_sg: "y",  // Genitive Singular
+    dat_sg: "je", // Dative Singular
+    ins_sg: "oj", // Instrumental Singular
+    loc_sg: "je", // Locative Singular
 
     nom_pl: "y",   // Nominative Plural
     acc_pl: "y",   // Accusative Plural
@@ -122,12 +147,12 @@ pub const FEMININE_HARD_ENDINGS: CaseEndings = CaseEndings {
     loc_pl: "ah",  // Locative Plural
 };
 pub const FEMININE_SOFT_ENDINGS: CaseEndings = CaseEndings {
-    nom_sg: "a",   // Nominative Singular
-    acc_sg: "u",   // Accusative Singular
-    gen_sg: "e",   // Genitive Singular
-    dat_sg: "i",   // Dative Singular
-    ins_sg: "eju", // Instrumental Singular
-    loc_sg: "i",   // Locative Singular
+    nom_sg: "a",  // Nominative Singular
+    acc_sg: "u",  // Accusative Singular
+    gen_sg: "i",  // Genitive Singular
+    dat_sg: "i",  // Dative Singular
+    ins_sg: "ej", // Instrumental Singular
+    loc_sg: "i",  // Locative Singular
 
     nom_pl: "e",   // Nominative Plural
     acc_pl: "e",   // Accusative Plural
