@@ -51,7 +51,7 @@ fn main() {
         "bratj",
         "vernutj",
         "risovatj",
-        "plevatj",
+        "pljevatj",
         "tancevatj",
     ];
 

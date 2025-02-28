@@ -7,42 +7,6 @@ use crate::verb_endings::*;
 impl RUTH {
     pub fn get_present_tense_stem(infinitive: &str) -> (String, Conjugation) {
         let infinitive_stem = RUTH::get_infinitive_stem(infinitive);
-        let irregular = irregular_present_stem(infinitive);
-
-        if irregular != "" {
-            if irregular.ends_with("me") {
-                return (
-                    RUTHUTILS::replace_last_occurence(&irregular, "me", "m"),
-                    Conjugation::First,
-                );
-            }
-            if irregular.ends_with("ne") {
-                return (
-                    RUTHUTILS::replace_last_occurence(&irregular, "ne", "n"),
-                    Conjugation::First,
-                );
-            }
-
-            if irregular.ends_with("je") {
-                return (
-                    RUTHUTILS::replace_last_occurence(&irregular, "je", "j"),
-                    Conjugation::First,
-                );
-            }
-
-            if irregular.ends_with("e") {
-                return (
-                    RUTHUTILS::replace_last_occurence(&irregular, "e", ""),
-                    Conjugation::First,
-                );
-            }
-            if irregular.ends_with("i") {
-                return (
-                    RUTHUTILS::replace_last_occurence(&irregular, "i", ""),
-                    Conjugation::Second,
-                );
-            }
-        }
 
         if RUTHUTILS::is_consonant(&RUTHUTILS::last_in_stringslice(&infinitive_stem)) {
             (infinitive_stem, Conjugation::First)
@@ -52,6 +16,21 @@ impl RUTH {
             (infinitive.replace("evatj", "uj"), Conjugation::First)
         } else if infinitive.ends_with("nutj") {
             (infinitive.replace("nutj", "n"), Conjugation::First)
+        } else if infinitive.ends_with("zzatj") {
+            (
+                RUTHUTILS::replace_last_occurence(infinitive, "zzatj", "zz"),
+                Conjugation::Second,
+            )
+        } else if infinitive.ends_with("szatj") {
+            (
+                RUTHUTILS::replace_last_occurence(infinitive, "szatj", "sz"),
+                Conjugation::Second,
+            )
+        } else if infinitive.ends_with("czatj") {
+            (
+                RUTHUTILS::replace_last_occurence(infinitive, "czatj", "cz"),
+                Conjugation::Second,
+            )
         } else if infinitive.ends_with("atj") {
             (
                 RUTHUTILS::replace_last_occurence(infinitive, "atj", "aj"),
