@@ -106,7 +106,7 @@ fn main() {
         println!("{:#?}", guessed_verb);
     }
 
-    let lik = RUTH::l_participle("buditi", &Gender::Feminine, &Number::Singular);
+    let lik = RUTH::l_participle("buditj", &Gender::Feminine, &Number::Singular);
     println!("{:#?}", lik);
 
     //println!("{:#?}", ISVUTILS::string_without_last_n("daj", 2));
