@@ -1,0 +1,9 @@
+make webextension for convert cyrillic to ruthenian
+make site with translated texts
+state insignia like flag
+complete dictionary
+presented as a new language with borrowing from all slavic and old slavic languages
+systematic borrowing from latin, greek, english
+derivation of ruthenian from old slavonic
+
+
