@@ -33,6 +33,9 @@ impl RUTHUTILS {
     pub fn is_vowel(ch: &char) -> bool {
         RUTHENIAN_VOWELS.contains(&ch) || RUSSIAN_VOWELS.contains(&ch)
     }
+    pub fn last_char(s: &str) -> Option<char> {
+        s.chars().rev().next()
+    }
 
     pub fn is_consonant(ch: &char) -> bool {
         !RUTHUTILS::is_vowel(ch)
