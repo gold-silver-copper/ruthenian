@@ -217,6 +217,12 @@ pub fn russian_to_ruthenian(input: &str) -> String {
                     result.push_str("z'z");
                     chars.next();
                 }
+
+                Some('ж') => {
+                    result.push_str("z'zz");
+                    chars.next();
+                }
+
                 _ => result.push_str("z"),
             },
 
@@ -235,6 +241,12 @@ pub fn russian_to_ruthenian(input: &str) -> String {
                     result.push_str("s'z");
                     chars.next();
                 }
+
+                Some('ж') => {
+                    result.push_str("s'zz");
+                    chars.next();
+                }
+
                 _ => result.push_str("s"),
             },
 
@@ -273,23 +285,13 @@ pub fn ruthenian_to_russian(input: &str) -> String {
                     if RUSSIAN_CONSONANTS.contains(&charik) {
                         if let Some(&next) = chars.peek() {
                             // Only add soft sign if next char is NOT a vowel (meaning standalone j)
-                            if !matches!(
-                                next,
-                                'a' | 'A'
-                                    | 'e'
-                                    | 'E'
-                                    | 'o'
-                                    | 'O'
-                                    | 'u'
-                                    | 'U'
-                                    | 'i'
-                                    | 'I'
-                                    | 'y'
-                                    | 'Y'
-                            ) {
+                            if !matches!(next, 'a' | 'A' | 'e' | 'E' | 'o' | 'O' | 'u' | 'U') {
                                 result.push('ь');
                                 soft_sign_added = true;
                             }
+                        } else {
+                            result.push('ь');
+                            soft_sign_added = true;
                         }
                     }
                 }
