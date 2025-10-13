@@ -68,81 +68,10 @@ pub const RUTHENIAN_RUSSIAN: &[(&str, &str)] = &[
     ("y", "ы"),
     ("z", "з"),
     ("'", "ъ"),
-    // Disambiguation patterns (s, c, z intersections)
-    ("z'z", "зз"),
-    ("c'z", "цз"),
-    ("s'z", "сз"),
-    ("z'sz", "зш"),
-    ("s'sz", "сш"),
-    ("c'sz", "цш"),
-    ("z'cz", "зч"),
-    ("s'cz", "сч"),
-    ("c'cz", "цч"),
-    ("z'zz", "зж"),
-    ("s'zz", "сж"),
-    ("c'zz", "цж"),
-    ("zz'zz", "жж"),
-    ("sz'zz", "шж"),
-    ("cz'zz", "чж"),
-    ("j'", "й"),
-    // Uppercase disambiguation patterns
-    ("Z'Z", "ЗЗ"),
-    ("C'Z", "ЦЗ"),
-    ("S'Z", "СЗ"),
-    ("Z'SZ", "ЗШ"),
-    ("S'SZ", "СШ"),
-    ("C'SZ", "ЦШ"),
-    ("Z'CZ", "ЗЧ"),
-    ("S'CZ", "СЧ"),
-    ("C'CZ", "ЦЧ"),
-    ("Z'ZZ", "ЗЖ"),
-    ("S'ZZ", "СЖ"),
-    ("C'ZZ", "ЦЖ"),
-    ("ZZ'ZZ", "ЖЖ"),
-    ("SZ'ZZ", "ШЖ"),
-    ("CZ'ZZ", "ЧЖ"),
 ];
 
 // Russian to Ruthenian mapping
 pub const RUSSIAN_RUTHENIAN: &[(&str, &str)] = &[
-    // Reverse disambiguations
-    ("зз", "z'z"),
-    ("цз", "c'z"),
-    ("сз", "s'z"),
-    ("зш", "z'sz"),
-    ("сш", "s'sz"),
-    ("цш", "c'sz"),
-    ("зч", "z'cz"),
-    ("сч", "s'cz"),
-    ("цч", "c'cz"),
-    ("зж", "z'zz"),
-    ("сж", "s'zz"),
-    ("цж", "c'zz"),
-    ("жж", "zz'zz"),
-    ("шж", "sz'zz"),
-    ("чж", "cz'zz"),
-    ("йа", "j'a"),
-    ("йо", "j'o"),
-    ("йу", "j'u"),
-    ("йи", "j'i"),
-    ("йы", "j'y"),
-    // Uppercase reverse disambiguations
-    ("ЗЗ", "Z'Z"),
-    ("ЦЗ", "C'Z"),
-    ("СЗ", "S'Z"),
-    ("ЗШ", "Z'SZ"),
-    ("СШ", "S'SZ"),
-    ("ЦШ", "C'SZ"),
-    ("ЗЧ", "Z'CZ"),
-    ("СЧ", "S'CZ"),
-    ("ЦЧ", "C'CZ"),
-    ("ЗЖ", "Z'ZZ"),
-    ("СЖ", "S'ZZ"),
-    ("ЦЖ", "C'ZZ"),
-    ("ЖЖ", "ZZ'ZZ"),
-    ("ШЖ", "SZ'ZZ"),
-    ("ЧЖ", "CZ'ZZ"),
-    // Uppercase
     ("Щ", "Szcz"),
     ("Ш", "Sz"),
     ("Ч", "Cz"),
@@ -211,140 +140,114 @@ pub const RUSSIAN_RUTHENIAN: &[(&str, &str)] = &[
     ("з", "z"),
     ("ъ", "'"),
 ];
+
 // Russian vowels
-pub const RUSSIAN_VOWELS: &[&str] = &[
-    "А", "Э", "И", "О", "У", "Ы", "Я", "Е", "Ё", "Ю", "а", "э", "и", "о", "у", "ы", "я", "е", "ё",
-    "ю",
+pub const RUSSIAN_VOWELS: &[char] = &[
+    'А', 'Э', 'И', 'О', 'У', 'Ы', 'Я', 'Е', 'Ё', 'Ю', 'а', 'э', 'и', 'о', 'у', 'ы', 'я', 'е', 'ё',
+    'ю',
 ];
 
 // Russian consonants
-pub const RUSSIAN_CONSONANTS: &[&str] = &[
-    "Б", "Ц", "Ч", "Д", "Ф", "Г", "Х", "Й", "К", "Л", "М", "Н", "П", "Р", "С", "Ш", "Щ", "Т", "В",
-    "З", "Ж", "б", "ц", "ч", "д", "ф", "г", "х", "й", "к", "л", "м", "н", "п", "р", "с", "ш", "щ",
-    "т", "в", "з", "ж",
+pub const RUSSIAN_CONSONANTS: &[char] = &[
+    'Б', 'Ц', 'Ч', 'Д', 'Ф', 'Г', 'Х', 'Й', 'К', 'Л', 'М', 'Н', 'П', 'Р', 'С', 'Ш', 'Щ', 'Т', 'В',
+    'З', 'Ж', 'б', 'ц', 'ч', 'д', 'ф', 'г', 'х', 'й', 'к', 'л', 'м', 'н', 'п', 'р', 'с', 'ш', 'щ',
+    'т', 'в', 'з', 'ж',
 ];
 
-// Ruthenian vowels
-pub const RUTHENIAN_VOWELS: &[&str] = &[
-    "A", "E", "I", "O", "U", "Y", "JA", "JE", "JO", "JU", "a", "e", "i", "o", "u", "y", "ja", "je",
-    "jo", "ju",
+// Ruthenian vowels (no clusters like "JA" etc.)
+pub const RUTHENIAN_VOWELS: &[char] = &['A', 'E', 'I', 'O', 'U', 'Y', 'a', 'e', 'i', 'o', 'u', 'y'];
+
+// Ruthenian consonants (no clusters like "SZ", "CZ", "ZZ", etc.)
+pub const RUTHENIAN_CONSONANTS: &[char] = &[
+    'B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'R', 'S', 'T', 'V', 'Z', 'b', 'c',
+    'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'r', 's', 't', 'v', 'z',
 ];
 
-// Ruthenian consonants
-pub const RUTHENIAN_CONSONANTS: &[&str] = &[
-    "B", "C", "CZ", "D", "F", "G", "H", "J", "K", "L", "M", "N", "P", "R", "S", "SZ", "SZCZ", "T",
-    "V", "Z", "ZZ", "b", "c", "cz", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "r", "s",
-    "sz", "szcz", "t", "v", "z", "zz",
-];
-
+/// Context-aware transliteration from Russian → Ruthenian
 pub fn russian_to_ruthenian(input: &str) -> String {
+    let chars: Vec<char> = input.chars().collect();
     let mut result = String::new();
-    let bytes = input.as_bytes();
+    let len = chars.len();
     let mut i = 0;
 
-    while i < bytes.len() {
+    while i < len {
+        // Try to match the longest possible substring (8 down to 1)
         let mut matched = false;
-
-        // Try matching progressively longer sequences (5, 4, 3, 2, 1 chars)
-        for len in (1..=8).rev() {
-            if i + len <= bytes.len() {
-                // Get a string slice of the input
-                if let Ok(substr) = std::str::from_utf8(&bytes[i..i + len]) {
-                    // Try to match in the lookup table
-                    for (russian, ruthenian) in RUSSIAN_RUTHENIAN {
-                        if *russian == substr {
-                            result.push_str(ruthenian);
-                            i += len;
-                            matched = true;
-                            break;
-                        }
-                    }
-
-                    if matched {
-                        break;
-                    }
+        for l in (1..=8).rev() {
+            if i + l <= len {
+                let segment: String = chars[i..i + l].iter().collect();
+                if let Some(&(_, ruth)) = RUSSIAN_RUTHENIAN.iter().find(|&&(k, _)| k == segment) {
+                    result.push_str(ruth);
+                    i += l; // Skip all matched characters
+                    matched = true;
+                    break;
                 }
             }
         }
 
-        // If no match found, just copy the character
         if !matched {
-            if let Ok(ch_str) = std::str::from_utf8(&bytes[i..i + 1]) {
-                result.push_str(ch_str);
-                i += 1;
-            } else {
-                // Skip invalid UTF-8
-                i += 1;
-            }
+            // If no rule matched, fallback to copying char as-is
+            result.push(chars[i]);
+            i += 1;
         }
     }
 
     result
 }
+
+/// Context-aware transliteration from Ruthenian → Russian
 pub fn ruthenian_to_russian(input: &str) -> String {
+    let chars: Vec<char> = input.chars().collect();
     let mut result = String::new();
-    let bytes = input.as_bytes();
+    let len = chars.len();
     let mut i = 0;
 
-    while i < bytes.len() {
+    while i < len {
+        let curr = chars[i];
+
+        // --- Context-sensitive handling for `'j'` ---
+        if curr == 'j' || curr == 'J' {
+            // Look at the previous character in the input
+            let prev_is_consonant = if i > 0 {
+                RUTHUTILS::is_consonant(&chars[i - 1])
+            } else {
+                false
+            };
+
+            if prev_is_consonant {
+                // After consonant: soft sign
+                result.push(if curr == 'J' { 'Ь' } else { 'ь' });
+            } else {
+                // At start or after vowel: short i
+                result.push(if curr == 'J' { 'Й' } else { 'й' });
+            }
+            i += 1;
+            continue;
+        }
+
+        // --- Try to match longest substring in table ---
         let mut matched = false;
-
-        // Try matching progressively longer sequences (5, 4, 3, 2, 1 chars)
-        for len in (1..=5).rev() {
-            if i + len <= bytes.len() {
-                // Get a string slice of the input
-                if let Ok(substr) = std::str::from_utf8(&bytes[i..i + len]) {
-                    // Special handling for 'j' or 'J' when it's a single character
-                    if len == 1 && (substr == "j" || substr == "J") {
-                        // Check if previous character in result is a consonant
-                        if let Some(last_char) = result.chars().last() {
-                            if RUTHUTILS::is_consonant(&last_char.to_string()) {
-                                // This is a soft sign
-                                result.push(if substr == "J" { 'Ь' } else { 'ь' });
-                                i += len;
-                                matched = true;
-                                break;
-                            } else {
-                                // This is a soft sign
-                                result.push(if substr == "J" { 'Й' } else { 'й' });
-                                i += len;
-                                matched = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    // Try to match in the lookup table
-                    for (ruthenian, russian) in RUTHENIAN_RUSSIAN {
-                        if *ruthenian == substr {
-                            result.push_str(russian);
-                            i += len;
-                            matched = true;
-                            break;
-                        }
-                    }
-
-                    if matched {
-                        break;
-                    }
+        for l in (1..=8).rev() {
+            if i + l <= len {
+                let segment: String = chars[i..i + l].iter().collect();
+                if let Some(&(_, rus)) = RUTHENIAN_RUSSIAN.iter().find(|&&(k, _)| k == segment) {
+                    result.push_str(rus);
+                    i += l; // Skip all matched characters
+                    matched = true;
+                    break;
                 }
             }
         }
 
-        // If no match found, just copy the character
         if !matched {
-            if let Ok(ch_str) = std::str::from_utf8(&bytes[i..i + 1]) {
-                result.push_str(ch_str);
-                i += 1;
-            } else {
-                // Skip invalid UTF-8
-                i += 1;
-            }
+            result.push(curr);
+            i += 1;
         }
     }
 
     result
 }
+
 pub fn test_roundtrip_from_file(filename: &str) -> std::io::Result<()> {
     use std::fs::File;
     use std::io::{BufRead, BufReader};

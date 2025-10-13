@@ -30,11 +30,11 @@ impl RUTHUTILS {
         }
         None
     }
-    pub fn is_vowel(ch: &str) -> bool {
+    pub fn is_vowel(ch: &char) -> bool {
         RUTHENIAN_VOWELS.contains(&ch) || RUSSIAN_VOWELS.contains(&ch)
     }
 
-    pub fn is_consonant(ch: &str) -> bool {
+    pub fn is_consonant(ch: &char) -> bool {
         !RUTHUTILS::is_vowel(ch)
     }
 
