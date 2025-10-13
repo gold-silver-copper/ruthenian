@@ -7,6 +7,13 @@ impl RUTHUTILS {
         let split_pos = word.char_indices().nth_back(n - 1).unwrap_or((0, 'a')).0;
         word[split_pos..].into()
     }
+    pub fn pair_match(word: &str, listik: &[(&str, &str)]) -> Option<String> {
+        listik
+            .iter()
+            .find(|(sing, _)| *sing == word)
+            .map(|(_, plur)| plur.to_string())
+    }
+
     pub fn replace_last_occurence(input: &str, pattern: &str, replacement: &str) -> String {
         if let Some(last_index) = input.rfind(pattern) {
             let (before_last, _after_last) = input.split_at(last_index);
@@ -15,55 +22,27 @@ impl RUTHUTILS {
             input.into()
         }
     }
-    pub fn iotation_merge(root: &str, suffix: &str) -> String {
-        if suffix.chars().nth(0) == Some('j') {
-            for entry in J_MERGE_CHARS {
-                if root.ends_with(entry) {
-                    let new_root = match *entry {
-                        "st" => RUTHUTILS::replace_last_occurence(root, entry, "szc"),
-                        "zd" => RUTHUTILS::replace_last_occurence(root, entry, "zzdzz"),
-                        "sk" => RUTHUTILS::replace_last_occurence(root, entry, "szcz"),
-                        "zg" => RUTHUTILS::replace_last_occurence(root, entry, "zzzz"),
-                        "s" => RUTHUTILS::replace_last_occurence(root, entry, "sz"),
-                        //  "z" => RUTHUTILS::replace_last_occurence(root, entry, "zz"),
-                        "t" => RUTHUTILS::replace_last_occurence(root, entry, "c"),
-                        "d" => RUTHUTILS::replace_last_occurence(root, entry, "dzz"),
-                        "k" => RUTHUTILS::replace_last_occurence(root, entry, "cz"),
-                        "g" => RUTHUTILS::replace_last_occurence(root, entry, "zz"),
-                        "h" => RUTHUTILS::replace_last_occurence(root, entry, "sz"),
-                        _ => root.to_string(),
-                    };
-                    let new_suffix = suffix.get(1..).unwrap();
-                    return format!("{new_root}{new_suffix}");
-                }
+    pub fn iter_replace_last(word: &str, pairs: &[(&str, &str)]) -> Option<String> {
+        for (sing, plur) in pairs {
+            if word.ends_with(sing) {
+                return Some(RUTHUTILS::replace_last_occurence(word, sing, plur));
             }
-
-            format!("{root}{suffix}")
-        } else {
-            format!("{root}{suffix}")
         }
+        None
+    }
+    pub fn is_vowel(ch: &str) -> bool {
+        RUTHENIAN_VOWELS.contains(&ch) || RUSSIAN_VOWELS.contains(&ch)
     }
 
-    pub fn is_vowel(c: &char) -> bool {
-        VOWELS.contains(c)
+    pub fn is_consonant(ch: &str) -> bool {
+        !RUTHUTILS::is_vowel(ch)
     }
 
-    pub fn ends_with_soft_consonant(word: &str) -> bool {
-        RUTHUTILS::is_soft_consonant(&RUTHUTILS::last_in_stringslice(word))
-    }
-
-    pub fn is_hard_consonant(c: &char) -> bool {
-        HARD_CONSONANTS.contains(c)
-    }
-
-    pub fn is_soft_consonant(c: &char) -> bool {
-        !RUTHUTILS::is_hard_consonant(c) && !RUTHUTILS::is_vowel(c)
-    }
-    pub fn last_in_stringslice(s: &str) -> char {
-        s.to_string().pop().unwrap_or(' ')
-    }
-    pub fn is_consonant(c: &char) -> bool {
-        !RUTHUTILS::is_vowel(c)
+    pub fn starts_with_uppercase(word: &str) -> bool {
+        word.chars()
+            .next()
+            .map(|c| c.is_uppercase())
+            .unwrap_or(false)
     }
     pub fn string_without_last_n(s: &str, n: i64) -> String {
         let mut stringik = s.to_string();
