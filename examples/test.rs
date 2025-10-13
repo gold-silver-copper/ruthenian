@@ -1,119 +1,32 @@
 use ruthenian::*;
 
+
 fn main() {
-    /*
-    let guessed_noun = ISV::decline_noun("czjelovjek", &Case::Gen, &Number::Singular);
-    println!("{:#?}", guessed_noun.0);
-    let guessed_noun = ISV::decline_noun("djenj", &Case::Gen, &Number::Singular);
-    println!("{:#?}", guessed_noun.0);
-    let guessed_noun = ISV::decline_noun("vjesna", &Case::Gen, &Number::Singular);
-    println!("{:#?}", guessed_noun.0);
-    let guessed_noun = ISV::decline_noun("dom", &Case::Gen, &Number::Singular);
-    println!("{:#?}", guessed_noun.0);
-    let guessed_noun = ISV::decline_noun("muzz", &Case::Gen, &Number::Singular);
-    println!("{:#?}", guessed_noun.0);
-    let guessed_adj = ISV::decline_adj(
-        "samyj",
-        &Case::Gen,
-        &Number::Singular,
-        &Gender::Masculine,
-        true,
-    );
-    println!("{:#?}", guessed_adj);
-    let guessed_adj = ISV::decline_adj(
-        "samyj",
-        &Case::Gen,
-        &Number::Singular,
-        &Gender::Masculine,
-        true,
-    );
-    println!("{:#?}", guessed_adj);
-    let guessed_adj = ISV::decline_adj(
-        "teplyj",
-        &Case::Gen,
-        &Number::Singular,
-        &Gender::Neuter,
-        true,
-    );
-    println!("{:#?}", guessed_adj);
-    let guessed_adj = ISV::decline_adj(
-        "nizkij",
-        &Case::Gen,
-        &Number::Singular,
-        &Gender::Feminine,
-        true,
-    );
-    println!("{:#?}", guessed_adj);
-    */
-
-    let verbiki = [
-        "uczitj",
-        "bratj",
-        "vernutj",
-        "risovatj",
-        "pljevatj",
-        "tancevatj",
-    ];
-
-    for verbik in verbiki {
-        let guessed_verb = RUTH::conjugate_verb(
-            verbik,
-            &Person::First,
-            &Number::Singular,
-            &Gender::Feminine,
-            &Tense::Present,
-        );
-        println!("{:#?}", guessed_verb);
-        let guessed_verb = RUTH::conjugate_verb(
-            verbik,
-            &Person::Second,
-            &Number::Singular,
-            &Gender::Feminine,
-            &Tense::Present,
-        );
-        println!("{:#?}", guessed_verb);
-        let guessed_verb = RUTH::conjugate_verb(
-            verbik,
-            &Person::Third,
-            &Number::Singular,
-            &Gender::Feminine,
-            &Tense::Present,
-        );
-        println!("{:#?}", guessed_verb);
-        let guessed_verb = RUTH::conjugate_verb(
-            verbik,
-            &Person::First,
-            &Number::Plural,
-            &Gender::Feminine,
-            &Tense::Present,
-        );
-        println!("{:#?}", guessed_verb);
-        let guessed_verb = RUTH::conjugate_verb(
-            verbik,
-            &Person::Second,
-            &Number::Plural,
-            &Gender::Feminine,
-            &Tense::Present,
-        );
-        println!("{:#?}", guessed_verb);
-        let guessed_verb = RUTH::conjugate_verb(
-            verbik,
-            &Person::Third,
-            &Number::Plural,
-            &Gender::Feminine,
-            &Tense::Present,
-        );
-        println!("{:#?}", guessed_verb);
-    }
-
-    let lik = RUTH::l_participle("buditj", &Gender::Feminine, &Number::Singular);
-    println!("{:#?}", lik);
-
-    //println!("{:#?}", ISVUTILS::string_without_last_n("daj", 2));
-    let guessed_noun = RUTH::decline_noun("sluga", &Case::Ins, &Number::Singular);
-    println!("{:#?}", guessed_noun.0);
-
-    //println!("{:#?}", ISV::feminine_nouns);
-    // println!("{:#?}", ISV::neuter_nouns);
-    //Output: "hibiscorum"
+    println!("=== Russian to Ruthenian ===");
+    let russian1 = "Привет мир!";
+    println!("{} -> {}", russian1, russian_to_ruthenian(russian1));
+    
+    let russian2 = "Здравствуйте!";
+    println!("{} -> {}", russian2, russian_to_ruthenian(russian2));
+    
+    let russian3 = "Щука жарко";
+    println!("{} -> {}", russian3, russian_to_ruthenian(russian3));
+    
+    println!("\n=== Ruthenian to Russian ===");
+    let ruthenian1 = "Pryvjet mir!";
+    println!("{} -> {}", ruthenian1, ruthenian_to_russian(ruthenian1));
+    
+    let ruthenian2 ="Zdravstvujtje!";
+    println!("{} -> {}", ruthenian2, ruthenian_to_russian(ruthenian2));
+    
+    let ruthenian3 = "Szczuka zzarko";
+    println!("{} -> {}", ruthenian3, ruthenian_to_russian(ruthenian3));
+    
+    println!("\n=== Round-trip test ===");
+    let original = "Борщ";
+    let to_ruthenian = russian_to_ruthenian(original);
+    let back_to_russian = ruthenian_to_russian(&to_ruthenian);
+    println!("Original: {}", original);
+    println!("To Ruthenian: {}", to_ruthenian);
+    println!("Back to Russian: {}", back_to_russian);
 }
