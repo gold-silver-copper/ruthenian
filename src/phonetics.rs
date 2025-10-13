@@ -227,7 +227,10 @@ pub fn russian_to_ruthenian(input: &str) -> String {
             },
 
             'и' => result.push_str("i"),
-            'й' | 'ь' => result.push_str("j"),
+            'й' => result.push_str("j"),
+
+            'ь' => result.push_str("j"),
+
             'к' => result.push_str("k"),
             'л' => result.push_str("l"),
             'м' => result.push_str("m"),
@@ -254,7 +257,21 @@ pub fn russian_to_ruthenian(input: &str) -> String {
             'у' => result.push_str("u"),
             'ф' => result.push_str("f"),
             'х' => result.push_str("h"),
-            'ц' => result.push_str("c"),
+
+            'ц' => match chars.peek() {
+                Some('з') => {
+                    result.push_str("c'z");
+                    chars.next();
+                }
+
+                Some('ж') => {
+                    result.push_str("c'zz");
+                    chars.next();
+                }
+
+                _ => result.push_str("c"),
+            },
+
             'ч' => result.push_str("cz"),
             'ш' => result.push_str("sz"),
             'щ' => result.push_str("szcz"),
