@@ -58,11 +58,7 @@ pub fn russian_to_ruthenian(input: &str) -> String {
             'Ь' => result.push('J'),
 
             'Й' => {
-                if matches!(chars.peek(), Some(next) if RUSSIAN_VOWELS.contains(next)) {
-                    result.push_str("J'");
-                } else {
-                    result.push('J');
-                }
+                result.push('J');
             }
 
             'ъ' => result.push('\''),
@@ -122,11 +118,7 @@ pub fn russian_to_ruthenian(input: &str) -> String {
             'ц' => handle_z_lookahead(&mut result, &mut chars, "c"),
 
             'й' => {
-                if matches!(chars.peek(), Some(next) if RUSSIAN_VOWELS.contains(next)) {
-                    result.push_str("j'");
-                } else {
-                    result.push('j');
-                }
+                result.push('j');
             }
 
             // Preserve non-Cyrillic chars
@@ -145,13 +137,6 @@ pub fn ruthenian_to_russian(input: &str) -> String {
         match ch {
             'j' | 'J' => {
                 let is_upper = ch == 'J';
-
-                // Check for j' -> й
-                if matches!(chars.peek(), Some('\'')) {
-                    result.push(if is_upper { 'Й' } else { 'й' });
-                    chars.next();
-                    continue;
-                }
 
                 // Add soft sign after consonants if needed
                 if let Some(last) = RUTHUTILS::last_char(&result) {
@@ -275,20 +260,24 @@ pub fn ruthenian_to_russian(input: &str) -> String {
     result
 }
 pub fn test_roundtrip_from_file_ru(filename: &str) -> std::io::Result<()> {
-    use std::fs::File;
-    use std::io::{BufRead, BufReader};
+    use std::fs::{File, OpenOptions};
+    use std::io::{BufRead, BufReader, Write};
 
     let file = File::open(filename)?;
     let reader = BufReader::new(file);
-
     let mut line_num = 0;
     let mut failed_lines = Vec::new();
+
+    // Prepare the output file (overwrite each run)
+    let mut log_file = OpenOptions::new()
+        .create(true)
+        .write(true)
+        .truncate(true)
+        .open("failed_roundtrips_ru.txt")?;
 
     for line in reader.lines() {
         line_num += 1;
         let original = line?;
-
-        // Skip empty lines
         if original.trim().is_empty() {
             continue;
         }
@@ -303,12 +292,24 @@ pub fn test_roundtrip_from_file_ru(filename: &str) -> std::io::Result<()> {
                 ruthenian.clone(),
                 back_to_russian.clone(),
             ));
+
+            writeln!(log_file, "Line {}", line_num)?;
+            writeln!(log_file, "Original:  {}", original)?;
+            writeln!(log_file, "Ruthenian: {}", ruthenian)?;
+            writeln!(log_file, "Back:      {}", back_to_russian)?;
+            writeln!(log_file, "---\n")?;
+
             println!("❌ Line {}: Round-trip failed!", line_num);
             println!("   Original:  {}", original);
             println!("   Ruthenian: {}", ruthenian);
             println!("   Back:      {}", back_to_russian);
             println!();
-            panic!();
+
+            for (i, (a, b)) in original.chars().zip(back_to_russian.chars()).enumerate() {
+                if a != b {
+                    println!("Difference at position {}: {:?} != {:?}", i, a, b);
+                }
+            }
         } else {
             println!("✓ Line {}: OK", line_num);
         }
@@ -322,7 +323,7 @@ pub fn test_roundtrip_from_file_ru(filename: &str) -> std::io::Result<()> {
         println!("✅ All lines passed! The transliteration is one-to-one.");
     } else {
         println!("❌ Some lines failed the round-trip test.");
-        println!("\nFailed lines:");
+        println!("(See 'failed_roundtrips.txt' for details.)\n");
         for (num, orig, rut, back) in failed_lines {
             println!("  Line {}: '{}' -> '{}' -> '{}'", num, orig, rut, back);
         }

@@ -3,25 +3,31 @@ use crate::utils::*;
 use std::iter::Peekable;
 use std::str::Chars;
 pub fn test_roundtrip_from_file_ukr(filename: &str) -> std::io::Result<()> {
-    use std::fs::File;
-    use std::io::{BufRead, BufReader};
+    use std::fs::{File, OpenOptions};
+    use std::io::{BufRead, BufReader, Write};
 
     let file = File::open(filename)?;
     let reader = BufReader::new(file);
     let mut line_num = 0;
     let mut failed_lines = Vec::new();
 
+    // Prepare the output file (overwrite each run)
+    let mut log_file = OpenOptions::new()
+        .create(true)
+        .write(true)
+        .truncate(true)
+        .open("failed_roundtrips_ukr.txt")?;
+
     for line in reader.lines() {
         line_num += 1;
         let raw_line = line?;
 
-        // Filter out Latin alphabet characters (a-z, A-Z)
+        // Remove Latin letters
         let original: String = raw_line
             .chars()
             .filter(|c| !c.is_ascii_alphabetic())
             .collect();
 
-        // Skip empty lines after filtering
         if original.trim().is_empty() {
             continue;
         }
@@ -36,19 +42,25 @@ pub fn test_roundtrip_from_file_ukr(filename: &str) -> std::io::Result<()> {
                 ruthenian.clone(),
                 back_to_ukrainian.clone(),
             ));
+
+            // Write failed line details to the log
+            writeln!(log_file, "Line {}", line_num)?;
+            writeln!(log_file, "Original:  {}", original)?;
+            writeln!(log_file, "Ruthenian: {}", ruthenian)?;
+            writeln!(log_file, "Back:      {}", back_to_ukrainian)?;
+            writeln!(log_file, "---\n")?;
+
             println!("❌ Line {}: Round-trip failed!", line_num);
             println!("   Original:  {}", original);
             println!("   Ruthenian: {}", ruthenian);
             println!("   Back:      {}", back_to_ukrainian);
+            println!();
 
             for (i, (a, b)) in original.chars().zip(back_to_ukrainian.chars()).enumerate() {
                 if a != b {
                     println!("Difference at position {}: {:?} != {:?}", i, a, b);
                 }
             }
-
-            panic!();
-            println!();
         } else {
             println!("✓ Line {}: OK", line_num);
         }
@@ -62,7 +74,7 @@ pub fn test_roundtrip_from_file_ukr(filename: &str) -> std::io::Result<()> {
         println!("✅ All lines passed! The transliteration is one-to-one.");
     } else {
         println!("❌ Some lines failed the round-trip test.");
-        println!("\nFailed lines:");
+        println!("(See 'failed_roundtrips_ukr.txt' for details.)\n");
         for (num, orig, rut, back) in failed_lines {
             println!("  Line {}: '{}' -> '{}' -> '{}'", num, orig, rut, back);
         }

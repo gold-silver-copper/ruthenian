@@ -1,0 +1,18 @@
+Line 12695
+Original:  4 И послушался Венадад царя Асы и послал военачальников, которые _были_ у него, против городов Израильских, и они опустошили Ийон и Дан и Авелмаим и все запасы в городах Неффалимовых.
+Ruthenian: 4 I posluszalsja Vjenadad carja Asy i poslal vojenaczaljnikov, kotoryje _byli_ u njego, protiv gorodov Izrailjskih, i oni opustoszili Ijon i Dan i Avjelmaim i vsje zapasy v gorodah Njeffalimovyh.
+Back:      4 И послушался Венадад царя Асы и послал военачальников, которые _были_ у него, против городов Израильских, и они опустошили Иён и Дан и Авелмаим и все запасы в городах Неффалимовых.
+---
+
+Line 13444
+Original:  3 сын Амарии, сын Азарии, сын Марайофа,
+Ruthenian: 3 syn Amarii, syn Azarii, syn Marajofa,
+Back:      3 сын Амарии, сын Азарии, сын Мараёфа,
+---
+
+Line 31725
+Original:  2 сына Ахии, сына Финееса, сына Илия, сына Амарии, сына Асиела, сына Мерайофа, сына Арна, сына Уззия, сына Ворифа, сына Авишуя, сына Финееса, сына Елеазара,
+Ruthenian: 2 syna Ahii, syna Finjejesa, syna Ilija, syna Amarii, syna Asijela, syna Mjerajofa, syna Arna, syna Uz'zija, syna Vorifa, syna Aviszuja, syna Finjejesa, syna Jeljeazara,
+Back:      2 сына Ахии, сына Финееса, сына Илия, сына Амарии, сына Асиела, сына Мераёфа, сына Арна, сына Уззия, сына Ворифа, сына Авишуя, сына Финееса, сына Елеазара,
+---
+

@@ -1,0 +1,30 @@
+Line 14705
+Original:  І встав Ісус рано вранці, і вони рушили з Ситтіму, та й прйшли аж до Йорда́ну він та всі Ізраїлеві сини́. І переночува́ли вони там перше, ніж перейшли.
+Ruthenian: I vstav Isus rano vranci, i vony ruszyly z Syttimu, ta j prjszly azz do J'ordánu vin ta vsi Izrajilevi syný. I perenoczuvály vony tam persze, nizz perejszly.
+Back:      І встав Ісус рано вранці, і вони рушили з Ситтіму, та й прьшли аж до Йорда́ну він та всі Ізраїлеві сини́. І переночува́ли вони там перше, ніж перейшли.
+---
+
+Line 21063
+Original:  36 Їг'ал, син Натанів, з Цови; Бані ґадянин,
+Ruthenian: 36 Jig'al, syn Nataniv, z Covy; Bani g'adjanyn,
+Back:      36 Їґал, син Натанів, з Цови; Бані ґадянин,
+---
+
+Line 21391
+Original:  38 І сказав Шім'ї до царя: „Добра це річ. Як наказав пан мій цар, так зробить раб твій'.“ І сидів Шім'ї в Єрусалимі багато днів.
+Ruthenian: 38 I skazav Szim'ji do carja: „Dobra ce ricz. Jak nakazav pan mij car, tak zrobytj rab tvij'.“ I sydiv Szim'ji v Jerusalymi bagato dniv.
+Back:      38 І сказав Шім'ї до царя: „Добра це річ. Як наказав пан мій цар, так зробить раб твій.“ І сидів Шім'ї в Єрусалимі багато днів.
+---
+
+Line 30493
+Original:  14 І сказав цар, щоб було зро́блено так, — і був да́ний зако́н у Сузах, а десятоьх Га́манових синів повісили.
+Ruthenian: 14 I skazav car, szczob bulo zróbleno tak, — i buv dányj zakón u Suzah, a desjatojh Gámanovyh syniv povisyly.
+Back:      14 І сказав цар, щоб було зро́блено так, — і був да́ний зако́н у Сузах, а десятойх Га́манових синів повісили.
+---
+
+Line 52061
+Original:  ↑ Грецьке μετεμορφώθε, латинське,   церк. слов. Пребразисж, — змінився, прийняв інший вигляд.
+Ruthenian: ↑ Grecjke μετεμορφώθε, latynsjke,   cerk. slov. Prebrazys'zz, — zminyvsja, pryjnjav inszyj vygljad.
+Back:      ↑ Грецьке μετεμορφώθε, латинське,   церк. слов. Пребразис'ж, — змінився, прийняв інший вигляд.
+---
+
