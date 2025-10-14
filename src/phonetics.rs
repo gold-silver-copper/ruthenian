@@ -178,8 +178,34 @@ pub fn russian_to_ruthenian(input: &str) -> String {
             'Д' => result.push_str("D"),
             'Е' => result.push_str("Je"),
             'Ё' => result.push_str("Jo"),
-            'Ж' => result.push_str("Zz"),
-            'З' => result.push_str("Z"),
+
+            'Ж' => match chars.peek() {
+                Some('з') => {
+                    result.push_str("Zz'z");
+                    chars.next();
+                }
+
+                Some('ж') => {
+                    result.push_str("Zz'zz");
+                    chars.next();
+                }
+
+                _ => result.push_str("Zz"),
+            },
+
+            'З' => match chars.peek() {
+                Some('з') => {
+                    result.push_str("Z'z");
+                    chars.next();
+                }
+
+                Some('ж') => {
+                    result.push_str("Z'zz");
+                    chars.next();
+                }
+
+                _ => result.push_str("Z"),
+            },
             'И' => result.push_str("I"),
             'Й' | 'Ь' => result.push_str("J"),
             'К' => result.push_str("K"),
@@ -189,7 +215,20 @@ pub fn russian_to_ruthenian(input: &str) -> String {
             'О' => result.push_str("O"),
             'П' => result.push_str("P"),
             'Р' => result.push_str("R"),
-            'С' => result.push_str("S"),
+
+            'С' => match chars.peek() {
+                Some('з') => {
+                    result.push_str("S'z");
+                    chars.next();
+                }
+
+                Some('ж') => {
+                    result.push_str("S'zz");
+                    chars.next();
+                }
+
+                _ => result.push_str("S"),
+            },
             'Т' => result.push_str("T"),
             'У' => result.push_str("U"),
             'Ф' => result.push_str("F"),
@@ -203,6 +242,7 @@ pub fn russian_to_ruthenian(input: &str) -> String {
             'Ю' => result.push_str("Ju"),
             'Я' => result.push_str("Ja"),
             'Ъ' => result.push_str("'"),
+
             // Lowercase
             'а' => result.push_str("a"),
             'б' => result.push_str("b"),
@@ -323,11 +363,11 @@ pub fn ruthenian_to_russian(input: &str) -> String {
                         if let Some(&next) = chars.peek() {
                             // Only add soft sign if next char is NOT a vowel (meaning standalone j)
                             if !matches!(next, 'a' | 'A' | 'e' | 'E' | 'o' | 'O' | 'u' | 'U') {
-                                result.push('ь');
+                                result.push(if is_upper { 'Ь' } else { 'ь' });
                                 soft_sign_added = true;
                             }
                         } else {
-                            result.push('ь');
+                            result.push(if is_upper { 'Ь' } else { 'ь' });
                             soft_sign_added = true;
                         }
                     }
