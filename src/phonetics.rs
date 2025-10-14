@@ -227,8 +227,18 @@ pub fn russian_to_ruthenian(input: &str) -> String {
             },
 
             'и' => result.push_str("i"),
-            'й' => result.push_str("j"),
 
+            'й' => match chars.peek() {
+                Some(next) => {
+                    if RUSSIAN_VOWELS.contains(next) {
+                        result.push_str("j'");
+                    } else {
+                        result.push_str("j");
+                    }
+                }
+
+                _ => result.push_str("j"),
+            },
             'ь' => result.push_str("j"),
 
             'к' => result.push_str("k"),
@@ -298,6 +308,16 @@ pub fn ruthenian_to_russian(input: &str) -> String {
             // --- Handle 'j' prefix vowels ---
             'j' | 'J' => {
                 let mut soft_sign_added = false;
+
+                let is_upper = ch == 'J';
+                if let Some(&next) = chars.peek() {
+                    if next == '\'' {
+                        result.push(if is_upper { 'Й' } else { 'й' });
+                        chars.next();
+                        continue;
+                    }
+                }
+
                 if let Some(charik) = RUTHUTILS::last_char(&result) {
                     if RUSSIAN_CONSONANTS.contains(&charik) {
                         if let Some(&next) = chars.peek() {
@@ -317,8 +337,6 @@ pub fn ruthenian_to_russian(input: &str) -> String {
                     continue;
                 }
                 if let Some(&next) = chars.peek() {
-                    let is_upper = ch == 'J';
-
                     match next {
                         'a' | 'A' => {
                             result.push(if is_upper { 'Я' } else { 'я' });
