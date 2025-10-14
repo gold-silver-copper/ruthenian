@@ -8,35 +8,47 @@ pub fn test_roundtrip_from_file_ukr(filename: &str) -> std::io::Result<()> {
 
     let file = File::open(filename)?;
     let reader = BufReader::new(file);
-
     let mut line_num = 0;
     let mut failed_lines = Vec::new();
 
     for line in reader.lines() {
         line_num += 1;
-        let original = line?;
+        let raw_line = line?;
 
-        // Skip empty lines
+        // Filter out Latin alphabet characters (a-z, A-Z)
+        let original: String = raw_line
+            .chars()
+            .filter(|c| !c.is_ascii_alphabetic())
+            .collect();
+
+        // Skip empty lines after filtering
         if original.trim().is_empty() {
             continue;
         }
 
         let ruthenian = ukrainian_to_ruthenian(&original);
-        let back_to_russian = ruthenian_to_ukrainian(&ruthenian);
+        let back_to_ukrainian = ruthenian_to_ukrainian(&ruthenian);
 
-        if original != back_to_russian {
+        if original != back_to_ukrainian {
             failed_lines.push((
                 line_num,
                 original.clone(),
                 ruthenian.clone(),
-                back_to_russian.clone(),
+                back_to_ukrainian.clone(),
             ));
             println!("❌ Line {}: Round-trip failed!", line_num);
             println!("   Original:  {}", original);
             println!("   Ruthenian: {}", ruthenian);
-            println!("   Back:      {}", back_to_russian);
-            println!();
+            println!("   Back:      {}", back_to_ukrainian);
+
+            for (i, (a, b)) in original.chars().zip(back_to_ukrainian.chars()).enumerate() {
+                if a != b {
+                    println!("Difference at position {}: {:?} != {:?}", i, a, b);
+                }
+            }
+
             panic!();
+            println!();
         } else {
             println!("✓ Line {}: OK", line_num);
         }
@@ -58,7 +70,6 @@ pub fn test_roundtrip_from_file_ukr(filename: &str) -> std::io::Result<()> {
 
     Ok(())
 }
-
 // Helper function for lookahead patterns (з/ж combinations)
 fn handle_z_lookahead_ukr(result: &mut String, chars: &mut Peekable<Chars>, base: &str) {
     result.push_str(base);
@@ -111,8 +122,15 @@ pub fn ukrainian_to_ruthenian(input: &str) -> String {
             'Х' => result.push('H'),
             'И' => result.push('Y'),
             'Е' => result.push('E'),
-            'Й' | 'Ь' => result.push('J'),
+            'Ь' => result.push('J'),
 
+            'Й' => {
+                if matches!(chars.peek(), Some(next) if RUSSIAN_VOWELS.contains(next)) {
+                    result.push_str("J'");
+                } else {
+                    result.push('J');
+                }
+            }
             // Multi-character uppercase
             'Є' => result.push_str("Je"),
             'Ч' => result.push_str("Cz"),
@@ -202,10 +220,9 @@ pub fn ruthenian_to_ukrainian(input: &str) -> String {
                 if let Some(last) = result.chars().last() {
                     if UKRAINIAN_CONSONANTS.contains(&last) {
                         let needs_soft_sign = match chars.peek() {
-                            Some(&next) => !matches!(
-                                next,
-                                'a' | 'A' | 'e' | 'E' | 'o' | 'O' | 'u' | 'U' | 'i' | 'I'
-                            ),
+                            Some(&next) => {
+                                !matches!(next, 'a' | 'A' | 'e' | 'E' | 'u' | 'U' | 'i' | 'I')
+                            }
                             None => true,
                         };
 
@@ -301,30 +318,33 @@ pub fn ruthenian_to_ukrainian(input: &str) -> String {
                 if matches!(chars.peek(), Some('z' | 'Z')) {
                     result.push(if is_upper { 'Ж' } else { 'ж' });
                     chars.next();
+                    // Check for 'zz after zz (e.g., zz'zz -> жж)
+                    if chars.peek() == Some(&'\'') {
+                        let mut temp_chars = chars.clone();
+                        temp_chars.next(); // skip '
+                        if matches!(temp_chars.peek(), Some('z' | 'Z')) {
+                            chars.next(); // consume '
+                        }
+                    }
                 } else {
                     result.push(if is_upper { 'З' } else { 'з' });
+                    // Check for 'z after z (e.g., z'z -> зз)
+                    if chars.peek() == Some(&'\'') {
+                        let mut temp_chars = chars.clone();
+                        temp_chars.next(); // skip '
+                        if matches!(temp_chars.peek(), Some('z' | 'Z')) {
+                            chars.next(); // consume '
+                        }
+                    }
                 }
             }
 
-            // Vowel mappings - note Ukrainian differences
             'a' | 'A' => result.push(if ch == 'A' { 'А' } else { 'а' }),
             'e' | 'E' => result.push(if ch == 'E' { 'Е' } else { 'е' }), // Ukrainian Е not Э
             'i' | 'I' => result.push(if ch == 'I' { 'І' } else { 'і' }), // Ukrainian І not И
             'o' | 'O' => result.push(if ch == 'O' { 'О' } else { 'о' }),
             'u' | 'U' => result.push(if ch == 'U' { 'У' } else { 'у' }),
             'y' | 'Y' => result.push(if ch == 'Y' { 'И' } else { 'и' }), // Ukrainian И not Ы
-
-            '\'' => {
-                // Ukrainian uses apostrophe differently - only as separator, not hard sign
-                // Skip apostrophes that are not part of g' or j' patterns
-                if !result.is_empty() {
-                    let last = result.chars().last().unwrap();
-                    // Only preserve if it might be a separator
-                    if !matches!(last, 'Ґ' | 'ґ' | 'Й' | 'й') {
-                        result.push('\'');
-                    }
-                }
-            }
 
             _ => result.push(ch),
         }

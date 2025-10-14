@@ -55,7 +55,16 @@ pub fn russian_to_ruthenian(input: &str) -> String {
             'Х' => result.push('H'),
             'Ы' => result.push('Y'),
             'Э' => result.push('E'),
-            'Й' | 'Ь' => result.push('J'),
+            'Ь' => result.push('J'),
+
+            'Й' => {
+                if matches!(chars.peek(), Some(next) if RUSSIAN_VOWELS.contains(next)) {
+                    result.push_str("J'");
+                } else {
+                    result.push('J');
+                }
+            }
+
             'ъ' => result.push('\''),
 
             'Ъ' => result.push_str("''"),
