@@ -29,7 +29,19 @@ fn main() {
     println!("To Ruthenian: {}", to_ruthenian);
     println!("Back to Russian: {}", back_to_russian);
 
-    match test_roundtrip_from_file("biblija_ru.txt") {
+    match test_roundtrip_from_file_ru("biblija_ru.txt") {
+        Ok(()) => {}
+        Err(e) => {
+            println!("Error reading file: {}", e);
+            println!("\nTo test, create a file named 'russian_text.txt' with Russian text.");
+            println!("Example content:");
+            println!("Привет мир!");
+            println!("Здравствуйте!");
+            println!("Щука жарко");
+        }
+    }
+
+    match test_roundtrip_from_file_ukr("biblija_ukr.txt") {
         Ok(()) => {}
         Err(e) => {
             println!("Error reading file: {}", e);
