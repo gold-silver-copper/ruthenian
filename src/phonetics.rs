@@ -163,173 +163,136 @@ pub const RUTHENIAN_CONSONANTS: &[char] = &[
     'f', 'g', 'h', 'k', 'l', 'm', 'n', 'p', 'r', 's', 't', 'v', 'z',
 ];
 
-/// Context-aware transliteration from Russian → Ruthenian
+use std::iter::Peekable;
+use std::str::Chars;
+
+// Helper macro for simple character mappings
+macro_rules! push_mapping {
+    ($result:expr, $($ch:literal => $s:literal),+ $(,)?) => {
+        match ch {
+            $($ch => $result.push_str($s),)+
+            _ => unreachable!(),
+        }
+    };
+}
+
+// Helper function for lookahead patterns (з/ж combinations)
+fn handle_z_lookahead(result: &mut String, chars: &mut Peekable<Chars>, base: &str) {
+    result.push_str(base);
+
+    match chars.peek() {
+        Some('з') => {
+            result.push_str("'z");
+            chars.next();
+        }
+
+        Some('З') => {
+            result.push_str("'Z");
+            chars.next();
+        }
+        Some('Ж') => {
+            result.push_str("'Zz");
+            chars.next();
+        }
+        Some('ж') => {
+            result.push_str("'zz");
+            chars.next();
+        }
+        _ => (),
+    }
+}
+
 pub fn russian_to_ruthenian(input: &str) -> String {
     let mut chars = input.chars().peekable();
     let mut result = String::new();
 
     while let Some(ch) = chars.next() {
         match ch {
-            // Uppercase
-            'А' => result.push_str("A"),
-            'Б' => result.push_str("B"),
-            'В' => result.push_str("V"),
-            'Г' => result.push_str("G"),
-            'Д' => result.push_str("D"),
+            // Simple uppercase mappings
+            'А' => result.push('A'),
+            'Б' => result.push('B'),
+            'В' => result.push('V'),
+            'Г' => result.push('G'),
+            'Д' => result.push('D'),
+            'И' => result.push('I'),
+            'К' => result.push('K'),
+            'Л' => result.push('L'),
+            'М' => result.push('M'),
+            'Н' => result.push('N'),
+            'О' => result.push('O'),
+            'П' => result.push('P'),
+            'Р' => result.push('R'),
+            'Т' => result.push('T'),
+            'У' => result.push('U'),
+            'Ф' => result.push('F'),
+            'Х' => result.push('H'),
+            'Ы' => result.push('Y'),
+            'Э' => result.push('E'),
+            'Й' | 'Ь' => result.push('J'),
+            'ъ' => result.push('\''),
+
+            'Ъ' => result.push_str("''"),
+            // Multi-character uppercase
             'Е' => result.push_str("Je"),
             'Ё' => result.push_str("Jo"),
-
-            'Ж' => match chars.peek() {
-                Some('з') => {
-                    result.push_str("Zz'z");
-                    chars.next();
-                }
-
-                Some('ж') => {
-                    result.push_str("Zz'zz");
-                    chars.next();
-                }
-
-                _ => result.push_str("Zz"),
-            },
-
-            'З' => match chars.peek() {
-                Some('з') => {
-                    result.push_str("Z'z");
-                    chars.next();
-                }
-
-                Some('ж') => {
-                    result.push_str("Z'zz");
-                    chars.next();
-                }
-
-                _ => result.push_str("Z"),
-            },
-            'И' => result.push_str("I"),
-            'Й' | 'Ь' => result.push_str("J"),
-            'К' => result.push_str("K"),
-            'Л' => result.push_str("L"),
-            'М' => result.push_str("M"),
-            'Н' => result.push_str("N"),
-            'О' => result.push_str("O"),
-            'П' => result.push_str("P"),
-            'Р' => result.push_str("R"),
-
-            'С' => match chars.peek() {
-                Some('з') => {
-                    result.push_str("S'z");
-                    chars.next();
-                }
-
-                Some('ж') => {
-                    result.push_str("S'zz");
-                    chars.next();
-                }
-
-                _ => result.push_str("S"),
-            },
-            'Т' => result.push_str("T"),
-            'У' => result.push_str("U"),
-            'Ф' => result.push_str("F"),
-            'Х' => result.push_str("H"),
-            'Ц' => result.push_str("C"),
             'Ч' => result.push_str("Cz"),
             'Ш' => result.push_str("Sz"),
             'Щ' => result.push_str("Szcz"),
-            'Ы' => result.push_str("Y"),
-            'Э' => result.push_str("E"),
             'Ю' => result.push_str("Ju"),
             'Я' => result.push_str("Ja"),
-            'Ъ' => result.push_str("'"),
 
-            // Lowercase
-            'а' => result.push_str("a"),
-            'б' => result.push_str("b"),
-            'в' => result.push_str("v"),
-            'г' => result.push_str("g"),
-            'д' => result.push_str("d"),
+            // Uppercase with lookahead
+            'Ж' => handle_z_lookahead(&mut result, &mut chars, "Zz"),
+            'З' => handle_z_lookahead(&mut result, &mut chars, "Z"),
+            'С' => handle_z_lookahead(&mut result, &mut chars, "S"),
+
+            'Ц' => handle_z_lookahead(&mut result, &mut chars, "C"),
+            // Simple lowercase mappings
+            'а' => result.push('a'),
+            'б' => result.push('b'),
+            'в' => result.push('v'),
+            'г' => result.push('g'),
+            'д' => result.push('d'),
+            'и' => result.push('i'),
+            'к' => result.push('k'),
+            'л' => result.push('l'),
+            'м' => result.push('m'),
+            'н' => result.push('n'),
+            'о' => result.push('o'),
+            'п' => result.push('p'),
+            'р' => result.push('r'),
+            'т' => result.push('t'),
+            'у' => result.push('u'),
+            'ф' => result.push('f'),
+            'х' => result.push('h'),
+            'ы' => result.push('y'),
+            'э' => result.push('e'),
+            'ь' => result.push('j'),
+
+            // Multi-character lowercase
             'е' => result.push_str("je"),
             'ё' => result.push_str("jo"),
-            'ж' => result.push_str("zz"),
-            'з' => match chars.peek() {
-                Some('з') => {
-                    result.push_str("z'z");
-                    chars.next();
-                }
-
-                Some('ж') => {
-                    result.push_str("z'zz");
-                    chars.next();
-                }
-
-                _ => result.push_str("z"),
-            },
-
-            'и' => result.push_str("i"),
-
-            'й' => match chars.peek() {
-                Some(next) => {
-                    if RUSSIAN_VOWELS.contains(next) {
-                        result.push_str("j'");
-                    } else {
-                        result.push_str("j");
-                    }
-                }
-
-                _ => result.push_str("j"),
-            },
-            'ь' => result.push_str("j"),
-
-            'к' => result.push_str("k"),
-            'л' => result.push_str("l"),
-            'м' => result.push_str("m"),
-            'н' => result.push_str("n"),
-            'о' => result.push_str("o"),
-            'п' => result.push_str("p"),
-            'р' => result.push_str("r"),
-
-            'с' => match chars.peek() {
-                Some('з') => {
-                    result.push_str("s'z");
-                    chars.next();
-                }
-
-                Some('ж') => {
-                    result.push_str("s'zz");
-                    chars.next();
-                }
-
-                _ => result.push_str("s"),
-            },
-
-            'т' => result.push_str("t"),
-            'у' => result.push_str("u"),
-            'ф' => result.push_str("f"),
-            'х' => result.push_str("h"),
-
-            'ц' => match chars.peek() {
-                Some('з') => {
-                    result.push_str("c'z");
-                    chars.next();
-                }
-
-                Some('ж') => {
-                    result.push_str("c'zz");
-                    chars.next();
-                }
-
-                _ => result.push_str("c"),
-            },
-
             'ч' => result.push_str("cz"),
             'ш' => result.push_str("sz"),
             'щ' => result.push_str("szcz"),
-            'ы' => result.push_str("y"),
-            'э' => result.push_str("e"),
             'ю' => result.push_str("ju"),
             'я' => result.push_str("ja"),
-            'ъ' => result.push_str("'"),
+
+            // Lowercase with lookahead
+            'з' => handle_z_lookahead(&mut result, &mut chars, "z"),
+
+            'ж' => handle_z_lookahead(&mut result, &mut chars, "zz"),
+            'с' => handle_z_lookahead(&mut result, &mut chars, "s"),
+            'ц' => handle_z_lookahead(&mut result, &mut chars, "c"),
+
+            'й' => {
+                if matches!(chars.peek(), Some(next) if RUSSIAN_VOWELS.contains(next)) {
+                    result.push_str("j'");
+                } else {
+                    result.push('j');
+                }
+            }
+
             // Preserve non-Cyrillic chars
             other => result.push(other),
         }
@@ -338,236 +301,143 @@ pub fn russian_to_ruthenian(input: &str) -> String {
     result
 }
 
-/// Context-aware transliteration from Ruthenian → Russian
 pub fn ruthenian_to_russian(input: &str) -> String {
     let mut chars = input.chars().peekable();
     let mut result = String::new();
 
     while let Some(ch) = chars.next() {
         match ch {
-            // --- Handle 'j' prefix vowels ---
             'j' | 'J' => {
-                let mut soft_sign_added = false;
-
                 let is_upper = ch == 'J';
-                if let Some(&next) = chars.peek() {
-                    if next == '\'' {
-                        result.push(if is_upper { 'Й' } else { 'й' });
-                        chars.next();
-                        continue;
-                    }
-                }
 
-                if let Some(charik) = RUTHUTILS::last_char(&result) {
-                    if RUSSIAN_CONSONANTS.contains(&charik) {
-                        if let Some(&next) = chars.peek() {
-                            // Only add soft sign if next char is NOT a vowel (meaning standalone j)
-                            if !matches!(next, 'a' | 'A' | 'e' | 'E' | 'o' | 'O' | 'u' | 'U') {
-                                result.push(if is_upper { 'Ь' } else { 'ь' });
-                                soft_sign_added = true;
-                            }
-                        } else {
-                            result.push(if is_upper { 'Ь' } else { 'ь' });
-                            soft_sign_added = true;
-                        }
-                    }
-                }
-
-                if soft_sign_added {
+                // Check for j' -> й
+                if matches!(chars.peek(), Some('\'')) {
+                    result.push(if is_upper { 'Й' } else { 'й' });
+                    chars.next();
                     continue;
                 }
-                if let Some(&next) = chars.peek() {
-                    match next {
-                        'a' | 'A' => {
-                            result.push(if is_upper { 'Я' } else { 'я' });
-                            chars.next();
-                        }
-                        'e' | 'E' => {
-                            result.push(if is_upper { 'Е' } else { 'е' });
-                            chars.next();
-                        }
-                        'o' | 'O' => {
-                            result.push(if is_upper { 'Ё' } else { 'ё' });
-                            chars.next();
-                        }
-                        'u' | 'U' => {
-                            result.push(if is_upper { 'Ю' } else { 'ю' });
-                            chars.next();
-                        }
-                        'i' | 'I' => {
-                            result.push(if is_upper { 'И' } else { 'и' });
-                            chars.next();
-                        }
-                        'y' | 'Y' => {
-                            result.push(if is_upper { 'Ы' } else { 'ы' });
-                            chars.next();
-                        }
-                        _ => {
-                            // Standalone J/j
-                            result.push(if is_upper { 'Й' } else { 'й' });
-                        }
-                    }
-                } else {
-                    result.push(if ch == 'J' { 'Й' } else { 'й' });
-                }
-            }
 
-            // --- Core consonant transliteration ---
-            'b' => result.push('б'),
-            'B' => result.push('Б'),
-            'v' => result.push('в'),
-            'V' => result.push('В'),
-            'g' => result.push('г'),
-            'G' => result.push('Г'),
-            'd' => result.push('д'),
-            'D' => result.push('Д'),
-            'k' => result.push('к'),
-            'K' => result.push('К'),
-            'l' => result.push('л'),
-            'L' => result.push('Л'),
-            'm' => result.push('м'),
-            'M' => result.push('М'),
-            'n' => result.push('н'),
-            'N' => result.push('Н'),
-            'p' => result.push('п'),
-            'P' => result.push('П'),
-            'r' => result.push('р'),
-            'R' => result.push('Р'),
-            't' => result.push('т'),
-            'T' => result.push('Т'),
-            'f' => result.push('ф'),
-            'F' => result.push('Ф'),
-            'h' => result.push('х'),
-            'H' => result.push('Х'),
-
-            // --- Special Ruthenian multi-letter sounds ---
-            'c' | 'C' => {
-                if let Some(&next) = chars.peek() {
-                    match next {
-                        'z' | 'Z' => {
-                            result.push(if ch.is_uppercase() { 'Ч' } else { 'ч' });
-                            chars.next();
-                        }
-                        _ => {
-                            result.push(if ch.is_uppercase() { 'Ц' } else { 'ц' });
-                        }
-                    }
-                } else {
-                    result.push(if ch.is_uppercase() { 'Ц' } else { 'ц' });
-                }
-            }
-            's' | 'S' => {
-                if let Some(&next) = chars.peek() {
-                    match next {
-                        'z' | 'Z' => {
-                            chars.next(); // consume 'z'
-                            if let Some(&third) = chars.peek() {
-                                match third {
-                                    'c' | 'C' => {
-                                        chars.next(); // consume 'c'
-                                        if let Some(&fourth) = chars.peek() {
-                                            match fourth {
-                                                'z' | 'Z' => {
-                                                    // szcz -> Щ
-                                                    result.push(if ch.is_uppercase() {
-                                                        'Щ'
-                                                    } else {
-                                                        'щ'
-                                                    });
-                                                    chars.next(); // consume second 'z'
-                                                }
-                                                _ => {
-                                                    // sz + c (not szcz)
-                                                    result.push(if ch.is_uppercase() {
-                                                        'Ш'
-                                                    } else {
-                                                        'ш'
-                                                    });
-                                                    result.push(if third.is_uppercase() {
-                                                        'Ц'
-                                                    } else {
-                                                        'ц'
-                                                    });
-                                                }
-                                            }
-                                        } else {
-                                            // sz + c at end
-                                            result.push(if ch.is_uppercase() {
-                                                'Ш'
-                                            } else {
-                                                'ш'
-                                            });
-                                            result.push(if third.is_uppercase() {
-                                                'Ц'
-                                            } else {
-                                                'ц'
-                                            });
-                                        }
-                                    }
-                                    _ => {
-                                        // sz (not szcz)
-                                        result.push(if ch.is_uppercase() { 'Ш' } else { 'ш' });
-                                    }
-                                }
-                            } else {
-                                // sz at end
-                                result.push(if ch.is_uppercase() { 'Ш' } else { 'ш' });
+                // Add soft sign after consonants if needed
+                if let Some(last) = RUTHUTILS::last_char(&result) {
+                    if RUSSIAN_CONSONANTS.contains(&last) {
+                        let needs_soft_sign = match chars.peek() {
+                            Some(&next) => {
+                                !matches!(next, 'a' | 'A' | 'e' | 'E' | 'o' | 'O' | 'u' | 'U')
                             }
-                        }
-                        _ => {
-                            result.push(if ch.is_uppercase() { 'С' } else { 'с' });
+                            None => true,
+                        };
+
+                        if needs_soft_sign {
+                            result.push(if is_upper { 'Ь' } else { 'ь' });
+                            continue;
                         }
                     }
-                } else {
-                    result.push(if ch.is_uppercase() { 'С' } else { 'с' });
                 }
-            }
-            'z' | 'Z' => {
+
+                // Handle j + vowel combinations
                 if let Some(&next) = chars.peek() {
-                    if next == 'z' || next == 'Z' {
-                        result.push(if ch.is_uppercase() { 'Ж' } else { 'ж' });
+                    let converted = match next {
+                        'a' | 'A' => Some(if is_upper { 'Я' } else { 'я' }),
+                        'e' | 'E' => Some(if is_upper { 'Е' } else { 'е' }),
+                        'o' | 'O' => Some(if is_upper { 'Ё' } else { 'ё' }),
+                        'u' | 'U' => Some(if is_upper { 'Ю' } else { 'ю' }),
+                        _ => None,
+                    };
+
+                    if let Some(cyrillic) = converted {
+                        result.push(cyrillic);
                         chars.next();
                     } else {
-                        result.push(if ch.is_uppercase() { 'З' } else { 'з' });
+                        result.push(if is_upper { 'Й' } else { 'й' });
                     }
                 } else {
-                    result.push(if ch.is_uppercase() { 'З' } else { 'з' });
+                    result.push(if is_upper { 'Й' } else { 'й' });
                 }
             }
 
-            // --- Simple vowels ---
-            'a' => result.push('а'),
-            'A' => result.push('А'),
-            'e' => result.push('э'),
-            'E' => result.push('Э'),
-            'i' => result.push('и'),
-            'I' => result.push('И'),
-            'o' => result.push('о'),
-            'O' => result.push('О'),
-            'u' => result.push('у'),
-            'U' => result.push('У'),
-            'y' => result.push('ы'),
-            'Y' => result.push('Ы'),
+            // Simple consonant mappings (using pattern matching for case)
+            'b' | 'B' => result.push(if ch == 'B' { 'Б' } else { 'б' }),
+            'v' | 'V' => result.push(if ch == 'V' { 'В' } else { 'в' }),
+            'g' | 'G' => result.push(if ch == 'G' { 'Г' } else { 'г' }),
+            'd' | 'D' => result.push(if ch == 'D' { 'Д' } else { 'д' }),
+            'k' | 'K' => result.push(if ch == 'K' { 'К' } else { 'к' }),
+            'l' | 'L' => result.push(if ch == 'L' { 'Л' } else { 'л' }),
+            'm' | 'M' => result.push(if ch == 'M' { 'М' } else { 'м' }),
+            'n' | 'N' => result.push(if ch == 'N' { 'Н' } else { 'н' }),
+            'p' | 'P' => result.push(if ch == 'P' { 'П' } else { 'п' }),
+            'r' | 'R' => result.push(if ch == 'R' { 'Р' } else { 'р' }),
+            't' | 'T' => result.push(if ch == 'T' { 'Т' } else { 'т' }),
+            'f' | 'F' => result.push(if ch == 'F' { 'Ф' } else { 'ф' }),
+            'h' | 'H' => result.push(if ch == 'H' { 'Х' } else { 'х' }),
 
-            // --- Apostrophe or separator ---
-            '\'' => match chars.peek() {
-                Some(next) => {
-                    if !RUTHENIAN_CONSONANTS.contains(next) {
-                        result.push('ъ')
-                    }
+            'c' | 'C' => {
+                let is_upper = ch == 'C';
+                if matches!(chars.peek(), Some('z' | 'Z')) {
+                    result.push(if is_upper { 'Ч' } else { 'ч' });
+                    chars.next();
+                } else {
+                    result.push(if is_upper { 'Ц' } else { 'ц' });
                 }
+            }
 
-                _ => result.push('ъ'),
-            },
+            's' | 'S' => {
+                let is_upper = ch == 'S';
+                if matches!(chars.peek(), Some('z' | 'Z')) {
+                    chars.next();
+                    // Check for szcz
+                    if matches!(chars.peek(), Some('c' | 'C')) {
+                        let third = *chars.peek().unwrap();
+                        chars.next();
+                        if matches!(chars.peek(), Some('z' | 'Z')) {
+                            result.push(if is_upper { 'Щ' } else { 'щ' });
+                            chars.next();
+                        } else {
+                            // sz + c (not szcz)
+                            result.push(if is_upper { 'Ш' } else { 'ш' });
+                            result.push(if third.is_uppercase() { 'Ц' } else { 'ц' });
+                        }
+                    } else {
+                        result.push(if is_upper { 'Ш' } else { 'ш' });
+                    }
+                } else {
+                    result.push(if is_upper { 'С' } else { 'с' });
+                }
+            }
 
-            // --- Default: preserve punctuation, spaces, etc. ---
+            'z' | 'Z' => {
+                let is_upper = ch == 'Z';
+                if matches!(chars.peek(), Some('z' | 'Z')) {
+                    result.push(if is_upper { 'Ж' } else { 'ж' });
+                    chars.next();
+                } else {
+                    result.push(if is_upper { 'З' } else { 'з' });
+                }
+            }
+
+            // Simple vowel mappings
+            'a' | 'A' => result.push(if ch == 'A' { 'А' } else { 'а' }),
+            'e' | 'E' => result.push(if ch == 'E' { 'Э' } else { 'э' }),
+            'i' | 'I' => result.push(if ch == 'I' { 'И' } else { 'и' }),
+            'o' | 'O' => result.push(if ch == 'O' { 'О' } else { 'о' }),
+            'u' | 'U' => result.push(if ch == 'U' { 'У' } else { 'у' }),
+            'y' | 'Y' => result.push(if ch == 'Y' { 'Ы' } else { 'ы' }),
+
+            '\'' => {
+                if chars.peek() == Some(&'\'') {
+                    result.push_str("Ъ");
+                    chars.next();
+                } else if !matches!(chars.peek(), Some(next) if RUTHENIAN_CONSONANTS.contains(next))
+                {
+                    result.push('ъ');
+                }
+            }
+
             _ => result.push(ch),
         }
     }
 
     result
 }
-
 pub fn test_roundtrip_from_file(filename: &str) -> std::io::Result<()> {
     use std::fs::File;
     use std::io::{BufRead, BufReader};
