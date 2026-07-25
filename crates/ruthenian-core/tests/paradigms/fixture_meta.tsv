@@ -1,0 +1,151 @@
+писать	verb	1a	aspect=impf-intr;cls:1a imperfective intransitive	verb class 1a
+работать	verb	1a	aspect=impf-intr;cls:1a imperfective intransitive;cls:1a imperfective intransitive	verb class 1a
+делать	verb	1a+p	aspect=impf;cls:1a imperfective transitive	verb class 1a+p
+читать	verb	1a+p	aspect=impf;cls:1a imperfective transitive;cls:1a imperfective transitive	verb class 1a+p
+переночевать	verb	2a	aspect=pf-intr;cls:2a perfective intransitive	verb class 2a
+заночевать	verb	2a	aspect=pf-intr;cls:2a perfective intransitive	verb class 2a
+напутствовать	verb	2a+p	aspect=impf;cls:2a imperfective transitive;cls:2a perfective transitive	verb class 2a+p
+баловать	verb	2a+p	aspect=impf;cls:2a imperfective transitive;cls:2a imperfective transitive;cls:2a imperfective transitive	verb class 2a+p
+нахлынуть	verb	3a	aspect=pf-intr;cls:3a perfective intransitive	verb class 3a
+отпрянуть	verb	3a	aspect=pf-intr;cls:3a perfective intransitive	verb class 3a
+раскинуть	verb	3a+p	aspect=pf;cls:3a perfective transitive	verb class 3a+p
+перекинуть	verb	3a+p	aspect=pf;cls:3a perfective transitive	verb class 3a+p
+ссориться	verb	4a	aspect=impf;cls:4a imperfective reflexive	verb class 4a
+херачить	verb	4a	aspect=impf-intr;cls:4a imperfective intransitive	verb class 4a
+прибавить	verb	4a+p	aspect=pf;cls:4a perfective transitive	verb class 4a+p
+убавить	verb	4a+p	aspect=pf;cls:4a perfective transitive	verb class 4a+p
+поживиться	verb	4b	aspect=pf;cls:4b perfective reflexive	verb class 4b
+парить	verb	4b	aspect=impf-intr;cls:4b imperfective intransitive	verb class 4b
+говорить	verb	4b+p	aspect=impf;cls:4b imperfective transitive;cls:4b imperfective transitive	verb class 4b+p
+удочерить	verb	4b+p	aspect=pf;cls:4b perfective transitive	verb class 4b+p
+ходить	verb	4c	aspect=impf-intr;cls:4c imperfective intransitive;cls:4c imperfective intransitive	verb class 4c
+восстановиться	verb	4c	aspect=pf;cls:4c perfective reflexive	verb class 4c
+носить	verb	4c+p	aspect=impf;arg:prpp=+;cls:4c imperfective transitive;cls:4c imperfective transitive	verb class 4c+p
+водить	verb	4c+p	aspect=impf;arg:prpp=+;cls:4c imperfective transitive;cls:4c imperfective transitive	verb class 4c+p
+выкипеть	verb	5a	aspect=pf-intr;cls:5a perfective intransitive	verb class 5a
+гореть	verb	5b	aspect=impf-intr;cls:5b imperfective intransitive	verb class 5b
+жужжать	verb	5b	aspect=impf-intr;cls:5b imperfective intransitive	verb class 5b
+задышать	verb	5c	aspect=pf-intr;cls:5c perfective intransitive	verb class 5c
+призреть	verb	5c	aspect=pf;arg:4=or;arg:5=5b;arg:6=призре́ть;arg:ppp=-;cls:5c // 5b perfective transitive	verb class 5c
+рассмеяться	verb	6b	aspect=pf;cls:6b perfective reflexive	verb class 6b
+посмеяться	verb	6b	aspect=pf;cls:6b perfective reflexive	verb class 6b
+связаться	verb	6c	aspect=pf;cls:6c perfective reflexive	verb class 6c
+рокотать	verb	6c	aspect=impf-intr;cls:6c imperfective intransitive	verb class 6c
+сказать	verb	6c+p	aspect=pf;cls:6c perfective transitive;cls:6c perfective transitive	verb class 6c+p
+красться	verb	7b	aspect=impf;arg:4=крад;cls:7b imperfective reflexive	verb class 7b
+вгрызться	verb	7b	aspect=pf;arg:4=вгрыз;cls:7b perfective reflexive	verb class 7b
+бечь	verb	8b/b	aspect=impf-intr;arg:4=бег;arg:pres_2sg=бегёшь;arg:pres_3sg=бегёт;arg:pres_1pl=бегём;arg:pres_2pl=бегёте;cls:8b/b imperfective intransitive	verb class 8b/b
+истечь	verb	8b/b	aspect=pf-intr;arg:4=истек;cls:8b/b perfective intransitive	verb class 8b/b
+пробиться	verb	11b	aspect=pf;cls:11b perfective reflexive	verb class 11b
+убиться	verb	11b	aspect=pf;cls:11b perfective reflexive	verb class 11b
+скрыться	verb	12a	aspect=pf;arg:4=скро́;cls:12a perfective reflexive	verb class 12a
+срыться	verb	12a	aspect=pf;arg:4=сро́;cls:12a perfective reflexive	verb class 12a
+отдавать	verb	13b	aspect=impf;cls:13b imperfective transitive	verb class 13b
+привставать	verb	13b	aspect=impf-intr;cls:13b imperfective intransitive	verb class 13b
+прижаться	verb	14b	aspect=pf;arg:4=прижм;cls:14b perfective reflexive	verb class 14b
+стать	verb	15a	aspect=pf-intr;cls:15a perfective intransitive;cls:15a perfective intransitive	verb class 15a
+привстать	verb	15a	aspect=pf-intr;cls:15a perfective intransitive	verb class 15a
+прижиться	verb	16b/c	aspect=pf;cls:16b/c'' perfective reflexive	verb class 16b/c
+разжиться	verb	16b/c	aspect=pf;cls:16b/c'' perfective reflexive	verb class 16b/c
+идти	verb	irreg	aspect=impf-intr;arg:pradp2=и́дучи1;arg:notes=1 Dated;cls:irreg-b/b imperfective intransitive;cls:irreg-b/b imperfective intransitive	verb class irreg
+мочь	verb	irreg	aspect=impf-intr;cls:8c/b imperfective intransitive;cls:8c/b imperfective intransitive	verb class irreg
+любить	verb	4c(4)+p	aspect=impf;arg:prpp=+;cls:4c④ imperfective transitive;cls:4c④ imperfective transitive	mutation б->бл
+живить	verb	4b+p	aspect=impf;cls:4b imperfective transitive	mutation в->вл
+блевать	verb	2b+p	aspect=impf;cls:2b(-ё-	mutation ев->ю
+переть	verb	9b+p	aspect=impf;cls:9b imperfective transitive	mutation ер->р
+бежать	verb	irreg	aspect=impf-intr;cls:5b imperfective intransitive;cls:5b perfective intransitive	mutation ж->г
+возить	verb	4c+p	aspect=impf;arg:prpp=+;cls:4c imperfective transitive	mutation з->ж
+имать	verb	irreg	aspect=impf;cls:1a // 6a imperfective transitive	mutation им->емл
+знакомить	verb	4a+p	aspect=impf;cls:4a imperfective transitive	mutation м->мл
+тупить	verb	4b+p	aspect=impf;cls:4b imperfective transitive	mutation п->пл
+брать	verb	6°b/c	aspect=impf;arg:4=бер;arg:ppp=-;cls:6°b/c imperfective transitive;cls:6°b/c imperfective transitive	mutation р->ер
+искать	verb	6c+p	aspect=impf;cls:6c imperfective transitive	mutation ск->щ
+совестить	verb	4a	aspect=impf;cls:4a imperfective transitive	mutation ст->щ
+хотеть	verb	irreg	aspect=impf-intr;arg:pradp=жела́я;cls:5c' imperfective intransitive	mutation т->ч
+пахать	verb	6c+p	aspect=impf;cls:6c imperfective transitive	mutation х->ш
+полвторого	noun	?|?	neuter;inanimate	noun ? ?
+дитя	noun	?|accent-a	neuter;animate;cls:accent-a;cls:accent-a	noun ? accent-a
+имя	noun	?|accent-c	neuter;inanimate;cls:accent-c;cls:accent-c	noun ? accent-c
+мати	noun	?|accent-e	feminine;animate;cls:accent-e	noun ? accent-e
+перкаль	noun	decl/soft-stem|accent-a	feminine;masculine;inanimate;cls:decl/soft-stem;cls:accent-a	noun decl/soft-stem accent-a
+дерево	noun	hard-stem|accent-a	neuter;inanimate;cls:hard-stem;cls:accent-a;cls:hard-stem;cls:accent-a	noun hard-stem accent-a
+стол	noun	hard-stem|accent-b	masculine;cls:hard-stem;cls:accent-b	noun hard-stem accent-b
+лето	noun	hard-stem|accent-c	neuter;inanimate;cls:hard-stem;cls:accent-c	noun hard-stem accent-c
+окно	noun	hard-stem|accent-d	neuter;inanimate;cls:hard-stem;cls:accent-d;cls:hard-stem;cls:accent-d	noun hard-stem accent-d
+вода	noun	hard-stem|accent-dʹ	feminine;inanimate;cls:hard-stem;cls:accent-dʹ;cls:hard-stem;cls:accent-dʹ	noun hard-stem accent-dʹ
+год	noun	hard-stem|accent-e	masculine;cls:hard-stem;cls:accent-e	noun hard-stem accent-e
+ребёнок	noun	hard-stem|accent-f	masculine;animate;cls:hard-stem;cls:accent-f	noun hard-stem accent-f
+борозда	noun	hard-stem|accent-fʹ	feminine;inanimate;cls:hard-stem;cls:accent-fʹ	noun hard-stem accent-fʹ
+прибытие	noun	i-stem|accent-a	neuter;inanimate;cls:i-stem;cls:accent-a	noun i-stem accent-a
+судия	noun	i-stem|accent-b	masculine;animate;cls:i-stem;cls:accent-b	noun i-stem accent-b
+пальто	noun	indecl/hard-stem|accent-d	neuter;inanimate;cls:indecl/hard-stem;cls:accent-d;cls:indecl/hard-stem;cls:accent-d	noun indecl/hard-stem accent-d
+тёща	noun	sibilant-stem|accent-a	feminine;animate;cls:sibilant-stem;cls:accent-a;cls:sibilant-stem;cls:accent-a	noun sibilant-stem accent-a
+трубач	noun	sibilant-stem|accent-b	masculine;animate;cls:sibilant-stem;cls:accent-b	noun sibilant-stem accent-b
+муж	noun	sibilant-stem|accent-c	masculine;animate;cls:sibilant-stem;cls:accent-c	noun sibilant-stem accent-c
+обруч	noun	sibilant-stem|accent-e	masculine;inanimate;cls:sibilant-stem;cls:accent-e	noun sibilant-stem accent-e
+свеча	noun	sibilant-stem|accent-f	feminine;inanimate;cls:sibilant-stem;cls:accent-f	noun sibilant-stem accent-f
+домашний	noun	soft-stem|?	masculine;animate;cls:soft-stem	noun soft-stem ?
+дядя	noun	soft-stem|accent-a	masculine;animate;cls:soft-stem;cls:accent-a;cls:soft-stem;cls:accent-a	noun soft-stem accent-a
+день	noun	soft-stem|accent-b	masculine;cls:soft-stem;cls:accent-b;cls:soft-stem;cls:accent-b	noun soft-stem accent-b
+зять	noun	soft-stem|accent-c	masculine;animate;cls:soft-stem;cls:accent-c;cls:soft-stem;cls:accent-c	noun soft-stem accent-c
+полупетля	noun	soft-stem|accent-d	feminine;inanimate;cls:soft-stem;cls:accent-d	noun soft-stem accent-d
+земля	noun	soft-stem|accent-dʹ	feminine;inanimate;cls:soft-stem;cls:accent-dʹ;cls:soft-stem;cls:accent-dʹ	noun soft-stem accent-dʹ
+парень	noun	soft-stem|accent-e	masculine;animate;cls:soft-stem;cls:accent-e;cls:soft-stem;cls:accent-e	noun soft-stem accent-e
+простыня	noun	soft-stem|accent-f	feminine;inanimate;cls:soft-stem;cls:accent-f;cls:soft-stem;cls:accent-f	noun soft-stem accent-f
+русский	noun	velar-stem|accent-a	masculine;inanimate;cls:velar-stem;cls:accent-a	noun velar-stem accent-a
+враг	noun	velar-stem|accent-b	masculine;animate;cls:velar-stem;cls:accent-b	noun velar-stem accent-b
+друг	noun	velar-stem|accent-c	masculine;animate;cls:velar-stem;cls:accent-c	noun velar-stem accent-c
+сноха	noun	velar-stem|accent-d	feminine;animate;cls:velar-stem;cls:accent-d;cls:velar-stem;cls:accent-d	noun velar-stem accent-d
+слега	noun	velar-stem|accent-f	feminine;inanimate;cls:velar-stem;cls:accent-f	noun velar-stem accent-f
+сватья	noun	vowel-stem|accent-a	feminine;animate;cls:vowel-stem;cls:accent-a	noun vowel-stem accent-a
+житьё-бытьё	noun	vowel-stem|accent-b	neuter;cls:vowel-stem;cls:accent-b	noun vowel-stem accent-b
+жнивьё	noun	vowel-stem|accent-d	neuter;cls:vowel-stem;cls:accent-d	noun vowel-stem accent-d
+племянница	noun	ц-stem|accent-a	feminine;animate;cls:ц-stem;cls:accent-a	noun ц-stem accent-a
+отец	noun	ц-stem|accent-b	masculine;animate;cls:ц-stem;cls:accent-b	noun ц-stem accent-b
+кольцо	noun	ц-stem|accent-d	neuter;inanimate;cls:ц-stem;cls:accent-d;cls:ц-stem;cls:accent-d	noun ц-stem accent-d
+дугообразный	adj	*a	cls:*a	adj class *a
+русский	adj	?		adj class ?
+столовый	adj	a	cls:a	adj class a
+столичный	adj	a*	cls:a*	adj class a*
+письменный	adj	a*[①]	cls:a*[①]	adj class a*[①]
+пожизненный	adj	a*①	cls:a*①	adj class a*①
+обещанный	adj	a*②	cls:a*②	adj class a*②
+статный	adj	aʹ*	cls:aʹ*	adj class aʹ*
+большой	adj	b	cls:b;cls:b	adj class b
+светлый	adj	b*	cls:b*	adj class b*
+углублённый	adj	b*②	cls:b*②;cls:b*②;cls:a*①;cls:a*①	adj class b*②
+молодой	adj	c	cls:c;cls:c	adj class c
+робкий	adj	c*	cls:c*	adj class c*
+сухой	adj	cʹ	cls:cʹ	adj class cʹ
+узкий	adj	cʹ*	cls:cʹ*	adj class cʹ*
+невысокий	adj	cʺ	cls:cʺ	adj class cʺ
+грешный	adj	cʺ*	cls:cʺ*	adj class cʺ*
+жавелевый	adj	vowel-stem	cls:vowel-stem;cls:accent-a	adj class vowel-stem
+брат	noun	hard-stem|accent-a	masculine;animate;cls:hard-stem;cls:accent-a	named hard case
+быть	verb	irreg/c	aspect=impf-intr;arg:pres_1sg2=есмь1;arg:pres_2sg2=еси́2;arg:pres_2sg3=есь2;arg:pres_1pl2=есмы́2;arg:pres_2pl2=е́сте2;arg:pres_3pl2=суть1;arg:impr_sg2=бу́ди2;arg:notes=1 See usage notes.;arg:notes2=2 Obsolete.;cls:irreg-a/c imperfective intransitive;cls:irreg-a/c imperfective intransitive	named hard case
+взять	verb	14b/c'+p	aspect=pf;arg:4=возьм;cls:14b/c' perfective transitive;cls:14b/c' perfective transitive	named hard case
+время	noun	?|accent-c	neuter;inanimate;cls:accent-c	named hard case
+город	noun	hard-stem|accent-c	masculine;inanimate;cls:hard-stem;cls:accent-c	named hard case
+дать	verb	irreg/c'+p	aspect=pf;arg:past_n=дало́;arg:past_n2=да́ло;arg:past_n_tail=*;arg:notes=* Less common.;cls:irreg-b/c' perfective transitive;cls:irreg-b/c' perfective transitive	named hard case
+дверь	noun	?|accent-e	feminine;cls:accent-e;cls:accent-e	named hard case
+дочь	noun	?|accent-e	feminine;animate;cls:accent-e;cls:accent-e	named hard case
+есть	verb	irreg+p	aspect=impf;arg:prpptail=*;arg:notes=* Rare.;cls:irreg-b imperfective transitive	named hard case
+ждать	verb	6°b/c	aspect=impf;arg:ppp=-;arg:pradp=-;cls:6°b/c imperfective transitive;cls:6°b/c imperfective transitive	named hard case
+жить	verb	16b/c'	aspect=impf-intr;arg:pradp2=живу́чи1;arg:notes=1 Dated;cls:16b/c' imperfective intransitive;cls:16b/c' imperfective intransitive	named hard case
+знамя	noun	?|accent-a	neuter;inanimate;cls:accent-a;cls:accent-a	named hard case
+книга	noun	velar-stem|accent-a	feminine;inanimate;cls:velar-stem;cls:accent-a;cls:velar-stem;cls:accent-a	named hard case
+купить	verb	4c+p	aspect=pf;cls:4c perfective transitive	named hard case
+мать	noun	?|accent-e	feminine;animate;cls:accent-e	named hard case
+нести	verb	7b/b+p	aspect=impf;arg:4=нес;cls:7b/b imperfective transitive;cls:7b/b imperfective transitive	named hard case
+ножницы	noun	ц-stem|accent-a	feminine;inanimate;cls:ц-stem;cls:accent-a;cls:ц-stem;cls:accent-a	named hard case
+ночь	noun	?|accent-e	feminine;cls:accent-e;cls:accent-e	named hard case
+платить	verb	4c+p	aspect=impf;cls:4c imperfective transitive	named hard case
+победить	verb	4b+pжд	aspect=pf;arg:futr_1sg=-;cls:4b(-жд-	named hard case
+просить	verb	4c+p	aspect=impf;arg:prpp=+;cls:4c imperfective transitive;cls:4c imperfective transitive	named hard case
+путь	noun	soft-stem|accent-b	masculine;cls:soft-stem;cls:accent-b;cls:soft-stem;cls:accent-b	named hard case
+сестра	noun	hard-stem|accent-d	feminine;animate;cls:hard-stem;cls:accent-d;cls:hard-stem;cls:accent-d	named hard case
+синий	adj	c	cls:c	named hard case
+сосед	noun	hard-stem|accent-a	masculine;animate;cls:hard-stem;cls:accent-a	named hard case
+стул	noun	hard-stem|accent-a	masculine;cls:hard-stem;cls:accent-a	named hard case
+хороший	adj	b	cls:b	named hard case
+человек	noun	velar-stem|accent-a	masculine;animate;cls:velar-stem;cls:accent-a	named hard case

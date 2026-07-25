@@ -1,5 +1,5 @@
 [workspace]
-members = ["crates/ruthenian-orthography"]
+members = ["crates/ruthenian-orthography", "crates/ruthenian-core"]
 exclude = ["legacy"]
 resolver = "3"
 
