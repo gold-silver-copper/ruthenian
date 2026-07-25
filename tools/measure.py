@@ -32,6 +32,22 @@ def forms_map(d, source):
         if s and s not in m: m[s] = f.get('form')
     return m
 
+def citation(d):
+    """The accented citation form, not the page title.
+
+    The page title carries no stress marks; the headword template and the
+    canonical form do. Keying a fixture on the title silently deprives the rules
+    of stress input and makes every strict comparison fail for the wrong reason.
+    """
+    for f in d.get('forms', []):
+        if 'canonical' in f.get('tags', []) and f.get('form'):
+            return f['form']
+    ht = (d.get('head_templates') or [{}])[0]
+    a1 = (ht.get('args') or {}).get('1')
+    if a1 and ' ' not in a1:
+        return a1
+    return d.get('word') or ''
+
 def classes_of(d):
     return [f['form'] for f in d.get('forms', []) if 'class' in f.get('tags', [])]
 
@@ -174,10 +190,11 @@ def emit(name, pool, source, n):
                 if 'anim' in exp: extra.append('inanimate' if 'inan' in exp else 'animate')
                 if ht.get('args', {}).get('2') == '*': extra.append('reducible')
             extra += ['cls:' + c for c in classes_of(d)]
-            fm_.write(f'{w}\t{d.get("pos")}\t{cls}\t{";".join(extra)}\trandom\n'); meta += 1
+            cit = citation(d)
+            fm_.write(f'{cit}\t{d.get("pos")}\t{cls}\t{";".join(extra)}\trandom\n'); meta += 1
             for slot, form in sorted(forms_map(d, source).items()):
                 if form and form != '-':
-                    fo.write(f'{w}\t{d.get("pos")}\t{cls}\t{slot}\t{form}\n'); rows += 1
+                    fo.write(f'{cit}\t{d.get("pos")}\t{cls}\t{slot}\t{form}\n'); rows += 1
     print(f'wrote {name}: {meta} lemmas, {rows} rows')
 
 emit('random_nouns', nouns, 'declension', 150)
