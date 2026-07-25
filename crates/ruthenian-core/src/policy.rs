@@ -121,7 +121,11 @@ impl Policy {
 /// Never empty. The evaluator attributes mismatches through it and the CLI
 /// explains deviations with it; returning a bare string would force both to
 /// re-derive what the engine already knew.
-#[derive(Debug, Clone, PartialEq, Eq, Default)]
+/// Deliberately **not** `Default`: a trace with no steps would let a prediction
+/// arrive with no explanation, and every consumer downstream depends on there
+/// being one. [`Trace::new`] is the only way to make one, so an empty trace is
+/// unconstructible rather than merely discouraged.
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Trace {
     steps: Vec<&'static str>,
     rules: Vec<RuleId>,
