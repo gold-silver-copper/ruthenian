@@ -324,6 +324,7 @@ pub fn score(rows: &str, meta_raw: &str, label: &str) -> Scored {
 }
 
 /// One measurement: scores per part of speech, hits per slot, and every miss.
+#[derive(Default)]
 pub struct Scored {
     pub by_pos: BTreeMap<String, Score>,
     /// slot -> (segmental hits, comparable cells)
@@ -363,16 +364,6 @@ impl Scored {
         v.sort_by(|a, b| a.1.partial_cmp(&b.1).unwrap_or(std::cmp::Ordering::Equal));
         v.truncate(take);
         v
-    }
-}
-
-impl Default for Scored {
-    fn default() -> Self {
-        Self {
-            by_pos: BTreeMap::new(),
-            by_slot: BTreeMap::new(),
-            misses: Vec::new(),
-        }
     }
 }
 
