@@ -156,11 +156,31 @@ Candidate rules for v1, in descending order of value-for-risk:
 
 | RuleId | What it does | Why it is cheap |
 |---|---|---|
-| `gap.fill-1sg` | Generates the missing 1sg for defective verbs (`pobjeditj`) | The dump marks defective slots `"-"`, so the affected set is enumerated exactly by Phase 4 |
+| `gap.fill-defective-1sg` | Generates the missing **1sg future** of a defective perfective (`pobjeditj`) | The source marks the lexical gap with an explicit override argument (`futr_1sg: "-"`), so the affected set is exact — see the correction below |
 | `iotation.uniform` | Applies the class's mutation to the exceptions that escape it | Mechanical; the trace shows every affected lemma |
 | `stress.fixed-stem` | Removes mobile stress in favour of fixed stem stress | Only meaningful if stress is stored (Phase 1 decision) |
 | `numeral.regular` | Regularizes Russian's most irregular subsystem | Small closed class; high visibility |
 | `suppletion.level` | Levels `idti`/`szol` onto one stem | Highest semantic cost — recommend leaving off by default |
+
+**Correction (phase 2, measured).** An earlier version of this section said the
+dump marks defective slots `"-"` so the affected set is "enumerated exactly by
+Phase 4". That conflates two different things, and acting on it would break the
+aspect system.
+
+Measured over 2 941 verbs: perfectives carry 13 922 gap slots against
+imperfectives' 2 509, and each of the six present-tense person/number slots
+appears ~1 519 times — almost exactly the perfective verb count. Those gaps are
+**structural**: a perfective verb has no present tense, no present participles
+and no present gerund; an intransitive verb has no passive participle. Filling
+them would invent a present tense for perfective verbs.
+
+Structural gaps are therefore **derived** in `verb::slot_exists` from
+`(aspect, transitivity, slot)` and returned as `Ok(None)`; nothing consults data
+to decide them. Genuine lexical defectiveness is a separate, much smaller
+category that the source marks explicitly — `победить` carries
+`futr_1sg: "-"` — and only `gap.fill-defective-1sg` may fill it. There were 21
+imperative gaps in the entire sample, which is the order of magnitude of real
+defectiveness.
 
 Three constraints, none negotiable:
 

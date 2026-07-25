@@ -81,7 +81,21 @@ the single field that determines the present stem; aspect and aspect partner fro
 the `ru-verb` args; transitivity from the `class` form; the attested 1sg/2sg
 present, which are the **principal parts**; participles and gerunds; and the
 **paradigm gaps, marked `"-"`**, which are the exact input to
-`ruthenian-core`'s `gap.fill-1sg` rule.
+`ruthenian-core`'s gap handling — but see the correction below.
+
+### Correction (phase 2): most `"-"` slots are structural, not defects
+
+Measured over 2 941 verbs: perfectives carry 13 922 gap slots against
+imperfectives' 2 509, and the six present-tense slots each appear ~1 519 times,
+matching the perfective count. A perfective verb has no present tense, so those
+`"-"` entries are grammar and `ruthenian-core` derives them from
+`(aspect, transitivity, slot)`. The extractor must **not** record them as
+lexical facts.
+
+What the extractor *must* capture is the small set the source marks explicitly:
+`победить` carries `futr_1sg: "-"` as a `ru-conj` **argument**, not merely as an
+absent form. Those overrides are the lexical gaps, they belong in the lexicon,
+and they are what `gap.fill-defective-1sg` targets.
 
 ### Two traps, both verified
 
