@@ -123,12 +123,12 @@ fn nonpast_ending(conj: Conjugation, pn: PersonNumber, soft: bool) -> &'static s
 fn future_auxiliary(pn: PersonNumber) -> &'static str {
     use PersonNumber::*;
     match pn {
-        S1 => "budu",
-        S2 => "budjeszj",
-        S3 => "budjet",
-        P1 => "budjem",
-        P2 => "budjetje",
-        P3 => "budut",
+        S1 => "bu\u{301}du",
+        S2 => "bu\u{301}djeszj",
+        S3 => "bu\u{301}djet",
+        P1 => "bu\u{301}djem",
+        P2 => "bu\u{301}djetje",
+        P3 => "bu\u{301}dut",
     }
 }
 
@@ -356,16 +356,29 @@ pub fn verb(
                 crate::types::Number::Singular => base,
                 crate::types::Number::Plural => format!("{base}tje"),
             };
-            Ok(Some(Prediction::new(
-                refl(collapse(&text)),
+            let (text, trace) = place_nonpast_stress(
+                &collapse(&text),
+                infinitive,
+                class,
+                PersonNumber::S2,
                 trace.then("imperative from the present stem"),
-            )))
+            );
+            Ok(Some(Prediction::new(refl(text), trace)))
         }
 
         VerbSlot::Participle { kind, voice, tense } => {
+            // Participles and gerunds are built off a stem that has already lost
+            // its stress mark, so the infinitive's stressed vowel is put back by
+            // index — the same discipline as the finite forms.
+            let idx = phono::stressed_index(infinitive);
             participle(infinitive, class, info, parts, kind, voice, tense).map(|o| {
                 o.map(|p| Prediction {
-                    text: refl(p.text),
+                    text: refl(match idx {
+                        Some(i) if !phono::is_stressed(&p.text) => {
+                            phono::apply_stress_at(&p.text, i)
+                        }
+                        _ => p.text,
+                    }),
                     trace: p.trace,
                 })
             })
