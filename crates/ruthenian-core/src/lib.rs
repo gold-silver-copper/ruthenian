@@ -37,7 +37,9 @@
 //!
 //! # Coverage
 //!
-//! Verb classes 1–6 are implemented, which is ~76 % of sampled verb lemmas;
+//! Verb classes 1–6 are implemented, which is **87.6 %** of sampled verb lemmas
+//! (1 359 of 1 551 carrying a class code: class 1 44.8 %, class 4 24.7 %,
+//! class 3 5.9 %, class 2 5.7 %, class 6 4.1 %, class 5 2.5 %);
 //! every other class returns [`verb::Unsupported`]. Noun accent patterns `a` and
 //! `b` place stress (~93 % of attested nouns); `c`–`f` produce the correct
 //! segmental form and say so in the trace. See `PROMPT_PHASE2.md` for the
