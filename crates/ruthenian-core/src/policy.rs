@@ -88,12 +88,13 @@ impl Policy {
         }
     }
 
-    /// Every departure that has been priced by the evaluator — which, until
-    /// phase 6 runs, is none. Deliberately identical to [`Policy::attested`] for
-    /// now: no rule ships enabled before its impact is measured.
-    pub fn regularized() -> Self {
-        Self::attested()
-    }
+    // NOTE: there is deliberately no `regularized()` preset yet.
+    //
+    // It would be identical to `attested()` — no rule ships enabled before
+    // phase 6 prices it — and a preset that silently means something else is
+    // exactly what a consumer blesses into a test and then depends on. It
+    // returns when it has content. Until then, name the rules you want:
+    // `Policy::attested().with(GAP_FILL_DEFECTIVE_1SG)`.
 
     pub fn with(mut self, rule: RuleId) -> Self {
         if !self.enabled.contains(&rule) {

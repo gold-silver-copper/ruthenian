@@ -281,14 +281,11 @@ fn policy_isolation() {
         base,
         "removing a rule must restore the baseline exactly"
     );
-    // Every registry rule is off in both presets until phase 6 prices it.
+    // Every registry rule is off in the only preset there is, until phase 6
+    // prices it. There is deliberately no regularized() preset while it would
+    // be a no-op alias a consumer could bless into a test.
     for r in policy::RULES {
         assert!(!Policy::attested().has(r.id), "{} on in attested", r.id);
-        assert!(
-            !Policy::regularized().has(r.id),
-            "{} on in regularized",
-            r.id
-        );
     }
 }
 
