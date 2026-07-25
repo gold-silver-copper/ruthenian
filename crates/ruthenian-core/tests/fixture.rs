@@ -374,6 +374,11 @@ fn paradigm_fixture() {
                         .entry(lemma.to_string())
                         .or_default()
                         .push(format!("{slot}: got {g}, attested {e}"));
+                    // A machine-readable dump, so failures can be categorised by
+                    // cause instead of eyeballed. Off unless asked for.
+                    if std::env::var("RUTHENIAN_DUMP_MISSES").is_ok() {
+                        println!("MISS\t{pos}\t{lemma}\t{}\t{slot}\t{g}\t{e}", m.class);
+                    }
                 }
             }
         }

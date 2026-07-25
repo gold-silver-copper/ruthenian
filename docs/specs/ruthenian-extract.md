@@ -236,26 +236,30 @@ quietly does not is worse than an honestly scheduled one.
 `je`, not `jo`, and no lexicon entry contains the `jo` digraph.
 
 This has one consequence that must not be missed, and it is a data-loss bug if it
-is: **the dump never marks stress on ё.** Verified against real records —
-`клёв`, `безотчётный`, `стихарём`, and every ё-bearing form sampled, carry no
-U+0301 anywhere, because ё is inherently stressed in Russian and Wiktionary
-therefore does not mark it. A naive `ё → е` replacement produces `клев`, a form
-with no stress information at all, and the stress cannot be recovered afterwards.
+is: **the dump almost never marks stress on ё.** Measured over the whole dump,
+79 803 ё-bearing forms carry 80 064 occurrences of ё, of which only **179
+(0.22 %)** carry a U+0301 — and every one of those is a reduplicated intensive
+(`чё́рный-пречё́рный`, `жёлтый-прежёлтый`), where the mark disambiguates which
+half of the compound is primary. Everywhere else ё is inherently stressed and
+Wiktionary does not mark it.
 
-So the normalization is not a character substitution. It is:
+A naive `ё → е` replacement therefore produces `клев` from `клёв`, with no stress
+information at all and no way to recover it. So the normalization is not a
+character substitution:
 
 ```text
 ё  →  е + U+0301        (transfer the implicit stress to an explicit mark)
+ё́  →  е + U+0301        (already marked: keep the one mark, never add a second)
 ```
 
 giving `клёв` → `кле́в` → `kljév`. Since Ruthenian stores stress (Phase 1
 decision), this keeps the lexicon strictly more informative than the source.
 
-Documented approximation: Russian ё is stressed with rare exceptions in compounds
-carrying more than one (`трёхколёсный`). Where a form already carries an explicit
-U+0301 elsewhere, the ё is *not* given a second one, and the entry is counted in
-a `yo_multiple_stress` reject-histogram bucket for later inspection rather than
-being guessed at.
+The 179 pre-marked cases are the exception the rule must handle rather than trip
+over; they were invisible to an earlier window sample, which is why
+`INVARIANTS.md` I1 forbids sampling. Where a form carries more than one stress
+mark after normalization, count it in a `yo_multiple_stress` reject-histogram
+bucket for inspection rather than guessing.
 
 ### Multi-sense lemmas
 

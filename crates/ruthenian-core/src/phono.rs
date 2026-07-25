@@ -5,15 +5,15 @@
 //! means it is in the wrong place — `interslavic-phrase` paid for that lesson
 //! with a rewrite.
 //!
-//! The mutation table below was measured, not recalled, over 4 834 sampled verbs.
-//! Two things it teaches that a grammar book states less sharply: `ov` → `u` is
-//! the commonest mutation by an order of magnitude (the `-ovatj` class), and
-//! mutation is **conditioned on the conjugation class, not on the stem's final
-//! consonant** — 670 labial-final stems in the sample take no epenthesis at all,
-//! because they are class `1a` `-ivatj`/`-yvatj` verbs where a theme vowel
-//! intervenes. A rule keyed on "ends in a labial" corrupts hundreds of common
-//! verbs; [`mutate_present_stem`] is therefore only ever called for the classes
-//! that mutate.
+//! The mutation table below was measured, not recalled, over **every** Russian
+//! verb in the dump. Two things it teaches that a grammar book states less
+//! sharply: `ov` → `u` is the commonest mutation by a factor of six (the
+//! `-ovatj` class), and mutation is **conditioned on the conjugation class, not
+//! on the stem's final consonant** — of 1 977 class-1 verbs with a labial-final
+//! stem, **every single one** takes no epenthesis, because the theme vowel
+//! intervenes. A rule keyed on "ends in a labial" would corrupt all 1 977;
+//! [`mutate_present_stem`] is therefore only ever called for the classes that
+//! mutate.
 
 pub const STRESS: char = '\u{0301}';
 
@@ -32,18 +32,27 @@ pub const LABIALS: &[&str] = &["b", "p", "v", "f", "m"];
 
 /// The measured present-stem mutations, longest match first.
 ///
-/// | Cyrillic | here | count |
-/// |---|---|---:|
-/// | ов → у | `ov` → `u` | 146 |
-/// | ст → щ | `st` → `szcz` | 6 |
-/// | ск → щ | `sk` → `szcz` | 1 |
-/// | с → ш | `s` → `sz` | 16 |
-/// | т → ч | `t` → `cz` | 15 |
-/// | д → ж | `d` → `zz` | 13 |
-/// | з → ж | `z` → `zz` | 11 |
-/// | х → ш | `h` → `sz` | 2 |
-/// | к → ч | `k` → `cz` | 1 |
-/// | г → ж | `g` → `zz` | — |
+/// | Cyrillic | here | count | example |
+/// |---|---|---:|---|
+/// | ов → у | `ov` → `u` | 675 | мульчировать/мульчирую |
+/// | д → ж | `d` → `zz` | 112 | щадить/щажу |
+/// | т → ч | `t` → `cz` | 60 | лететь/лечу |
+/// | с → ш | `s` → `sz` | 56 | писать/пишу |
+/// | з → ж | `z` → `zz` | 40 | возить/вожу |
+/// | п → пл | `p` → `plj` | 38 | спать/сплю |
+/// | в → вл | `v` → `vlj` | 27 | готовить/готовлю |
+/// | б → бл | `b` → `blj` | 25 | любить/люблю |
+/// | ст → щ | `st` → `szcz` | 24 | крестить/крещу |
+/// | м → мл | `m` → `mlj` | 19 | кормить/кормлю |
+/// | к → ч | `k` → `cz` | 9 | плакать/плачу |
+/// | ск → щ | `sk` → `szcz` | 6 | искать/ищу |
+/// | х → ш | `h` → `sz` | 6 | махать/машу |
+/// | т → щ | `t` → `szcz` | 5 | трепетать/трепещу |
+///
+/// Not yet implemented, and each a known miss: `в → ∅` (давать/даю, 41),
+/// `ев → у` (бичевать/бичую, 19), `ев → ю` (блевать/блюю, 11),
+/// `им → емл` (внимать/внемлю, 5), `ер → р` (тереть/тру, 3),
+/// `р → ер` (брать/беру, 2).
 ///
 /// `d` → `zz` and `z` → `zz` collide, exactly as they do in Russian
 /// (`voditj`/`voziti` both give `vozzu`). That is a real homograph, not a bug.

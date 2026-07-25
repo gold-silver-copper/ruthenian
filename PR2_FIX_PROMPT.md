@@ -3,10 +3,9 @@
 Work on `agent/core`, the branch behind [PR #2]. Every fix below lands in that
 PR; do not open a new one.
 
-Part 1 is the research the fixes rest on — measured, with the commands. Part 2 is
-what to do about it. Read Part 1 first: three of the fixes exist because the
-numbers currently published in the PR are wrong, and the reasons matter more than
-the corrections.
+Part 1 is the research the fixes rest on. Part 2 is what to do about it. Read
+Part 1 first: several fixes exist because numbers published in the PR were wrong,
+and the reasons matter more than the corrections.
 
 [PR #2]: https://github.com/gold-silver-copper/ruthenian/pull/2
 
@@ -14,37 +13,58 @@ the corrections.
 
 # Part 1 — Research
 
-All measurements taken 2026-07-25 against
-`~/Desktop/code/wikidata/raw-wiktextract-data.jsonl` (23 622 298 877 bytes,
-10 667 129 lines) and the phase-2 crate at `8464fc7`.
+Every figure below is measured over the **entire** dump —
+`~/Desktop/code/wikidata/raw-wiktextract-data.jsonl`, 23 622 298 877 bytes,
+10 667 129 lines, 441 629 Russian records — on 2026-07-25. Sampling is forbidden
+(`INVARIANTS.md` I1). Regenerate everything with:
 
-Two sampling methods are used and the difference matters:
+```bash
+cd ~/Desktop/code/wikidata
+LC_ALL=C grep -F '"lang_code": "ru"' raw-wiktextract-data.jsonl > /tmp/ru_all.jsonl
+cd ~/Desktop/code/ruthenian && python3 tools/measure.py /tmp/ru_all.jsonl
+```
 
-- **full pass** — `LC_ALL=C grep -oE` over the whole 22 GB. Exact.
-- **windowed sample** — three `dd` windows (`skip=6000/14000/21000`,
-  `count=500`). Russian records are scattered rather than sorted, so windows are
-  representative, but they are estimates and are labelled as such.
+## Finding 0 — sampling was wrong three times, which is why I1 exists
+
+This research was originally done on `dd` windows covering ~8 % of the dump. The
+full scan changed the answer materially in three places, and in one of them the
+*shape* of the conclusion changed, not just the precision:
+
+| From a sample | From the full scan |
+|---|---|
+| 117 distinct verb class codes | **226** — the sample missed 109 |
+| classes 1–6 cover 87.6 % of verbs | **90.7 %** |
+| 670 class-1 labial stems take no epenthesis | **1 977, and not one takes it** — exceptionless |
+| `ov → u` occurs 146 times | **675** |
+| noun accents are a–f | there are also primed patterns (`accent-dʹ`, `accent-fʺ`) the sample never saw |
+
+The third row is the one that matters. A sample shows a rule holds *often*; only
+a full scan shows it holds *always*, and "always" is what lets the engine key on
+a rule instead of hedging around it.
+
+A full-file `grep` is also not automatically a full scan. An intermediate attempt
+used `grep -oE` with a pattern assuming JSON key order and found 183 of the 226
+codes. Parse the records; do not pattern-match them.
 
 ## Finding 1 — the fixture is selection-biased, and the PR's accuracy table understates the crate
 
-The paradigm fixture was built to *cover* things: one lemma per class, one per
+The paradigm fixture is built to *cover* things: one lemma per class, one per
 mutation, plus hand-picked hard cases (`имя`, `дитя`, `время`, `мать`, `дочь`,
-`победить`). That is the right design for a regression net and the wrong design
-for an accuracy figure — it is a sample of the hard tail, not of the language.
+`победить`). That is right for a regression net and wrong for an accuracy figure
+— it samples the hard tail, not the language.
 
-Measured on a **random 120-lemma noun sample** (seed 7, no hand-picking, no class
-targeting, 1 390 comparable cells):
+Measured against a **random held-out sample** (fixed seed, no hand-picking, no
+class targeting) instead:
 
 | | PR #2 reports | Random sample |
 |---|---:|---:|
 | noun | 58.0 % | **79.1 %** |
-| adj | 80.2 % | **93.1 %** ¹ |
-| verb | 84.7 % | 87.7 % ¹ |
+| adj | 80.2 % | **93.1 %** |
+| verb | 84.7 % | 87.7 % |
 
-¹ adj/verb figures are from splitting the existing fixture by selection reason;
-the noun figure is from the independent random sample.
-
-Splitting the fixture by why each lemma was chosen:
+Splitting the old fixture by why each lemma was chosen shows the same thing, and
+shows verbs as a control with almost no bias (87.5 vs 87.7) — so the bias is real
+and specific, not an artefact of the splitting:
 
 | pos | selection | lemmas | rows | misses | ok |
 |---|---|---:|---:|---:|---:|
@@ -55,237 +75,204 @@ Splitting the fixture by why each lemma was chosen:
 | verb | hand-picked hard cases | 11 | 257 | 32 | 87.5 % |
 | verb | class-coverage | 65 | 1489 | 183 | 87.7 % |
 
-**Caveat on that table**: the split is itself contaminated. The fixture builder
-fills class buckets before named ones, so a hard case that also filled a class
-bucket (`имя`, `дитя`) is counted as "class-coverage". That is why the noun
-class-coverage figure (64.6 %) still sits well below the clean random sample
-(79.1 %) — and why the random sample, not a re-slice of the fixture, is the
-number to publish.
+That split is itself contaminated — the builder fills class buckets before named
+ones, so a hard case that also filled a class bucket (`имя`, `дитя`) counts as
+"class-coverage". Which is why the noun class-coverage figure (64.6 %) still sits
+below the clean random sample (79.1 %), and why the random sample — not a
+re-slice of the fixture — is the number to publish.
 
-Verbs show almost no bias (87.5 vs 87.7), which is a useful control: it says the
-bias is real and specific, not an artefact of the splitting.
+The random samples are now committed:
+`tests/paradigms/random_nouns.tsv` (150 lemmas, 1 932 rows),
+`random_verbs.tsv` (150 / 3 358), `random_adjs.tsv` (100 / 2 384), seed 20260725.
 
-## Finding 2 — the class-code parser fails on 9 real codes, and its test corpus is 8 % of reality
+## Finding 2 — the class-code parser failed on 9 of the 226 real codes
 
-A full pass found **183 distinct `ru-conj` class codes over 13 468 verbs**. The
-committed parser corpus (`tests/paradigms/class-codes.txt`) holds **117**, taken
-from an 8 % window sample — it never saw 66 of them.
+The committed corpus held 117 codes taken from a window sample. Against the full
+226, the parser rejected 9, in three groups:
 
-```bash
-LC_ALL=C grep -oE '"name": "ru-conj", "args": \{"1": "[^"]*", "2": "[^"]*"' \
-  raw-wiktextract-data.jsonl | sed 's/.*"2": "//' | sort | uniq -c | sort -rn
-```
-
-Against all 183, the parser rejects **9**, in three groups:
-
-| Codes | Feature | Why it fails |
+| Codes | Feature | Why it failed |
 |---|---|---|
-| `14b/c'+p`, `14c/c'+p`, `16b/c'`, `irreg/c'+p` | ASCII apostrophe `'` marking a softness distinction | the parser handles U+02B9 `ʹ` but not U+0027 `'` |
-| `4b/c-nd` | a `-nd` stem suffix (cf. the `-bd` in `14c/c-bd`) | `n` is neither a digit nor `a`–`f`, so it hits the error arm |
-| `6a1as13`, `6a1as13+p`, `6a1as14`, `6a1as14+p` | an `sNN` suffix | same |
+| `14b/c'+p`, `14c/c'+p`, `16b/c'`, `irreg/c'+p` | ASCII `'` marking a softness distinction | the parser handled U+02B9 `ʹ` but not U+0027 `'` |
+| `4b/c-nd` | a `-nd` stem suffix (cf. `-bd` in `14c/c-bd`) | `n` is neither a digit nor `a`–`f`, so it hit the error arm |
+| `6a1as13`, `6a1as13+p`, `6a1as14`, `6a1as14+p` | an `sNN` variant marker | same |
 
-The parser erroring rather than silently defaulting is correct and is why these
-are visible at all. But 9 codes covering real verbs will abort extraction in
-phase 4.
+**Already fixed on the branch.** The parser now handles all three features
+(`ZaliznyakVerbClass` gained `stem_suffix` and `variant`), the corpus at
+`tests/paradigms/class-codes.txt` is the full 226, and `class_codes_parse`
+asserts a floor of 226 so a shrunken corpus fails loudly. The parser erroring
+rather than silently defaulting is what made these visible at all.
 
-Class distribution, full dump — the top of a very long tail:
+Class distribution, full dump:
 
 ```
-5060 1a      953 2a+p     693 4a+p    639 4b+p    547 1a+p    539 2a
- 491 4b      483 4c+p     480 4a      356 4c      224 5b      211 3b
+5060 1a     953 2a+p    693 4a+p   639 4b+p   547 1a+p   539 2a
+ 491 4b     483 4c+p    480 4a     356 4c     224 5b     211 3b
 ```
 
-**Classes 1–6 are 12 205 / 13 468 = 90.6 %** of verbs carrying a class code.
+**Classes 1–6 are 11 584 / 12 773 = 90.7 %** of verbs carrying a class code.
 
-## Finding 3 — the same coverage figure was published three times, three different ways, all wrong
+## Finding 3 — the same coverage figure was published three times, three ways, all wrong
 
-| Where | Figure | How it was got |
+| Where | Figure | Method |
 |---|---|---|
 | `lib.rs` (original) | ~76 % | top-22 codes only |
 | PR #2 description | 73.2 % | top-22 codes only, recounted |
-| `lib.rs` (corrected, `a05f5e5`) | 87.6 % | windowed sample, all codes |
-| **True** | **90.6 %** | **full dump, all codes** |
+| `lib.rs` (corrected) | 87.6 % | window sample, all codes |
+| **True** | **90.7 %** | **full scan, all codes** |
 
-The first two were wrong because they counted only the twenty-two most frequent
-codes, so every class-1–6 *variant* outside that list went uncounted. The third
-is right in method and low only because it used an 8 % sample.
-
-This is the metric-drift failure `LESSONS.md` records from slovowiki — README,
-machine summary and reports carrying different numbers — reproduced inside the PR
-that cites the lesson. The structural remedy (generate every published number
-from one canonical result) belongs to phase 6, but the immediate remedy is to
-have one number, computed one way, stated once.
+The first two counted only the twenty-two most frequent codes, so class-1–6
+*variants* outside that list went uncounted. The third was right in method and
+low only because it sampled. This is the metric-drift failure `LESSONS.md`
+records from slovowiki, reproduced inside the PR that cites the lesson — and the
+reason `INVARIANTS.md` I2 exists.
 
 ## Finding 4 — stress placement is buggy, not unmodelled
 
 The PR attributes the low strict score (4.1 % verb, 10.4 % noun) to accent
-patterns `d`–`f` being unmodelled. The data does not support that.
-
-Accent-pattern distribution (windowed sample):
+patterns `d`–`f` being unmodelled. The full-dump distribution does not support
+that:
 
 | Nouns | count | | Verbs | count |
 |---|---:|---|---|---:|
-| `accent-a` | 2434 | | `a` | 576 |
-| `accent-b` | 174 | | `b` | 163 |
-| `accent-c` | 27 | | `c` | 73 |
-| `accent-d` | 41 | | `e` | 17 |
-| `accent-e` | 15 | | none/irreg | 15 |
-| `accent-f` | 2 | | | |
-| **a+b modelled** | **2608 / 2693 = 96.8 %** | | **a+b+c modelled** | **812 / 844 = 96.2 %** |
+| `accent-a` | 25 442 | | `a` | 8 667 |
+| `accent-b` | 2 382 | | `b` | 2 547 |
+| `accent-c` | 536 | | `c` | 1 307 |
+| `accent-d` | 495 | | `e` | 252 |
+| `accent-e` | 287 | | | |
+| `accent-f` | 75 | | | |
+| primed (`dʹ fʹ bʹ fʺ`) | 72 | | | |
+| **a+b modelled** | **27 824 / 29 381 = 94.7 %** | | **a+b+c modelled** | **12 521 / 12 773 = 98.0 %** |
 
-So ~96 % of both nouns and verbs fall in patterns the crate *claims* to model,
-and strict accuracy is 4–10 %. The unmodelled tail cannot account for that. The
-placement logic inside the implemented patterns is wrong, and that is a bug to
-fix rather than a coverage limit to document.
+So 95–98 % of nouns and verbs fall in patterns the crate *claims* to model while
+strict accuracy is 4–10 %. The unmodelled tail cannot account for that. The
+placement logic inside the implemented patterns is wrong — a bug to fix, not a
+coverage limit to document.
 
 ## Finding 5 — the noun weakness is two cells, not a systematic fault
 
-From the random sample, by slot (only slots with ≥ 8 observations):
+From the random sample, by slot:
 
 | Slot | segmental |
 |---|---:|
-| genitive plural | 64.7 % (77/119) |
-| instrumental singular | 65.8 % (73/111) |
-| accusative plural | 78.8 % (93/118) |
-| dative singular | 78.4 % (87/111) |
-| nominative plural | 79.2 % (95/120) |
-| prepositional singular | 79.3 % (88/111) |
-| genitive singular | 80.2 % (89/111) |
-| accusative singular | 81.7 % (89/109) |
+| genitive plural | 64.7 % |
+| instrumental singular | 65.8 % |
+| dative singular | 78.4 % |
+| accusative plural | 78.8 % |
+| nominative plural | 79.2 % |
+| prepositional singular | 79.3 % |
+| genitive singular | 80.2 % |
+| accusative singular | 81.7 % |
 
-Genitive plural and instrumental singular stand out, and both are known-hard for
-principled reasons: the genitive plural is a zero ending that triggers fleeting-
+Genitive plural and instrumental singular stand out, and both are hard for
+principled reasons: the genitive plural is a zero ending triggering fleeting-
 vowel insertion (`okon`, `sestjor`), and the instrumental singular carries the
-`-om`/`-em` alternation after sibilants and `c`. Everything else clusters around
-79–82 %, which is the general level rather than a defect.
-
-Categorising the fixture's noun misses by shape: 136 wrong ending, 14 with no
-accent pattern in the source at all, 13 where the ending is a prefix or extension
-of the attested form.
+`-om`/`-em` alternation after sibilants and `c`. Everything else clusters at
+79–82 %, the general level rather than a defect.
 
 ## Finding 6 — adjective soft stems are 1.6 % of adjectives and are derivable
 
 `adjective.rs` hardcodes `soft = false` and documents the resulting forms as
-wrong. Measured over 1 090 sampled adjectives:
+wrong. Over every Russian adjective in the dump:
 
 | Type | count | share |
 |---|---:|---:|
-| hard `-yj` | 818 | 75.0 % |
-| velar/sibilant (hard endings, `i`-spelling) | 203 | 18.6 % |
-| stressed `-oj` (hard) | 52 | 4.8 % |
-| **true soft (`-nij` type)** | **17** | **1.6 %** |
+| hard `-yj` | 6 669 | 66.7 % |
+| velar/sibilant (hard endings, `i`-spelling) | 2 356 | 23.6 % |
+| stressed `-oj` (hard) | 540 | 5.4 % |
+| other | 279 | 2.8 % |
+| **true soft (`-nij`)** | **155** | **1.6 %** |
 
-Two consequences. The exposure is 1.6 %, not the open-ended problem the code
-comment implies. And softness *is* derivable from the citation form — ends `-ij`
-**and** the stem-final consonant is not velar or sibilant — which is exactly the
-rule the research script used to produce this table. The velar/sibilant group is
-correctly handled already: those take hard endings with the `y`→`i` spelling
-rule, not soft endings.
+The exposure is 1.6 %, not the open-ended problem the comment implies. And
+softness *is* derivable from the citation form — ends `-ij` **and** the
+stem-final consonant is not velar or sibilant — which is exactly the rule
+`tools/measure.py` uses to produce this table. The velar/sibilant group is
+already handled correctly: hard endings with the `y`→`i` spelling rule.
 
-## Finding 7 — the repository redistributes 560 KB of third-party data with no attribution file
+## Finding 7 — 560 KB of third-party data ships with no attribution file
 
 | Artefact | Size | Source | Licence |
 |---|---:|---|---|
 | `crates/ruthenian-orthography/tests/corpus/sample.tsv` | 328 KB | Russian Synodal Bible, via `gold-silver-copper/ruthenian@49d3af7` | public domain (1876); provenance still required |
-| `crates/ruthenian-core/tests/paradigms/fixture.tsv` | 216 KB | English Wiktionary via Wiktextract | **CC BY-SA 4.0 + GFDL** |
-| `crates/ruthenian-core/tests/paradigms/fixture_meta.tsv` | 16 KB | same | same |
+| `crates/ruthenian-core/tests/paradigms/*.tsv` | 232 KB → now ~600 KB | English Wiktionary via Wiktextract | **CC BY-SA 4.0 + GFDL** |
 
 `docs/specs/ruthenian-extract.md` requires `ATTRIBUTION.md` "in the same commit
 that first vendors extracted data". It does not exist. The obligation began in
-phase 1 and doubled in phase 2.
+phase 1 and has grown with every fixture regeneration since.
 
-Note the comparison with slovowiki, whose `ATTRIBUTION.md` states that the raw
-dump "is **not** redistributed in this repository; it is read locally at build
-time". This repository *does* redistribute dump-derived data, so its obligation
-is strictly larger than the model it is copying.
+Note the contrast with slovowiki, whose `ATTRIBUTION.md` states the raw dump "is
+**not** redistributed in this repository". This repository *does* redistribute
+dump-derived data, so its obligation is strictly larger than the model it copies.
 
 ---
 
 # Part 2 — The fixes
 
-Land all of these on `agent/core`. Order is by risk, not by size: the licence
-and the parser first, the measurement rewrite next, the rule work last.
+Land all of these on `agent/core`. Order is by risk, not size.
+
+Fix 2 and the sampling removal are **already done** on the branch — the parser
+handles all 226 codes, `tools/measure.py` and `tools/build_fixture.py` do full
+scans, the fixture and random samples are regenerated from the complete record
+set, and `INVARIANTS.md` records the rule. What follows is the remainder.
 
 ## Fix 1 — `ATTRIBUTION.md` (licence condition)
 
-Write it at the repository root, on slovowiki's structure (`~/Desktop/code/slovowiki/ATTRIBUTION.md`):
-a table separating **source code** (MIT OR Apache-2.0) from **vendored data**
-from **generated content**, then a section per source.
+Write it at the repository root on slovowiki's structure
+(`~/Desktop/code/slovowiki/ATTRIBUTION.md`): a table separating **source code**
+(MIT OR Apache-2.0) from **vendored data** from **generated content**, then a
+section per source.
 
 Must state, per Finding 7: the corpus sample's provenance and public-domain
-status; that the paradigm fixture is English Wiktionary content extracted with
-Wiktextract, carrying **CC BY-SA 4.0 + GFDL**, requiring attribution and
-share-alike from anyone redistributing it; that Wiktextract itself (Tatu Ylonen)
-is MIT while the data it produces keeps Wiktionary's licence; and that the raw
-dump is *not* redistributed here.
+status; that the paradigm fixture and the random samples are English Wiktionary
+content extracted with Wiktextract, carrying **CC BY-SA 4.0 + GFDL** and
+requiring attribution and share-alike from anyone redistributing them; that
+Wiktextract itself (Tatu Ylonen) is MIT while the data keeps Wiktionary's
+licence; and that the raw dump is not redistributed here.
 
-Link it from the root `README.md` and from both `tests/*/README.md` files.
-
-## Fix 2 — class-code parser: three notation features, and the real corpus
-
-Handle all three groups from Finding 2:
-
-- **ASCII `'`** as well as `ʹ` (U+02B9). Both mark the same softness
-  distinction; treat them identically rather than adding a second concept.
-- **`-xx` stem suffixes** (`-nd`, `-bd`): a hyphen followed by Cyrillic or Latin
-  letters, captured like the existing `+p` mutation rather than skipped.
-- **`sNN` suffixes** (`s13`, `s14`): captured as a numbered variant.
-
-Then **replace `tests/paradigms/class-codes.txt` with the full 183-code list**
-from the full-dump command in Finding 2, and make `class_codes_parse` assert the
-count is ≥ 183 so a shrunken corpus fails loudly. Keep the existing negative
-cases: an unrecognized code must still error, and `irreg`/`-` must still parse to
-their own variants.
-
-Acceptance: all 183 parse; the guard still fails under its witness.
+Link it from the root `README.md`, from `tools/README.md`, and from both
+`tests/*/README.md` files.
 
 ## Fix 3 — measure honestly: two samples, one number each
 
-The single most important fix, because the PR currently understates the crate.
-
-1. **Add a random held-out sample** at `tests/paradigms/random.tsv` — ~120
-   lemmas per part of speech drawn with a fixed seed from the dump, with **no
-   hand-picking and no class targeting**. Record the seed, the windows and the
-   selection code in `tests/paradigms/README.md` so it is reproducible.
+1. **Score the random held-out samples** — they are committed but nothing reads
+   them yet. Add a harness beside `tests/fixture.rs` that scores
+   `random_{nouns,verbs,adjs}.tsv` segmentally and strictly.
 2. **Report both, and say what each is for.** The targeted fixture is a
-   regression net over hard cases; the random sample is the accuracy figure.
-   Never average them, and never quote the targeted one as accuracy.
-3. **Keep the `RUTHENIAN_DUMP_MISSES` diagnostic** already added to
-   `tests/fixture.rs` (currently uncommitted) — it is what made Finding 5
-   possible.
-4. **Correct every published figure** to the full-dump numbers: classes 1–6 are
-   **90.6 %**, not 87.6 %; noun accent `a+b` is **96.8 %**, not "~93 %"; and the
-   accuracy table in the PR description gets both columns.
+   regression net; the random samples are the accuracy figure. Never average
+   them, never quote the targeted one as accuracy (`INVARIANTS.md` I3).
+3. **Keep the `RUTHENIAN_DUMP_MISSES` diagnostic** in `tests/fixture.rs` — it is
+   what made Finding 5 possible — and extend it to the random harness.
+4. **Correct every published figure** to full-dump values: classes 1–6 are
+   **90.7 %**; noun accent `a+b` is **94.7 %**; verb `a+b+c` is **98.0 %**; and
+   the PR description's accuracy table gets both columns.
 
 Acceptance: every number in `lib.rs`, the crate README and the PR description
-traces to one stated command, and no two of them disagree.
+traces to `tools/measure.py`, and no two disagree (`INVARIANTS.md` I2).
 
 ## Fix 4 — derive adjective softness
 
 Replace the `soft = false` hardcode with the derivation from Finding 6: soft iff
-the citation form ends `-ij` and the stem-final consonant is not velar or
-sibilant. The function currently takes a bare stem, which cannot carry the
-distinction — so take the citation form, or add an explicit `soft: bool` the
-caller supplies. Prefer whichever keeps `adjective()` a pure function of its
-arguments.
+the citation form ends `-ij` **and** the stem-final consonant is not velar or
+sibilant. `adjective()` currently takes a bare stem, which cannot carry the
+distinction — take the citation form, or add an explicit `soft: bool` the caller
+supplies, whichever keeps the function pure in its arguments.
 
-Delete the code comment admitting the forms are wrong; it will no longer be true.
+Delete the comment admitting the forms are wrong; it will no longer be true.
 
-Acceptance: `sinij` declines soft (`sinjego`), `russkij` stays hard
-(`russkogo`, not `*russkjego`), `novyj` unchanged. Add all three as golden cases.
+Acceptance: `sinij` declines soft (`sinjego`), `russkij` stays hard (`russkogo`,
+not `*russkjego`), `novyj` unchanged. All three as golden cases.
 
 ## Fix 5 — fix stress placement inside the modelled patterns
 
-Per Finding 4, ~96 % of nouns and verbs are in patterns the crate claims to
+Per Finding 4, 95–98 % of nouns and verbs are in patterns the crate claims to
 model, so the 4–10 % strict score is placement bugs. Work from the
-`RUTHENIAN_DUMP_MISSES` dump filtered to rows that differ **only** in stress —
-that set is the work list, and it is already computable.
+`RUTHENIAN_DUMP_MISSES` dump filtered to rows differing **only** in stress —
+that set is the work list and is already computable.
 
-Do not extend to patterns `d`–`f` in this PR. They are 3–4 % and the honest
-statement about them ("segmental form correct, stress not modelled, recorded in
-the trace") is already true.
+Do not extend to patterns `d`–`f` here. They are 2–5 % and the honest statement
+about them ("segmental form correct, stress not modelled, recorded in the trace")
+is already true.
 
-Acceptance: strict scores rise substantially on both samples and are reported;
+Acceptance: strict scores rise substantially on both fixtures and are reported;
 `stress_placed` still fails under its witness.
 
 ## Fix 6 — genitive plural and instrumental singular
@@ -294,39 +281,52 @@ The two weak cells from Finding 5.
 
 - **Genitive plural**: the zero ending with fleeting-vowel insertion
   (`okno` → `okon`, `sestra` → `sestjor`). `NounClass::reducible` already carries
-  the `*` marker from the source and is currently unused.
+  the `*` marker and is currently unused.
 - **Instrumental singular**: the `-om`/`-em` alternation after sibilants and `c`.
-  `phono::spell_after_stem` already implements the unstressed `o`→`e` rule; check
-  whether it is being reached on this path, since the ending arrives pre-spelled.
+  `phono::spell_after_stem` implements the unstressed `o`→`e` rule; check whether
+  it is reached on this path, since the ending arrives pre-spelled.
 
-Acceptance: both slots improve measurably on the random sample; report before and
-after.
+Acceptance: both slots improve measurably on the random noun sample; report
+before and after.
 
 ## Fix 7 — `Policy::regularized()`
 
 Decide and apply one: drop the method until phase 6 gives it content, or keep it
 and make the no-op unmissable at the call site. The risk is a consumer blessing
 its output into a test and depending on behaviour that will change. Prefer
-dropping — an alias that silently means something else is exactly what
-`LESSONS.md` E3 warns about.
+dropping — an alias that silently means something else is what `LESSONS.md` E3
+warns about.
+
+## Fix 8 — extend the mutation table
+
+The full scan surfaced six mutations the crate does not implement, listed in
+`phono.rs` as known misses: `в → ∅` (давать/даю, 41), `ев → у` (бичевать/бичую,
+19), `ев → ю` (блевать/блюю, 11), `им → емл` (внимать/внемлю, 5), `ер → р`
+(тереть/тру, 3), `р → ер` (брать/беру, 2). Together they are ~81 verbs.
+
+These interact with class conditioning — `ев → у` and `ев → ю` are both `-евать`
+verbs distinguished by the lemma, not the class — so implement only what the
+class determines and leave the rest to the lexicon, recording which is which.
 
 ## Gates and house rules
 
-Unchanged from phase 2, and all must still hold:
+Unchanged, and all must still hold:
 
 - `cargo test --workspace`, `cargo test --doc --workspace`,
   `cargo clippy --workspace --all-targets -- -D warnings`, `cargo fmt --check`.
 - Zero third-party dependencies in `ruthenian-core`; `ruthenian-orthography` only.
 - Phase 1's full-corpus guard still passes: 41 462 lines, 0 failures.
-- **All 13 guards re-mutation-tested after the changes**, not just the ones you
-  touched. Fix 4 and Fix 5 both alter code that guards watch.
+- **All 13 guards re-mutation-tested** after the changes, not only the ones you
+  touched. Fixes 4, 5, 6 and 8 all alter guarded code.
+- **`INVARIANTS.md` I1**: no sampling anywhere, in code, tests, tooling or docs.
+  The check is in I1 and it is one grep.
 - Assert nothing you have not executed. Every number in the report needs a
-  command behind it — the whole reason this document exists is that three
-  published figures did not.
+  command behind it — the reason this document exists is that several published
+  figures did not.
 
 ## Report
 
-State: the two sample tables side by side, before and after; the 183-code parse
-result; which stress bugs you found and what they cost; the gen-pl/ins-sg
-movement; the 13 guards with each mutation outcome; and anything in Part 1 that
-turned out to be wrong when you re-measured it.
+State: the targeted and random tables side by side, before and after; the
+226-code parse result; which stress bugs you found and what they cost; the
+gen-pl/ins-sg movement; the 13 guards with each mutation outcome; and anything in
+Part 1 that turned out to be wrong when you re-measured it.

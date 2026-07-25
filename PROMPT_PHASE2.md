@@ -41,101 +41,104 @@ Three consequences to design around rather than discover:
 
 ## The measured class inventory
 
-Sampled from `~/Desktop/code/wikidata/raw-wiktextract-data.jsonl` on 2026-07-25:
-1.8 GB of 22 GB (~8%), 1 669 verb lemmas carrying `ru-conj`. Re-measure on a
-larger sample if you want tighter numbers; these are estimates, not exact counts.
+Measured over the **entire** dump on 2026-07-25 — 441 629 Russian records,
+12 773 verb lemmas carrying `ru-conj`. Sampling is forbidden (`INVARIANTS.md`
+I1); regenerate with `python3 tools/measure.py`.
 
-**Verbs — 127 distinct class codes, very heavily skewed:**
+**Verbs — 226 distinct class codes, very heavily skewed:**
 
-| Class | Share | Cumulative |
-|---|---:|---:|
-| `1a` | 38.6 % | 38.6 % |
-| `4a+p` | 4.3 % | 43.0 % |
-| `4b+p` | 4.0 % | 47.0 % |
-| `4c+p` | 4.0 % | 50.9 % |
-| `4b` | 3.3 % | 54.2 % |
-| `2a+p` | 3.1 % | 57.3 % |
-| `4a` | 2.8 % | 60.0 % |
-| `1a+p` | 2.8 % | 62.8 % |
-| `4c` | 2.7 % | 65.5 % |
-| `a(2)` | 2.2 % | 67.7 % |
-| … 12 more | | 79.9 % |
-| `irreg` | 1.0 % | |
-| `-` (no class given) | 1.6 % | |
+| Class | Count |
+|---|---:|
+| `1a` | 5 060 |
+| `2a+p` | 953 |
+| `4a+p` | 693 |
+| `4b+p` | 639 |
+| `1a+p` | 547 |
+| `2a` | 539 |
+| `4b` | 491 |
+| `4c+p` | 483 |
+| `4a` | 480 |
+| `4c` | 356 |
+| `5b` | 224 |
+| `3b` | 211 |
 
-Classes 1, 2 and 4 with stress patterns a/b/c cover roughly two thirds of all
-verbs. **Implement in frequency order** and report coverage as you go — that
-number is this phase's headline.
+**Classes 1–6 are 11 584 of 12 773 = 90.7 %** of verbs carrying a class code.
+**Implement in frequency order** and report coverage as you go — that number is
+this phase's headline.
 
 **Nouns — a small closed inventory, which is why they are the easiest part:**
 
-- stem classes: `hard-stem` (1 258), `velar-stem` (716), `soft-stem` (336),
-  `i-stem` (235), `sibilant-stem` (107), `ц-stem` (106), `vowel-stem` (73);
-- accent patterns: `a` (2 524), `b` (275), `c` (58), `d` (57), `e` (26), `f` (12).
+- stem classes: `hard-stem` (12 314), `velar-stem` (7 297), `i-stem` (3 583),
+  `soft-stem` (1 452), `ц-stem` (1 340), `sibilant-stem` (899),
+  `vowel-stem` (641);
+- accent patterns: `a` (25 442), `b` (2 382), `c` (536), `d` (495), `e` (287),
+  `f` (75), plus primed variants (`dʹ` 28, `fʹ` 28, `bʹ` 11, `fʺ` 5) that a
+  sample never surfaced at all. `a`+`b` alone are 94.7 %.
 
-**Adjectives:** `a*` (287), `a` (103), `a*①` (35), `a*②` (14), `c`, `cʹ*`, `b*②`.
-`*` marks a fleeting vowel in the short form, `①`/`②` short-form irregularities,
-`ʹ` a softness distinction.
+**Adjectives:** hard `-yj` (6 669), velar/sibilant with `i`-spelling (2 356),
+stressed `-oj` (540), **true soft `-nij` (155 = 1.6 %)**. `*` marks a fleeting
+vowel in the short form, `①`/`②` short-form irregularities, `ʹ` a softness
+distinction.
 
 ### Parsing the class code is part of this crate
 
 The notation is not a simple enum. Observed shapes include `1a`, `4b+pжд`,
-`7b/b(9)+p`, `a(2)`, `6°b`, `irreg`, `-`. Write a real parser, with the full list
-of distinct codes as its test corpus — regenerate it rather than trusting the
-table above:
-
-```bash
-cd ~/Desktop/code/wikidata
-for skip in 4000 11000 19000; do
-  dd if=raw-wiktextract-data.jsonl bs=1m skip=$skip count=600 2>/dev/null | tail -n +2
-done | python3 -c 'your_filter'   # collect inflection_templates[0].args["2"]
-```
+`7b/b(9)+p`, `a(2)`, `6°b`, `irreg`, `-`. Write a real parser, with **all 226** distinct codes as its test corpus. They are
+committed at `crates/ruthenian-core/tests/paradigms/class-codes.txt`; regenerate
+with `tools/measure.py`, never from a slice of the file.
 
 **`irreg` and `-` are not parse failures.** They are valid codes meaning "the
 rules cannot derive this verb" — a signal that `ruthenian-lexicon` must supply
 the forms. Parse them into an explicit variant. An *unrecognized* code is a
 different thing and must be an error, never a silent default to some class.
 
-**Verified: `+p` means the verb forms a past passive participle.** Of verbs whose
-code contains `+p`, 1 488 have an attested PPP and 1 without; of verbs without
-it, 61 have one and 3 284 do not. So `+p` predicts the PPP with ~99.9 % precision
-and ~96 % recall — reliable enough to drive generation, and the 61 exceptions are
-exactly the kind of residue the lexicon exists to hold. In `4b+pжд` the trailing
+**Verified: `+p` means the verb forms a past passive participle.** Over the whole
+dump: of codes carrying `+p`, 4 190 have an attested PPP and 6 do not; of codes
+without it, 173 have one and 8 404 do not. So `+p` predicts the PPP with
+**99.86 % precision and 96.0 % recall** — reliable enough to drive generation,
+and the 173 exceptions are exactly the kind of residue the lexicon exists to
+hold. In `4b+pжд` the trailing
 `жд` is the participle's stem mutation (`победить` → `побеждённый`).
 
 ## The present-stem mutations, measured
 
 This is the heart of the crate, and it is directly expressible in Ruthenian.
-Counts and examples are from the same sample; the Ruthenian column is the same
+Counts and examples are from the full-dump scan; the Ruthenian column is the same
 rule written in the alphabet you actually emit.
 
-| Cyrillic | Ruthenian | Count | Examples |
+| Cyrillic | Ruthenian | Count | Example |
 |---|---|---:|---|
-| ов → у | `ov` → `u` | 146 | негодовать/негодую, семплировать/семплирую |
-| с → ш | `s` → `sz` | 16 | превозносить/превозношу, заносить/заношу |
-| т → ч | `t` → `cz` | 15 | рокотать/рокочу, колотить/колочу |
-| д → ж | `d` → `zz` | 13 | садить/сажу, восходить/восхожу |
-| з → ж | `z` → `zz` | 11 | отвозить/отвожу, грезить/грежу |
-| п → пл | `p` → `plj` | 17 | тупить/туплю |
-| в → вл | `v` → `vlj` | 6 | кривить/кривлю, травить/травлю |
-| м → мл | `m` → `mlj` | 6 | знакомить/знакомлю, экономить/экономлю |
-| б → бл | `b` → `blj` | 5 | долбить/долблю, клубить/клублю |
-| ст → щ | `st` → `szcz` | 6 | хрустеть/хрущу, хлестать/хлещу |
-| т → щ | `t` → `szcz` | 3 | трепетать/трепещу, тяготить/тягощу |
-| х → ш | `h` → `sz` | 2 | пахать/пашу |
-| ск → щ | `sk` → `szcz` | 1 | рыскать/рыщу |
-| к → ч | `k` → `cz` | 1 | мурлыкать/мурлычу |
+| ов → у | `ov` → `u` | 675 | мульчировать/мульчирую |
+| д → ж | `d` → `zz` | 112 | щадить/щажу |
+| т → ч | `t` → `cz` | 60 | лететь/лечу |
+| с → ш | `s` → `sz` | 56 | писать/пишу |
+| в → ∅ | `v` → ∅ | 41 | давать/даю |
+| з → ж | `z` → `zz` | 40 | возить/вожу |
+| п → пл | `p` → `plj` | 38 | спать/сплю |
+| в → вл | `v` → `vlj` | 27 | готовить/готовлю |
+| б → бл | `b` → `blj` | 25 | любить/люблю |
+| ст → щ | `st` → `szcz` | 24 | крестить/крещу |
+| ев → у | `ev` → `u` | 19 | бичевать/бичую |
+| м → мл | `m` → `mlj` | 19 | кормить/кормлю |
+| ев → ю | `ev` → `ju` | 11 | блевать/блюю |
+| к → ч | `k` → `cz` | 9 | плакать/плачу |
+| ск → щ | `sk` → `szcz` | 6 | искать/ищу |
+| х → ш | `h` → `sz` | 6 | махать/машу |
+| т → щ | `t` → `szcz` | 5 | трепетать/трепещу |
+| им → емл | `im` → `jemlj` | 5 | внимать/внемлю |
+| ер → р | `er` → `r` | 3 | тереть/тру |
+| р → ер | `r` → `er` | 2 | брать/беру |
 
 Two things this table teaches that a grammar book states less sharply:
 
-- **`ов` → `u` is the single most common mutation**, by an order of magnitude. It
-  is the `-овать`/`-ировать` class, not an exotic case — do not leave it for
-  later.
+- **`ов` → `u` is the single most common mutation**, six times the next. It is
+  the `-овать`/`-ировать` class, not an exotic case — do not leave it for later.
 - **Mutation is conditioned on the class, not on the stem's final consonant.**
-  1 251 verbs in the sample show *no* mutation at all, and 670 labial-final stems
-  show no epenthesis — because they are class `1a` `-ивать`/`-ывать` verbs, where
-  the theme vowel intervenes and nothing mutates. A rule keyed on "stem ends in a
-  labial" will corrupt hundreds of common verbs. Key on the class.
+  Of the 1 977 class-1 verbs whose stem ends in a labial, **not one** takes
+  epenthesis — they are `-ивать`/`-ывать` verbs where the theme vowel intervenes.
+  The rule is exceptionless across the whole dump, which is a fact only a full
+  scan can establish; a rule keyed on "stem ends in a labial" would corrupt all
+  1 977. Key on the class.
 - `д` → `zz` and `з` → `zz` collide, exactly as they do in Russian
   (водить/возить both → вожу). That is a real homograph, not a bug.
 
@@ -143,16 +146,17 @@ Two things this table teaches that a grammar book states less sharply:
 
 `docs/specs/ruthenian-core.md` §7 says the dump marks defective slots `"-"` so
 the affected set is "enumerated exactly by Phase 4". **That is wrong as written,
-and acting on it would break the aspect system.** Measured, from 2 941 verbs:
+and acting on it would break the aspect system.** Measured over every Russian
+verb in the dump:
 
-| Aspect | Verbs | Gap slots |
-|---|---:|---:|
-| perfective (incl. `pf-intr`) | 1 459 | 13 922 |
-| imperfective (incl. `impf-intr`) | 1 477 | 2 509 |
+| Aspect | Verbs | Gap slots | Per verb |
+|---|---:|---:|---:|
+| perfective (incl. `pf-intr`) | 5 881 | 55 646 | 9.5 |
+| imperfective (incl. `impf-intr`) | 6 856 | 9 517 | 1.4 |
 
-The commonest gap slots are `participle passive present` (2 199),
-`participle passive past` (2 013), `adverbial participle present` (1 532), and
-each of the six present-tense person/number slots at ~1 519 — almost exactly the
+The commonest gap slots are `participle passive present` (9 036),
+`participle passive past` (8 405), `adverbial participle present` (6 035), and
+each of the six present-tense person/number slots at ~5 950 — tracking the
 perfective verb count.
 
 So the overwhelming majority of `"-"` slots are **structural**: a perfective verb
@@ -175,9 +179,7 @@ explicitly.** Verified on the canonical case:
 
 `победить` carries `futr_1sg: "-"` as an **explicit override argument**. Its
 first-person *future* singular is the defect (`*побежу` is avoided); its
-first-person *present* singular is `-` merely because it is perfective. Only 21
-imperative gaps appear in the entire sample, which is the order of magnitude of
-real defectiveness.
+first-person *present* singular is `-` merely because it is perfective.
 
 So `gap.fill-defective-1sg` (rename it from `gap.fill-1sg`) targets the 1sg
 future of defective perfectives, and its documentation must say which gap it
@@ -342,7 +344,7 @@ the same problem until the mutation proves otherwise.
 
 ## Report
 
-State: coverage by part of speech and by verb class, as a share of the sampled
+State: coverage by part of speech and by verb class, as a share of the full-dump
 distribution; the fixture pass rate **segmental and strict**, with failures
 listed by lemma and the reason each needs a principal part; the twelve guards
 with the outcome of each mutation test; every place the spec was wrong or

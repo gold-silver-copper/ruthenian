@@ -27,8 +27,10 @@ pub struct ZaliznyakVerbClass {
     pub accent_alt: Option<AccentPattern>,
     /// `°` — an irregular stem within an otherwise regular class.
     pub irregular_stem: bool,
-    /// Forms a past passive participle. Verified: this predicts an attested PPP
-    /// with ~99.9 % precision and ~96 % recall over 4 834 sampled verbs.
+    /// Forms a past passive participle. Measured over every Russian verb in the
+    /// dump: 4 190 of 4 196 codes carrying `+p` have an attested PPP (99.86 %
+    /// precision), and they account for 4 190 of 4 363 attested PPPs (96.0 %
+    /// recall).
     pub ppp: bool,
     /// The participle's stem mutation, when the code names one (`+pжд`).
     pub ppp_mutation: Option<String>,
@@ -36,6 +38,10 @@ pub struct ZaliznyakVerbClass {
     pub footnotes: Vec<u8>,
     /// `*` — a fleeting vowel in the stem.
     pub reducible: bool,
+    /// A `-xx` stem suffix, as in `4b/c-nd` or `14c/c-bd`.
+    pub stem_suffix: Option<String>,
+    /// An `sNN` variant marker, as in `6a1as13`.
+    pub variant: Option<u8>,
     /// `irreg`: the rules do not derive this verb at all.
     pub irregular: bool,
     /// `-`: the source gives no class.
@@ -102,6 +108,8 @@ impl ZaliznyakVerbClass {
             ppp_mutation: None,
             footnotes: Vec::new(),
             reducible: false,
+            stem_suffix: None,
+            variant: None,
             irregular: false,
             unclassified: false,
             raw: raw.to_string(),
@@ -165,7 +173,20 @@ impl ZaliznyakVerbClass {
                     i += 1;
                 }
                 '/' | ',' => i += 1,
-                'ʹ' | '\u{0301}' => i += 1,
+                // Softness mark. The data uses both the modifier letter and a
+                // plain ASCII apostrophe for the same thing, so both are the
+                // same concept here rather than two.
+                'ʹ' | '\'' | '\u{0301}' | 'ʺ' => i += 1,
+                // `sNN` variant marker: 6a1as13.
+                's' if chars.get(i + 1).is_some_and(char::is_ascii_digit) => {
+                    i += 1;
+                    let start = i;
+                    while i < chars.len() && chars[i].is_ascii_digit() {
+                        i += 1;
+                    }
+                    let n: String = chars[start..i].iter().collect();
+                    out.variant = n.parse().ok();
+                }
                 '+' => {
                     i += 1;
                     if chars.get(i) == Some(&'p') {
@@ -214,7 +235,18 @@ impl ZaliznyakVerbClass {
                         out.ppp_mutation = Some(chars[start..i].iter().collect());
                     }
                 }
-                '-' => i += 1,
+                // `-xx` stem suffix: 4b/c-nd, 14c/c-bd. A bare trailing hyphen
+                // is not one.
+                '-' => {
+                    i += 1;
+                    let start = i;
+                    while i < chars.len() && chars[i].is_alphabetic() {
+                        i += 1;
+                    }
+                    if i > start {
+                        out.stem_suffix = Some(chars[start..i].iter().collect());
+                    }
+                }
                 _ => return Err(err(i, "unexpected character in class code")),
             }
         }

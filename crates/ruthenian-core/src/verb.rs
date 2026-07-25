@@ -5,8 +5,10 @@
 //! A perfective verb has **no present tense** — its non-past morphology realizes
 //! the future — no present participles and no present gerund; an intransitive
 //! verb has no passive participle. In the source data these appear as `"-"`
-//! forms, and they are the overwhelming majority of them: 13 922 gap slots
-//! across 1 459 perfective verbs against 2 509 across 1 477 imperfective ones.
+//! forms, and they are the overwhelming majority of them. Measured over every
+//! Russian verb in the dump: 55 646 gap slots across 5 881 perfective verbs
+//! against 9 517 across 6 856 imperfective ones — 9.5 per perfective verb
+//! against 1.4 per imperfective one.
 //!
 //! They are grammar, not defectiveness, so this module computes them from
 //! `(aspect, transitivity, slot)` and returns `Ok(None)`. Filling them would

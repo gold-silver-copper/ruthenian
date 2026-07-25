@@ -1,0 +1,22 @@
+# tools
+
+Measurement and fixture generation. Both read a **complete** set of Russian
+records, never a sample — see [`INVARIANTS.md`](../INVARIANTS.md) I1.
+
+```bash
+cd ~/Desktop/code/wikidata
+LC_ALL=C grep -F '"lang_code": "ru"' raw-wiktextract-data.jsonl > /tmp/ru_all.jsonl
+
+cd ~/Desktop/code/ruthenian
+python3 tools/measure.py /tmp/ru_all.jsonl        # every published figure
+python3 tools/build_fixture.py < /tmp/ru_all.jsonl # regenerate the fixture
+```
+
+The `grep` filter is a superset — every record whose `lang_code` is `ru`
+contains that literal — so the cache is provably complete. It matches 517 691
+lines, of which 441 629 parse as Russian records; the difference is nested
+occurrences, which is why the records are JSON-parsed rather than pattern-matched.
+
+`measure.py` prints the class-code census, gap counts by aspect, the `+p`
+precision/recall check, the mutation table, stem-class and accent distributions,
+and writes `class-codes-full.txt` plus the random held-out samples.
