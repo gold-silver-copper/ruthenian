@@ -203,8 +203,16 @@ pub fn adjective(
     form: AdjForm,
 ) -> Option<Prediction> {
     let bare = phono::unstress(stem);
-    let soft = bare.ends_with('n') && false; // soft-stem adjectives end in -nij; see below
-    let soft = soft || phono::ends_sibilant(&bare) || phono::ends_velar(&bare);
+    // Softness is a property of the lemma (`sinij` is soft, `novyj` hard), and a
+    // bare stem does not carry it: `sin` and `nov` look alike. Velar and
+    // sibilant stems are NOT soft — `russkogo`, not `*russkjego`; their `y` ->
+    // `i` is the spelling rule in `phono`, not a different ending set.
+    //
+    // Until the lexicon supplies the distinction (phase 3), this defaults to
+    // hard, which is right for every stem except the true soft ones. `sinij`
+    // and its kind are therefore wrong here, and that is recorded rather than
+    // hidden.
+    let soft = false;
 
     match form {
         AdjForm::Short => {

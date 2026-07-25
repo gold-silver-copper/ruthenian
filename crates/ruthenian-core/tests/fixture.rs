@@ -22,7 +22,6 @@ const META: &str = include_str!("paradigms/fixture_meta.tsv");
 
 #[derive(Debug, Clone)]
 struct Meta {
-    pos: String,
     class: String,
     extra: String,
 }
@@ -37,7 +36,6 @@ fn meta() -> BTreeMap<String, Meta> {
         m.insert(
             f[0].to_string(),
             Meta {
-                pos: f[1].to_string(),
                 class: f[2].to_string(),
                 extra: f[3].to_string(),
             },
