@@ -1,0 +1,12 @@
+[package]
+name = "ruthenian-orthography"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "Bijective Cyrillic-Latin orthography for Ruthenian (Latin-script Russian)"
+
+# NO dependencies. Enforced by the `no_dependencies` guard, not by convention.
+[dependencies]
