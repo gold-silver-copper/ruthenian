@@ -254,3 +254,53 @@ pub fn apply_stress_at(s: &str, idx: usize) -> String {
     out.push_str(&bare[*at..]);
     out
 }
+
+/// Insert a fleeting vowel into a final consonant cluster before a zero ending.
+///
+/// Russian nouns and adjectives with a reducible stem grow a vowel where a zero
+/// ending would otherwise leave an unpronounceable cluster: `okno` → `okon`,
+/// `kukla` → `kukol`, `sbjerknizzka` → `sbjerknizzjek`, `sovjestnyj` →
+/// `sovjestjen`.
+///
+/// Which vowel is decided by what precedes the insertion point: `je` after a
+/// sibilant or a soft consonant, `o` otherwise.
+///
+/// ```
+/// use ruthenian_core::phono::insert_fleeting_vowel;
+/// assert_eq!(insert_fleeting_vowel("okn"), "okon");
+/// assert_eq!(insert_fleeting_vowel("kukl"), "kukol");
+/// assert_eq!(insert_fleeting_vowel("sbjerknizzk"), "sbjerknizzjek");
+/// // nothing to break up
+/// assert_eq!(insert_fleeting_vowel("stol"), "stol");
+/// ```
+pub fn insert_fleeting_vowel(stem: &str) -> String {
+    let bare: Vec<char> = stem.chars().collect();
+    if bare.len() < 2 {
+        return stem.to_string();
+    }
+    // Find the final consonant, then check that something consonantal precedes
+    // it; a vowel there means there is no cluster to break up.
+    let last = bare.len() - 1;
+    if VOWELS.contains(&bare[last]) || bare[last] == STRESS {
+        return stem.to_string();
+    }
+    let mut before = last;
+    while before > 0 && bare[before - 1] == STRESS {
+        before -= 1;
+    }
+    if before == 0 || VOWELS.contains(&bare[before - 1]) {
+        return stem.to_string();
+    }
+    let head: String = bare[..before].iter().collect();
+    let tail: String = bare[before..].iter().collect();
+    // `j` here is a soft sign, which the fleeting vowel replaces rather than
+    // follows: `pjesnj` -> `pjesjen`.
+    let (head, vowel) = if let Some(h) = head.strip_suffix('j') {
+        (h.to_string(), "je")
+    } else if ends_sibilant(&head) || ends_ts(&head) {
+        (head, "je")
+    } else {
+        (head, "o")
+    };
+    format!("{head}{vowel}{tail}")
+}

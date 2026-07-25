@@ -235,6 +235,25 @@ fn build(
         trace = trace.then("spelling rule after velar/sibilant stem");
     }
 
+    // A zero ending on a reducible stem grows a fleeting vowel: the genitive
+    // plural of `sbjerknizzka` is `sbjerknizzjek`, not `*sbjerknizzk`.
+    let (stem, bare_stem, trace) = if ending.is_empty() && class.reducible {
+        let filled = phono::insert_fleeting_vowel(&bare_stem);
+        let stressed = match phono::stressed_index(stem) {
+            Some(i) => phono::apply_stress_at(&filled, i),
+            None => filled.clone(),
+        };
+        (
+            std::borrow::Cow::Owned(stressed),
+            filled,
+            trace.then("fleeting vowel before a zero ending"),
+        )
+    } else {
+        (std::borrow::Cow::Borrowed(stem), bare_stem, trace)
+    };
+    let mut trace = trace;
+    let stem: &str = &stem;
+
     let text = match class.accent {
         // Fixed stem stress: the stem keeps the mark it arrived with.
         AccentPattern::A => {
