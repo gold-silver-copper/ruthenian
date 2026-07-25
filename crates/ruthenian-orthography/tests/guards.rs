@@ -29,24 +29,50 @@ fn legal(seq: &[char]) -> bool {
     Cyrillic::parse(&seq.iter().collect::<String>()).is_ok()
 }
 
+/// The Russian alphabet, written out independently of the crate's own table.
+///
+/// Mutation testing caught this: the exhaustive guards originally iterated
+/// `Alphabet::letters()`, which is derived from the mapping table, so deleting a
+/// row from the table merely stopped the guard from testing that letter. A guard
+/// must not source its expectations from the thing it is checking.
+const RUSSIAN: [char; 33] = [
+    'а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с',
+    'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я',
+];
+
 // --------------------------------------------------------------------------
 // 1. roundtrip_exhaustive_singles
 //    Witness: remove one row from the mapping table.
 // --------------------------------------------------------------------------
 #[test]
 fn roundtrip_exhaustive_singles() {
+    // Every letter of the independently-written alphabet must be mapped. A row
+    // missing from the crate's table shows up here as a parse failure, not as a
+    // silently smaller test.
+    for &c in &RUSSIAN {
+        assert!(
+            Alphabet::contains(c),
+            "{c:?} is a Russian letter but is not in the alphabet"
+        );
+    }
     let mut checked = 0;
-    for c in Alphabet::letters() {
+    for &c in &RUSSIAN {
         for s in [c.to_string(), c.to_uppercase().to_string()] {
             let chars: Vec<char> = s.chars().collect();
             if !legal(&chars) {
+                // ъ and ь cannot stand alone; they are covered by the pair and
+                // triple guards in their legal environments.
+                assert!(
+                    matches!(c, 'ъ' | 'ь'),
+                    "{c:?} should be well-formed on its own"
+                );
                 continue;
             }
             assert_roundtrip(&s);
             checked += 1;
         }
     }
-    assert!(checked >= 60, "only {checked} single letters checked");
+    assert_eq!(checked, 62, "expected 31 letters x 2 cases");
 }
 
 // --------------------------------------------------------------------------
@@ -370,6 +396,28 @@ fn stress_is_distinguishing() {
         Cyrillic::parse("т\u{0301}ы").unwrap_err().kind,
         Unmapped::StrayStress
     );
+
+    // The mark must be carried *by the vowel*, not merely survive as a stray
+    // character. Mutation testing caught this: making the reader ignore the mark
+    // still round-tripped, because the unconsumed mark fell through the
+    // passthrough arm and landed back in the output by accident.
+    let toks = ruthenian_orthography::reader::tokenize(b.as_str(), None);
+    assert!(
+        !toks
+            .iter()
+            .any(|g| matches!(g, Grapheme::Neutral(c) if *c == STRESS)),
+        "the stress mark passed through as a neutral character"
+    );
+    let stressed: Vec<char> = toks
+        .iter()
+        .filter_map(|g| match g {
+            Grapheme::Letter {
+                cyr, stress: true, ..
+            } => Some(*cyr),
+            _ => None,
+        })
+        .collect();
+    assert_eq!(stressed, vec!['а'], "the stress must attach to а in писа́ть");
 }
 
 // --------------------------------------------------------------------------
