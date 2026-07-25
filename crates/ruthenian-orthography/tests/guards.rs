@@ -72,6 +72,7 @@ fn roundtrip_exhaustive_singles() {
             checked += 1;
         }
     }
+    println!("singles: {checked} well-formed");
     assert_eq!(checked, 62, "expected 31 letters x 2 cases");
 }
 
@@ -92,6 +93,7 @@ fn roundtrip_exhaustive_pairs() {
             checked += 1;
         }
     }
+    println!("pairs: {checked} well-formed");
     assert!(checked > 800, "only {checked} pairs checked");
 }
 
@@ -115,6 +117,7 @@ fn roundtrip_exhaustive_triples() {
             }
         }
     }
+    println!("triples: {checked} well-formed");
     assert!(checked > 20_000, "only {checked} triples checked");
 }
 
@@ -138,6 +141,7 @@ fn roundtrip_corpus_sample() {
             Err(e) => failures.push(format!("{no} ({e})")),
         }
     }
+    println!("fixture: {lines} lines");
     assert!(lines > 1500, "fixture shrank to {lines} lines");
     assert!(
         failures.is_empty(),
@@ -489,6 +493,7 @@ fn property_roundtrip() {
             checked += 1;
         }
     }
+    println!("property: {checked} well-formed random strings");
     assert!(
         checked > 2000,
         "only {checked} random strings were well-formed"

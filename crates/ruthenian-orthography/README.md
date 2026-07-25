@@ -24,8 +24,8 @@ separator exactly where re-reading its own output would diverge.
 |---|---|
 | Corpus round-trip (`biblija_ru.txt`, 41 462 lines, 38 623 non-empty) | **0 failures** |
 | The same corpus through the reference implementation | 3 failures (lines 12695, 13444, 31725) |
-| Every letter, every ordered pair (953), every ordered triple (28 476) | 0 failures |
-| Random well-formed strings | 0 failures |
+| Every letter (62 cased forms), ordered pair (966) and ordered triple (30 101) | 0 failures |
+| Random well-formed strings (14 144) | 0 failures |
 | Guards, each verified to fail under its stated mutation | 11 of 11 |
 
 See [`docs/ORTHOGRAPHY.md`](../../docs/ORTHOGRAPHY.md) for the normative spec,

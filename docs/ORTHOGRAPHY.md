@@ -14,9 +14,10 @@ This holds **by construction**, not by accumulated special cases. The reader
 defines how Ruthenian is read; the writer emits a separator exactly where
 re-reading its own output would diverge.
 
-Measured: 41 462 corpus lines (38 623 non-empty), **0 failures**; all 33 letters
-singly, 953 well-formed ordered pairs and 28 476 well-formed ordered triples;
-2 000+ random well-formed strings.
+Measured: 41 462 corpus lines (38 623 non-empty), **0 failures**; 62 single
+letters (31 × 2 cases — `ъ` and `ь` cannot stand alone), 966 well-formed ordered
+pairs, 30 101 well-formed ordered triples, and 14 144 random well-formed strings.
+Every count is printed by the guard that produced it.
 
 ## The alphabet
 
