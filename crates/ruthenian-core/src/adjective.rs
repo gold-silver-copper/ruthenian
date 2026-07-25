@@ -175,6 +175,32 @@ fn long_ending(case: Case, number: Number, gender: Gender, soft: bool) -> Option
     })
 }
 
+/// Split a citation form into its stem and whether that stem is soft.
+///
+/// Soft iff the form ends `-ij` **and** the stem-final consonant is not a velar
+/// or a sibilant. Velar and sibilant stems take *hard* endings with the `y` ->
+/// `i` spelling rule (`russkogo`, never `*russkjego`); only the `-nij` type is
+/// genuinely soft, and it is 155 of 9 999 adjectives in the dump — 1.6 %.
+///
+/// Stripped segmentally, so a stressed ending does not defeat the suffix match.
+pub fn split_citation(citation: &str) -> (String, bool) {
+    let idx = phono::stressed_index(citation);
+    let bare = phono::unstress(citation);
+    let (stem, soft) = if let Some(rest) = bare.strip_suffix("ij") {
+        let soft = !(phono::ends_velar(rest) || phono::ends_sibilant(rest));
+        (rest.to_string(), soft)
+    } else if let Some(rest) = bare.strip_suffix("yj").or_else(|| bare.strip_suffix("oj")) {
+        (rest.to_string(), false)
+    } else {
+        (bare.clone(), false)
+    };
+    let stem = match idx {
+        Some(i) if i < phono::vowel_count(&stem) => phono::apply_stress_at(&stem, i),
+        _ => stem,
+    };
+    (stem, soft)
+}
+
 fn short_ending(number: Number, gender: Gender) -> &'static str {
     match (number, gender) {
         (Number::Plural, _) => "y",
@@ -184,35 +210,36 @@ fn short_ending(number: Number, gender: Gender) -> &'static str {
     }
 }
 
-/// Decline an adjective. `stem` is the masculine nominative singular with its
-/// ending removed.
+/// Decline an adjective from its **citation form** — the masculine nominative
+/// singular, ending included.
+///
+/// The citation form rather than a bare stem, because softness is a property of
+/// the lemma and a stem cannot carry it: `sin` and `nov` look alike, but
+/// `sinij` is soft and `novyj` is hard.
 ///
 /// ```
 /// use ruthenian_core::adjective::adjective;
 /// use ruthenian_core::types::*;
-/// let p = adjective("nov", Case::Gen, Number::Singular, Gender::Masculine,
-///                   Animacy::Inanimate, AdjForm::Long).unwrap();
-/// assert_eq!(p.text, "novogo");
+/// let long = |w, c, g| adjective(w, c, Number::Singular, g, Animacy::Inanimate, AdjForm::Long)
+///     .unwrap().text;
+///
+/// assert_eq!(long("novyj", Case::Gen, Gender::Masculine), "novogo");
+/// // soft stem: -jego, not -ogo
+/// assert_eq!(long("sinij", Case::Gen, Gender::Masculine), "sinjego");
+/// // a velar stem is HARD with an i-spelling, not soft
+/// assert_eq!(long("russkij", Case::Gen, Gender::Masculine), "russkogo");
 /// ```
 pub fn adjective(
-    stem: &str,
+    citation: &str,
     case: Case,
     number: Number,
     gender: Gender,
     animacy: Animacy,
     form: AdjForm,
 ) -> Option<Prediction> {
+    let (stem, soft) = split_citation(citation);
+    let stem = stem.as_str();
     let bare = phono::unstress(stem);
-    // Softness is a property of the lemma (`sinij` is soft, `novyj` hard), and a
-    // bare stem does not carry it: `sin` and `nov` look alike. Velar and
-    // sibilant stems are NOT soft — `russkogo`, not `*russkjego`; their `y` ->
-    // `i` is the spelling rule in `phono`, not a different ending set.
-    //
-    // Until the lexicon supplies the distinction (phase 3), this defaults to
-    // hard, which is right for every stem except the true soft ones. `sinij`
-    // and its kind are therefore wrong here, and that is recorded rather than
-    // hidden.
-    let soft = false;
 
     match form {
         AdjForm::Short => {
@@ -227,7 +254,7 @@ pub fn adjective(
             Trace::new("comparative: mutated stem + jeje"),
         )),
         AdjForm::Superlative => Some(Prediction::new(
-            format!("samyj {stem}yj"),
+            format!("samyj {citation}"),
             Trace::new("superlative: samyj + long form"),
         )),
         AdjForm::Long => {
@@ -239,7 +266,7 @@ pub fn adjective(
                     _ => Case::Acc,
                 };
                 if source != Case::Acc {
-                    let mut p = adjective(stem, source, number, gender, animacy, form)?;
+                    let mut p = adjective(citation, source, number, gender, animacy, form)?;
                     p.trace = p.trace.then("accusative copies nominative or genitive");
                     return Some(p);
                 }
