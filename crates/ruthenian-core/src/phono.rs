@@ -134,21 +134,33 @@ fn ends_with_letter(stem: &str, letter: &str) -> bool {
         && !(letter == "c" && before.ends_with('s'))
 }
 
-/// The spelling rule: after a velar or sibilant, `y` is written `i`.
+/// The spelling rules that apply at a stem/ending seam.
+///
+/// Two of them, and the second is conditional on stress:
+///
+/// * after a velar or sibilant, `y` is written `i` (`knigi`, not `*knigy`);
+/// * after a sibilant or `c`, **unstressed** `o` is written `je` — Ruthenian
+///   writes Russian `е` as `je`, so a bare `e` would spell `э`.
+///
+/// `ending_stressed` is the caller's business because only it knows the accent
+/// pattern: `nozzóm` keeps its `o` because the ending bears the stress, while
+/// `továriszczjem` takes `je` because it does not. Deciding this from the string
+/// alone is impossible — at this point no stress has been placed yet.
 ///
 /// ```
 /// use ruthenian_core::phono::spell_after_stem;
-/// assert_eq!(spell_after_stem("knig", "y"), "i");   // книги, not книгы
-/// assert_eq!(spell_after_stem("stol", "y"), "y");   // столы
+/// assert_eq!(spell_after_stem("knig", "y", false), "i");        // книги
+/// assert_eq!(spell_after_stem("stol", "y", false), "y");        // столы
+/// assert_eq!(spell_after_stem("gribnic", "oj", false), "jej");  // грибницей
+/// assert_eq!(spell_after_stem("nozz", "om", true), "om");       // ножом
 /// ```
-pub fn spell_after_stem(stem: &str, ending: &str) -> String {
+pub fn spell_after_stem(stem: &str, ending: &str, ending_stressed: bool) -> String {
     let mut out = ending.to_string();
     if (ends_velar(stem) || ends_sibilant(stem)) && out.starts_with('y') {
         out.replace_range(0..1, "i");
     }
-    // After a sibilant or `c`, unstressed `o` is written `e`.
-    if (ends_sibilant(stem) || ends_ts(stem)) && out.starts_with('o') && !out.contains(STRESS) {
-        out.replace_range(0..1, "e");
+    if (ends_sibilant(stem) || ends_ts(stem)) && out.starts_with('o') && !ending_stressed {
+        out.replace_range(0..1, "je");
     }
     out
 }

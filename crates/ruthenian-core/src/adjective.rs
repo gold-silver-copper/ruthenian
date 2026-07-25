@@ -243,7 +243,7 @@ pub fn adjective(
 
     match form {
         AdjForm::Short => {
-            let e = phono::spell_after_stem(&bare, short_ending(number, gender));
+            let e = phono::spell_after_stem(&bare, short_ending(number, gender), false);
             Some(Prediction::new(
                 format!("{stem}{e}"),
                 Trace::new("short form"),
@@ -272,7 +272,7 @@ pub fn adjective(
                 }
             }
             let raw = long_ending(case, number, gender, soft)?;
-            let e = phono::spell_after_stem(&bare, raw);
+            let e = phono::spell_after_stem(&bare, raw, false);
             Some(Prediction::new(
                 format!("{stem}{e}"),
                 Trace::new("long form ending"),

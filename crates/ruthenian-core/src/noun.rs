@@ -41,7 +41,7 @@ fn ending_sg(g: Gender, stem: StemClass, case: Case) -> Option<&'static str> {
         (Feminine, I, Gen) => "i",
         (Feminine, I, Dat) => "i",
         (Feminine, I, Acc) => "j",
-        (Feminine, I, Ins) => "ju",
+        (Feminine, I, Ins) => "jju",
         (Feminine, I, Loc) => "i",
         (Feminine, Soft, Nom) => "ja",
         (Feminine, Soft, Gen) => "i",
@@ -53,7 +53,7 @@ fn ending_sg(g: Gender, stem: StemClass, case: Case) -> Option<&'static str> {
         (Feminine, Vowel, Gen) => "i",
         (Feminine, Vowel, Dat) => "i",
         (Feminine, Vowel, Acc) => "ju",
-        (Feminine, Vowel, Ins) => "joj",
+        (Feminine, Vowel, Ins) => "jej",
         (Feminine, Vowel, Loc) => "i",
         (Feminine, _, Nom) => "a",
         (Feminine, _, Gen) => "y",
@@ -215,8 +215,20 @@ fn build(
     };
     let _ = direct_acc;
 
+    // A soft or i-stem noun's citation form ends in `ь`, but that `ь` belongs to
+    // the *ending*, not the stem: `konj` is `kon` + `j`, `boljeznj` is `boljezn`
+    // + `j`. Stripping it here means the endings can spell each cell exactly —
+    // `boljezn` + `jju` for the instrumental, where the soft sign survives —
+    // instead of a blanket `jj` -> `j` collapse that cannot tell the two apart.
+    let stem = match class.stem {
+        StemClass::Soft | StemClass::I => stem.strip_suffix('j').unwrap_or(stem),
+        _ => stem,
+    };
     let bare_stem = phono::unstress(stem);
-    let ending = phono::spell_after_stem(&bare_stem, raw);
+    // Accent `b` puts the stress on the ending, which is what decides the
+    // sibilant `o`/`je` alternation.
+    let ending_stressed = class.accent == AccentPattern::B;
+    let ending = phono::spell_after_stem(&bare_stem, raw, ending_stressed);
 
     let mut trace = Trace::new("noun ending by gender and stem class");
     if ending != raw {
@@ -258,20 +270,7 @@ fn build(
         }
     };
 
-    // A stem that already ends in a soft sign absorbs a following `j`-initial
-    // ending: `konj` + `ja` is `konja`, not `konjja`.
-    let text = collapse_soft(&text);
     Some(Prediction::new(text, trace))
-}
-
-fn collapse_soft(s: &str) -> String {
-    let mut out = s.to_string();
-    while let Some(at) = out.find("jj") {
-        // Keep a doubled `j` only where it spells `ьj` before a vowel, which the
-        // ending table never produces.
-        out.replace_range(at..at + 2, "j");
-    }
-    out
 }
 
 /// Strip a nominative-singular ending to get the stem the rules want.

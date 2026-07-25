@@ -306,7 +306,7 @@ pub fn verb(
             };
             let soft = !phono::ends_sibilant(&stem);
             let ending = nonpast_ending(conj, pn, soft);
-            let ending = phono::spell_after_stem(&stem, ending);
+            let ending = phono::spell_after_stem(&stem, ending, false);
             trace = trace.then(if conj == Conjugation::First {
                 "first conjugation endings"
             } else {
