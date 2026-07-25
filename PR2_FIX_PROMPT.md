@@ -144,9 +144,17 @@ that:
 | **a+b modelled** | **27 824 / 29 381 = 94.7 %** | | **a+b+c modelled** | **12 521 / 12 773 = 98.0 %** |
 
 So 95–98 % of nouns and verbs fall in patterns the crate *claims* to model while
-strict accuracy is 4–10 %. The unmodelled tail cannot account for that. The
-placement logic inside the implemented patterns is wrong — a bug to fix, not a
-coverage limit to document.
+strict accuracy is 4–10 %. The unmodelled tail cannot account for that.
+
+**Corrected during execution.** The conclusion — "the placement logic inside the
+implemented patterns is wrong" — was mostly wrong. The dominant cause was that
+both fixtures keyed on the Wiktionary **page title**, which carries no stress
+marks, so the engine was asked to place stress having been given none. Keying on
+the accented citation form instead took strict accuracy from 4.7 % to 70.1 %
+without touching a single placement rule. Real placement bugs existed and were
+worth about 16 more points (imperatives, participles, gerunds and the
+periphrastic auxiliary got no stress at all), but the measurement was lying about
+their size by an order of magnitude.
 
 ## Finding 5 — the noun weakness is two cells, not a systematic fault
 
