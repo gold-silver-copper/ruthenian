@@ -151,11 +151,15 @@ fn trace_non_empty() {
     }
 }
 
-/// Inv. 4 — `Variant::standard()` output is a function of its arguments alone.
+/// Inv. 4 — output is a function of the arguments alone.
+///
+/// The engine has no configuration to depend on: no policy, no variant, no
+/// feature flags. `RUTHENIAN.md` fixes the language, so a change to the language
+/// is a source edit rather than a runtime switch.
 ///
 /// Witness: read an environment variable inside a rule.
 #[test]
-fn standard_is_pure() {
+fn generation_is_pure() {
     let call = || {
         noun(
             "kniga",
@@ -172,44 +176,36 @@ fn standard_is_pure() {
     for _ in 0..100 {
         assert_eq!(call(), first, "output must not depend on ambient state");
     }
-    assert!(Variant::standard().is_standard());
-    assert!(Variant::standard().active().is_empty());
 }
 
-/// Inv. 6 — an optional feature never changes a form it does not claim.
+/// There is no configuration axis in the public API.
 ///
-/// Every rule is off in the standard variant, so enabling one must currently
-/// change nothing at all. Witness: ship a rule enabled by default.
-#[test]
-fn variant_isolation() {
-    for rule in variant::RULES {
-        let v = Variant::standard().with(rule.id);
-        assert!(v.has(rule.id));
-        assert!(!v.is_standard());
-        assert!(
-            Variant::standard().without(rule.id).is_standard(),
-            "removing an unset rule must be a no-op"
-        );
-    }
-}
-
-/// No optional feature ships enabled, and every one names an open §13 item.
+/// A rule engine whose answer is fixed by a specification should not carry a
+/// switch that changes the answer. The previous design had one — a `Variant`
+/// carrying three rules, every one of them permanently off — which is a dead
+/// branch in every rule until some future language decision brings it to life.
 ///
-/// Witness: add a rule whose `spec_item` is 0, or enable one in `standard()`.
+/// Witness: reintroduce `pub struct Variant` or a `policy` parameter.
 #[test]
-fn no_optional_feature_ships_enabled() {
-    assert!(
-        Variant::standard().active().is_empty(),
-        "the standard variant is the language as specified: no options on"
-    );
-    for rule in variant::RULES {
-        assert!(
-            (2..=4).contains(&rule.spec_item),
-            "{} must name the RUTHENIAN.md §13 item it would settle, got {}",
-            rule.id,
-            rule.spec_item
-        );
-        assert!(!rule.summary.is_empty() && !rule.detail.is_empty());
+fn no_configuration_axis() {
+    for src in [
+        include_str!("../src/lib.rs"),
+        include_str!("../src/trace.rs"),
+        include_str!("../src/noun.rs"),
+        include_str!("../src/verb.rs"),
+    ] {
+        for line in src.lines() {
+            let decl = line.trim_start();
+            if decl.starts_with("//") {
+                continue;
+            }
+            for banned in ["struct Variant", "enum Variant", "struct Policy", "RuleId"] {
+                assert!(
+                    !decl.contains(banned),
+                    "configuration type {banned:?} reintroduced: {line}"
+                );
+            }
+        }
     }
 }
 

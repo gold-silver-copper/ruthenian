@@ -4,8 +4,8 @@
 //! post-prepositional `n-` series is not a case of a noun: modelling `u njego`
 //! as a case would produce wrong forms everywhere else.
 
+use crate::trace::{Prediction, Trace};
 use crate::types::{Case, Gender, Number, Person, PronounStyle};
-use crate::variant::{Prediction, Trace};
 
 /// First and second person (§5.1). `vje` "we two" and `va` "you two" are the
 /// OCS duals, restored.

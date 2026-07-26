@@ -215,10 +215,11 @@ pub enum Voice {
 
 /// How a personal pronoun is realized.
 ///
-/// There is no `Clitic` variant: the full/clitic opposition is
-/// `pron.clitic-series`, an **optional** feature (`RUTHENIAN.md` §13 item 3),
-/// and the standard language has one series. A style the language does not have
-/// returns `None`, meaning "this cell does not exist" — never "unimplemented".
+/// There is no `Clitic` variant. `RUTHENIAN.md` §13 item 3 records a full/clitic
+/// opposition as an open question, and until the specification answers it the
+/// language has one series — an unanswered question is not a feature to be
+/// switched on. A style the language does not have returns `None`, meaning
+/// "this cell does not exist", never "unimplemented".
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum PronounStyle {
     Full,

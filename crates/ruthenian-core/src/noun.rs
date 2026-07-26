@@ -19,8 +19,8 @@
 
 use crate::case_endings::{self, Cell, Ending};
 use crate::phono::{self, Palatal};
+use crate::trace::{Prediction, Trace};
 use crate::types::{Animacy, Case, Declension, Gender, NounClass, Number, StemHardness};
-use crate::variant::{Prediction, Trace};
 
 /// Decline a noun.
 ///

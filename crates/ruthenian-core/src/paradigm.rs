@@ -17,11 +17,11 @@
 //! their expectations, so reordering is a breaking change and is announced as
 //! one (`DIRECTION.md`, "Ordering is API").
 
+use crate::trace::Prediction;
 use crate::types::{
     AdjForm, Animacy, Case, Degree, Gender, NounClass, Number, Person, PersonNumber, Tense,
     VerbClass, VerbSlot,
 };
-use crate::variant::Prediction;
 use crate::verb::{Resolved, Unsupported, VerbInfo};
 
 /// A noun's full table: 8 cases × 3 numbers.

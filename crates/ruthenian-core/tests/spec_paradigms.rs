@@ -1,105 +1,73 @@
-//! `spec_paradigms_match` — the guard that makes `docs/RUTHENIAN.md` executable.
+//! Conformance against the specification's noun paradigms.
 //!
-//! Every expected form here is **parsed out of the specification at test time**,
-//! never transcribed. Hand-copying the tables would create a second copy of the
-//! language that drifts from the first, which is law 9 and the failure this
-//! project has already watched happen elsewhere.
+//! Two tests with deliberately different jobs:
 //!
-//! The specification is normative: where the engine and the document disagree,
-//! the engine is wrong. A failure names the table and cell it contradicts.
+//! * [`noun_paradigms_conform`] asserts the engine against the **committed
+//!   corpus** in `paradigms/spec_nouns.tsv`. That file is data: readable,
+//!   diffable, and stable under any reformatting of the specification's prose.
+//! * [`spec_corpus_is_current`] re-extracts the corpus from `docs/RUTHENIAN.md`
+//!   and fails if it has drifted, so amending the spec shows up as a corpus diff
+//!   in review rather than as a conformance test that quietly checks less.
+//!
+//! Splitting them is the point. An earlier version parsed the markdown inside
+//! the conformance assertion, and a heading match silently found the wrong
+//! table — checking `dom`'s forms against `noczj` while reporting a clean parse.
+//! Extraction is now a separate step whose output a human can read.
+
+mod support;
 
 use ruthenian_core::{Animacy, Case, Declension, Gender, NounClass, Number, noun};
+use support::Row;
 
 const SPEC: &str = include_str!("../../../docs/RUTHENIAN.md");
+const CORPUS_PATH: &str = "tests/paradigms/spec_nouns.tsv";
+const CORPUS: &str = include_str!("paradigms/spec_nouns.tsv");
 
-/// One paradigm table in the specification, and how to build it.
-struct Paradigm {
-    /// The `###` heading the table sits under, matched as a substring.
-    heading: &'static str,
-    stem: &'static str,
-    class: NounClass,
-    gender: Gender,
-    animacy: Animacy,
-}
-
-const PARADIGMS: &[Paradigm] = &[
-    Paradigm {
-        heading: "Hard: `dom`",
-        stem: "dom",
-        class: NounClass::hard(Declension::II),
-        gender: Gender::Masculine,
-        animacy: Animacy::Inanimate,
-    },
-    Paradigm {
-        heading: "Soft: `konj`",
-        stem: "konj",
-        class: NounClass::soft(Declension::II),
-        gender: Gender::Masculine,
-        animacy: Animacy::Animate,
-    },
-    Paradigm {
-        heading: "Velar: `drug`",
-        stem: "drug",
-        class: NounClass::hard(Declension::II),
-        gender: Gender::Masculine,
-        animacy: Animacy::Animate,
-    },
-    Paradigm {
-        heading: "Hard: `okno`",
-        stem: "okn",
-        class: NounClass::hard(Declension::II),
-        gender: Gender::Neuter,
-        animacy: Animacy::Inanimate,
-    },
-    Paradigm {
-        heading: "Hard: `zzena`",
-        stem: "zzen",
-        class: NounClass::hard(Declension::I),
-        gender: Gender::Feminine,
-        animacy: Animacy::Animate,
-    },
-    Paradigm {
-        heading: "`noczj`",
-        stem: "noczj",
-        class: NounClass::hard(Declension::III),
-        gender: Gender::Feminine,
-        animacy: Animacy::Inanimate,
-    },
-];
-
-/// A cell as the specification writes it: one or more backticked forms, or a
-/// `= nom` / `= dat` reference, or a footnote marker to be stripped.
-#[derive(Debug, PartialEq, Eq)]
-enum SpecCell {
-    Forms(Vec<String>),
-    SameAs(Case),
-}
-
-fn parse_cell(raw: &str) -> Option<SpecCell> {
-    let text = raw.trim();
-    // Footnote markers are superscripts; strip everything after the last
-    // backtick-delimited run so `dom` / `doma` ¹ parses as two forms.
-    if let Some(rest) = text.strip_prefix('=') {
-        return match rest.trim() {
-            "nom" => Some(SpecCell::SameAs(Case::Nom)),
-            "dat" => Some(SpecCell::SameAs(Case::Dat)),
-            _ => None,
-        };
+/// How to build each paradigm the corpus names.
+fn engine(paradigm: &str) -> (&'static str, NounClass, Gender, Animacy) {
+    match paradigm {
+        "dom" => (
+            "dom",
+            NounClass::hard(Declension::II),
+            Gender::Masculine,
+            Animacy::Inanimate,
+        ),
+        "konj" => (
+            "konj",
+            NounClass::soft(Declension::II),
+            Gender::Masculine,
+            Animacy::Animate,
+        ),
+        "drug" => (
+            "drug",
+            NounClass::hard(Declension::II),
+            Gender::Masculine,
+            Animacy::Animate,
+        ),
+        "okno" => (
+            "okn",
+            NounClass::hard(Declension::II),
+            Gender::Neuter,
+            Animacy::Inanimate,
+        ),
+        "zzena" => (
+            "zzen",
+            NounClass::hard(Declension::I),
+            Gender::Feminine,
+            Animacy::Animate,
+        ),
+        "noczj" => (
+            "noczj",
+            NounClass::hard(Declension::III),
+            Gender::Feminine,
+            Animacy::Inanimate,
+        ),
+        other => panic!("corpus names an unknown paradigm: {other}"),
     }
-    let forms: Vec<String> = text
-        .split('`')
-        .skip(1)
-        .step_by(2)
-        .map(|s| s.trim().to_string())
-        .filter(|s| !s.is_empty())
-        .collect();
-    (!forms.is_empty()).then_some(SpecCell::Forms(forms))
 }
 
-fn case_of(label: &str) -> Option<Case> {
-    // The ablative is bolded in every table, so strip emphasis first.
-    let l = label.trim().trim_matches('*').trim();
-    Some(match l {
+fn case_of(label: &str) -> Case {
+    match label {
         "nominative" => Case::Nom,
         "vocative" => Case::Voc,
         "accusative" => Case::Acc,
@@ -108,237 +76,180 @@ fn case_of(label: &str) -> Option<Case> {
         "dative" => Case::Dat,
         "instrumental" => Case::Ins,
         "locative" => Case::Loc,
-        _ => return None,
-    })
-}
-
-/// Extract the `Case | Singular | Dual | Plural` table under a heading.
-///
-/// The heading must be matched on a **heading line**. Matching anywhere would
-/// find `noczj` in §3.2's declension summary rather than §3.6's paradigm, and
-/// then silently check the wrong table — which is exactly how a conformance
-/// guard goes stale without failing.
-fn table_for(heading: &str) -> Vec<(Case, [SpecCell; 3])> {
-    let start = SPEC
-        .lines()
-        .scan(0usize, |offset, line| {
-            let at = *offset;
-            *offset += line.len() + 1;
-            Some((at, line))
-        })
-        .find(|(_, line)| line.starts_with('#') && line.contains(heading))
-        .map(|(at, _)| at)
-        .unwrap_or_else(|| panic!("spec heading line not found: {heading}"));
-    let mut rows = Vec::new();
-    let mut seen_header = false;
-    for line in SPEC[start..].lines().skip(1) {
-        let line = line.trim();
-        if line.starts_with("##") && !rows.is_empty() {
-            break;
-        }
-        if !line.starts_with('|') {
-            if seen_header && !rows.is_empty() {
-                break;
-            }
-            continue;
-        }
-        let cols: Vec<&str> = line.trim_matches('|').split('|').collect();
-        if cols.len() < 4 {
-            continue;
-        }
-        if !seen_header {
-            seen_header = true;
-            continue;
-        }
-        if cols[0].contains("---") {
-            continue;
-        }
-        let Some(case) = case_of(cols[0]) else {
-            continue;
-        };
-        let cells = [
-            parse_cell(cols[1]),
-            parse_cell(cols[2]),
-            parse_cell(cols[3]),
-        ];
-        if let [Some(s), Some(d), Some(p)] = cells {
-            rows.push((case, [s, d, p]));
-        }
+        other => panic!("unknown case {other}"),
     }
-    assert!(
-        rows.len() >= 6,
-        "parsed only {} rows under {heading}; the table format changed",
-        rows.len()
-    );
-    rows
 }
 
+fn number_of(label: &str) -> Number {
+    match label {
+        "singular" => Number::Singular,
+        "dual" => Number::Dual,
+        "plural" => Number::Plural,
+        other => panic!("unknown number {other}"),
+    }
+}
+
+/// The engine reproduces every cell the specification states.
 #[test]
-fn spec_paradigms_match() {
+fn noun_paradigms_conform() {
+    let rows: Vec<Row> = support::from_tsv(CORPUS);
+    assert_eq!(
+        rows.len(),
+        support::HEADINGS.len() * support::CASES.len() * support::NUMBERS.len(),
+        "the corpus is not the expected size; regenerate it"
+    );
+
     let mut failures = Vec::new();
-    let mut checked = 0usize;
+    for row in &rows {
+        let (stem, class, gender, animacy) = engine(&row.paradigm);
+        let got = noun(
+            stem,
+            class,
+            gender,
+            animacy,
+            case_of(&row.case),
+            number_of(&row.number),
+        )
+        .map(|p| p.text);
 
-    for p in PARADIGMS {
-        let rows = table_for(p.heading);
-        for (case, cells) in &rows {
-            for (i, number) in [Number::Singular, Number::Dual, Number::Plural]
-                .into_iter()
-                .enumerate()
-            {
-                let expected = match &cells[i] {
-                    SpecCell::Forms(f) => f.clone(),
-                    // A `= nom` / `= dat` cell asserts a syncretism. Resolve it
-                    // through the spec's own table, so the check still compares
-                    // against the document rather than against our reading of it.
-                    SpecCell::SameAs(source) => {
-                        let Some((_, src)) = rows.iter().find(|(c, _)| c == source) else {
-                            continue;
-                        };
-                        match &src[i] {
-                            SpecCell::Forms(f) => f.clone(),
-                            SpecCell::SameAs(_) => continue,
-                        }
-                    }
-                };
-
-                let got =
-                    noun(p.stem, p.class, p.gender, p.animacy, *case, number).map(|pred| pred.text);
-                checked += 1;
-
-                match got {
-                    Some(text) if expected.contains(&text) => {}
-                    Some(text) => failures.push(format!(
-                        "{:<16} {:?}/{:?}: spec says {:?}, engine gives {:?}",
-                        p.heading, case, number, expected, text
-                    )),
-                    None => failures.push(format!(
-                        "{:<16} {:?}/{:?}: spec says {:?}, engine says the cell does not exist",
-                        p.heading, case, number, expected
-                    )),
-                }
-            }
+        match got {
+            Some(text) if row.forms.contains(&text) => {}
+            Some(text) => failures.push(format!(
+                "{:<6} {:<13} {:<9} spec {:?}, engine {:?}",
+                row.paradigm, row.case, row.number, row.forms, text
+            )),
+            None => failures.push(format!(
+                "{:<6} {:<13} {:<9} spec {:?}, engine says the cell does not exist",
+                row.paradigm, row.case, row.number, row.forms
+            )),
         }
     }
 
-    assert!(
-        checked >= 100,
-        "only {checked} cells checked; the spec parser is not finding the tables"
-    );
     assert!(
         failures.is_empty(),
-        "{} of {checked} cells disagree with docs/RUTHENIAN.md:\n{}",
+        "{} of {} cells disagree with the specification:\n{}",
         failures.len(),
+        rows.len(),
         failures.join("\n")
     );
-    println!("{checked} cells checked against docs/RUTHENIAN.md, all matching");
+    println!("{} cells conform to docs/RUTHENIAN.md", rows.len());
 }
 
-/// The parser itself needs a failure witness: if it silently matched nothing,
-/// `spec_paradigms_match` would pass vacuously and the guard would be stale.
+/// The committed corpus still matches the specification.
+///
+/// Set `RUTHENIAN_REGEN_CORPUS=1` to rewrite it after amending the spec.
 #[test]
-fn spec_tables_are_actually_parsed() {
-    let rows = table_for("Hard: `dom`");
-    assert_eq!(rows.len(), 8, "dom has eight cases");
-    let (_, cells) = rows.iter().find(|(c, _)| *c == Case::Gen).unwrap();
-    assert_eq!(
-        cells[0],
-        SpecCell::Forms(vec!["domogo".into()]),
-        "the genitive singular must be read out of the spec, not assumed"
-    );
-    let (_, abl) = rows.iter().find(|(c, _)| *c == Case::Abl).unwrap();
-    assert_eq!(
-        abl[1],
-        SpecCell::SameAs(Case::Dat),
-        "dual ablative = dative"
-    );
+fn spec_corpus_is_current() {
+    let extracted = support::extract(SPEC);
+    let rendered = support::to_tsv(&extracted);
+
+    if std::env::var_os("RUTHENIAN_REGEN_CORPUS").is_some() {
+        std::fs::write(CORPUS_PATH, &rendered).expect("write corpus");
+        println!("regenerated {CORPUS_PATH} ({} rows)", extracted.len());
+        return;
+    }
+
+    if rendered != CORPUS {
+        let committed = support::from_tsv(CORPUS);
+        let mut diff = Vec::new();
+        for row in &extracted {
+            let found = committed.iter().find(|c| {
+                c.paradigm == row.paradigm && c.case == row.case && c.number == row.number
+            });
+            match found {
+                Some(c) if c.forms == row.forms => {}
+                Some(c) => diff.push(format!(
+                    "  {} {}/{}: corpus {:?}, spec now {:?}",
+                    row.paradigm, row.case, row.number, c.forms, row.forms
+                )),
+                None => diff.push(format!(
+                    "  {} {}/{}: missing from the corpus",
+                    row.paradigm, row.case, row.number
+                )),
+            }
+        }
+        for c in &committed {
+            if !extracted
+                .iter()
+                .any(|r| r.paradigm == c.paradigm && r.case == c.case && r.number == c.number)
+            {
+                diff.push(format!(
+                    "  {} {}/{}: in the corpus but no longer in the spec",
+                    c.paradigm, c.case, c.number
+                ));
+            }
+        }
+        panic!(
+            "{CORPUS_PATH} has drifted from docs/RUTHENIAN.md.\n{}\n\n\
+             Regenerate and review the diff:\n  \
+             RUTHENIAN_REGEN_CORPUS=1 cargo test -p ruthenian-core --test spec_paradigms",
+            if diff.is_empty() {
+                "  (cells agree; only formatting or ordering changed)".to_string()
+            } else {
+                diff.join("\n")
+            }
+        );
+    }
 }
 
-/// §11 tabulates how many **distinct surface forms** each paradigm has after
-/// syncretism. That is a second, independent claim about the same tables — a
-/// paradigm can reproduce every cell and still have the wrong shape if a
-/// syncretism is missing or spurious — so it is checked separately.
+/// §11 tabulates how many distinct surface forms each paradigm has after
+/// syncretism — a second, independent claim about the same tables. A paradigm
+/// can reproduce every cell and still have the wrong shape if a syncretism is
+/// missing or spurious.
 #[test]
-fn spec_paradigm_sizes_match() {
+fn paradigm_sizes_match_section_11() {
     use ruthenian_core::noun_forms;
 
-    // §11's rows, keyed by the lemma the spec names.
     let expected = parse_size_table();
+    assert!(
+        !expected.is_empty(),
+        "§11's size table was not parsed; this guard would pass vacuously"
+    );
+
     let built = [
-        (
-            "dom",
-            noun_forms(
-                "dom",
-                NounClass::hard(Declension::II),
-                Gender::Masculine,
-                Animacy::Inanimate,
-            ),
-        ),
-        (
-            "okno",
-            noun_forms(
-                "okno",
-                NounClass::hard(Declension::II),
-                Gender::Neuter,
-                Animacy::Inanimate,
-            ),
-        ),
-        (
-            "zzena",
-            noun_forms(
-                "zzena",
-                NounClass::hard(Declension::I),
-                Gender::Feminine,
-                Animacy::Animate,
-            ),
-        ),
+        ("dom", Declension::II, Gender::Masculine, Animacy::Inanimate),
+        ("okno", Declension::II, Gender::Neuter, Animacy::Inanimate),
+        ("zzena", Declension::I, Gender::Feminine, Animacy::Animate),
         (
             "noczj",
-            noun_forms(
-                "noczj",
-                NounClass::hard(Declension::III),
-                Gender::Feminine,
-                Animacy::Inanimate,
-            ),
+            Declension::III,
+            Gender::Feminine,
+            Animacy::Inanimate,
         ),
     ];
 
     let mut failures = Vec::new();
-    for (lemma, paradigm) in &built {
-        let Some(&(sg, du, pl, total)) = expected.get(*lemma) else {
+    for (lemma, declension, gender, animacy) in built {
+        let p = noun_forms(lemma, NounClass::hard(declension), gender, animacy);
+        let Some(&(sg, du, pl, total)) = expected.get(lemma) else {
             failures.push(format!("§11 has no row for {lemma}"));
             continue;
         };
-        let got: Vec<usize> = Number::ALL
+        let per: Vec<usize> = Number::ALL
             .into_iter()
             .map(|number| {
                 let mut seen: Vec<&str> = Case::ALL
                     .into_iter()
-                    .filter_map(|case| paradigm.get(case, number).map(|p| p.text.as_str()))
+                    .filter_map(|case| p.get(case, number).map(|f| f.text.as_str()))
                     .collect();
                 seen.sort_unstable();
                 seen.dedup();
                 seen.len()
             })
             .collect();
-        if got != vec![sg, du, pl] || paradigm.distinct_forms() != total {
+        if per != vec![sg, du, pl] || p.distinct_forms() != total {
             failures.push(format!(
                 "{lemma}: §11 says {sg}/{du}/{pl} = {total}, engine gives {}/{}/{} = {}",
-                got[0],
-                got[1],
-                got[2],
-                paradigm.distinct_forms()
+                per[0],
+                per[1],
+                per[2],
+                p.distinct_forms()
             ));
         }
     }
-    assert!(
-        !expected.is_empty(),
-        "§11's size table was not parsed; the guard would pass vacuously"
-    );
     assert!(failures.is_empty(), "{}", failures.join("\n"));
-    println!("{} paradigm sizes checked against §11", built.len());
 }
 
-/// Parse §11's `Word class | Singular | Dual | Plural | Total` table.
 fn parse_size_table() -> std::collections::BTreeMap<String, (usize, usize, usize, usize)> {
     let mut out = std::collections::BTreeMap::new();
     let start = SPEC
@@ -355,7 +266,6 @@ fn parse_size_table() -> std::collections::BTreeMap<String, (usize, usize, usize
         if cols.len() < 5 {
             continue;
         }
-        // The label carries the lemma in backticks: "noun, declension II masculine (`dom`)".
         let Some(lemma) = cols[0].split('`').nth(1) else {
             continue;
         };

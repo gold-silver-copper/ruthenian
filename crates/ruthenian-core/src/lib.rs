@@ -83,8 +83,8 @@ pub mod numeral;
 pub mod paradigm;
 pub mod phono;
 pub mod pronoun;
+pub mod trace;
 pub mod types;
-pub mod variant;
 pub mod verb;
 
 pub use adjective::adjective;
@@ -93,10 +93,10 @@ pub use numeral::{Government, government};
 pub use paradigm::{AdjParadigm, NounParadigm, VerbParadigm, adj_forms, noun_forms, verb_forms};
 pub use phono::Palatal;
 pub use pronoun::{personal, reflexive};
+pub use trace::{Prediction, Trace};
 pub use types::{
     AdjClass, AdjForm, Animacy, Aspect, Case, Conjugation, Declension, Degree, Gender, NounClass,
     Number, ParticipleKind, Person, PersonNumber, PrincipalPartsRef, PronounStyle, Slot,
     StemHardness, Tense, VerbClass, VerbSlot, Voice,
 };
-pub use variant::{Prediction, RuleDef, RuleId, Trace, Variant};
 pub use verb::{Derived, Resolved, Unsupported, VerbInfo, aspect_of, slot_exists, verb, verb_with};

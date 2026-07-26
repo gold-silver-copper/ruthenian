@@ -24,11 +24,11 @@
 //! `(aspect, transitivity, slot)` and returns `Ok(None)`.
 
 use crate::phono;
+use crate::trace::{Prediction, Trace};
 use crate::types::{
     Aspect, Conjugation, Gender, Number, ParticipleKind, Person, PersonNumber, PrincipalPartsRef,
     Tense, VerbClass, VerbSlot, Voice,
 };
-use crate::variant::{Prediction, Trace};
 
 /// The engine could not answer, and says so rather than guessing.
 ///

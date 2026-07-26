@@ -17,8 +17,8 @@
 //! all of Slavic.
 
 use crate::phono::{self, Palatal};
+use crate::trace::{Prediction, Trace};
 use crate::types::{AdjForm, Animacy, Case, Degree, Gender, Number};
-use crate::variant::{Prediction, Trace};
 
 /// Short (indefinite) endings — the noun's, exactly (§4.1).
 fn short(case: Case, number: Number, gender: Gender) -> Option<Ending> {

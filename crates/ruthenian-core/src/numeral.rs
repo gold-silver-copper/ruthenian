@@ -1,8 +1,8 @@
 //! Numerals, and the case and number a count imposes on what it counts
 //! (`RUTHENIAN.md` §6).
 
+use crate::trace::Trace;
 use crate::types::{Case, Number};
-use crate::variant::Trace;
 
 /// What a count does to the noun it governs.
 ///
