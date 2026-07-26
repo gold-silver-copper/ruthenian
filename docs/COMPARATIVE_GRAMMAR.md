@@ -18,8 +18,8 @@ comparison; the lexicon's single source remains the English Wiktionary dump.
 
 ## Method
 
-Every countable claim is counted over the **whole** dump (`INVARIANTS.md` I1 and
-I7). Full scans: 441 629 Russian records, 124 791 across `uk`/`be`/`cu`/`sa`, and
+Every countable claim is counted over the **whole** dump (`DIRECTION.md` laws 2
+and 3). Full scans: 441 629 Russian records, 124 791 across `uk`/`be`/`cu`/`sa`, and
 1 894 Proto-Indo-European reconstructions (`ine-pro`).
 
 **How the ending tables were built.** For each lemma, the stem is the longest
@@ -272,7 +272,7 @@ orthographically.
 | PIE | free **pitch** accent; mobile paradigms; **ablaut** (e/o/zero) grammatically productive |
 | Sanskrit | pitch accent in Vedic, lost in Classical |
 | OCS | free, mobile; the Proto-Slavic accent paradigms |
-| Russian | free, mobile — 6 patterns + 4 primed (`sources/RUSSIAN_GRAMMAR.md` §2) |
+| Russian | free, mobile — 6 patterns + 4 primed (§12.1) |
 | Ukrainian | free, mobile |
 | Belarusian | free, mobile, **orthographically load-bearing** (*akanne*: unstressed `o` written `a`) |
 | Interslavic | **unspecified**; not marked |
@@ -484,6 +484,44 @@ enclitic, and both continue PIE second-position clitics.
 | verb conj. classes | thematic/athematic | 10 | 5 | 16 | 13 | ~2 | 2 |
 | noun decl. classes | thematic/athematic | ~8 | 8 | 8 | 4 | 3 | 3 |
 | stress | pitch, mobile | pitch (Vedic) | mobile | mobile, 10 patterns | mobile | mobile + *akanne* | unmarked |
+
+## 12.1 The Russian irregularity Ruthenian removes — measured
+
+Ruthenian's removals (`RUTHENIAN.md` §1, §3.9) are not gestures at "Russian is
+hard"; each names a subsystem with a size. Measured over the whole dump
+(`DIRECTION.md`, law 13), these are the counts those decisions rest on.
+
+| Subsystem | Size in Russian | What Ruthenian does |
+|---|---|---|
+| **marginal cases** | partitive sg 206 lemmas, locative-2 199, count form 31, vocative relics 40 — **436** | the ablative does the partitive's and locative-2's semantic work; the vocative is restored as a full case (§3.1) |
+| **mobile stress** | 6 accent patterns + 4 primed variants; `c`–`f` alone cover 1 393 nouns, the primed 72 | one fixed position per word (§2.1) |
+| **declension classes** | 8, keyed on the *graphic* stem ending — plain consonant, `ь`, velar, sibilant, `ц`, vowel/`й` | 3, with the velar/sibilant/`c`/vowel splits demoted to automatic spelling adjustments (§3.2, §3.8) |
+| **conjugation classes** | 16 | 6 — Zaliznyak's 1–6, with 7–16 regularized onto them (§7.3) |
+| **heteroclitics** | ~15 lemmas (`время`/`времени`), memorized individually in every Slavic language | none (§3.9) |
+| **indeclinables** | 1 193 nouns, mostly loans (`кофе`, `метро`, `пальто`) | none — regularization by *addition*, since the loans are declined (§12.3) |
+| **number defectiveness** | 460 plural-only, 1 543 singular-only — **2 003** | every noun has all three numbers (§3.9) |
+| **fleeting vowel in the gen. pl.** | pervasive (`окно` → `окон`) | the genitive plural is uniformly `-ov` (§3.9) |
+| **lexical aspect pairing** | unpredictable, stored per lemma in every Slavic dictionary | derived from surface shape (§7.2) |
+
+Two entries in that table are **additions** rather than removals, and are the
+reason the paradigm barely grows: the vocative and the dual come back, and they
+pay for themselves. The dual in particular makes numeral government regular
+(§13.6) — Russian's genitive singular after 2–4 is petrified dual agreement, so
+restoring the dual does not simplify that rule, it deletes it.
+
+**The Zaliznyak classification is the source-language index this is all measured
+through.** It encodes declension/conjugation type plus stress pattern in a compact
+code (`1a`, `4a+p`, `4c+p`, `6°b`); Wiktionary's `ru-noun+` and `ru-conj`
+templates *are* Zaliznyak indices, which is why the counts above are obtainable
+at all. It describes Russian, and it stops at the extraction boundary
+(`DIRECTION.md`, "Source-language classifications"): Ruthenian's own three
+declensions and six classes are what the engine speaks.
+
+> Zaliznyak, A. A., *Грамматический словарь русского языка*, 1977 (6th ed. 2010)
+> — ~110 000 words, the source the rest derives from. Zaliznyak, *Русское
+> именное словоизменение*, 1967. *Русская грамматика* (Academy Grammar, 1980,
+> ed. Shvedova). Timberlake, A., *A Reference Grammar of Russian*, CUP, 2004.
+> Jakobson (1948) / Townsend (1975) for the one-stem analysis of the verb.
 
 ---
 

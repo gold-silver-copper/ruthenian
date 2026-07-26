@@ -12,10 +12,10 @@ precedent in a sister language or in Interslavic. Nothing here is invented; the
 novelty is in the combination. The evidence is in
 [`COMPARATIVE_GRAMMAR.md`](COMPARATIVE_GRAMMAR.md), measured over full corpora of
 Proto-Indo-European, Sanskrit, Old Church Slavonic, Russian, Ukrainian and
-Belarusian.
+Belarusian. What this document still owes is in
+[`OPEN_QUESTIONS.md`](OPEN_QUESTIONS.md).
 
-Orthography is specified separately in [`ORTHOGRAPHY.md`](ORTHOGRAPHY.md); all
-forms below are in the Ruthenian Latin alphabet.
+All forms below are in the Ruthenian Latin alphabet, specified in §2.1.
 
 ---
 
@@ -52,13 +52,40 @@ via the Ukrainian reflex `-i`.
 
 Ruthenian is written in **unaccented ASCII**. There are no diacritics, no
 combining marks, and no letters outside `a`–`z`. The digraphs `cz sz zz szcz ja
-je jo ju` and the separator `'` carry everything a diacritic would
-(`ORTHOGRAPHY.md`).
+je jo ju` and the separator `'` carry everything a diacritic would.
+
+The alphabet, against the Cyrillic it corresponds to:
+
+| Cyr | Ruth | Cyr | Ruth | Cyr | Ruth |
+|---|---|---|---|---|---|
+| а | `a` | к | `k` | ч | `cz` |
+| б | `b` | л | `l` | ш | `sz` |
+| в | `v` | м | `m` | щ | `szcz` |
+| г | `g` | н | `n` | ъ | `'` |
+| д | `d` | о | `o` | ы | `y` |
+| е | `je` | п | `p` | ь | `j` |
+| ё | `jo` | р | `r` | э | `e` |
+| ж | `zz` | с | `s` | ю | `ju` |
+| з | `z` | т | `t` | я | `ja` |
+| и | `i` | у | `u` | | |
+| й | `j` | ф | `f` | | |
+| | | х | `h` | | |
+
+**The separator `'` is one glyph with one rule**: *the next character starts a
+new letter*. `sz'czi` is ш + ч rather than щ; `s'zadi` is с + з rather than ш.
+Russian's hard sign is that same rule applied at a morpheme boundary
+(`pod'jezd`), so the two are one idea and not two.
+
+The correspondence is **bijective**, which is what makes the Cyrillic source
+languages mechanically readable. Its implementation, the context rules that make
+it invertible, and the round-trip evidence are in
+[`crates/ruthenian-orthography`](../crates/ruthenian-orthography/README.md).
 
 **Stress is not written.** It is real, lexical and fixed per word, but ordinary
 text does not mark it — as in Russian, Ukrainian and Polish orthography, and as
 in Interslavic, which does not encode stress at all. Dictionaries and teaching
-materials may mark it; running text never does.
+materials may mark it with a combining acute on the vowel (`pisátj`); running
+text never does, and the marked and unmarked spellings are different strings.
 
 > **Planned: an etymological alphabet.** A second, diacritic-bearing notation for
 > dictionaries and etymology — ASCII with diacritics, on the model of
@@ -1285,7 +1312,7 @@ the lexicon** and it should be scoped as its own phase, not assumed away.
 
 Where reconstruction is uncertain, the entry records that. A form derived from
 one language's reflex is not the same claim as one attested across four, and
-`Provenance` must distinguish them (`docs/specs/ruthenian-lexicon.md`).
+`Provenance` must distinguish them.
 
 ## 12.3 Borrowing: the regularized system
 
@@ -1361,18 +1388,19 @@ not, by rule rather than by taste.
 
 # 13. Open questions
 
-> The full list, with evidence and recommendations, is in
-> [`PROMPT_SPEC_COMPLETION.md`](../PROMPT_SPEC_COMPLETION.md) — including the
+> **The full list, with evidence, recommendations and what each one blocks, is in
+> [`OPEN_QUESTIONS.md`](OPEN_QUESTIONS.md).** That includes the
 > **sound-correspondence decisions** (pleophony, `*tj`/`*dj`, the nasals, the
-> jers) that this document has never addressed and that the multi-source lexicon
-> cannot be built without.
+> jers) which this document has never addressed and without which the
+> multi-source lexicon cannot be built at all.
 
 Settled in this revision: the copula (full, with dual), aspect (rule-derived),
 the masculine dative (`-u`), negation (genitive), the alphabet (pure ASCII, no
-yat letter), the aorist and imperfect (core, not register), and the long/short
-adjective (restored, carrying definiteness).
+yat letter), the aorist and imperfect (core, not register), the supine (§7.10a),
+and the long/short adjective (restored, carrying definiteness).
 
-Still open:
+Still open, in this document's own terms — each is a decision, not a
+configuration option, and each blocks the paradigm it touches:
 
 1. **The etymological alphabet.** A diacritic notation for dictionaries — ASCII
    plus diacritics, on the model of Interslavic's — distinguishing yat, the
@@ -1394,9 +1422,9 @@ Still open:
    chosen five do not — pitch accent and a productive aorist in Serbo-Croatian,
    vowel length in Czech. Polish already crossed the East Slavic line, so the
    boundary is one of degree.
-7. **The supine.** OCS had it alongside the infinitive, for purpose after verbs
-   of motion (`idǫ loviti` vs `idǫ lovitъ`). Not yet specified; it would fit the
-   brief.
+7. **The sound correspondences themselves** (`OPEN_QUESTIONS.md` A). The largest
+   gap in this document: it never states which reflex Ruthenian takes for any
+   Common Slavic divergence, and that decides the shape of every inherited word.
 
 ## Written in this revision
 
@@ -1407,8 +1435,8 @@ supine (§7.10a).
 
 ## Still to write
 
-- **a phonological rule for the fleeting vowel** stated over the jer positions
-  rather than over consonant clusters, now that §2 gives a phoneme inventory;
-- **worked example texts** — the spec has paradigms but no connected prose, and
-  nothing tests a grammar like translating a page into it;
-- **a frequency-ordered core vocabulary**, which the lexicon phase will produce.
+Tracked, with sources, in [`OPEN_QUESTIONS.md`](OPEN_QUESTIONS.md) §F: a
+fleeting-vowel rule stated over jer positions rather than consonant clusters;
+worked example texts, since nothing tests a grammar like translating a page into
+it; a frequency-ordered core vocabulary; and clitic placement under Wackernagel's
+law.

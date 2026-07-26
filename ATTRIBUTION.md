@@ -35,7 +35,7 @@ attested Russian word forms, class codes and grammatical metadata extracted from
 
 The raw dump (`raw-wiktextract-data.jsonl`, 22 GB) is **not** redistributed here.
 It is read locally, in full, by `tools/measure.py` and `tools/build_fixture.py` —
-see [`INVARIANTS.md`](INVARIANTS.md) I1, which forbids sampling it.
+see [`DIRECTION.md`](DIRECTION.md) law 3, which forbids sampling it.
 
 ## Russian Synodal Bible — the orthography corpus
 
@@ -52,7 +52,8 @@ excerpt keeps the original line numbers so any row can be traced back.
 
 `legacy/` is the original `ruthenian` crate, unchanged, © gold-silver-copper,
 MIT OR Apache-2.0. It is kept so the head-to-head in
-[`docs/ORTHOGRAPHY.md`](docs/ORTHOGRAPHY.md) reproduces from one checkout.
+[`crates/ruthenian-orthography/README.md`](crates/ruthenian-orthography/README.md)
+reproduces from one checkout.
 
 ---
 

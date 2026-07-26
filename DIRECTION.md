@@ -6,11 +6,16 @@
 > one describes the software that realizes it, and is authoritative only for the
 > boundaries between crates.
 >
-> The comparative evidence behind the language is in
-> [`docs/COMPARATIVE_GRAMMAR.md`](docs/COMPARATIVE_GRAMMAR.md). The source
-> languages the lexicon draws on are described in
-> [`docs/sources/`](docs/sources/) — those are studies of *other* languages, not
-> of Ruthenian.
+> The comparative evidence behind the language — PIE, Sanskrit, OCS, Russian,
+> Ukrainian, Belarusian, Interslavic, measured — is in
+> [`docs/COMPARATIVE_GRAMMAR.md`](docs/COMPARATIVE_GRAMMAR.md). What the
+> specification still owes is in
+> [`docs/OPEN_QUESTIONS.md`](docs/OPEN_QUESTIONS.md).
+
+**The whole repository is five documents.** This one, the three above, and
+`CHANGELOG.md`. Everything else is either a licence notice (`ATTRIBUTION.md`) or
+belongs to a single crate or tool, and lives beside it. If a seventh guiding
+document seems necessary, one of these five is doing its job badly.
 
 ## What Ruthenian is
 
@@ -120,7 +125,7 @@ one attested across four.
 
 The corpus is the same English Wiktionary dump —
 `~/Desktop/code/wikidata/raw-wiktextract-data.jsonl`, 23 622 298 877 bytes,
-10 667 129 lines — read in full for every language (`INVARIANTS.md` I1).
+10 667 129 lines — read in full for every language (law 3).
 
 **Interslavic remains excluded.** It is a grammar reference, not a lexical
 source: no Interslavic data enters the crate.
@@ -181,9 +186,11 @@ green and is useful on its own.
 | 7 | `ruthenian-cli` | The `ruth` binary. | Argument parsing, output formatting. | `ruthenian`, `ruthenian-orthography` | Contains no morphology; every subcommand is a thin adapter with `--json`. |
 | 8 | `xtask` | `refresh-data`, `check-registry`, `conformance`. | Nothing. | `ruthenian-extract`, `ruthenian-eval` | Orchestration only — no logic that belongs in the crate it invokes. |
 
-Detailed specs live in `docs/specs/<crate>.md`. Each spec is authoritative for
-its crate; this document is authoritative for the boundaries between them; and
-`docs/RUTHENIAN.md` outranks all of them on any question about the language.
+**A crate's own documentation lives in the crate**, as
+`crates/<name>/README.md`, and is written when the crate is — a specification
+for an unbuilt crate is a guess with a version number. This document is
+authoritative for the boundaries *between* crates and for the decisions that
+span them; `docs/RUTHENIAN.md` outranks it on any question about the language.
 
 ### Three structural decisions, made deliberately
 
@@ -231,50 +238,148 @@ trap the first refactor would spring. A zero-dependency schema crate lets
 
 ## The laws
 
-These hold in every crate. Each is a lesson someone already paid for; the
-citations are in `LESSONS.md`.
+These hold in every crate. Each is falsifiable: the **check** is the command or
+test that catches a violation, and a law without one is an aspiration rather than
+a law. Where a law was learned the hard way, the source is named — most were paid
+for by `slovowiki`, `interslavic` or `english` before this project started.
 
-1. **One generation path.** The CLI and the evaluator are adapters over the same
+### About the language
+
+1. **The specification decides; the code conforms.** Where `docs/RUTHENIAN.md`
+   states a form, that form is correct by definition and a disagreeing engine is
+   wrong. Where the spec is silent, the gap is reported as a spec gap and closed
+   *there* — never patched with a guess in code.
+   *Check:* the conformance corpus, extracted from the spec and asserted against
+   the engine.
+
+2. **Claims about a source language are measured; claims about Ruthenian are
+   specified.** A statement about how Russian, Ukrainian, Belarusian, Polish or
+   OCS works is backed by a count over the dump, not by a grammar reference
+   alone — references say what to look for, the data says what is there. A
+   statement about *Ruthenian* is backed by the specification, because there is
+   no Ruthenian corpus and never will be.
+   Conflating the two is how a constructed language turns back into a description
+   of Russian. The converse error is as bad: taking a measured fact about Russian
+   as though it settled a question the spec had already answered differently.
+   *Learned:* a published summary described Russian noun accent pattern `f` as
+   stem-stressed in the singular. It is ending-stressed, as ~285 000 attested
+   forms show. Implementing the quoted version would have been wrong for every
+   `f` noun.
+   *Check:* `tools/measure.py` regenerates every source-language figure; a diff
+   against the committed docs is empty.
+
+3. **Every measurement scans the entire dump. No sampling.** Any number
+   describing a source language — class distributions, mutation counts, gap
+   counts, lemma inventories, the reflex percentages the spec reasons from — is
+   computed over **all 10 667 129 lines** of `raw-wiktextract-data.jsonl`, per
+   language code.
+   *Learned:* sampling was used early and was wrong three separate times, in ways
+   a bigger sample would not have fixed. A sample said 117 verb class codes; the
+   truth is **226**, and it missed 9 the parser could not parse. A sample said
+   670 class-1 labial stems take no epenthesis; the truth is **1 977, and not one
+   takes it** — the rule is exceptionless, which only a full scan can establish,
+   and "always" is what lets an engine key on a rule instead of hedging around
+   it. Even a full-file `grep` is not automatically a full scan: an early census
+   used a pattern assuming JSON key order and found 183 of the 226. **Parse the
+   records; do not pattern-match them.**
+   *Check:* no `dd if=`, `skip=`, `count=`, `| head -` or "sampled" appears in any
+   tracked file.
+
+4. **Conformance, coverage and distance are three numbers. Never averaged, never
+   substituted.** Conformance: of the cells the spec states, how many does the
+   engine produce (a miss is an engine bug). Coverage: of the cells the language
+   has, how many does the spec state (a miss is a spec hole). Distance: how far a
+   form sits from its source-language cognates — descriptive only, never called
+   accuracy, never gating.
+   *Why:* the single number this project was originally specified to publish —
+   accuracy against attested Russian — cannot exist. Most Ruthenian cells have no
+   Russian counterpart, so the figure would silently score the overlapping
+   minority and would *improve* as the language moved closer to Russian.
+   *Check:* `Summary`'s shape, plus a check that no generated prose calls a
+   distance an accuracy.
+
+### About the code
+
+5. **One generation path.** The CLI and the evaluator are adapters over the same
    call. If a second way to produce a form appears, one of them is wrong and
-   nobody knows which. (A1, A5)
-2. **Rules predict; tables store the residue.** The extractor drops any form the
-   rule engine already produces, so the tables are exactly the unpredictable
-   residue — the reconstructed stems and principal parts no rule recovers.
-   Changing a rule therefore changes what counts as irregular and **requires
-   regenerating the tables** — enforced by a dump-free layering check. (A2)
-3. **Typed until the last moment; one stringification point.** Forms travel as
+   nobody knows which.
+   *Learned:* slovowiki's benchmark and its website ran materially different
+   pipelines, so its published accuracy described neither.
+   *Check:* the evaluator depends on the facade's public API only.
+
+6. **Rules predict; tables store the residue.** The extractor drops any form the
+   rule engine already produces, so the tables hold exactly what no rule
+   recovers. Changing a rule therefore changes what counts as irregular and
+   **requires regenerating the tables**.
+   *Check:* for every table row, the predictor's output differs from it.
+
+7. **Derive state; never hand-maintain it.** No field that duplicates something
+   computable. A hand-maintained flag drifts, and its dead branch becomes the
+   bug. Aspect, paradigm gaps, the fleeting vowel and reducibility are all
+   derived; none is stored.
+   *Check:* a schema check paired with a differential test against the deriving
+   function — the schema check alone would not catch the value smuggled in under
+   another name.
+
+8. **Typed until the last moment; one stringification point.** Forms travel as
    typed values with their origin attached. Nothing is recovered by searching a
-   string that was already structured. (A3)
-4. **No droppable side channels.** If a caller can silently forget a field and
-   still compile, that field will be silently forgotten. Losing information is a
-   type error. (A4)
-5. **Derive state; never hand-maintain it.** No boolean that duplicates something
-   computable from the data. A hand-maintained flag drifts, and its dead branches
-   become the bug. (A6)
-6. **Pure build logic, thin writer.** Every artifact is produced by a pure
-   function returning a plan; exactly one place writes bytes to disk. (A7)
-7. **Provenance travels with the form.** Every form knows whether it is
-   rule-derived or stored, and carries the trace of the rules that built it;
-   every *lemma* knows which source languages attest it and how confidently its
-   reconstruction follows. This is API, not documentation. (B1)
-8. **`None` means "no such form exists".** Never "not implemented", never
-   "unknown". A cell the specification declares absent is `None` and is
-   documented as by design. (B2)
-9. **One canonical owner per artifact; docs and metrics are generated from it.**
-   No number is hand-copied into prose. A README figure that disagrees with
-   `summary.json` is a build failure, not a typo. (B3, C3)
-10. **The spec decides; the code conforms.** Where `docs/RUTHENIAN.md` states a
-    form, that form is correct by definition and a disagreeing engine is wrong.
-    Where the spec is silent, the gap is reported as a spec gap and closed there
-    — never patched with a guess in the code. Where a source language is
-    genuinely variable, say so and state which way the spec went and why. (B4)
-11. **Every guard has a failure witness and an owner.** A check whose claimed
-    mutation does not break it is stale and gets deleted. A guard that cannot
-    fail loudly does not count. (D1, D2)
-12. **Structure, not strings, at every boundary.** Return the parts, not a string
-    for the caller to parse; return the resolved case and number, not just the
-    word. This is the single mistake `interslavic` paid for across four
-    consecutive releases. (E1)
+   string that was already structured.
+
+9. **Structure, not strings, at every boundary.** Return the parts, not a string
+   for the caller to parse; return the resolved case and number, not just the
+   word.
+   *Learned:* the single mistake `interslavic` paid for across four consecutive
+   releases, and shipped `quantified_parts` to fix.
+
+10. **No droppable side channels.** If a caller can silently forget a field and
+    still compile, that field will be silently forgotten. Losing information is a
+    type error.
+
+11. **Provenance travels with the form.** Every form knows whether it is
+    rule-derived or stored, and carries the trace of the rules that built it;
+    every *lemma* knows which source languages attest it and how confidently its
+    reconstruction follows. API, not documentation.
+    *Check:* every `Prediction` carries a non-empty trace; every entry carries
+    non-empty provenance.
+
+12. **`None` means "no such form exists".** Never "not implemented", never
+    "unknown". `Ok(None)` is a claim about the language; `Err(Unsupported)` is a
+    claim about the code. Conflating them makes every `None` untrustworthy.
+    *Check:* structural gaps are derived from the grammar, not read from data.
+
+13. **Pure build logic, thin writer.** Every artifact is produced by a pure
+    function returning a plan; exactly one place writes bytes to disk.
+    *Check:* no file is opened inside a `plan` function.
+
+14. **One canonical owner per artifact; docs and metrics are generated from it.**
+    No number is hand-copied into prose. A README figure that disagrees with
+    `summary.json` is a build failure, not a typo.
+    *Learned:* one verb-coverage figure was published three times three ways —
+    `~76 %`, `73.2 %`, `87.6 %` — before the true value (`90.7 %`) was measured.
+    *Check:* regeneration diffs against the committed docs.
+
+15. **Every guard has a failure witness, and the witness is verified.** A guard
+    ships only after its named mutation has been applied, observed to fail it,
+    and reverted. A guard that survives its own witness is stale and is deleted,
+    not left in place looking reassuring.
+    *Learned:* phase 1 found two stale guards this way; phase 2 found a third,
+    plus two witnesses that were themselves wrong. Guards are not
+    self-evidently correct.
+    *Check:* the mutation table in each phase's report.
+
+16. **The dependency-free crates stay dependency-free.** `ruthenian-orthography`
+    has zero dependencies; `ruthenian-core` depends on it and nothing else.
+    *Check:* a `no_dependencies` test in each crate's guard suite — a test, not a
+    review habit.
+
+17. **Redistributed data carries its licence.** Any third-party data committed
+    here is recorded in `ATTRIBUTION.md` with its source and licence, **in the
+    same change that adds it**. Wiktionary-derived content is CC BY-SA 4.0 +
+    GFDL and requires attribution and share-alike from anyone redistributing it
+    further.
+
+Breaking one of these is not a trade-off to be weighed. It is a bug, and the fix
+is to restore the law, not to document the exception.
 
 ## Phase order
 
@@ -336,22 +441,26 @@ Two remain. Both are deferred by design rather than undecided.
 
 ### Closed during specification
 
-| Decision | Resolution | Recorded in |
+Recorded here because they span crate boundaries or predate the crates they
+constrain. When a crate is built, its README restates the ones it implements.
+
+
+| Decision | Resolution | Applies to |
 |---|---|---|
-| **The measurement baseline** | **The specification, not any natural language.** `docs/RUTHENIAN.md`'s paradigm tables are the conformance corpus. Attested forms are reconstruction evidence; comparison to Russian is reported as distance and is never called accuracy. | `docs/specs/ruthenian-eval.md` §1, §2 |
-| **Source-language classifications** | **Extraction-time only.** Zaliznyak classes and stress letters are how a cognate is read out of the dump and mapped onto one of Ruthenian's six classes. They appear in no public type. | `docs/specs/ruthenian-extract.md` §4; `docs/specs/ruthenian-core.md` §3 |
-| **Stress** | **Ruthenian stores stress and renders it on request.** Stress is fixed per word (`docs/RUTHENIAN.md` §2.1), so there are no mobile patterns to model — but the lexicon keeps the position, the orthography carries it as a combining acute (`pisátj`), and the CLI prints it only when asked. Running text never marks it. | `docs/specs/ruthenian-orthography.md` §12, `docs/specs/ruthenian-core.md` §12 |
-| **Homograph keying** | **Composite keys carrying the disambiguating class**, not `_n` sense suffixes. A key is derived from linguistic properties, so it is stable across dump refreshes. | `docs/specs/ruthenian-lexicon.md` §2, §10 |
-| **ё/е normalization** | **Normalize ё → е at extraction** — with the implicit stress transferred to an explicit U+0301, because the dump never marks stress on ё (verified). This is a *source-reading* rule; Ruthenian's own orthography is settled by `docs/ORTHOGRAPHY.md`. | `docs/specs/ruthenian-extract.md` §10 |
-| **The apostrophe** | **One glyph, one rule**: `'` means "the next character starts a new letter" (`docs/RUTHENIAN.md` §2.1). | `docs/specs/ruthenian-orthography.md` §7, §12 |
-| **No configuration axis** | Generation is `(entry, slot) → Option<Form>`. There is no policy, variant or feature flag: the language is fixed by the specification, so changing it is a source edit rather than a runtime switch. Provenance survives as the trace. | `docs/specs/ruthenian-core.md` §7, `docs/specs/ruthenian.md` §10 |
-| **Sense storage** | Full structured senses (gloss, tags, topics), stored in a generated `senses.rdb` blob — **not** inlined in `Entry` and **not** compiled into any crate. The CLI embeds it and stays self-contained. | `docs/specs/ruthenian-lexicon.md` §2a |
-| **`Form` type location** | `ruthenian-lexicon`, so the evaluator can consume it without depending on generated tables. | `docs/specs/ruthenian-lexicon.md` §2 |
-| **Pronouns and numerals** | Their own `Slot` variants. Numeral government is returned as structure (case + number), never re-derived by callers — and it is regular in Ruthenian (`docs/RUTHENIAN.md` §6.1), with `dva` governing the dual. | `docs/specs/ruthenian-core.md` §3, §12 |
-| **CI fixture** | A few hundred **real** dump records vendored with provenance, chosen to cover the hard cases. Never hand-written fixtures. | `docs/specs/ruthenian-extract.md` §10 |
-| **Conformance corpus** | **Extracted once into a committed artifact**, not parsed live inside the assertion. Amending the spec regenerates it and the diff is reviewed; a currency check fails if the two drift. Coverage of the spec is reported alongside conformance to it. | `docs/specs/ruthenian-core.md` §9, `docs/specs/ruthenian-eval.md` §3 |
-| **Stress in evaluation** | Scored twice — segmental (headline) and strict (including stress placement) — so neither number hides the other. | `docs/specs/ruthenian-eval.md` §2 |
-| **`resolve` does not rank** | All candidates in deterministic key order; no manufactured primacy score. | `docs/specs/ruthenian.md` §10 |
-| **CLI surface** | `paradigm` prints the full table by default, `principal-parts` is its own subcommand, and `ruth` carries **no** developer commands — `extract` and `eval` live only in `cargo xtask`. | `docs/specs/ruthenian-cli.md` §2, §10 |
-| **Conformance gating** | `cargo xtask conformance` fails on any regression against the spec corpus; everything else reports without gating. | `docs/specs/xtask.md` §9 |
-| **Latin-in-Cyrillic input** — verified breakage: `"cat дом"` round-trips to `"цат дом"` in the reference | Two entry points. `to_latin` is strict and returns `AlphabetError` with a byte offset; `to_latin_mixed` transliterates only declared-alphabet runs and reports the spans it skipped. The CLI uses the strict one, so a mixed-script argument is an error, never a silent guess. | `docs/specs/ruthenian-orthography.md` §2, §12; `docs/specs/ruthenian-cli.md` §3 |
+| **The measurement baseline** | **The specification, not any natural language.** `docs/RUTHENIAN.md`'s paradigm tables are the conformance corpus. Attested forms are reconstruction evidence; comparison to Russian is reported as distance and is never called accuracy. | `ruthenian-eval` |
+| **Source-language classifications** | **Extraction-time only.** Zaliznyak classes and stress letters are how a cognate is read out of the dump and mapped onto one of Ruthenian's six classes. They appear in no public type. | `ruthenian-extract`, `ruthenian-core` |
+| **Stress** | **Ruthenian stores stress and renders it on request.** Stress is fixed per word (`docs/RUTHENIAN.md` §2.1), so there are no mobile patterns to model — but the lexicon keeps the position, the orthography carries it as a combining acute (`pisátj`), and the CLI prints it only when asked. Running text never marks it. | `ruthenian-orthography`, `ruthenian-core` |
+| **Homograph keying** | **Composite keys carrying the disambiguating class**, not `_n` sense suffixes. A key is derived from linguistic properties, so it is stable across dump refreshes. | `ruthenian-lexicon` |
+| **ё/е normalization** | **Normalize ё → е at extraction** — with the implicit stress transferred to an explicit U+0301, because the dump never marks stress on ё (verified). This is a *source-reading* rule; Ruthenian's own orthography is settled by `docs/RUTHENIAN.md` §2.1. | `ruthenian-extract` |
+| **The apostrophe** | **One glyph, one rule**: `'` means "the next character starts a new letter" (`docs/RUTHENIAN.md` §2.1). | `ruthenian-orthography` |
+| **No configuration axis** | Generation is `(entry, slot) → Option<Form>`. There is no policy, variant or feature flag: the language is fixed by the specification, so changing it is a source edit rather than a runtime switch. Provenance survives as the trace. | `ruthenian-core`, `ruthenian` |
+| **Sense storage** | Full structured senses (gloss, tags, topics), stored in a generated `senses.rdb` blob — **not** inlined in `Entry` and **not** compiled into any crate. The CLI embeds it and stays self-contained. | `ruthenian-lexicon` |
+| **`Form` type location** | `ruthenian-lexicon`, so the evaluator can consume it without depending on generated tables. | `ruthenian-lexicon` |
+| **Pronouns and numerals** | Their own `Slot` variants. Numeral government is returned as structure (case + number), never re-derived by callers — and it is regular in Ruthenian (`docs/RUTHENIAN.md` §6.1), with `dva` governing the dual. | `ruthenian-core` |
+| **CI fixture** | A few hundred **real** dump records vendored with provenance, chosen to cover the hard cases. Never hand-written fixtures. | `ruthenian-extract` |
+| **Conformance corpus** | **Extracted once into a committed artifact**, not parsed live inside the assertion. Amending the spec regenerates it and the diff is reviewed; a currency check fails if the two drift. Coverage of the spec is reported alongside conformance to it. | `ruthenian-core`, `ruthenian-eval` |
+| **Stress in evaluation** | Scored twice — segmental (headline) and strict (including stress placement) — so neither number hides the other. | `ruthenian-eval` |
+| **`resolve` does not rank** | All candidates in deterministic key order; no manufactured primacy score. | `ruthenian` |
+| **CLI surface** | `paradigm` prints the full table by default, `principal-parts` is its own subcommand, and `ruth` carries **no** developer commands — `extract` and `eval` live only in `cargo xtask`. | `ruthenian-cli` |
+| **Conformance gating** | `cargo xtask conformance` fails on any regression against the spec corpus; everything else reports without gating. | `xtask` |
+| **Latin-in-Cyrillic input** — verified breakage: `"cat дом"` round-trips to `"цат дом"` in the reference | Two entry points. `to_latin` is strict and returns `AlphabetError` with a byte offset; `to_latin_mixed` transliterates only declared-alphabet runs and reports the spans it skipped. The CLI uses the strict one, so a mixed-script argument is an error, never a silent guess. | `ruthenian-orthography`, `ruthenian-cli` |

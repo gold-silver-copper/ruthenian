@@ -1,4 +1,4 @@
-//! The eleven guards from `docs/specs/ruthenian-orthography.md` §9.
+//! The eleven guards this crate declares; see `README.md`.
 //!
 //! Every one names the minimal mutation that must make it fail. A guard that
 //! survives its own witness is stale and must be fixed or deleted.
