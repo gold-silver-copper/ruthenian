@@ -171,6 +171,40 @@ future uses a different root altogether (`bǫd-` against `jes-`), which is
 suppletion rather than a tense of one stem. That is why `future_auxiliary` is its
 own function and there is no fourth tense variant for one verb's sake.
 
+### Why `byti` is a function and not five special cases
+
+It is the language's only suppletive verb (§7.9), so it has to be handled
+somewhere. The alternative — threading it through the general path with checks at
+each stage — is what `interslavic-rs` does, and it is worth knowing how that
+turned out.
+
+There, `byti` has no entry point of its own. Its irregularity is spread across
+**five** places in one file: the prefix splitter carries it in a `NON_REGULAR`
+list; the stem deriver swaps `by` → `jes` with a string comparison; a hardcoded
+six-slot table supplies the present; the future builder special-cases it to emit
+the auxiliary with an empty lexical verb; and the passive-participle builder
+returns `—` for it. Its own `is_irregular_stem` predicate lists `da | je | jě |
+ja | vě` and **does not include `jes`** — so the most irregular verb in the
+language bypasses the crate's irregular-verb mechanism entirely.
+
+None of that is wrong, and it produces correct forms. But a reader asking "how
+does `byti` work" has to find all five sites, and nothing tells them there are
+five. A dedicated function collects the same facts where they can be read at
+once.
+
+The cost is real and is accepted deliberately: **`byti` is a second generation
+path**, which law 2 otherwise forbids. It is tolerable only because the verb is a
+closed, nine-cell paradigm that the specification tabulates in full, so the
+function is checked against §7.9 by the same conformance corpus as everything
+else. If it ever grows a rule rather than a table, that exemption stops holding.
+
+One `interslavic-rs` idea does **not** transfer, and it is worth saying why.
+There, the future is periphrastic for *every* verb, so `byti`'s own future falls
+out for free as "auxiliary + empty string" — elegant, and it means no separate
+auxiliary function is needed. Ruthenian cannot do this: §7.8 gives perfectives a
+*synthetic* future built from present endings, so there is no universal
+periphrastic rule for `byti` to be a degenerate case of.
+
 Doing the composition here would mean doing agreement and word order, which is
 syntax, and the return value would stop being a word.
 
