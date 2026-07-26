@@ -321,8 +321,14 @@ Russian adjectives have short forms, with no rule predicting which.
 | reflexive | ✓ | ✓ (`ātman-`) | ✓ | ✓ | ✓ | ✓ | ✓ |
 
 Clitics run PIE → Sanskrit → OCS → *lost in East Slavic* → **deliberately restored
-by Interslavic**. The ***n-* prefix** (`u njego`) is a Slavic innovation from a
-reanalysed preposition-final nasal, absent from PIE and Sanskrit.
+by Interslavic**, and Ruthenian restores them too (§5.1a).
+
+The ***n-* prefix** (`u njego`) runs the other way: absent from PIE and Sanskrit,
+universal in Slavic. It is not inherited but **reanalysed** — `vъn`, `sъn` and
+`kъn` once ended in a nasal, and when that nasal was lost the boundary was
+misparsed, `vъn jego` becoming `vъ njego`. Ruthenian is the only column here that
+declines it, on the grounds that a Slavic-internal accident is exactly what a
+maximally conservative standard has no reason to inherit (`RUTHENIAN.md` §5.1).
 
 Pronouns are also where the PIE genitive `*-osyo` survives in Slavic, as `-ogo`.
 
@@ -618,7 +624,7 @@ because the irregularity is removed rather than the categories:
 |---|---|
 | aspect | the defining Slavic innovation, in all four lects |
 | animacy | shared by all four, information-bearing |
-| the *n-* prefix, reflexive, participle structure | pan-Slavic |
+| reflexive, participle structure | pan-Slavic |
 | iotation | 675 `ov→u` alone; removing it would make the verb unrecognizable |
 
 ## 13.5 The verb
@@ -694,3 +700,12 @@ table.
 The design is defensible precisely because every restored feature is attested in
 the family and every regularization has a sister-language or constructed-standard
 precedent. Nothing here is invented; the novelty is only in the combination.
+
+**One exception, stated plainly.** Dropping the post-prepositional *n-* prefix
+(§3, `RUTHENIAN.md` §5.1) has no precedent in any Slavic language or in
+Interslavic — all seven columns above carry it. Its precedent is PIE and
+Sanskrit, which have nothing corresponding, because the prefix is a
+Slavic-internal reanalysis rather than an inheritance. That makes it a
+*restoration* on the same logic as the ablative and the dual rather than a
+simplification, but it is the one place the sister-language test is not met, and
+it should not be quietly folded in with the others.

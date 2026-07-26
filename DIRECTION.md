@@ -22,12 +22,16 @@ document seems necessary, one of these five is doing its job badly.
 Ruthenian is a **constructed Latin-script East Slavic literary language, more
 conservative than Russian or Ukrainian and more regular than either**.
 
-It restores three categories modern East Slavic lost — the **ablative**, the
-**vocative** and the **dual** — along with the aorist, the imperfect, the OCS
-long/short adjective and the full copula. It removes what makes Russian hard:
-mobile stress, heteroclitics, soft adjective stems, indeclinables, fleeting
-vowels in the genitive plural, irregular numeral government, ten of Russian's
-sixteen verb classes, and lexical aspect pairing.
+It restores categories modern East Slavic lost — the **ablative**, the
+**vocative**, the **dual**, the aorist, the imperfect, the OCS long/short
+adjective, the full copula, and the **clitic pronoun series**. It removes what
+makes Russian hard: mobile stress, heteroclitics, soft adjective stems,
+indeclinables, **the fleeting vowel entirely**, irregular numeral government, and
+ten of Russian's sixteen verb classes.
+
+Its three axes, which are not the same axis (`docs/RUTHENIAN.md` §1): **grammar
+follows OCS, phonology follows Russian, vocabulary is East Slavic with an OCS
+learned layer.**
 
 | | Ruthenian | Russian | Ukrainian | OCS |
 |---|---|---|---|---|
@@ -40,7 +44,9 @@ sixteen verb classes, and lexical aspect pairing.
 | 2nd palatalization | **kept** | lost (0 %) | kept (99 %) | kept (66 %) |
 
 **Every restored feature is attested in the family and every regularization has a
-precedent in a sister language.** Nothing is invented; the novelty is in the
+precedent in a sister language** — with exactly one declared exception, the
+post-prepositional `n-` prefix, whose precedent is PIE and Sanskrit rather than
+Slavic (`docs/RUTHENIAN.md` §5.1). Nothing is invented; the novelty is in the
 combination. That is the design brief, and it is what separates this from both a
 relexification and an *a priori* conlang.
 
@@ -77,10 +83,11 @@ Ruthenian text and there never will be, so:
   `polje`, `zzena`, `zjemlja`, `noczj`, `kostj`, and the verb tables of §7) are
   the conformance fixtures. A cell the engine gets wrong is a bug in the engine;
   a cell the spec does not state is a hole in the spec.
-- **Attested forms are evidence, not answers.** Russian, Ukrainian, Belarusian,
-  Polish and OCS supply the etyma and the cognates from which a Ruthenian lemma
-  is *reconstructed* (`docs/RUTHENIAN.md` §12.2). They do not supply the target
-  output, and agreement with any one of them is neither required nor a score.
+- **Attested forms are evidence, not answers.** The seven source languages supply
+  the cognates from which a Ruthenian lemma is *reconstructed* — Russian-anchored,
+  consulting the others only at Russian's known mergers
+  (`docs/RUTHENIAN.md` §12.2). They do not supply the target output, and
+  agreement with any one of them is neither required nor a score.
 - **Comparing output to Russian is a description, never a metric.** Such a
   comparison answers "how far has Ruthenian moved from Russian here", which is
   interesting and is reported as a distance. It is not accuracy, is never called
@@ -93,19 +100,23 @@ compare against at all. That is not a low score; it is a category error.
 
 ## The lexicon is multi-source
 
-Ruthenian draws its vocabulary from **all of East Slavic plus Polish and Old
-Church Slavonic**, and adapts international vocabulary through a declared
-borrowing system (`docs/RUTHENIAN.md` §9, §12.3).
+Ruthenian draws its vocabulary from **all of East Slavic plus Polish, Czech,
+Serbo-Croatian and Old Church Slavonic**, and adapts international vocabulary
+through a declared borrowing system (`docs/RUTHENIAN.md` §9, §12.3).
 
 | Tier | Languages | Role |
 |---|---|---|
 | **primary** | Russian, Ukrainian, Belarusian | the East Slavic core |
-| **secondary** | Polish, Old Church Slavonic | recover what East Slavic levelled |
+| **secondary** | Polish, OCS, Czech, Serbo-Croatian | recover what East Slavic levelled, and supply breadth |
 | **borrowing** | Latin, Greek, Sanskrit, English, French, German | adapted by rule |
+
+The tier breaks ties: a primary attestation outranks a secondary one, which is
+what keeps a seven-source lexicon East Slavic in character rather than pan-Slavic.
 
 Measured lemma inventories, all from full scans of the same dump: Russian
 419 283, Polish 152 325, Ukrainian 52 223, Belarusian 6 899, Old Church Slavonic
-4 311.
+4 311. **Czech and Serbo-Croatian are not yet measured**, and law 3 requires a
+full scan before either figure is quoted.
 
 **Why more than one source is necessary, not merely nice.** Russian alone cannot
 supply the language specified above. Yat is the clearest case: it is a phoneme in
@@ -456,7 +467,7 @@ constrain. When a crate is built, its README restates the ones it implements.
 | **No configuration axis** | Generation is `(entry, slot) → Option<Form>`. There is no policy, variant or feature flag: the language is fixed by the specification, so changing it is a source edit rather than a runtime switch. Provenance survives as the trace. | `ruthenian-core`, `ruthenian` |
 | **Sense storage** | Full structured senses (gloss, tags, topics), stored in a generated `senses.rdb` blob — **not** inlined in `Entry` and **not** compiled into any crate. The CLI embeds it and stays self-contained. | `ruthenian-lexicon` |
 | **`Form` type location** | `ruthenian-lexicon`, so the evaluator can consume it without depending on generated tables. | `ruthenian-lexicon` |
-| **Pronouns and numerals** | Their own `Slot` variants. Numeral government is returned as structure (case + number), never re-derived by callers — and it is regular in Ruthenian (`docs/RUTHENIAN.md` §6.1), with `dva` governing the dual. | `ruthenian-core` |
+| **Pronouns and numerals** | Their own `Slot` variants. A pronoun slot carries a `PronounStyle` of **full or clitic** (`docs/RUTHENIAN.md` §5.1a) — there is no post-prepositional `n-` series, since §5.1 declines that prefix, so a preposition simply takes the full form. Numeral government is returned as structure (case + number), never re-derived by callers, and it is regular (§6.1), with `dva` governing the dual. | `ruthenian-core` |
 | **CI fixture** | A few hundred **real** dump records vendored with provenance, chosen to cover the hard cases. Never hand-written fixtures. | `ruthenian-extract` |
 | **Conformance corpus** | **Extracted once into a committed artifact**, not parsed live inside the assertion. Amending the spec regenerates it and the diff is reviewed; a currency check fails if the two drift. Coverage of the spec is reported alongside conformance to it. | `ruthenian-core`, `ruthenian-eval` |
 | **Stress in evaluation** | Scored twice — segmental (headline) and strict (including stress placement) — so neither number hides the other. | `ruthenian-eval` |

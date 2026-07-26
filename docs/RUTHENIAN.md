@@ -44,9 +44,11 @@ placement.
 **Removed:** mobile stress, heteroclitics, marginal cases, soft adjective stems,
 indeclinables, **the fleeting vowel entirely**, irregular numeral government,
 verb classes 7–16.
-**Kept:** aspect, animacy, the *n-* prefix, reflexives, iotation, participles,
+**Kept:** aspect, animacy, reflexives, iotation, participles,
 determinate/indeterminate motion pairs, **all three palatalizations** (Ukrainian
 99 %, Russian 0 %), and the yat distinction via the Ukrainian reflex `-i`.
+**Not adopted:** the post-prepositional *n-* prefix (§5.1), which every Slavic
+language has and neither PIE nor Sanskrit does.
 
 **The three axes, stated once.** Ruthenian is not uniformly conservative or
 uniformly regular; it is conservative in one dimension and Russian in another,
@@ -744,7 +746,7 @@ each of those environments requires the full form.
 ```
 on mi go dal          he gave it to me        (clitics second, dat before acc)
 mnje on go dal        to ME he gave it        (focused: full form, fronted)
-u njego               at his                  (after a preposition: full form)
+u jego                at his                  (after a preposition: full form)
 ```
 
 Within the cluster the order is **dative before accusative**, and the reflexive
@@ -766,10 +768,29 @@ which Russian fused to the verb and Ruthenian keeps free (§5.2).
 | instrumental | `jim` | `jim` | `jeju` | `jima` | `jimi` |
 | locative | `jem` | `jem` | `jej` | `jeju` | `jih` |
 
-**The *n-* prefix.** After a preposition, every `j-`-initial form takes `nj-`:
-`u njego`, `s njim`, `k njej`, `o njih`. Pan-Slavic, from a reanalysed
-preposition-final nasal. It applies to prepositions only, never to a bare
-oblique.
+**No post-prepositional *n-*.** A pronoun after a preposition is the plain form:
+
+```
+u jego        at his          (not *u njego)
+s jim         with him        (not *s njim)
+k jej         to her          (not *k njej)
+o jih         about them      (not *o njih)
+```
+
+Every Slavic language has this prefix — OCS `u njego`, Russian `у него`,
+Ukrainian, Belarusian, Polish and Interslavic alike — so declining it is the one
+regularization here without a Slavic precedent. It has a deeper one instead.
+
+The `n-` is not inherited. It is a **reanalysis**: the prepositions `vъn`, `sъn`,
+`kъn` once ended in a nasal, and when that nasal was lost the boundary was
+misparsed, `vъn jego` becoming `vъ njego`. The prefix is therefore a
+Slavic-internal accident, and PIE and Sanskrit — the two languages this spec
+takes the ablative and the dual from — have nothing corresponding to it.
+
+Removing it is conservative in the same sense those restorations are: it returns
+the pronoun to the shape it had before a change that only Slavic made. It also
+removes an allomorph, which costs nothing in expressiveness — the `nj-` forms
+were never contrastive, only positional.
 
 ## 5.2 Reflexive
 

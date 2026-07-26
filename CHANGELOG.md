@@ -59,6 +59,16 @@ them to keep eight cases distinguishable.
   "he is the good one". OCS and Russian both state a *positional* rule; Ruthenian
   has made the contrast semantic, so banning a form in a position would discard a
   distinction the system already encodes.
+- **§5.1 — the post-prepositional `n-` prefix is dropped**: `u jego`, not
+  `u njego`. This is the one regularization with **no Slavic precedent** — OCS,
+  Russian, Ukrainian, Belarusian, Polish and Interslavic all carry it — and the
+  spec says so rather than folding it in with the others. Its precedent is PIE
+  and Sanskrit, which have nothing corresponding, because the `n-` is not
+  inherited but reanalysed: `vъn`, `sъn`, `kъn` once ended in a nasal, and when
+  it was lost the boundary was misparsed (`vъn jego` → `vъ njego`). Dropping it
+  restores the pre-Slavic shape on the same logic as the ablative and the dual,
+  and removes a purely positional allomorph. `PronounStyle` reduces to full vs
+  clitic.
 - **§5.1a — the clitic pronoun series is restored**, with §10.1a placing it in
   Wackernagel second position. This also explains the reflexive: `sja` is the
   accusative clitic OCS had, which Russian fused to the verb. **§5.2 makes it a
