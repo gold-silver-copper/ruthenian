@@ -1,13 +1,14 @@
 # tools
 
 Measurement and fixture generation over the **source languages**. Both read a
-complete record set, never a sample — see [`DIRECTION.md`](../DIRECTION.md) law 3.
+complete record set, never a sample — see
+[`docs/COMPARATIVE_GRAMMAR.md`](../docs/COMPARATIVE_GRAMMAR.md) "Method".
 
 > **These measure Russian, not Ruthenian.** Ruthenian is specified rather than
 > attested (I7), so nothing here produces a figure about it. The fixtures
 > `build_fixture.py` writes are source-language evidence for `ruthenian-extract`
-> (phase 4) and are not carried by the `ruthenian-core` phase, which is measured
-> against `docs/RUTHENIAN.md` instead (law 2).
+> and are not used by `ruthenian-core`, which is measured against
+> `docs/RUTHENIAN.md` instead.
 
 ```bash
 cd ~/Desktop/code/wikidata

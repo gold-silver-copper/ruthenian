@@ -18,9 +18,36 @@ comparison; the lexicon's single source remains the English Wiktionary dump.
 
 ## Method
 
-Every countable claim is counted over the **whole** dump (`DIRECTION.md` laws 2
-and 3). Full scans: 441 629 Russian records, 124 791 across `uk`/`be`/`cu`/`sa`, and
-1 894 Proto-Indo-European reconstructions (`ine-pro`).
+**Every countable claim here is counted over the entire dump. There is no such
+thing as a sampled figure in this document.** Full scans: 441 629 Russian
+records, 124 791 across `uk`/`be`/`cu`/`sa`, and 1 894 Proto-Indo-European
+reconstructions (`ine-pro`), from all 10 667 129 lines of
+`raw-wiktextract-data.jsonl`.
+
+That rule is not fastidiousness. Sampling was used early in this project and was
+wrong three separate times, in ways a bigger sample would not have fixed:
+
+| Claim from a sample | Truth from the full scan |
+|---|---|
+| 117 distinct verb class codes | **226** — the sample missed 109, including 9 the parser could not parse |
+| classes 1–6 cover 87.6 % of verbs | **90.7 %** |
+| 670 class-1 labial stems take no epenthesis | **1 977, and not one takes it** — the rule is exceptionless |
+| `ov → u` occurs 146 times | **675** |
+| noun accent `a`+`b` ≈ 93 % | **94.7 %**, and the sample never saw the primed patterns at all |
+
+The third row is the one that matters. A sample can show a rule holds *often*;
+only a full scan can show it holds *always*, and "always" is what lets a
+morphology engine key on a rule instead of hedging around it.
+
+Even a full-file `grep` is not automatically a full scan: an early class-code
+census used a pattern assuming JSON key order and found 183 of the 226. **Parse
+the records; do not pattern-match them.** `tools/measure.py` regenerates every
+figure below.
+
+**Claims about Ruthenian are not measured at all**, because there is no Ruthenian
+corpus and never will be. They are settled by [`RUTHENIAN.md`](RUTHENIAN.md),
+which is normative. Conflating the two is how a constructed language turns back
+into a description of Russian.
 
 **How the ending tables were built.** For each lemma, the stem is the longest
 common prefix over all its attested forms with combining marks stripped; the
@@ -495,7 +522,7 @@ enclitic, and both continue PIE second-position clitics.
 
 Ruthenian's removals (`RUTHENIAN.md` §1, §3.9) are not gestures at "Russian is
 hard"; each names a subsystem with a size. Measured over the whole dump
-(`DIRECTION.md`, law 13), these are the counts those decisions rest on.
+(see Method), these are the counts those decisions rest on.
 
 | Subsystem | Size in Russian | What Ruthenian does |
 |---|---|---|
@@ -520,7 +547,7 @@ through.** It encodes declension/conjugation type plus stress pattern in a compa
 code (`1a`, `4a+p`, `4c+p`, `6°b`); Wiktionary's `ru-noun+` and `ru-conj`
 templates *are* Zaliznyak indices, which is why the counts above are obtainable
 at all. It describes Russian, and it stops at the extraction boundary
-(`DIRECTION.md`, "Source-language classifications"): Ruthenian's own three
+(it describes Russian, not Ruthenian): Ruthenian's own three
 declensions and six classes are what the engine speaks.
 
 > Zaliznyak, A. A., *Грамматический словарь русского языка*, 1977 (6th ed. 2010)

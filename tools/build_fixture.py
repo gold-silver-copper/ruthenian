@@ -6,7 +6,7 @@ produced by one pass over the whole dump:
     LC_ALL=C grep -F '\"lang_code\": \"ru\"' raw-wiktextract-data.jsonl > ru_all.jsonl
     python3 tools/build_fixture.py < ru_all.jsonl
 
-Never a window, a `dd` slice or a `head`. See DIRECTION.md law 3.
+Never a window, a `dd` slice or a `head`. See docs/COMPARATIVE_GRAMMAR.md.
 """
 
 import json, sys, collections, re, unicodedata

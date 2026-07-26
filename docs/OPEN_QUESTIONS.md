@@ -6,8 +6,7 @@ that cannot be finished.
 
 **These are decisions, not options.** Nothing here is modelled as a runtime
 switch: when one closes, the specification changes, the code changes with it, and
-the changelog enumerates the affected slots (`DIRECTION.md`, "There is no
-configuration axis").
+the changelog enumerates the affected slots.
 
 The bulk of this document has been answered and moved into the specification.
 See §13 there for the settled list, and the changelog for the reasoning.
@@ -65,15 +64,16 @@ original languages, and 2 700 in just one.** Etymology templates alone will not
 group them; it needs phonological matching and the English gloss as a pivot, as
 slovowiki does.
 
-> **Blocks:** `ruthenian-extract`'s coverage, though not its existence. The
-> anchored path can be built first and the fallback added as its own phase.
+> **Blocks:** the lexicon's coverage, though not its existence. The anchored path
+> can be built first and the fallback added later. It blocks nothing in
+> `ruthenian-core`, which needs no lexicon at all.
 
 ## 4. Czech and Serbo-Croatian lemma counts
 
 §12.1 lists both as secondary sources with their inventories marked *not yet
-measured*. `DIRECTION.md` law 3 requires a full scan per language code, so
-`tools/measure.py` must be run for `cs` and `sh`/`sr`/`hr` before those figures
-are quoted anywhere.
+measured*. `COMPARATIVE_GRAMMAR.md`'s method requires a full scan per language
+code, so `tools/measure.py` must be run for `cs` and `sh`/`sr`/`hr` before those
+figures are quoted anywhere.
 
 > **Blocks:** the §12.1 table, and any claim about lexical coverage.
 

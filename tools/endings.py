@@ -1,4 +1,4 @@
-"""Measured ending inventories per language, from FULL scans (DIRECTION.md law 3).
+"""Measured ending inventories per language, from FULL scans.
 
 Produces the ending tables in docs/COMPARATIVE_GRAMMAR.md. Inputs are complete
 per-language record sets, each from one pass over the whole dump:

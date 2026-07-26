@@ -35,7 +35,8 @@ attested Russian word forms, class codes and grammatical metadata extracted from
 
 The raw dump (`raw-wiktextract-data.jsonl`, 22 GB) is **not** redistributed here.
 It is read locally, in full, by `tools/measure.py` and `tools/build_fixture.py` —
-see [`DIRECTION.md`](DIRECTION.md) law 3, which forbids sampling it.
+see [`docs/COMPARATIVE_GRAMMAR.md`](docs/COMPARATIVE_GRAMMAR.md) "Method",
+which forbids sampling it.
 
 ## Russian Synodal Bible — the orthography corpus
 

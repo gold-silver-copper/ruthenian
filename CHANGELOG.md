@@ -18,6 +18,50 @@
 
 ### Changed
 
+- **`DIRECTION.md` is rewritten, and is now purely about `ruthenian-core`.** The
+  old document described an eight-crate workspace — an extraction pipeline, a
+  lexicon schema, a facade, an evaluator, a CLI and an xtask — six of which do not
+  exist, specified in a phase order written before the language was settled. It
+  was outdated in the way a plan is outdated when the thing it plans has changed
+  shape.
+
+  The new document describes one crate with one job: **word plus grammar, in;
+  form, out.** `noun("dom", Masculine, Inanimate, Genitive, Singular)` →
+  `"domogo"`. Typed enums for every category, a `paradigm()` that enumerates a
+  complete table, and no dictionary, no data files, no I/O, no analysis
+  direction. The goal is stated as complete coverage: every form of every word,
+  computed from rules.
+
+  Three things it settles that the old one did not:
+
+  - **The argument lists are the specification of what a lemma cannot tell you.**
+    Gender is required because `konj` "horse" (masculine, declension II) and
+    `noczj` "night" (feminine, declension III) both end in `j` and no rule
+    separates them; animacy because the accusative depends on it; verb class
+    because `-atj` is class 1 or class 6; aspect because a closed class is
+    inherently perfective. Everything else — declension, hardness, the stem, the
+    palatalizations, the gaps — is derived, and storing any of it is a bug.
+  - **Nouns and adjectives are total; verbs and pronouns are not.** Every noun has
+    every cell (§3.9 removed number defectiveness), and the long adjective's
+    "missing" vocative is filled by the nominative (§4.2), so both return
+    `String`. A perfective verb has no present tense (§7.8) and the reflexive has
+    no nominative (§5.2), so both return `Option<String>`.
+  - **`Prediction` and `Trace` are dropped.** They existed to serve an evaluator
+    and a CLI, neither of which is in scope. With no consumer, the trace was
+    structure nobody read. This is a deliberate relaxation of "return structure,
+    not strings", and the cost — a caller cannot ask *why* — is stated rather
+    than hidden.
+
+  The seventeen laws reduce to eight, keeping those a rules engine can actually
+  break: the spec decides, one generation path, derive don't store, `None` means
+  absent, no droppable arguments, pure functions, zero dependencies, and every
+  guard verified against its witness.
+
+  The **no-sampling rule** moves to `COMPARATIVE_GRAMMAR.md`'s Method section,
+  where the measured claims actually live, and takes its evidence with it — the
+  117-versus-226 class census, the 670-versus-1 977 labial stems, and the reason
+  a full-file `grep` is not a full scan.
+
 - **Every open question in the specification is answered.** `OPEN_QUESTIONS.md`
   goes from twenty-odd decisions to four items, none of which blocks the grammar.
   The reasoning for each is below; the settled list is `RUTHENIAN.md` §13.

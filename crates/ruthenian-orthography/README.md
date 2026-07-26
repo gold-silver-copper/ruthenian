@@ -1,8 +1,7 @@
 # ruthenian-orthography
 
 Bijective Cyrillic↔Latin conversion for Ruthenian, and the only place in the
-system where a script conversion exists. First crate of the
-[Ruthenian](../../DIRECTION.md) workspace.
+system where a script conversion exists.
 
 The alphabet itself is specified in [`docs/RUTHENIAN.md`](../../docs/RUTHENIAN.md)
 §2, which is normative. This document is the implementation: how the mapping is
