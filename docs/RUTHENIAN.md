@@ -30,12 +30,16 @@ forms below are in the Ruthenian Latin alphabet.
 | verb classes | **6** | 16 | 13 | 5 | 10 |
 | stress | fixed, lexical | 10 patterns | mobile | mobile | pitch |
 | adjective long/short | long only | both | both | both | n/a |
+| 2nd palatalization | **kept** | lost (0 %) | kept (99 %) | kept (66 %) | n/a |
+| yat distinction | **kept** (as `-i`) | lost | kept (as `i`) | kept (as `ě`) | n/a |
 
 **Restored:** ablative, vocative, dual, dual pronouns, dual verb agreement.
 **Removed:** mobile stress, heteroclitics, marginal cases, short adjectives, soft
 adjective stems, indeclinables, fleeting vowels in the genitive plural,
 irregular numeral government, verb classes 7–16.
-**Kept:** aspect, animacy, the *n-* prefix, reflexives, iotation, participles.
+**Kept:** aspect, animacy, the *n-* prefix, reflexives, iotation, participles,
+**both palatalizations** (Ukrainian 99 %, Russian 0 %), and the yat distinction
+via the Ukrainian reflex `-i`.
 
 ---
 
@@ -132,6 +136,58 @@ Sources: OCS `-a` / `-u` / `-oma`, cognate with Sanskrit `-au` / `-yoḥ` /
 `-bhyām`. The dual is used for exactly two of something, and is **obligatory**
 with the numeral `dva`.
 
+### Yat, the locative, and the two palatalizations
+
+OCS distinguished the vocative and the locative singular by origin:
+
+| | OCS | from |
+|---|---|---|
+| vocative sg | `dome` | PIE `*-e`, the bare e-grade stem vowel |
+| locative sg | `domě` | PIE `*-oi`, a diphthong that became **yat** (`ě`) |
+
+Two different endings. The East Slavic languages then split on yat:
+
+| | ě becomes | Effect |
+|---|---|---|
+| Russian | `e` | **merger** — the distinction is lost |
+| Belarusian | `e` | merger |
+| **Ukrainian** | **`i`** | **distinction preserved**, as a different vowel |
+
+Ruthenian takes the **Ukrainian reflex**: every yat-derived ending is written
+`-i`. This is not a borrowing in place of conservatism — it is the one East
+Slavic reflex in which the OCS distinction survived. `lěsъ` → `lis`,
+`chlěbъ` → `chlib`, `domě` → `domi`.
+
+So the locative singular is `-i` and the vocative singular is `-je`, and they are
+distinct as they were in OCS.
+
+**The second palatalization does the same work in the consonant.** Yat from
+`*-oi` triggered the *second* palatalization of velars, while the vocative `-e`
+triggered the *first*. Velar stems therefore distinguish the two cases twice
+over — in the vowel and in the consonant:
+
+| | first palatalization (voc `-je`) | second palatalization (loc `-i`) |
+|---|---|---|
+| `k` | `cz` | `c` |
+| `g` | `zz` | `z` |
+| `h` | `sz` | `s` |
+
+`drug` → vocative `druzzje`, locative `druzi`.
+
+Whether to keep the second palatalization at all is a real choice, and the
+measured answer is that **Ruthenian sides with Ukrainian and OCS against
+Russian**. In velar-stem feminine dative/locative singulars:
+
+| | second palatalization applied |
+|---|---|
+| Ukrainian | **99 %** (`sobaka` → `sobaci`) |
+| Old Church Slavonic | 66 % (`noga` → `nozě`) |
+| **Russian** | **0 %** (`sobaka` → `sobake`) |
+
+Russian levelled it away completely. Ruthenian keeps it: it is inherited, it is
+regular, and it carries a case distinction that would otherwise rest on the
+vowel alone.
+
 ## 2.2 The three declensions
 
 Ruthenian has three declensions, not Russian's eight. The velar, sibilant, `c`
@@ -153,7 +209,7 @@ Each has a **hard** and a **soft** variant; the soft variant substitutes `je` fo
 
 | Case | Singular | Dual | Plural |
 |---|---|---|---|
-| nominative | `dom` | `doma` | `domi` |
+| nominative | `dom` | `doma` | `domy` |
 | vocative | `domje` | = nom | = nom |
 | accusative | `dom` / `doma` ¹ | = nom | `domy` / `domov` ¹ |
 | genitive | `domogo` | `domu` | `domov` |
@@ -177,6 +233,23 @@ Each has a **hard** and a **soft** variant; the soft variant substitutes `je` fo
 | instrumental | `konjem` | `konjema` | `konjami` |
 | locative | `konji` | `konju` | `konjah` |
 
+### Velar: `drug` "friend" (animate, stem `drug-`)
+
+| Case | Singular | Dual | Plural |
+|---|---|---|---|
+| nominative | `drug` | `druga` | `drugi` ² |
+| vocative | **`druzzje`** ³ | = nom | = nom |
+| accusative | `druga` | = nom | `drugov` |
+| genitive | `drugogo` | `drugu` | `drugov` |
+| **ablative** | `druga` | = dat | = dat |
+| dative | `drugu` | `drugoma` | `drugom` |
+| instrumental | `drugom` | `drugoma` | `drugami` |
+| locative | **`druzi`** ⁴ | `drugu` | `drugah` |
+
+² spelling rule: `y` is written `i` after a velar. ³ first palatalization
+`g` → `zz`. ⁴ second palatalization `g` → `z`. The vocative and locative differ
+in both the consonant and the vowel.
+
 **Note on syncretism.** `doma` is both ablative singular and nominative dual.
 This is inherited, not a defect: OCS has exactly the same collision (genitive
 singular `-a` = nominative dual `-a`), because both continue different PIE
@@ -189,9 +262,9 @@ noun takes dual modifiers and a dual verb.
 
 | Case | Singular | Dual | Plural |
 |---|---|---|---|
-| nominative | `okno` | `oknje` | `okna` |
+| nominative | `okno` | `okni` | `okna` |
 | vocative | = nom | = nom | = nom |
-| accusative | `okno` | `oknje` | `okna` |
+| accusative | `okno` | `okni` | `okna` |
 | genitive | `oknogo` | `oknu` | `oknov` |
 | **ablative** | `okna` | = dat | = dat |
 | dative | `oknu` | `oknoma` | `oknom` |
@@ -204,7 +277,7 @@ Nominative `polje`, genitive `poljego`, ablative `polja`, dative `polju`,
 instrumental `poljem`, locative `polji`; dual `polji` / `polju` / `poljema`;
 plural `polja` / `poljev` / `poljem` / `poljami` / `poljah`.
 
-The neuter dual `-je` continues OCS `-ě` (`dvě selě`), and the neuter vocative is
+The neuter dual `-i` continues OCS `-ě` (`dvě selě`), and the neuter vocative is
 the nominative in every language measured — Sanskrit 84 % ∅, OCS 45 %.
 
 ## 2.5 Declension I — feminine in `-a`
@@ -213,16 +286,31 @@ the nominative in every language measured — Sanskrit 84 % ∅, OCS 45 %.
 
 | Case | Singular | Dual | Plural |
 |---|---|---|---|
-| nominative | `zzena` | `zzenje` | `zzeny` |
+| nominative | `zzena` | `zzeni` | `zzeny` |
 | vocative | `zzeno` | = nom | = nom |
-| accusative | `zzenu` | `zzenje` | `zzeny` / `zzenov` ¹ |
+| accusative | `zzenu` | `zzeni` | `zzeny` / `zzenov` ¹ |
 | genitive | `zzeny` | `zzenu` | `zzenov` |
 | **ablative** | `zzeny` ² | = dat | = dat |
-| dative | `zzenje` | `zzenama` | `zzenam` |
+| dative | `zzeni` ³ | `zzenama` | `zzenam` |
 | instrumental | `zzenoj` | `zzenama` | `zzenami` |
-| locative | `zzeni` | `zzenu` | `zzenah` |
+| locative | `zzeni` ³ | `zzenu` | `zzenah` |
 
-¹ animate. ² **= genitive**, as in PIE and Sanskrit (99 %).
+¹ animate. ² **= genitive**, as in PIE and Sanskrit (99 %). ³ dative **=**
+locative: both continue OCS `-ě`, and they are identical in OCS, Russian and
+Ukrainian alike (Ukrainian `-i` 55 % in both cells). Keeping them apart would be
+an innovation, not a conservatism.
+
+### Velar feminine: `kniga` "book" (stem `knig-`)
+
+Nominative `kniga`, vocative `knigo`, accusative `knigu`, genitive/ablative
+`knigi` (spelling rule only), **dative/locative `knizi`** (second palatalization
+`g` → `z`), instrumental `knigoj`; dual `knizi` / `knigu` / `knigama`; plural
+`knigi` / `knigov` / `knigam` / `knigami` / `knigah`.
+
+Note that the genitive `knigi` and the dative/locative `knizi` are distinguished
+by the palatalization alone — the vowel is the same. This is exactly the
+Ukrainian pattern (`knyhy` / `knyzi`) and is lost in Russian, where both are
+`книги`/`книге` with the velar intact.
 
 ### Soft: `zjemlja` "earth" (stem `zjeml-`)
 
@@ -268,7 +356,16 @@ Not declensions — a single set of rules applied to every ending:
 
 1. after `k g h` and `zz sz cz szcz`, `y` is written `i` (`knigi`, not `*knigy`);
 2. after `zz sz cz szcz c`, unstressed `o` is written `je`;
-3. a stem-final soft sign belongs to the ending, not the stem (`kon` + `j`).
+3. a stem-final soft sign belongs to the ending, not the stem (`kon` + `j`);
+4. **first palatalization** before the vocative `-je`: `k`→`cz`, `g`→`zz`,
+   `h`→`sz` (`drug` → `druzzje`);
+5. **second palatalization** before any yat-derived `-i` — the locative
+   singular, the feminine dative singular, the neuter and feminine dual:
+   `k`→`c`, `g`→`z`, `h`→`s` (`drug` → `druzi`, `kniga` → `knizi`).
+
+Rules 4 and 5 are morphophonemic rather than orthographic — they change the
+consonant, not just its spelling — but they are fully automatic and belong with
+the others.
 
 These replace Russian's velar-, sibilant-, `ц`- and vowel-stem declensions, which
 differ from the hard type *only* by these automatic effects.
@@ -519,19 +616,28 @@ ablative, not the genitive.
 
 # 8. Summary of paradigm sizes
 
-| Word class | Distinct forms |
-|---|---|
-| noun, declension II masculine | 8 sg + 3 du + 6 pl = **17** |
-| noun, declension II neuter | 7 + 3 + 5 = **15** |
-| noun, declension I feminine | 7 + 3 + 5 = **15** |
-| noun, declension III | 4 + 3 + 5 = **12** |
-| adjective | 24 across all genders and numbers |
+Distinct **surface forms**, after syncretism — 24 nominal cells (8 cases × 3
+numbers) never yield 24 forms:
+
+| Word class | Singular | Dual | Plural | Total |
+|---|---:|---:|---:|---:|
+| noun, declension II masculine (`dom`) | 7 | 3 | 5 | **15** |
+| noun, declension II neuter (`okno`) | 6 | 3 | 5 | **14** |
+| noun, declension I feminine (`zzena`) | 6 | 3 | 5 | **14** |
+| noun, declension III (`noczj`) | 3 | 3 | 5 | **11** |
+| adjective (`dobryj`) | — | — | — | 24 across all genders |
 | verb, one aspect | 9 present + 5 past + 3 imperative + 6 participles |
 
-A Ruthenian noun has **more categories** than a Russian one and roughly the same
-number of forms, because the categories are regular and the irregularities are
-gone. That is the whole design: conservatism in the inventory, regularity in the
-realization.
+Compare Russian, which has 12 nominal cells and typically 9–11 distinct forms.
+Ruthenian doubles the categories and adds four to six forms, because the added
+categories are heavily syncretic by design — the dual contributes three forms
+regardless of how many cases exist, and the ablative contributes one, in two
+paradigms out of four.
+
+That is the whole design: **conservatism in the inventory, regularity in the
+realization.** A Ruthenian noun expresses more distinctions than a Russian one
+and is barely larger, because what was removed — mobile stress, fleeting vowels,
+heteroclitic stems, eight declensions — cost more than what was added.
 
 ---
 
@@ -539,11 +645,20 @@ realization.
 
 Recorded rather than decided.
 
-1. **Yat.** Restoring `ě` would keep the vocative `-je` and locative distinct by
-   origin, and would be maximally conservative. It is rejected for now because
-   the orthography (`ORTHOGRAPHY.md`) declares a 33-letter alphabet and adding a
-   letter is a breaking change. The locative `-i` (Ukrainian, 27 %) resolves the
-   clash instead.
+1. **Yat as a written letter.** Ruthenian already carries the yat *distinction*
+   through the Ukrainian reflex `-i` (§2.1) and the second palatalization, so
+   nothing is lost in the grammar. Writing `ě` as a letter would additionally
+   restore it **lexically** — `hlib` would be spelled `chlěb` — and that is the
+   maximally conservative option.
+
+   It is deferred, and the reason is lexicographic rather than orthographic. Yat
+   is not one ending but a phoneme in roughly **15 % of the vocabulary** (700 of
+   4 505 OCS lemmas). Writing it requires knowing where it stood in every word,
+   and the Russian source has almost none: 360 pre-reform headwords in 441 629
+   records, mostly proper nouns like `Dnjeprъ`. It *is* recoverable — Ukrainian
+   `i` and OCS `ě` both encode it and both are in the dump — but that means
+   admitting a second language as a lexical source, which is a scope decision
+   about the lexicon (`DIRECTION.md`), not about the alphabet.
 2. **Ablative in the plural.** No attested language distinguishes it. Ruthenian
    follows, but a maximally conservative variant could revive PIE `*-ios`.
 3. **Clitic pronouns.** OCS, Sanskrit and Interslavic all have a full/clitic
