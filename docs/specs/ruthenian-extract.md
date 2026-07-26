@@ -2,6 +2,12 @@
 
 Phase 4. Depends on `ruthenian-lexicon`, `ruthenian-core`, `ruthenian-orthography`.
 
+> **Scope change (2026-07-25): extraction is multi-language.** The dump is
+> scanned in full for Russian (419 283 lemmas), Polish (152 325), Ukrainian
+> (52 223), Belarusian (6 899) and Old Church Slavonic (4 311), plus borrowing
+> etymologies. `INVARIANTS.md` I1 applies per language: a full scan each, never a
+> sample. See `DIRECTION.md` and `docs/RUTHENIAN.md` §9.
+
 ## 1. Purpose
 
 Read the English Wiktionary dump once and turn it into the lexicon artifact, the

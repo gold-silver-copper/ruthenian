@@ -30,12 +30,39 @@ What it is not:
   Russian.
 - **Not a morphological analyser.** Generation only: lemma → forms. Surface →
   lemma is out of scope for every crate here.
-- **Not multilingual.** Russian only. No Ukrainian profile, no Church Slavonic,
-  no Proto-Slavic reconstruction.
+- **Not a morphological analyser.** Generation only.
 
-The single vocabulary source is the English Wiktionary dump at
-`~/Desktop/code/wikidata/raw-wiktextract-data.jsonl` — 23 622 298 877 bytes
-(22.0 GiB), 10 667 129 lines, verified 2026-07-25.
+## The lexicon is multi-source
+
+Ruthenian draws its vocabulary from **all of East and West Slavic plus Old
+Church Slavonic**, and adapts international vocabulary through a declared
+borrowing system. It is not a relexification of Russian.
+
+| Tier | Languages | Role |
+|---|---|---|
+| **primary** | Russian, Ukrainian, Belarusian | the East Slavic core |
+| **secondary** | Polish, Old Church Slavonic | recover what East Slavic levelled |
+| **borrowing** | Latin, Greek, Sanskrit, English, French, German | adapted by rule (`docs/RUTHENIAN.md` §9) |
+
+Measured lemma inventories, all from full scans of the same dump: Russian
+419 283, Polish 152 325, Ukrainian 52 223, Belarusian 6 899, Old Church Slavonic
+4 311.
+
+**Why more than one source is necessary, not merely nice.** Russian alone cannot
+supply the language Ruthenian is specified to be. Yat is the clearest case: it is
+a phoneme in ~15 % of the inherited vocabulary, Russian merged it into `e`, and
+Ukrainian (`i`), Polish (`ie`/`ia`) and OCS (`ě`) each preserve it. The same
+holds for the nasal vowels, which only Polish keeps (`ą`, `ę`), and for the
+second palatalization, which Russian levelled to 0 % while Ukrainian keeps it at
+99 %. Every one of those is information the specification needs and Russian has
+destroyed.
+
+The corpus is the same English Wiktionary dump —
+`~/Desktop/code/wikidata/raw-wiktextract-data.jsonl`, 23 622 298 877 bytes,
+10 667 129 lines — read in full for every language (`INVARIANTS.md` I1).
+
+**Interslavic remains excluded.** It is a grammar reference, not a lexical
+source: no Interslavic data enters the crate.
 
 ## The shape of the system
 

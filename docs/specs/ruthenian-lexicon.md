@@ -2,6 +2,13 @@
 
 Phase 3. Depends on `ruthenian-core`, `ruthenian-orthography`.
 
+> **Scope change (2026-07-25): the lexicon is multi-source.** Vocabulary comes
+> from Russian, Ukrainian, Belarusian, Polish and Old Church Slavonic, plus a
+> rule-governed borrowing layer — see `DIRECTION.md` and `docs/RUTHENIAN.md` §9.
+> `Provenance` must therefore record **which language or languages attest a
+> form**, and how the Ruthenian reflex was arrived at, not merely that it came
+> from the dump. Cognate grouping is an unsolved problem with its own phase.
+
 ## 1. Purpose
 
 The lexical entry schema every other crate agrees on: what a word *is* in this

@@ -641,7 +641,129 @@ heteroclitic stems, eight declensions — cost more than what was added.
 
 ---
 
-# 9. Open questions
+# 9. The lexicon: sources and borrowing
+
+## 9.1 Why the lexicon is multi-source
+
+Ruthenian's vocabulary is drawn from all of East Slavic, plus Polish and Old
+Church Slavonic, plus a rule-governed borrowing system. This is not eclecticism:
+**Russian alone cannot supply the language specified above.**
+
+| What the spec needs | Russian | Recoverable from |
+|---|---|---|
+| yat (`-i` endings, `chlib`) | merged into `e` | Ukrainian `i`, Polish `ie`/`ia`, OCS `ě` |
+| second palatalization | levelled to **0 %** | Ukrainian **99 %**, OCS 66 % |
+| the vocative | 40 relic forms | Ukrainian 25 180, OCS 6 186 |
+| the dual | lost | OCS 77 714 forms |
+| nasal vowels (etymology) | lost | **Polish only** (`ą`, `ę`) |
+
+Measured lemma inventories, each from a full scan:
+
+| Language | Single-word lemmas |
+|---|---:|
+| Russian | 419 283 |
+| Polish | 152 325 |
+| Ukrainian | 52 223 |
+| Belarusian | 6 899 |
+| Old Church Slavonic | 4 311 |
+
+## 9.2 How a Ruthenian word is chosen
+
+A Ruthenian lemma is not "the Russian word transliterated". It is the reflex the
+**Proto-Slavic etymon** would have in Ruthenian's phonology, with the attested
+cognates as evidence.
+
+1. **Group by etymon.** Cognates across the source languages that continue the
+   same Proto-Slavic form make one entry.
+2. **Reconstruct the Ruthenian form** by regular sound correspondence from the
+   etymon, using the cognates to resolve what any single language lost.
+3. **Record the evidence** — which languages attest it, and how confidently the
+   reconstruction follows.
+
+**An honest limit, measured.** Explicit Proto-Slavic etymology links in the
+source are thin: 5 517 distinct etyma, of which only 88 have reflexes tagged in
+all five languages and 2 700 in just one. Cognate grouping therefore cannot rely
+on etymology templates alone; it will need phonological matching and the English
+gloss as a pivot, as slovowiki does. **This is the hardest unsolved problem in
+the lexicon** and it should be scoped as its own phase, not assumed away.
+
+Where reconstruction is uncertain, the entry records that. A form derived from
+one language's reflex is not the same claim as one attested across four, and
+`Provenance` must distinguish them (`docs/specs/ruthenian-lexicon.md`).
+
+## 9.3 Borrowing: the regularized system
+
+International vocabulary is adapted by rule rather than borrowed ad hoc, so that
+`nacija` is predictable from *natio* rather than memorized from Russian.
+
+### Latin and Greek — the learned layer
+
+| Source ending | Ruthenian | Gender / declension | Example |
+|---|---|---|---|
+| `-tiō, -tiōnem` | `-cija` | fem., I | *natio* → `nacija` |
+| `-tās, -tātem` | `-tetj` | fem., III | *universitas* → `univjersitetj` |
+| `-or, -ōrem` | `-or` | masc., II | *doctor* → `doktor` |
+| `-us` (2nd decl.) | `-∅` | masc., II | *circus* → `cirk` |
+| `-um` (2nd decl.) | `-o` | neut., II | *museum* → `muzjeo` |
+| `-a` (1st decl.) | `-a` | fem., I | *forma* → `forma` |
+| Gk `-ισμός` | `-izm` | masc., II | *organismos* → `organizm` |
+| Gk `-ία` | `-ija` | fem., I | *philosophia* → `filosofija` |
+| Gk `-της` | `-t` | masc., II | *poiētēs* → `pojet` |
+
+The Latin **oblique** stem is the base, not the nominative — *natio* borrows as
+`nacij-` from *natiōn-*, exactly as Slavic has always done it. Once adapted, a
+loan declines as a native word of its class: `nacija`, `nacijy`, `naciji`,
+`nacijej`.
+
+### Sanskrit — the purist layer
+
+Available for coining where a native or Graeco-Latin form is unwanted. Sanskrit
+is not a *source* of everyday vocabulary but of learned formations, adapted
+through the same regular correspondences: `-a` → `-∅` masculine, `-ā` → `-a`
+feminine, `-am` → `-o` neuter, `-tva` → `-stvo`, `-tā` → `-ostj`.
+
+Because Sanskrit and Slavic are cognate, some Sanskrit borrowings would collide
+with inherited words (`dāna-` "gift" beside inherited `dan-`). Where they do, the
+inherited word wins and the Sanskrit form is not borrowed — a rule that keeps the
+layer from corrupting the core.
+
+### English, French, German — the modern layer
+
+| Pattern | Ruthenian | Example |
+|---|---|---|
+| ends in a consonant | masc., II, unchanged | *computer* → `kompjutjer` |
+| ends in `-a` | fem., I | *pizza* → `pica` |
+| ends in `-o`, `-u`, `-i`, `-e` | neut., II, **declined** | *metro* → `mjetro`, `mjetrogo`, `mjetru` |
+| `-tion` (Fr./Eng.) | `-cija` | *station* → `stancija` |
+| `-ing` | `-ing`, masc. | *marketing* → `markjeting` |
+
+The third row is the notable one: Ruthenian has **no indeclinables**. Russian
+leaves 1 193 loans undeclined; Ruthenian declines them all. This is
+regularization by *addition* — the loan is naturalized rather than quarantined.
+
+### Stress in loans
+
+Loans take **fixed stress on the syllable stressed in the source**, and keep it
+throughout the paradigm. No mobile patterns, ever.
+
+## 9.4 The layers are ordered
+
+When two sources could supply a word, the earlier layer wins:
+
+1. inherited Slavic (attested in two or more source languages)
+2. inherited Slavic (attested in one)
+3. Old Church Slavonic, for learned and abstract vocabulary
+4. a native coinage from Ruthenian roots
+5. a Graeco-Latin borrowing
+6. a modern borrowing
+
+This makes Ruthenian **purist by default but not dogmatic**: a native word is
+preferred where one exists, and an international word is adopted where it does
+not, by rule rather than by taste.
+
+---
+
+# 10. Open questions
 
 Recorded rather than decided.
 
@@ -666,3 +788,10 @@ Recorded rather than decided.
 4. **The middle voice.** Lost in all Slavic, its work done by `-sja`. Restoring
    it would be the most radical available conservatism.
 5. **Aorist and imperfect as default rather than optional register.**
+6. **Cognate grouping.** §9.2 — the unsolved problem. Explicit Proto-Slavic
+   links cover 5 517 etyma with only 88 attested across all five languages, so
+   grouping needs phonological matching and gloss pivoting. Its own phase.
+7. **Serbo-Croatian and Czech as further sources.** Both preserve features the
+   chosen five do not — Serbo-Croatian has pitch accent and a productive aorist,
+   Czech has vowel length. Neither is East Slavic, so both are excluded for now,
+   but Polish is already a West Slavic admission and the line is one of degree.
