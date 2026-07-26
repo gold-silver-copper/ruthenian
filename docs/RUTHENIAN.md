@@ -103,27 +103,60 @@ implementation, the context rules that make it invertible, and the round-trip
 evidence are in
 [`crates/ruthenian-orthography`](../crates/ruthenian-orthography/README.md).
 
-### The word-final `'` marks an unpredicted class
+### A citation form carries what its shape cannot predict
 
-Word-finally there is no next character, so the separator rule is vacuous there
-and the position is free. Ruthenian uses it: **a trailing `'` marks a lemma whose
-inflectional class is not the one its ending predicts.**
+Two positions in a lemma carry morphology rather than sound, and between them
+they let every inflectional fact be **read off the citation form** instead of
+supplied alongside it. A lemma is therefore self-describing: `noun(word, case,
+number)` and `verb(word, person, number, tense)` need nothing else.
+
+**A trailing `'` marks a lemma that is not what its ending predicts.** Word-finally
+there is no next character, so the separator rule is vacuous and the position is
+free:
+
+| | predicted | marked |
+|---|---|---|
+| verb, `-atj` | class 1 — `czitatj` → `czitaj-` | class 6 — `pisatj'` → `pisz-` |
+| noun, `-j` | masculine — `konj` | feminine — `noczj'` |
+| noun, `-a` | feminine — `zzena` | masculine — `sluga'` |
+
+One mark suffices because each ambiguity is **binary**, never three-way: a verb
+in `-atj` is class 1 or 6; a noun in `-j` is masculine or feminine, since no
+neuter ends in `j`; a noun in `-a` is feminine or masculine, since no neuter ends
+in `-a`. Where an ending predicts one gender absolutely — `-o`/`-je` is always
+neuter, a non-`j` consonant always masculine — the mark has no legal use.
+
+**A capital first letter marks an animate noun.**
 
 ```
-czitatj      class 1 — the prediction for -atj      czitaj-
-pisatj'      class 6 — marked, because it is not    pisz-
+drug     inanimate
+Drug     animate      — vizzu druga, not vizzu drug
 ```
 
-This is the one place the alphabet carries morphological rather than phonetic
-information, and it is what lets the class be **derived from the citation form**
-instead of supplied alongside it (§7.3).
+Capitalization is otherwise free in a lemma, because sentence position is not a
+property of a word. The inflected output is **always lowercase**: `Drug` in the
+nominative is `drug`, and a text that needs a capital applies it afterwards.
+
+Two costs, and both are real:
+
+- **A lemma list is not running text.** In a lemma a capital means animate; in
+  text it means sentence-initial or proper. The two conventions cannot be mixed
+  in one string, so a lemma is a dictionary object rather than a word ready to
+  paste.
+- **Transliteration does not produce lemmas.** A Cyrillic source word carries no
+  animacy in its capitalization — `друг` is lowercase and animate — so the
+  extractor must supply the capital when it builds a lemma. `to_latin` gives a
+  word, not a citation form.
 
 Two honest consequences:
 
 - **`'` now has two jobs**, not one. They are in complementary distribution — the
-  separator only ever occurs *between* letters, the class mark only ever at the
-  end — so no string is ambiguous, but the "one glyph, one rule" formulation is
-  no longer literally true.
+  separator only ever occurs *between* letters, the mark only ever at the end —
+  so no string is ambiguous, but the "one glyph, one rule" formulation is no
+  longer literally true. What the mark means is uniform across parts of speech,
+  though: *this lemma is not what its ending predicts*. Which fact that is
+  depends on what the word is, and the caller already knows that, since it calls
+  `noun` or `verb`.
 - **The mark has no Cyrillic counterpart.** No Cyrillic word can produce a
   word-final `'`, because `ъ` may only stand before `е ё ю я и`, so the mark never
   appears in a transliterated word and the round-trip contract is untouched on
@@ -411,6 +444,26 @@ same endings with automatic spelling adjustments (§3.8).
 Each has a **hard** and a **soft** variant; the soft variant substitutes `je` for
 `o`, `ju` for `u`, `i` for `y` — a single alternation, applied everywhere.
 
+### Declension, hardness and gender are all read off the citation form
+
+Nothing about a noun's class has to be stated separately:
+
+| Citation form ends in | Gender | Declension | Hardness |
+|---|---|---|---|
+| `-a` | feminine | I | hard |
+| `-ja` | feminine | I | soft |
+| `-o` | neuter | II | hard |
+| `-je` | neuter | II | soft |
+| `-j` | **masculine** | II | soft |
+| `-j` **+ `'`** | **feminine** | III | — |
+| `-a` **+ `'`** | **masculine** | I | hard |
+| any other consonant | masculine | II | hard |
+
+`konj` and `noczj'` are the pair that makes the mark necessary: both end in `j`,
+and nothing else distinguishes a soft masculine of declension II from a feminine
+of declension III. Everywhere else the ending decides, and **hardness is simply
+whether the form ends in `j`, `ja` or `je`.**
+
 ## 3.3 Declension II — masculine
 
 ### Hard: `dom` "house" (stem `dom-`)
@@ -565,6 +618,11 @@ from OCS, which has exactly the same collision.
 nominative. Inherited, pan-Slavic, information-bearing, and kept unchanged in
 scope — it applies to any animate noun, in both the singular and the plural.
 
+Animacy is not derivable from a word's shape — `dom` and `drug` are identical in
+form and differ only in what they denote — so a lemma **marks it with a capital
+first letter** (§2.1): `Drug` is animate, `drug` is not. Inflected output is
+always lowercase.
+
 Which oblique form, however, is a question Ruthenian has to answer and the other
 Slavic languages do not, because Ruthenian has split the genitive from the
 ablative (§3.1):
@@ -574,10 +632,10 @@ ablative (§3.1):
 | animate accusative = | **ablative** | **genitive** |
 
 ```
-vizzu dom        I see the house     (inanimate sg: acc = nom)
-vizzu konja      I see the horse     (animate sg:   acc = ABL, konjego is genitive)
-vizzu domy       I see the houses    (inanimate pl: acc = nom)
-vizzu drugov     I see the friends   (animate pl:   acc = gen)
+dom   → vizzu dom       I see the house     (inanimate sg: acc = nom)
+Konj  → vizzu konja     I see the horse     (animate sg:   acc = ABL, konjego is genitive)
+dom   → vizzu domy      I see the houses    (inanimate pl: acc = nom)
+Drug  → vizzu drugov    I see the friends   (animate pl:   acc = gen)
 ```
 
 **Why the singular takes the ablative.** The construction is inherited: OCS forms

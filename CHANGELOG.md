@@ -142,6 +142,32 @@ them to keep eight cases distinguishable.
   or the loss of `budu`. One suppletive verb is cheaper than either, and it is now
   the language's only one.
 
+- **A noun's gender and animacy move into its lemma**, so `noun` takes a word, a
+  case and a number — nothing else. `noun("Drug", Locative, Singular)` is
+  `druzi`.
+
+  **Gender** rides the same word-final `'` the verb class uses, and one bit is
+  enough because gender is never three-way *given the ending*: `-o`/`-je` is
+  always neuter, a non-`j` consonant always masculine, and only `-j` (masculine
+  `konj` against feminine `noczj'`) and `-a` (feminine `zzena` against masculine
+  `sluga'`) are open — each of them binary. So the mark's meaning is uniform
+  across parts of speech: *this lemma is not what its ending predicts*.
+
+  **Animacy** is marked by a capital first letter — `Drug` animate, `drug` not —
+  since nothing in a word's shape distinguishes `dom` from `drug`. Inflected
+  output is always lowercase; sentence capitalisation is not the inflector's
+  concern.
+
+  Two costs, stated in §2.1 rather than left implicit. A lemma list is **not**
+  running text: in a lemma a capital means animate, in text it means
+  sentence-initial, and the two conventions cannot share a string. And
+  transliteration does not produce lemmas — `друг` is lowercase and animate in
+  Cyrillic, so the extractor must supply the capital.
+
+  `ruthenian-orthography`'s `is_class_marked` becomes `is_marked`, since the mark
+  is no longer about class alone; the crate reports it and leaves the
+  interpretation to morphology.
+
 - **The conjugation class and the declension are now derived, and both enums are
   gone from the API.** `noun` and `verb` take a word and grammar, nothing else.
 

@@ -231,19 +231,25 @@ impl Ruthenian {
         &self.0
     }
 
-    /// Does this lemma carry the word-final class mark (`RUTHENIAN.md` §2.1)?
+    /// Does this lemma carry the word-final mark (`RUTHENIAN.md` §2.1)?
     ///
-    /// The mark says the inflectional class is not the one the ending predicts —
-    /// `pisatj'` is class 6 where `pisatj` would be class 1.
+    /// The mark says the lemma is **not what its ending predicts**. Which fact
+    /// that is depends on the part of speech, and the caller already knows it:
+    /// for a verb in `-atj` it is class 6 rather than 1 (`pisatj'`), for a noun
+    /// in `-j` it is feminine rather than masculine (`noczj'`), for a noun in
+    /// `-a` masculine rather than feminine (`sluga'`).
+    ///
+    /// This crate reports the mark; interpreting it is morphology's job.
     ///
     /// ```
     /// use ruthenian_orthography::Ruthenian;
-    /// assert!(Ruthenian::parse("pisatj'").unwrap().is_class_marked());
-    /// assert!(!Ruthenian::parse("czitatj").unwrap().is_class_marked());
+    /// assert!(Ruthenian::parse("pisatj'").unwrap().is_marked());
+    /// assert!(Ruthenian::parse("noczj'").unwrap().is_marked());
+    /// assert!(!Ruthenian::parse("czitatj").unwrap().is_marked());
     /// // A word-internal separator is not a mark.
-    /// assert!(!Ruthenian::parse("pod'jezd").unwrap().is_class_marked());
+    /// assert!(!Ruthenian::parse("pod'jezd").unwrap().is_marked());
     /// ```
-    pub fn is_class_marked(&self) -> bool {
+    pub fn is_marked(&self) -> bool {
         self.0.ends_with(SEP)
     }
 
@@ -252,6 +258,11 @@ impl Ruthenian {
     /// The mark is morphology, not sound: it has no pronunciation and no
     /// Cyrillic counterpart, so anything concerned with the *word* — including
     /// [`to_cyrillic`] — sees this rather than [`as_str`](Self::as_str).
+    ///
+    /// Note this does **not** touch capitalisation. A capital first letter marks
+    /// an animate noun (`RUTHENIAN.md` §3.7), which is likewise morphology, but
+    /// it is carried by the existing case layer rather than by a character of
+    /// its own.
     ///
     /// ```
     /// use ruthenian_orthography::Ruthenian;
@@ -302,7 +313,7 @@ pub fn to_cyrillic(s: &Ruthenian) -> Cyrillic {
     // Two lemmas differing only in the mark therefore share a Cyrillic form. That
     // is not a round-trip failure: the contract quantifies over Cyrillic strings
     // and `to_latin` never emits a mark. A caller needing the distinction asks
-    // `Ruthenian::is_class_marked` before converting.
+    // `Ruthenian::is_marked` before converting.
     Cyrillic(reader::to_string(&reader::tokenize(s.word(), None)))
 }
 

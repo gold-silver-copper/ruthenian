@@ -68,7 +68,23 @@ slovowiki does.
 > can be built first and the fallback added later. It blocks nothing in
 > `ruthenian-core`, which needs no lexicon at all.
 
-## 4. Czech and Serbo-Croatian lemma counts
+## 4. Do masculine nouns in `-a` exist?
+
+§3.2 defines declension I as "feminine in `-a`" and says nothing about the
+`sluga` / `vojevoda` type — masculine in form, masculine in agreement, declining
+as declension I. They are pan-Slavic and OCS has them.
+
+The question is now load-bearing rather than academic, because §2.1's gender mark
+assumes `-a` is a **binary** environment: feminine predicted, masculine marked
+(`sluga'`). If the type does not exist, `-a` predicts feminine absolutely and the
+mark has no legal use there — which is simpler, and removes a whole class of
+lemma from the language.
+
+> **Blocks:** nothing structurally — the mark works either way. But it decides
+> whether `sluga'` is a well-formed lemma or a spelling error, which the
+> inflector cannot answer for itself.
+
+## 5. Czech and Serbo-Croatian lemma counts
 
 §12.1 lists both as secondary sources with their inventories marked *not yet
 measured*. `COMPARATIVE_GRAMMAR.md`'s method requires a full scan per language

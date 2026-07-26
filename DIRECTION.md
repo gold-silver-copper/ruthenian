@@ -11,14 +11,17 @@
 ```rust
 use ruthenian_core::*;
 
-assert_eq!(noun("dom", Masculine, Inanimate, Genitive, Singular), "domogo");
-assert_eq!(noun("dom", Masculine, Inanimate, Ablative, Singular), "doma");
-assert_eq!(noun("dom", Masculine, Inanimate, Nominative, Dual),   "doma");
-assert_eq!(noun("drug", Masculine, Animate, Locative, Singular),  "druzi");
+assert_eq!(noun("dom", Genitive, Singular),  "domogo");   // OF the house
+assert_eq!(noun("dom", Ablative, Singular),  "doma");     // FROM the house
+assert_eq!(noun("dom", Nominative, Dual),    "doma");     // two houses
 
-// The class is in the lemma, not in the arguments: pisatj' is class 6.
-assert_eq!(verb("czitatj", First, Singular, NonPast), "czitaju");
-assert_eq!(verb("pisatj'", First, Singular, NonPast), "piszu");
+// Everything a shape cannot predict is in the lemma itself:
+assert_eq!(noun("Drug", Locative, Singular), "druzi");    // capital = animate
+assert_eq!(noun("noczj'", Genitive, Singular), "noczi");  // ' = not the predicted gender
+assert_eq!(verb("pisatj'", First, Singular, NonPast), "piszu");  // ' = class 6
+
+// Output is always lowercase; sentence capitalisation is the caller's business.
+assert_eq!(noun("Drug", Nominative, Singular), "drug");
 ```
 
 The goal is complete coverage: **every form of every word.** Given a citation
@@ -38,9 +41,11 @@ said which cell you wanted.
 
 ```rust
 // Nominals. Every one of these is total: the language has no gap here.
-pub fn noun(word: &str, gender: Gender, animacy: Animacy,
-            case: Case, number: Number) -> String;
+pub fn noun(word: &str, case: Case, number: Number) -> String;
 
+// An adjective agrees with a head noun, so its gender and animacy are the
+// HEAD's, not its own — they stay parameters because they come from elsewhere
+// in the sentence, not from the adjective's citation form.
 pub fn adjective(word: &str, form: AdjectiveForm, degree: Degree,
                  case: Case, number: Number, gender: Gender,
                  animacy: Animacy) -> String;
@@ -95,7 +100,7 @@ For repeated use, bind the lexical facts once and the per-call signature reduces
 to the grammar alone:
 
 ```rust
-let dom = Noun::new("dom", Masculine, Inanimate);
+let dom = Noun::new("dom");
 assert_eq!(dom.form(Genitive, Singular), "domogo");
 assert_eq!(dom.form(Nominative, Dual),   "doma");
 
@@ -275,8 +280,7 @@ and the list is short:
 
 | Supplied | Why it cannot be derived |
 |---|---|
-| **gender** (nouns) | `konj` "horse" is masculine declension II; `noczj` "night" is feminine declension III. Both end in `j`. No rule separates them. |
-| **animacy** (nouns) | The accusative depends on it — `vizzu dom` against `vizzu druga` (§3.7) — and nothing in the string marks it. |
+| **gender, animacy** (adjectives, numerals) | They agree with a **head noun**, so these come from elsewhere in the sentence rather than from the word being inflected. A noun's own gender and animacy are in its lemma. |
 
 **Nothing about a verb is on that list.** The conjugation class used to be, but
 §7.3 now derives it from the citation form: every ending decides its own class,
@@ -290,14 +294,22 @@ changes a form — only what `NonPast` means. A caller reasoning about *meaning*
 still needs it (and §7.2's closed perfective class still has to be stored
 somewhere), but that somewhere is not this crate.
 
+A noun's own gender and animacy are **not** on that list, because the lemma
+carries them: a capital first letter is animate, and the word-final `'` supplies
+the one bit where the ending leaves gender open (§2.1, §3.2). `noun` therefore
+takes a word, a case and a number, and nothing else.
+
 Everything else **is** derived, and storing any of it would be a bug:
 
+- **gender**, from the ending plus the mark: `-o`/`-je` is neuter, a non-`j`
+  consonant masculine, and only `-j` and `-a` are ambiguous — each binary, never
+  three-way (§3.2);
+- **animacy**, from the lemma's first letter (§3.7);
 - **the conjugation class**, from the citation form's ending, plus the word-final
   `'` where the ending alone is ambiguous (§7.3);
-- **declension and hardness**, from gender plus the word's ending (§3.2): a
-  feminine in `-a` is declension I, a feminine in a consonant is III, masculines
-  and neuters are II; a stem is soft exactly when the citation form ends in `j`,
-  `ja` or `je`;
+- **declension and hardness**, from the ending: a feminine in `-a` is declension
+  I, a feminine in `-j` is III, masculines and neuters are II; a stem is soft
+  exactly when the citation form ends in `j`, `ja` or `je` (§3.2);
 - **the stem**, which is the citation form itself, since there is no fleeting
   vowel (§3.9) — `son`, `sona`, `sonu`;
 - **the palatalizations**, from the ending's own trigger (§2.4, §3.8);
@@ -328,7 +340,8 @@ Short, and each falsifiable by a test.
 2. **One generation path.** `paradigm()` calls `form()`. A convenience wrapper
    that computes a form its own way is two implementations that will disagree.
 3. **Derive state; never store it.** No field duplicating something computable.
-   Class, declension, hardness, stem, gaps and palatalization are all derived. A stored
+   Gender, animacy, class, declension, hardness, stem, gaps and palatalization
+   are all derived from the lemma. A stored
    flag drifts, and its dead branch becomes the bug.
 4. **Every function is total, and every fallback is declared.** No `Option`, no
    `Result`, no panic. Where the language has no form for a cell, the function

@@ -51,18 +51,19 @@ Ruthenian's orthography is not obliged to be expressible in another language's.
 
 Every count is printed by the guard that produced it. Measured 2026-07-25.
 
-## The word-final class mark
+## The word-final mark
 
-`RUTHENIAN.md` §2.1 gives a word-final `'` a second job: it marks a lemma whose
-inflectional class is not the one its ending predicts (`pisatj'` is class 6 where
-`pisatj` would be class 1). The position is free because the separator rule is
-about what follows a `'`, and word-finally nothing does.
+`RUTHENIAN.md` §2.1 gives a word-final `'` a second job: it marks a lemma that is
+**not what its ending predicts** — class 6 rather than 1 on a verb (`pisatj'`),
+feminine rather than masculine on a noun in `-j` (`noczj'`). The position is free
+because the separator rule is about what follows a `'`, and word-finally nothing
+does. This crate reports the mark; interpreting it is morphology's job.
 
 | | |
 |---|---|
 | `Ruthenian::parse("pisatj'")` | **Ok** — the mark was already inside the allowed character set |
 | `Ruthenian::parse("pisatj''")` | **Err(Apostrophe)** — two marks are neither separator nor mark |
-| `marked.is_class_marked()` | `true`; a word-internal `pod'jezd` is `false` |
+| `marked.is_marked()` | `true`; a word-internal `pod'jezd` is `false` |
 | `marked.word()` | `"pisatj"` — the word without its mark |
 | `to_cyrillic(marked)` | `писать` — the mark is morphology, not sound |
 
@@ -70,8 +71,8 @@ about what follows a `'`, and word-finally nothing does.
 round-trip failure.** The contract quantifies over *Cyrillic* strings, and
 `to_latin` can never emit a mark: `ъ` may only stand before `е ё ю я и`, so a
 word-final hard sign is ill-formed Cyrillic and no source word reaches that
-position. `transliteration_never_emits_a_class_mark` pins it. A caller who needs
-the distinction asks `is_class_marked` before converting.
+position. `transliteration_never_emits_a_mark` pins it. A caller who needs
+the distinction asks `is_marked` before converting.
 
 ## Well-formedness is part of the alphabet
 
