@@ -3,5 +3,12 @@
 version = 4
 
 [[package]]
+name = "ruthenian-core"
+version = "0.1.0"
+dependencies = [
+ "ruthenian-orthography",
+]
+
+[[package]]
 name = "ruthenian-orthography"
 version = "0.1.0"

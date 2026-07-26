@@ -25,8 +25,8 @@
 
 use crate::phono;
 use crate::types::{
-    Aspect, Conjugation, Gender, Number, ParticipleKind, Person, PersonNumber, Tense, VerbClass,
-    VerbSlot, Voice,
+    Aspect, Conjugation, Gender, Number, ParticipleKind, Person, PersonNumber, PrincipalPartsRef,
+    Tense, VerbClass, VerbSlot, Voice,
 };
 use crate::variant::{Prediction, Trace};
 
@@ -285,6 +285,22 @@ pub fn infinitive_stem(infinitive: &str) -> Option<String> {
 /// assert_eq!(present_stem("pisatj", VerbClass::Six).as_deref(), Some("pisz"));
 /// ```
 pub fn present_stem(infinitive: &str, class: VerbClass) -> Option<String> {
+    present_stem_with(infinitive, class, PrincipalPartsRef::default())
+}
+
+/// The present stem, honouring a supplied principal part.
+///
+/// The rule engine never guesses a stem it cannot derive: if the class does not
+/// determine it — the suppletive copula `byti` (§7.9) is the clear case — the
+/// caller supplies it, and this is the type-level expression of law 8.
+pub fn present_stem_with(
+    infinitive: &str,
+    class: VerbClass,
+    parts: PrincipalPartsRef<'_>,
+) -> Option<String> {
+    if let Some(given) = parts.present_stem {
+        return Some(phono::unstress(given.as_str()));
+    }
     let stem = infinitive_stem(infinitive)?;
     Some(match class {
         VerbClass::One => format!("{stem}j"),
@@ -351,6 +367,37 @@ pub fn present_stem(infinitive: &str, class: VerbClass) -> Option<String> {
 /// );
 /// ```
 pub fn verb(infinitive: &str, class: VerbClass, info: VerbInfo, slot: VerbSlot) -> Resolved {
+    verb_with(infinitive, class, info, PrincipalPartsRef::default(), slot)
+}
+
+/// Conjugate a verb, supplying the principal parts the class does not determine.
+///
+/// This is the general entry point; [`verb`] is the common case with none
+/// supplied. The `_with` split follows `interslavic`'s convention for
+/// explicit-metadata variants, and exists because one verb genuinely needs it:
+/// the copula `byti` is suppletive (§7.9) and no class derives `jesmj` from it.
+///
+/// ```
+/// use ruthenian_core::{verb_with, Number, Person, PrincipalPartsRef, Tense, VerbClass, VerbInfo, VerbSlot};
+/// use ruthenian_orthography::Ruthenian;
+///
+/// // A supplied present stem overrides the class derivation entirely.
+/// let stem = Ruthenian::parse("znaj").unwrap();
+/// let parts = PrincipalPartsRef { present_stem: Some(&stem), ..Default::default() };
+/// let slot = VerbSlot::Finite { person: Person::Third, number: Number::Singular, tense: Tense::Present };
+///
+/// let got = verb_with("znatj", VerbClass::One, VerbInfo::default(), parts, slot)
+///     .unwrap().unwrap();
+/// assert_eq!(got.text, "znajet");
+/// assert!(got.trace.steps().iter().any(|s| s.contains("principal part")));
+/// ```
+pub fn verb_with(
+    infinitive: &str,
+    class: VerbClass,
+    info: VerbInfo,
+    parts: PrincipalPartsRef<'_>,
+    slot: VerbSlot,
+) -> Resolved {
     let aspect = aspect_of(infinitive).value;
     if !slot_exists(aspect, info.transitive, slot) {
         return Ok(None);
@@ -361,8 +408,11 @@ pub fn verb(infinitive: &str, class: VerbClass, info: VerbInfo, slot: VerbSlot) 
     };
     let inf_stem =
         || infinitive_stem(infinitive).ok_or_else(|| unsupported("infinitive must end in -tj"));
-    let pres_stem =
-        || present_stem(infinitive, class).ok_or_else(|| unsupported("infinitive must end in -tj"));
+    let pres_stem = || {
+        present_stem_with(infinitive, class, parts)
+            .ok_or_else(|| unsupported("infinitive must end in -tj"))
+    };
+    let supplied = parts.present_stem.is_some();
 
     let p = match slot {
         VerbSlot::Infinitive => Prediction::new(
@@ -398,6 +448,9 @@ pub fn verb(infinitive: &str, class: VerbClass, info: VerbInfo, slot: VerbSlot) 
                         Conjugation::First => "1st-conjugation present ending",
                         Conjugation::Second => "2nd-conjugation present ending",
                     });
+                    if supplied {
+                        trace = trace.then("present stem supplied as a principal part");
+                    }
                     if tense == Tense::Future {
                         trace = trace.then("a perfective's present endings carry future sense");
                     }

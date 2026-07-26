@@ -252,3 +252,119 @@ fn spec_tables_are_actually_parsed() {
         "dual ablative = dative"
     );
 }
+
+/// §11 tabulates how many **distinct surface forms** each paradigm has after
+/// syncretism. That is a second, independent claim about the same tables — a
+/// paradigm can reproduce every cell and still have the wrong shape if a
+/// syncretism is missing or spurious — so it is checked separately.
+#[test]
+fn spec_paradigm_sizes_match() {
+    use ruthenian_core::noun_forms;
+
+    // §11's rows, keyed by the lemma the spec names.
+    let expected = parse_size_table();
+    let built = [
+        (
+            "dom",
+            noun_forms(
+                "dom",
+                NounClass::hard(Declension::II),
+                Gender::Masculine,
+                Animacy::Inanimate,
+            ),
+        ),
+        (
+            "okno",
+            noun_forms(
+                "okno",
+                NounClass::hard(Declension::II),
+                Gender::Neuter,
+                Animacy::Inanimate,
+            ),
+        ),
+        (
+            "zzena",
+            noun_forms(
+                "zzena",
+                NounClass::hard(Declension::I),
+                Gender::Feminine,
+                Animacy::Animate,
+            ),
+        ),
+        (
+            "noczj",
+            noun_forms(
+                "noczj",
+                NounClass::hard(Declension::III),
+                Gender::Feminine,
+                Animacy::Inanimate,
+            ),
+        ),
+    ];
+
+    let mut failures = Vec::new();
+    for (lemma, paradigm) in &built {
+        let Some(&(sg, du, pl, total)) = expected.get(*lemma) else {
+            failures.push(format!("§11 has no row for {lemma}"));
+            continue;
+        };
+        let got: Vec<usize> = Number::ALL
+            .into_iter()
+            .map(|number| {
+                let mut seen: Vec<&str> = Case::ALL
+                    .into_iter()
+                    .filter_map(|case| paradigm.get(case, number).map(|p| p.text.as_str()))
+                    .collect();
+                seen.sort_unstable();
+                seen.dedup();
+                seen.len()
+            })
+            .collect();
+        if got != vec![sg, du, pl] || paradigm.distinct_forms() != total {
+            failures.push(format!(
+                "{lemma}: §11 says {sg}/{du}/{pl} = {total}, engine gives {}/{}/{} = {}",
+                got[0],
+                got[1],
+                got[2],
+                paradigm.distinct_forms()
+            ));
+        }
+    }
+    assert!(
+        !expected.is_empty(),
+        "§11's size table was not parsed; the guard would pass vacuously"
+    );
+    assert!(failures.is_empty(), "{}", failures.join("\n"));
+    println!("{} paradigm sizes checked against §11", built.len());
+}
+
+/// Parse §11's `Word class | Singular | Dual | Plural | Total` table.
+fn parse_size_table() -> std::collections::BTreeMap<String, (usize, usize, usize, usize)> {
+    let mut out = std::collections::BTreeMap::new();
+    let start = SPEC
+        .find("# 11. Summary of paradigm sizes")
+        .expect("§11 heading");
+    for line in SPEC[start..].lines() {
+        if line.starts_with("# 12.") {
+            break;
+        }
+        if !line.starts_with("| noun") {
+            continue;
+        }
+        let cols: Vec<&str> = line.trim_matches('|').split('|').collect();
+        if cols.len() < 5 {
+            continue;
+        }
+        // The label carries the lemma in backticks: "noun, declension II masculine (`dom`)".
+        let Some(lemma) = cols[0].split('`').nth(1) else {
+            continue;
+        };
+        let n = |s: &str| -> Option<usize> { s.trim().trim_matches('*').trim().parse().ok() };
+        if let (Some(sg), Some(du), Some(pl), Some(total)) =
+            (n(cols[1]), n(cols[2]), n(cols[3]), n(cols[4]))
+        {
+            out.insert(lemma.to_string(), (sg, du, pl, total));
+        }
+    }
+    out
+}

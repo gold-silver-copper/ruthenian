@@ -77,8 +77,10 @@
 #![forbid(unsafe_code)]
 
 pub mod adjective;
+pub mod case_endings;
 pub mod noun;
 pub mod numeral;
+pub mod paradigm;
 pub mod phono;
 pub mod pronoun;
 pub mod types;
@@ -88,6 +90,7 @@ pub mod verb;
 pub use adjective::adjective;
 pub use noun::noun;
 pub use numeral::{Government, government};
+pub use paradigm::{AdjParadigm, NounParadigm, VerbParadigm, adj_forms, noun_forms, verb_forms};
 pub use phono::Palatal;
 pub use pronoun::{personal, reflexive};
 pub use types::{
@@ -96,4 +99,4 @@ pub use types::{
     StemHardness, Tense, VerbClass, VerbSlot, Voice,
 };
 pub use variant::{Prediction, RuleDef, RuleId, Trace, Variant};
-pub use verb::{Derived, Resolved, Unsupported, VerbInfo, aspect_of, slot_exists, verb};
+pub use verb::{Derived, Resolved, Unsupported, VerbInfo, aspect_of, slot_exists, verb, verb_with};
