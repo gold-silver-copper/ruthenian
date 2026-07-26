@@ -22,7 +22,7 @@ being invoked should have had.
 ```text
 cargo xtask refresh-data --dump <path>   # extract → artifacts → generated tables
 cargo xtask check-registry               # dump-free structural gate on committed tables
-cargo xtask accuracy [--policy ...]      # dump-driven measurement → eval/summary.json
+cargo xtask conformance                  # spec-driven measurement → eval/summary.json
 ```
 
 **`refresh-data`** runs the extractor in release mode, writes the lexicon,
@@ -41,23 +41,27 @@ committed artifacts alone:
 - the schema version and dump fingerprint are present and consistent across
   artifacts.
 
-It cannot verify that a row's *value* is correct — that is attested data, not
+It cannot verify that a row's *value* is correct — that is the conformance run's
+job against the spec, not
 derivable without the dump. Say so in the command's own help text, the way
 `english`'s xtask does, so nobody mistakes a green `check-registry` for a
 correctness guarantee.
 
-**`accuracy`** runs the evaluator and writes `eval/summary.json`, then
-regenerates the numbers in the README and `docs/REGULARIZATION.md` from it.
+**`conformance`** runs the evaluator against the corpus extracted from
+`docs/RUTHENIAN.md` and writes `eval/summary.json`, then regenerates the numbers
+in the README from it. It also re-extracts the corpus and fails if the committed
+artifact has drifted from the specification.
 Running it is how a change acquires a number instead of an anecdote.
 
 ## 2a. Inputs and outputs
 
-In: the dump path (`refresh-data`, `accuracy`), the committed artifacts
+In: the dump path (`refresh-data`), the spec and the committed artifacts
+(`conformance`), the committed artifacts
 (`check-registry`), and nothing else — no config file, no network.
 
 Out: `refresh-data` writes `crates/ruthenian/generated/` and the lexicon
-artifacts; `accuracy` writes `eval/summary.json` and the numbers it regenerates
-in the README and `docs/REGULARIZATION.md`; `check-registry` writes nothing and
+artifacts; `conformance` writes `eval/summary.json` and the numbers it
+regenerates in the README; `check-registry` writes nothing and
 communicates entirely through its exit code and a report on stdout.
 
 ## 3. Data owned
@@ -112,7 +116,7 @@ skipped.
 
 ## 9. Closed decisions
 
-- **`accuracy` fails on a net-negative paired diff** — more slots broken than
+- **`conformance` fails on a net-negative paired diff** — more slots broken than
   fixed blocks the change; everything else is reported without gating. A gate
   that always succeeds is telemetry wearing a gate's name, and the ecosystem has
   a documented example of exactly that. The comparison is against the committed
@@ -123,7 +127,7 @@ skipped.
   measure.
 
 - **`xtask fmt-docs` is added only if needed.** Generated docs
-  (`docs/REGULARIZATION.md`, the README numbers) come out of the accuracy run. A
+  (the README numbers) come out of the conformance run. A
   separate command is justified only once that run is slow enough that people
   start skipping it — the failure mode being a generated doc that drifts because
   regenerating it was inconvenient. Until then: one command, one path.

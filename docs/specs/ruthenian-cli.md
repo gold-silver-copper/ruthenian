@@ -13,7 +13,7 @@ special cases for particular words. If `ruth` needs behaviour the facade does no
 provide, the change goes in the facade.
 
 This constraint is not tidiness. The CLI and the evaluator must consume the same
-`Form` from the same call, or the published accuracy number stops describing the
+`Form` from the same call, or the published conformance number stops describing the
 shipped tool — which is the first and largest failure mode this project is
 designed to avoid.
 
@@ -32,7 +32,7 @@ ruth stats                              # lexicon counts by pos, class, rule imp
 ```
 
 **`ruth` is the user-facing tool and nothing else.** Regeneration and measurement
-live in `cargo xtask refresh-data` / `cargo xtask accuracy` and are deliberately
+live in `cargo xtask refresh-data` / `cargo xtask conformance` and are deliberately
 *not* mirrored here: the shipped binary contains nothing a user cannot use, and
 there is exactly one way to invoke a developer workflow. A contributor learns
 `xtask` from the README's regenerate → check → measure loop.
@@ -45,10 +45,12 @@ Global flags:
 
 - `--json` on **every** subcommand. Same information as the human output, no
   more, no less.
-- `--policy attested|regularized` on every generating subcommand; `attested` is
-  the default for v1.
-- `--show-deviations` prints the `RuleId` and trace for any form that is not
-  plain attested Russian.
+- `--show-derivation` prints the trace for any form, so a user can see which
+  rules produced it.
+
+There is deliberately **no** flag selecting a language variant: the engine has
+no configuration axis (`ruthenian-core.md` §7), so there is nothing for such a
+flag to select.
 - `--script cyrillic|ruthenian` for output; input script is auto-detected.
 
 ## 3. Behaviour that is contractual
@@ -61,9 +63,10 @@ Global flags:
 - **A guess is visibly a guess.** For an out-of-vocabulary lemma the rules still
   answer, and the output says so — a marker in human output, an `origin` field in
   JSON. A user must never have to wonder whether a form was looked up or derived.
-- **Gaps are shown as gaps.** A defective slot prints as an em dash with a note,
-  not as a blank or a fabricated form. Under `--policy regularized` it prints the
-  filled form tagged with `gap.fill-1sg`.
+- **Gaps are shown as gaps.** A slot the language does not have prints as an em
+  dash with a note, not as a blank or a fabricated form. The note says *why* —
+  a perfective verb has no present tense, a noun has no vocative plural — because
+  a gap in a specified language always has a stated reason.
 - **Exit codes mean something**: `0` success; `1` no such lemma; `2` bad usage;
   `3` internal error. `--json` still emits a structured error body on failure.
 - **No panics.** Any input, including invalid UTF-8 arguments and empty strings,
@@ -98,8 +101,8 @@ Nothing that touches morphology.
 1. No subcommand computes a form. Every form comes from a facade call.
 2. `--json` output for a given invocation is a lossless encoding of the human
    output.
-3. Every generating subcommand honours `--policy`, and the active policy appears
-   in the output.
+3. No flag changes a form. The CLI selects what to print, never what the answer
+   is.
 4. Script auto-detection never silently transliterates mixed-script input.
 5. Every form printed carries its origin, in both output modes.
 6. No panic on any input.
@@ -110,13 +113,13 @@ Nothing that touches morphology.
 |---|---|---|---|---|---|
 | `cli_has_no_morphology` | Inv. 1 | Add an ending-manipulating function to the CLI crate; the dependency/API check flags it, and the differential test against the facade diverges | required | seconds | crate |
 | `json_parity` | Inv. 2 | Print a note in human output that has no JSON field | required | seconds | crate |
-| `policy_echoed` | Inv. 3 | Accept `--policy` and ignore it; output under both policies is byte-identical for a rule-affected lemma | required | ms | crate |
+| `no_form_altering_flags` | Inv. 3 | Add a flag that changes a generated form rather than its presentation; the differential test against the facade diverges | required | seconds | crate |
 | `mixed_script_rejected` | Inv. 4 | Feed `"cat дом"`; must error with an offset, not transliterate | required | ms | crate |
 | `origin_always_shown` | Inv. 5 | Print a rule-derived form with no marker | required | ms | crate |
 | `no_panic_fuzz` | Inv. 6 | Empty string, lone combining mark, 10 kB argument, invalid UTF-8 | required | seconds | crate |
 | `exit_codes` | §3 | Return `0` for an unknown lemma | required | ms | crate |
 | `golden_invocations` | The documented examples work | Change output formatting; the pinned transcripts diff | required | ms | crate |
-| `colour_carries_no_information` | §10 — piped output loses nothing but styling | Convey a gap or a regularized origin by colour alone; the piped transcript no longer distinguishes it | required | ms | crate |
+| `colour_carries_no_information` | §10 — piped output loses nothing but styling | Convey a gap or a form's origin by colour alone; the piped transcript no longer distinguishes it | required | ms | crate |
 
 Eight guards.
 
@@ -131,7 +134,7 @@ Eight guards.
 
 ## 9. Done criteria
 
-- Every subcommand in §2 implemented with `--json`, `--policy` and
+- Every subcommand in §2 implemented with `--json` and
   `--show-deviations` where applicable.
 - `--help` text for every subcommand, with a worked example.
 - The eight guards present, each demonstrated to fail under its witness.

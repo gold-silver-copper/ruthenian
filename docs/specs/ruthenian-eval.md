@@ -4,40 +4,90 @@ Phase 6. Depends on `ruthenian`, `ruthenian-lexicon`.
 
 ## 1. Purpose
 
-Measure the shipped facade against attested Russian, and produce the one
+Measure the shipped facade against **the specification**, and produce the one
 canonical summary that every reported number is generated from.
 
-This crate exists to make one specific failure impossible: publishing an accuracy
-figure that describes something other than the tool people use. It therefore
-scores by calling `ruthenian::form` — the same entry point the CLI calls — and
-never by reconstructing a parallel approximation of the pipeline.
+This crate exists to make one specific failure impossible: publishing a figure
+that describes something other than the tool people use. It therefore scores by
+calling `ruthenian::form` — the same entry point the CLI calls — and never by
+reconstructing a parallel approximation of the pipeline.
 
-It is also the crate that keeps the regularization honest. A departure from
-standard Russian looks exactly like a bug unless the evaluator can tell them
-apart, so the headline number is accompanied by a count of **unexplained**
-mismatches, which is the number that must go to zero.
+### The baseline is `docs/RUTHENIAN.md`, not any natural language
+
+Ruthenian is specified, not attested (`DIRECTION.md`, "The specification is the
+ground truth"). There is no corpus of Ruthenian text, so there is nothing to
+score against except the document that defines the language — and that is
+sufficient, because the document is normative: a form it states is correct by
+definition.
+
+An earlier version of this spec said "measure the shipped facade against attested
+Russian". That cannot work, and the reason is worth stating so it is not
+reintroduced. A Ruthenian paradigm is mostly cells Russian does not have:
+`domogo` (gen), `doma` (abl), `domje` (voc), `druzi`, `druzzje`, and every cell
+of the dual. Scoring against Russian would silently restrict the measurement to
+the minority of cells that happen to overlap — and worse, the score would *rise*
+as Ruthenian moved closer to Russian, which is backwards for a language specified
+to be more conservative than Russian and to keep what Russian levelled away.
+
+Attested forms keep a real job, one level up: they are the **evidence** a
+Ruthenian lemma is reconstructed from (`../RUTHENIAN.md` §12.2). That is
+`ruthenian-extract`'s concern, and its quality is reported here as
+reconstruction confidence, never as accuracy.
 
 Wrong to put here: anything that changes output. The evaluator observes; it never
-patches, never post-processes, never "fixes up" a form before comparing.
+patches, never post-processes, never "fixes up" a form before comparing. Equally
+wrong: treating a disagreement with the spec as a spec bug. If the engine and
+`../RUTHENIAN.md` disagree, the engine is wrong — that is what normative means.
+Amending the spec to match the code is how the baseline stops meaning anything.
 
-## 2. What gets measured, and how
+## 2. Three quantities, never averaged
 
-**Per slot, not per form.** A slot counts as a hit when the facade's output is in
-the attested set for that slot. Wiktionary attests several valid variants for one
-slot, so a per-form metric could never reach 100 % regardless of which valid
-variant the library picks. `english` established this and its README states the
-consequence plainly; copy both the metric and the plain statement.
+Per `INVARIANTS.md` I3, the specification baseline yields three distinct numbers.
+Collapsing any two produces a figure that means nothing, so they are reported
+separately and no arithmetic combines them.
 
-Every mismatch is then classified — this is the part that is specific to
-Ruthenian:
+### Conformance — the headline
+
+Of the cells `../RUTHENIAN.md` states, what fraction does the facade reproduce?
+
+**Per slot, not per form.** A slot counts as a hit when the facade's output
+matches the spec's stated form for that slot. Where the spec states alternatives
+(`dom` / `doma` in the accusative, by animacy), the whole set is the target and
+matching any declared member is a hit.
 
 | Class | Meaning | Target |
 |---|---|---|
-| **Hit** | Output ∈ attested set | maximize |
-| **Explained** | Output ≠ attested, and the trace names a `RuleId` that claims this slot | expected; report per rule |
-| **Unexplained** | Output ≠ attested, no rule accounts for it | **must go to zero** |
-| **Gap agreement** | Facade returns `None`, source marks the slot `"-"` | correct behaviour, counted separately |
+| **Hit** | Output = the form the spec states | maximize — **this must reach 100 %** |
+| **Traced** | Output ≠ spec, and the trace shows which rule produced it — the actionable half of a mismatch, since it names where to look | report per rule |
+| **Unexplained** | Output ≠ spec, no rule accounts for it | **a bug; must go to zero** |
+| **Gap agreement** | Facade returns `None`, spec declares no such cell | correct behaviour, counted separately |
 | **Gap disagreement** | One says gap, the other does not | a bug in either direction |
+
+Conformance differs from an accuracy figure in a way that matters: **100 % is
+attainable and is the actual target.** The spec is finite and authoritative, so
+any shortfall is a defect with a known fix, not an asymptote to creep toward.
+
+### Coverage — the honesty companion
+
+Of the cells the language *has*, what fraction does the spec state? 100 %
+conformance over a spec that tabulates nine paradigms is not a claim about the
+language as a whole, and reporting it alone would imply otherwise.
+
+A miss here is a **hole in the specification**, closed by amending
+`../RUTHENIAN.md` — never by inferring a form in code. Coverage is what turns
+"the engine agrees with the spec" into a statement about how much of the language
+that covers, and it is the number that says where the spec should grow next.
+
+### Distance — descriptive only
+
+For each generated form, how far is it from its source-language cognates? This
+answers "how much has Ruthenian moved from Russian here", which is genuinely
+interesting — the second palatalization, the yat reflex and the dual should all
+show large distances, and a *small* distance in those places is a signal the
+engine has quietly reverted to Russian.
+
+It is never called accuracy, never gates a release, and never appears without the
+word "distance" attached.
 
 **Stress is scored twice.** Since Ruthenian stores stress, a form can be
 segmentally right and prosodically wrong, and one number cannot say both. So
@@ -51,31 +101,53 @@ bare-lemma accuracy side by side: neither number is allowed to hide inside the
 other. A large gap between them is itself the finding — it means the endings are
 right and the accent patterns are not.
 
-Reported per part of speech, and separately under `Policy::attested()` and
-`Policy::regularized()`. The attested run is the correctness measurement; the
-regularized run measures how far Ruthenian has moved from Russian, which is a
-*description*, not a score.
+Reported per part of speech. There is one run, because there is one language:
+the engine has no configuration axis (`ruthenian-core.md` §7), so there is no
+second configuration to report beside it.
 
-## 3. No split in v1 — and what that costs
+## 3. The conformance corpus is generated from the spec
 
-**v1 scores against every attested form.** There is no sealed test set, and the
-reason is that Ruthenian has no learned parameters: the rules are written by
-hand, the tables are mechanically derived, and nothing is fit by an optimizer
-that could memorize a training set.
+**The corpus is extracted from `../RUTHENIAN.md` into a committed artifact.** Its
+paradigm tables (§§3–7: `dom`, `konj`, `drug`, `okno`, `polje`, `zzena`,
+`zjemlja`, `noczj`, `kostj`, the adjective, the pronouns, the numerals, the verb
+tables and `byti`) are read once by a generator and written to a checked-in file.
+Hand-transcribing them would create a second copy of the language that drifts
+from the first, which is law 9.
 
-The honesty requirement that replaces the split is therefore blunt and must
-appear next to every published number:
+**Extraction is a separate step from assertion**, and that separation is
+load-bearing rather than tidiness. `ruthenian-core.md` §9 records what happened
+when the two were fused: the markdown parser matched the wrong heading and
+silently compared one paradigm's forms against another's, reporting a clean run.
+Prose formatting must not be a test's interface.
 
-> The accuracy figure is **coverage of known data**, not generalization
-> performance. Every attested form was available while the rules were written.
+So: the generator writes the artifact, a currency check re-extracts and diffs,
+and the conformance run reads only the artifact. **Amending the spec regenerates
+the corpus in the same commit**, and the diff is reviewed like any other.
+
+### There is no held-out set, and here that is sound
+
+Ruthenian has no learned parameters and no attested corpus to hold out. The rules
+implement a document; the document is the answer key; there is nothing to
+generalize *to*. The train/test distinction does not apply, and importing it
+would be cargo-culting a machine-learning ritual into a setting with no
+inference.
+
+What replaces it is the coverage number (§2), and the honesty requirement is
+correspondingly different from the old one. Every published conformance figure
+carries:
+
+> Conformance is measured against `docs/RUTHENIAN.md`, which specifies N of the
+> language's paradigms. It states how faithfully the engine implements the
+> specification, not how complete the specification is — see coverage.
 
 That sentence is generated into the README from `summary.json` along with the
 number, so the two cannot drift apart.
 
-What is genuinely given up: rules are still fit to the data by a human, which is
-the same leakage as training, only slower. A rule added because it fixes twelve
-observed forms may not generalize, and this design cannot detect that. The
-mitigations that remain are cheap and are required:
+What is genuinely given up: the spec itself is written by a human who can be
+wrong, and no amount of conformance detects a mis-specified paradigm. That is a
+real limit and the mitigation is comparative, not statistical — `COMPARATIVE_GRAMMAR.md`
+is where a proposed paradigm is checked against the family. The mitigations below
+remain cheap and are required:
 
 - **Per-rule impact counts** (§4) — a rule touching three entries is visible as
   overfitting in a way an aggregate percentage is not.
@@ -84,24 +156,24 @@ mitigations that remain are cheap and are required:
   average.
 - **The unexplained-mismatch list** — enumerated in full, never summarized.
 
-If a sealed set is added later, it must be **grouped by lemma, not by form**
-(otherwise a lemma's 1sg lands in train and its 2sg in test and the paradigm
-leaks across the boundary), and it must be called what it is: the ecosystem has a
-worked example of a "holdout" that was inspected during rule selection and
-quietly became a validation set wearing a test set's name.
-
 ## 4. Public API sketch
 
 ```rust
-pub fn run(attested: &Path, policy: &Policy) -> Result<Summary, EvalError>;
+pub fn run(spec_corpus: &Path) -> Result<Summary, EvalError>;
 
 pub struct Summary {
     pub facade_fingerprint: String,   // which build produced this
-    pub dump_fingerprint: String,     // which data
-    pub policy: PolicyId,
+    pub spec_fingerprint: String,     // which revision of docs/RUTHENIAN.md
+    pub dump_fingerprint: String,     // which lexicon data
     pub by_pos: BTreeMap<Pos, PosScore>,
     pub unexplained: Vec<Mismatch>,   // the actionable list
     pub by_rule: BTreeMap<RuleId, RuleImpact>,
+    /// Of the cells the language has, how many does the spec state? A spec
+    /// gap, not an engine defect — reported so conformance cannot be read as
+    /// a claim about the whole language.
+    pub coverage: Coverage,
+    /// Descriptive only. Never combined with the above.
+    pub distance: BTreeMap<SourceLang, DistanceStats>,
 }
 
 pub struct PosScore {
@@ -111,7 +183,7 @@ pub struct PosScore {
 
 pub struct Counts {
     pub slots: u64, pub hits: u64,
-    pub explained: u64, pub unexplained: u64,
+    pub traced: u64, pub unexplained: u64,
     pub gap_agreement: u64, pub gap_disagreement: u64,
 }
 
@@ -126,7 +198,8 @@ cannot distinguish a change that fixes 50 slots and breaks 40 from one that fixe
 
 ## 5. Inputs and outputs
 
-In: `attested.tsv` from Phase 4; the facade as a library dependency.
+In: the conformance corpus generated from `../RUTHENIAN.md`; the lexicon artifact
+from Phase 4 (for coverage and distance); the facade as a library dependency.
 
 Out: **`eval/summary.json`** — the single canonical result. Every number in the
 README, the changelog and any report is generated from this file. Nothing is
@@ -138,8 +211,10 @@ Also out: per-part-of-speech CSVs of misses, for working on, mirroring
 
 ## 6. Data owned
 
-The split definition (which lemmas are in which set), the metric definitions, and
-`summary.json`.
+The corpus generator (spec tables → expected cells), the metric definitions, and
+`summary.json`. It does **not** own the expected forms themselves — those belong
+to `../RUTHENIAN.md`, and a form written here rather than derived from there is a
+second copy of the language.
 
 ## 6a. Dependencies allowed
 
@@ -154,17 +229,22 @@ artifact, not the dump.
 
 1. The evaluator calls the public facade. It never reimplements lookup or
    inflection.
-2. `Policy::attested()` is the baseline for correctness claims.
+2. The engine measured against `../RUTHENIAN.md` is the baseline for correctness
+   claims. There is no other configuration to measure.
 3. Every mismatch is classified; "other" is not a category.
-4. Every published number is accompanied by the generated coverage caveat (§3).
-   A number without it is a build failure.
-5. Every `RuleId` active under the measured policy has an impact count in the
-   summary — the small-n overfitting signal that replaces a held-out set.
-6. `summary.json` records the facade fingerprint, the dump fingerprint and the
-   policy — a summary that cannot say what it measured is invalid.
+4. Every published conformance number is accompanied by the generated coverage
+   statement (§3). A number without it is a build failure.
+5. Every rule named in a trace has an impact count in the summary, so a rule
+   affecting three entries is visible as such.
+6. `summary.json` records the facade fingerprint, the **spec fingerprint** and
+   the dump fingerprint — a summary that cannot say what it measured is invalid.
 7. Reported numbers are generated from `summary.json`, never transcribed.
 8. Failures fail. No warning-only outcome, no silent input substitution: if the
    requested input is missing or unsuitable, the run errors and says why.
+9. **Conformance, coverage and distance are reported separately and never
+   combined.** No arithmetic produces a single "score" from them (I3).
+10. The expected forms are derived from `../RUTHENIAN.md` at build time. No
+    expected form is written by hand in this crate.
 
 ## 8. Guards
 
@@ -172,55 +252,77 @@ artifact, not the dump.
 |---|---|---|---|---|---|
 | `eval_uses_public_api` | Inv. 1 | Import a private/internal path from the facade; the check on the dependency surface fails | required | ms | crate |
 | `mismatch_totally_classified` | Inv. 3 | Add a mismatch path that increments no class counter; hits + explained + unexplained ≠ slots | required | seconds | crate |
-| `coverage_caveat_published` | Inv. 4 | Emit a README number without the "coverage of known data, not generalization" sentence generated beside it | required | ms | crate |
+| `coverage_statement_published` | Inv. 4 | Emit a README conformance number without the generated coverage sentence beside it | required | ms | crate |
 | `per_rule_impact_reported` | Inv. 5 | Add a `RuleId` with no impact count in the summary; a rule affecting 3 entries must be visible as such | required | seconds | crate |
-| `summary_self_describing` | Inv. 6 | Emit a summary without the facade fingerprint | required | ms | crate |
+| `summary_self_describing` | Inv. 6 | Emit a summary without the facade or spec fingerprint | required | ms | crate |
+| `three_quantities_separate` | Inv. 9 | Add a field averaging conformance with coverage, or label a distance figure "accuracy"; the check on `Summary`'s shape and on generated prose fails | required | ms | crate |
+| `expected_forms_are_derived` | Inv. 10 | Hand-write an expected cell in the crate instead of deriving it; the corpus regeneration diffs against it | required | seconds | crate |
 | `readme_numbers_generated` | Inv. 7 | Edit a number in the README by hand; regeneration diffs against it | required | seconds | workspace |
 | `no_silent_substitution` | Inv. 8 | Point the run at a missing/short input; it must error, never fall back to a default dataset while reporting the requested path | required | ms | crate |
 | `no_debug_only_assertions` | Inv. 8 | Put an invariant in `debug_assert!` — it compiles out under the `--release` runs CI uses | required | ms | crate |
 | `paired_diff_gate` | §4 | Land a change that fixes 3 slots and breaks 5; the paired diff blocks it where an absolute floor would not | required | seconds | crate |
 | `both_stress_variants_reported` | §2 — segmental and strict both present | Emit a summary with one variant; a stress-only regression becomes invisible | required | ms | crate |
 
-Nine guards. Two of them — `no_silent_substitution` and `no_debug_only_assertions`
-— exist purely because the ecosystem has already shipped both bugs, in the
-evaluator, in the project this one is modelled on.
+Eleven guards. Two of them — `no_silent_substitution` and
+`no_debug_only_assertions` — exist purely because the ecosystem has already
+shipped both bugs, in the evaluator, in the project this one is modelled on. Two
+more — `three_quantities_separate` and `expected_forms_are_derived` — exist
+because the pressure to produce one headline number, and to write the expected
+forms down "just this once", is what turned the baseline into Russian the first
+time.
 
 ## 9. Out of scope
 
 - Changing any form. The evaluator is read-only with respect to output.
+- **Amending the specification.** If the engine and `../RUTHENIAN.md` disagree,
+  this crate reports it; it never edits the document to make the number better.
 - Ranking, calibration, or probability estimation. There is nothing to calibrate:
   the facade is deterministic and rule-driven, and a confidence score with no
   decision hanging off it is decoration.
-- Judging whether a *regularization* is a good idea. It reports impact; the
-  decision is a human one recorded in `docs/REGULARIZATION.md`.
+- Judging whether a rule is a good idea. It reports impact; the decision is a
+  human one, recorded in `../RUTHENIAN.md`.
+- Judging the *quality of a reconstruction* — whether the right cognate was
+  chosen for a lemma. That is `ruthenian-extract`'s provenance data; this crate
+  reports the confidence distribution without second-guessing it.
 - Evaluating the orthography — that is a round-trip property, guarded in Phase 1.
 
 ## 10. Done criteria
 
-- `summary.json` produced, with per-part-of-speech scores under both policies.
+- `summary.json` produced, with per-part-of-speech conformance under the standard
+  language, plus coverage and per-source distance.
+- **Conformance at 100 %, or every shortfall
+  enumerated.** Unlike an accuracy figure, this target is reachable, and a
+  shortfall is a defect list rather than a percentage to improve on.
 - **Unexplained mismatches enumerated in full**, not summarized. This list is the
-  Phase 6 deliverable; the accuracy percentage is secondary to it.
-- Every rule's impact counted, feeding the generated
-  `docs/REGULARIZATION.md`.
+  Phase 6 deliverable.
+- Coverage reported against the language's full paradigm inventory, so the
+  conformance figure cannot be read as a claim about the whole language.
+- Every rule's impact counted, so a rule touching three entries is visible as such.
 - README numbers generated, with a statement of what the metric does *not*
   measure — in the same paragraph as the number, not in a footnote.
 - The paired-diff gate wired so a release cannot silently trade regressions for
   improvements.
-- Nine guards present, each demonstrated to fail under its witness.
+- Eleven guards present, each demonstrated to fail under its witness.
 
 ## 11. Closed decisions
 
-- **No sealed test set in v1.** Score against everything attested, and publish the
-  coverage caveat with every number. See §3 for what is given up and what
-  replaces it.
+- **The baseline is the specification.** See §1 for why attested Russian cannot
+  serve, and what attested forms are used for instead.
+- **The corpus is generated from `../RUTHENIAN.md`**, never hand-written, so it
+  cannot drift from the language it checks.
+- **No held-out set**, and here that is sound rather than a compromise: there are
+  no learned parameters and no corpus to hold out. See §3.
 - **Stress is scored both ways** — segmental headline, strict companion. See §2.
 - **There is no publication threshold.** Publish whatever the first run produces,
-  with the coverage caveat and the unexplained-mismatch count printed beside it.
-  A withheld number helps nobody, an honest low one sets the baseline the paired
-  diff then protects, and a fixed floor would reintroduce exactly the
+  with the coverage statement and the unexplained-mismatch count printed beside
+  it. A withheld number helps nobody, an honest low one sets the baseline the
+  paired diff then protects, and a fixed floor would reintroduce exactly the
   coarse-gate trap this spec avoids elsewhere. The release gate is the *paired
   diff*, not an absolute figure.
 
 ## 12. Open questions
 
-None. Every question this spec opened is closed above.
+- **How coverage is denominated.** Conformance is well-defined; coverage needs a
+  denominator — "the cells the language has" — and that is only knowable once the
+  lexicon exists. Until Phase 4, coverage is reported as paradigms-stated rather
+  than cells-covered, and the imprecision is stated with it.

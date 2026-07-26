@@ -2,16 +2,60 @@
 
 Phase 4. Depends on `ruthenian-lexicon`, `ruthenian-core`, `ruthenian-orthography`.
 
+> **Scope change (2026-07-25): extraction is multi-language.** The dump is
+> scanned in full for Russian (419 283 lemmas), Polish (152 325), Ukrainian
+> (52 223), Belarusian (6 899) and Old Church Slavonic (4 311), plus borrowing
+> etymologies. `INVARIANTS.md` I1 applies per language: a full scan each, never a
+> sample. See `DIRECTION.md` and `docs/RUTHENIAN.md` §9.
+
 ## 1. Purpose
 
-Read the English Wiktionary dump once and turn it into the lexicon artifact, the
-attested-forms artifact, and the generated PHF tables. Deterministically, with
-bounded memory, and with an honest account of everything it threw away.
+Read the English Wiktionary dump once and turn it into the lexicon artifact and
+the generated PHF tables. Deterministically, with bounded memory, and with an
+honest account of everything it threw away.
 
 This is the only crate that knows Wiktionary exists. Every fact about
 `head_templates`, `ru-conj`, tag vocabularies and template arguments is confined
 here; nothing downstream should be able to tell where the data came from except
 by reading `Provenance`.
+
+### This crate reconstructs; it does not transliterate
+
+The dump holds **source languages**. Ruthenian is in none of them, and no record
+in 10 667 129 lines is a Ruthenian form. What this crate produces is therefore a
+*reconstruction*, by the procedure `../RUTHENIAN.md` §12.2 specifies:
+
+1. **Group cognates by etymon** — the reflexes of one Proto-Slavic form across
+   Russian, Ukrainian, Belarusian, Polish and OCS make one entry.
+2. **Derive the Ruthenian form** by regular sound correspondence from that
+   etymon, using the cognates to resolve what any single language lost.
+3. **Record the evidence** — which languages attest it, and how confidently the
+   derivation follows.
+
+Taking the Russian cognate and transliterating it is not this procedure and does
+not produce Ruthenian. Russian has merged yat, levelled the second
+palatalization, and lost the dual, the ablative and the aorist; a lemma derived
+from it alone cannot supply the endings the language needs. That is the whole
+argument for the multi-source scan, and it is why step 3 is not optional
+bookkeeping — a form resting on one reflex is a weaker claim than one attested
+across four, and `Provenance` must say which it is.
+
+**This is the hardest unsolved problem in the project** (`../RUTHENIAN.md` §12.2,
+`DIRECTION.md` open decisions). Explicit Proto-Slavic links cover 5 517 etyma,
+only 88 of them attested across all five source languages, and 2 700 in just one.
+Cognate grouping therefore cannot rely on etymology templates alone; it needs
+phonological matching and the English gloss as a pivot. It is scoped as its own
+phase and must not be assumed away.
+
+### Source-language classifications stop here
+
+Zaliznyak classes, accent letters and Russian stem classes are how a cognate is
+read out of the dump and mapped onto one of Ruthenian's three declensions or six
+conjugation classes (`../RUTHENIAN.md` §3.2, §7.3). That mapping is this crate's
+job, and its output is a Ruthenian class. **No Zaliznyak index, accent pattern or
+stem class appears in `Entry`, in `ruthenian-core`, or in anything the facade
+returns** (`DIRECTION.md`, "Three structural decisions"; guarded in
+`ruthenian-core` by `no_source_language_types`).
 
 Wrong to put here: morphology (it is in `core`, and this crate *calls* it as the
 predictor), the entry schema (it is in `lexicon`), or any runtime behaviour. This
@@ -76,12 +120,42 @@ arg `adj`; the full case × number paradigm with stress.
 ]
 ```
 
-Yields: the **Zaliznyak class** from `ru-conj` arg `2` (`4c+p`, `4a+p`, `1a`) —
-the single field that determines the present stem; aspect and aspect partner from
-the `ru-verb` args; transitivity from the `class` form; the attested 1sg/2sg
-present, which are the **principal parts**; participles and gerunds; and the
-**paradigm gaps, marked `"-"`**, which are the exact input to
-`ruthenian-core`'s `gap.fill-1sg` rule.
+Yields: the **Zaliznyak class** from `ru-conj` arg `2` (`4c+p`, `4a+p`, `1a`),
+which determines the Russian present stem; transitivity from the `class` form;
+the attested 1sg/2sg present; participles and gerunds; and the stress position.
+
+**What survives the boundary, and what does not.** These fields are read to
+identify the cognate and to locate its stem and stress. They are then mapped:
+
+| Read from the source | Becomes | Or is discarded |
+|---|---|---|
+| Zaliznyak class digit (1–16) | one of Ruthenian's six classes (§7.3 — his 1–6 map directly; 7–16 are regularized onto them) | |
+| Zaliznyak accent letter (`a`, `b`, `c`, `c″`) | the **stress position** in the lemma | the mobility pattern — Ruthenian stress is fixed (§2.1) |
+| Russian stem class (velar, sibilant, `c`, vowel) | declension + hardness (§3.2) | the eight-way split — these are spelling adjustments, not declensions (§3.8) |
+| aspect, aspect partner | *nothing* | discarded entirely — aspect is derived from surface shape (§7.2) and no entry stores it |
+| transitivity | kept — it conditions the passive participle gap | |
+
+The aspect row is the one most likely to be implemented wrongly out of habit.
+`ru-verb` supplies both an aspect and an aspect partner, and both are Russian
+lexical facts that Ruthenian has abolished. Storing either would reintroduce
+exactly the lexical pairing §7.2 exists to remove, and would then quietly
+disagree with `Rules::aspect_of`.
+
+### Gaps are grammar, not data
+
+Measured over 2 941 Russian verbs: perfectives carry 13 922 gap slots against
+imperfectives' 2 509, and the six present-tense slots each appear ~1 519 times,
+matching the perfective count. Those `"-"` entries are grammar, not lexical
+facts, and `ruthenian-core` derives the corresponding Ruthenian gaps from
+`(aspect, transitivity, slot)`.
+
+The extractor therefore records **no gaps at all**. Russian's lexical
+defectiveness — `победить` carrying `futr_1sg: "-"` as an explicit `ru-conj`
+argument — is a fact about Russian and does not transfer: it does not make the
+corresponding Ruthenian verb defective, and Ruthenian's paradigms are specified as
+regular and complete. If a Ruthenian lemma should ever carry a genuine lexical
+gap, `../RUTHENIAN.md` must say so; there is no rule for inferring one from a
+cognate.
 
 ### Two traps, both verified
 
@@ -106,7 +180,11 @@ pub fn write(plan: &BuildPlan, out: &Path) -> Result<Written, ExtractError>;
 
 pub struct BuildPlan {
     pub entries: Vec<Entry>,
-    pub attested: Vec<(EntryKey, Slot, Ruthenian)>,
+    /// The cognate evidence each entry was reconstructed from: which source
+    /// languages attested it, and in what form. Kept so the reconstruction can
+    /// be audited and so `ruthenian-eval` can report distance — NOT as a set of
+    /// expected outputs. There is no attested Ruthenian.
+    pub evidence: Vec<(EntryKey, SourceLang, SourceForm)>,
     pub senses: SenseBlob,         // the `senses.rdb` payload, built not written
     pub tables: TableSet,          // only forms the predictor does NOT produce
     pub rejects: RejectHistogram,
@@ -129,7 +207,7 @@ environment. The vendored CI fixture (§10) is the same format, read the same wa
 | Artifact | Contents | Consumed by |
 |---|---|---|
 | `lexicon.jsonl` | one `Entry` per line, sorted by key — inflection data only | `ruthenian`, humans |
-| `attested.tsv` | `(key, slot, form)` ground truth | `ruthenian-eval` |
+| `evidence.tsv` | `(key, source_lang, source_form)` — the cognates each entry was reconstructed from. **Evidence, not ground truth**: it records what the reconstruction rests on, and is what `ruthenian-eval` measures *distance* against. It is never an expected-output set, because no line of it is Ruthenian. | `ruthenian-eval` |
 | `senses.rdb` | the binary sense blob with its sorted key index | `ruthenian-cli` via `include_bytes!` |
 | `crates/ruthenian/generated/*.rs` | PHF tables — the residue the rules cannot predict | `ruthenian` |
 
@@ -165,6 +243,14 @@ measurement goes in the commit message.
 7. Lemma records and inflected-form pages are distinguished; the `form-of` /
    `inflection-of` sense tags are the signal.
 8. No Wiktionary romanization reaches an artifact.
+9. **No source-language classification reaches an artifact.** No Zaliznyak index,
+   accent letter or Russian stem class appears in `Entry`. They are read, mapped
+   to a Ruthenian class, and dropped.
+10. **No entry stores aspect or an aspect partner.** Both are derived (§7.2);
+    storing either would create a second, divergent answer.
+11. **Every entry carries its reconstruction evidence** — which source languages
+    attested it, and how confidently the derivation follows. An entry that cannot
+    say what it rests on is not admissible.
 
 ## 7. Guards
 
@@ -184,20 +270,34 @@ measurement goes in the commit message.
 | `senses_verbatim` | Gloss text reaches the artifact untouched | Transliterate or trim a gloss; the fixture's pinned English text diffs | required | ms | crate |
 | `sense_index_sorted` | `senses.rdb`'s key index uses the lexicon's key ordering | Emit the index in insertion order; a `SenseIndex::get` round-trip over every fixture key fails to find some of them | required | ms | crate |
 | `plan_writes_nothing` | Law 6 | Open a file inside `plan` | required | ms | crate |
+| `no_source_classification_in_entry` | Inv. 9 | Store the Zaliznyak string on `Entry`; the check on the artifact schema fails | required | ms | crate |
+| `no_stored_aspect` | Inv. 10 | Add an `aspect` field and populate it from `ru-verb`; the check fails on the schema **and** a differential test against `Rules::aspect_of` diverges | required | seconds | crate |
+| `entry_carries_evidence` | Inv. 11 | Emit an entry with an empty evidence set | required | ms | crate |
 
-Nine guards. Two are deliberately not per-PR: `determinism_rerun` costs two full
-passes, and `schema_drift_canary` needs the 22 GiB file, which CI will not have.
-Both are marked and scheduled — a guard that pretends to run everywhere and
+Seventeen guards. Two are deliberately not per-PR: `determinism_rerun` costs two
+full passes, and `schema_drift_canary` needs the 22 GiB file, which CI will not
+have. Both are marked and scheduled — a guard that pretends to run everywhere and
 quietly does not is worse than an honestly scheduled one.
+
+`no_stored_aspect` is paired the same way `morphophonology_single_owner` is: a
+schema check alone would not catch an aspect value smuggled in under another
+name, so it is backed by a differential test against the deriving function.
 
 ## 8. Out of scope
 
 - Runtime lookup — this crate is never in the binary's hot path, and ideally not
   in the binary at all.
 - Morphological rules → `ruthenian-core`.
-- Accuracy measurement → `ruthenian-eval`. This crate reports *coverage* (how
-  many entries, how many rejects); it never reports correctness.
-- Other languages, other dumps, incremental updates.
+- Conformance measurement → `ruthenian-eval`. This crate reports *yield* (how
+  many entries, how many rejects, how well-evidenced); it never reports
+  correctness, and it has no expected outputs to compare against.
+- **Deciding the sound correspondences.** Which reflex Ruthenian takes for each
+  Common Slavic divergence — pleophony, `*tj`/`*dj`, the nasals, the jers — is a
+  language design question, answered in `../RUTHENIAN.md` and currently open
+  (`PROMPT_SPEC_COMPLETION.md` Part 1 A). This crate *applies* the correspondence
+  table; it must not invent one, and until the spec states it, reconstruction
+  cannot be implemented.
+- Other dumps, incremental updates.
 
 ## 9. Done criteria
 
@@ -212,7 +312,12 @@ quietly does not is worse than an honestly scheduled one.
   required, generated forms labelled machine-generated.
 - `docs/CORPUS.md` records the dump revision, the counts, and the normalization
   decisions (Unicode form, `ё` handling).
-- Nine guards present, each demonstrated to fail under its witness.
+- **Reconstruction reported by confidence**, not just by count: how many entries
+  rest on cognates in four or more source languages, how many on one. The
+  headline for the lexicon's quality is that distribution, since an entry derived
+  from a single Russian reflex is the weakest thing this crate produces and the
+  count of those is the number that must come down.
+- Seventeen guards present, each demonstrated to fail under its witness.
 
 ## 10. Closed decisions
 
@@ -222,26 +327,30 @@ quietly does not is worse than an honestly scheduled one.
 `je`, not `jo`, and no lexicon entry contains the `jo` digraph.
 
 This has one consequence that must not be missed, and it is a data-loss bug if it
-is: **the dump never marks stress on ё.** Verified against real records —
-`клёв`, `безотчётный`, `стихарём`, and every ё-bearing form sampled, carry no
-U+0301 anywhere, because ё is inherently stressed in Russian and Wiktionary
-therefore does not mark it. A naive `ё → е` replacement produces `клев`, a form
-with no stress information at all, and the stress cannot be recovered afterwards.
+is: **the dump almost never marks stress on ё.** Measured over the whole dump,
+79 803 ё-bearing forms carry 80 064 occurrences of ё, of which only **179
+(0.22 %)** carry a U+0301 — and every one of those is a reduplicated intensive
+(`чё́рный-пречё́рный`, `жёлтый-прежёлтый`), where the mark disambiguates which
+half of the compound is primary. Everywhere else ё is inherently stressed and
+Wiktionary does not mark it.
 
-So the normalization is not a character substitution. It is:
+A naive `ё → е` replacement therefore produces `клев` from `клёв`, with no stress
+information at all and no way to recover it. So the normalization is not a
+character substitution:
 
 ```text
 ё  →  е + U+0301        (transfer the implicit stress to an explicit mark)
+ё́  →  е + U+0301        (already marked: keep the one mark, never add a second)
 ```
 
 giving `клёв` → `кле́в` → `kljév`. Since Ruthenian stores stress (Phase 1
 decision), this keeps the lexicon strictly more informative than the source.
 
-Documented approximation: Russian ё is stressed with rare exceptions in compounds
-carrying more than one (`трёхколёсный`). Where a form already carries an explicit
-U+0301 elsewhere, the ё is *not* given a second one, and the entry is counted in
-a `yo_multiple_stress` reject-histogram bucket for later inspection rather than
-being guessed at.
+The 179 pre-marked cases are the exception the rule must handle rather than trip
+over; they were invisible to an earlier window sample, which is why
+`INVARIANTS.md` I1 forbids sampling. Where a form carries more than one stress
+mark after normalization, count it in a `yo_multiple_stress` reject-histogram
+bucket for inspection rather than guessing.
 
 ### Multi-sense lemmas
 
@@ -291,4 +400,15 @@ Three extraction-side consequences:
 
 ## 11. Open questions
 
-None. Every question this spec opened is closed above.
+- **Cognate grouping** (`../RUTHENIAN.md` §12.2) — the unsolved problem this
+  crate cannot be finished without. Explicit Proto-Slavic links cover 5 517
+  etyma, only 88 of them attested across all five source languages and 2 700 in
+  just one, so etymology templates alone will not group the lexicon. Needs
+  phonological matching plus English-gloss pivoting, and is scoped as its own
+  phase.
+- **The sound-correspondence table** that reconstruction applies. It is a
+  language-design output, owed by `../RUTHENIAN.md`
+  (`PROMPT_SPEC_COMPLETION.md` Part 1 A and P1), and this crate is blocked on it:
+  choosing between a Russian, Ukrainian, Polish and OCS cognate *is* choosing a
+  reflex, so without the table there is no defined answer for the extractor to
+  produce.

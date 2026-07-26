@@ -2,6 +2,13 @@
 
 Phase 3. Depends on `ruthenian-core`, `ruthenian-orthography`.
 
+> **Scope change (2026-07-25): the lexicon is multi-source.** Vocabulary comes
+> from Russian, Ukrainian, Belarusian, Polish and Old Church Slavonic, plus a
+> rule-governed borrowing layer — see `DIRECTION.md` and `docs/RUTHENIAN.md` §9.
+> `Provenance` must therefore record **which language or languages attest a
+> form**, and how the Ruthenian reflex was arrived at, not merely that it came
+> from the dump. Cognate grouping is an unsolved problem with its own phase.
+
 ## 1. Purpose
 
 The lexical entry schema every other crate agrees on: what a word *is* in this
@@ -34,17 +41,30 @@ pub struct EntryKey {
 
 pub enum Disambiguator {
     None,                                    // the lemma is unique in its pos
-    Noun { gender: Gender, class: NounClass },
-    Verb { aspect: Aspect, class: ZaliznyakVerbClass },
+    Noun { gender: Gender, class: NounClass },   // declension + hardness
+    Verb { class: VerbClass },                   // one of Ruthenian's six
     Adj  { class: AdjClass },
 }
 
 impl EntryKey {
-    /// "voda", "voda.f.1a", "pisatj.ipf.6c" — stable, parseable, human-typable.
+    /// "voda", "voda.f.I-hard", "pisatj.6" — stable, parseable, human-typable.
     pub fn display(&self) -> String;
     pub fn parse(s: &str) -> Result<Self, KeyError>;
 }
 ```
+
+Two things left the disambiguator, and both for the same reason — they were
+Russian facts, not Ruthenian ones.
+
+**Aspect is gone** because it is derived from the lemma's surface shape
+(`../RUTHENIAN.md` §7.2), and a derived value cannot disambiguate: `czitatj` and
+`poczitatj` are different lemmas, not one lemma with two aspects, so the shape
+that determines the aspect has already distinguished them. Putting it in the key
+would store an answer the rules compute — law 5, and it would drift.
+
+**The Zaliznyak class is gone** because it is a source-language classification
+(`DIRECTION.md`, "Three structural decisions"). The key carries Ruthenian's own
+class, which is what the paradigm is actually built from.
 
 Two properties this buys, and they are the reason for the choice:
 
@@ -52,8 +72,8 @@ Two properties this buys, and they are the reason for the choice:
    newer dump cannot silently move a key to a different word the way a
    sequence-numbered scheme can. A key changes only when the facts change, and
    that is a semantic change announced in the changelog.
-2. **Self-describing.** `pisatj.ipf.6c` says what it is. A user reading CLI
-   output or a bug report can tell which word is meant without a lookup.
+2. **Self-describing.** `pisatj.6` says what it is. A user reading CLI output or
+   a bug report can tell which word is meant without a lookup.
 
 The costs, accepted and documented: keys are longer, and `Disambiguator::None`
 must be computed globally — a lemma is only unambiguous if nothing else in the
@@ -120,22 +140,20 @@ while the prose that dominates the byte count sits where it can be excluded.
 
 pub enum Inflection {
     Noun {
-        class: NounClass,            // stem class + accent pattern + reducible
+        class: NounClass,            // declension + hardness. No accent pattern
+                                     // (stress is fixed), no `reducible` flag
+                                     // (the fleeting vowel is derived, §3.9).
         gender: Gender,
         animacy: Animacy,
         number_defect: Option<NumberDefect>,   // PluraleTantum | SingulareTantum
-        indeclinable: bool,
         relational_adj: Option<Ruthenian>,
     },
     Adj { class: AdjClass, short_forms: ShortForms, comparative: Option<Ruthenian> },
     Verb {
-        class: ZaliznyakVerbClass,
-        aspect: Aspect,
-        partner: Option<EntryKey>,   // the aspect pair, resolved to a key not a string
+        class: VerbClass,            // one of Ruthenian's six (§7.3)
         transitivity: Option<bool>,  // None = the source carries no marker
         reflexive: bool,
         principal_parts: PrincipalParts,
-        gaps: SlotSet,               // slots the source marks "-"
     },
 }
 
@@ -146,16 +164,54 @@ pub struct PrincipalParts {
     pub overrides: Vec<(VerbSlot, Ruthenian)>,
 }
 
+/// Where a Ruthenian LEMMA came from. Not "which dump page", but which cognates
+/// the reconstruction rests on and how far it had to reach — `../RUTHENIAN.md`
+/// §12.2. An entry that cannot say this is not admissible.
 pub struct Provenance {
+    /// Every source language that attests a reflex of this etymon, with the
+    /// form it attests. Non-empty for an inherited lemma.
+    pub cognates: Vec<(SourceLang, SourceForm)>,
+    /// Which layer of §12.4 supplied the word. The layers are ordered, and this
+    /// records which one won.
+    pub layer: Layer,
+    pub confidence: Confidence,
     pub source: Source,              // Wiktionary { page, revision }
-    pub confidence: Attestation,     // Attested | Inferred { from: RuleId }
 }
 
-/// The one place "where did this form come from" is expressed.
+pub enum Layer {
+    Inherited,                       // §12.4 layers 1-2, by cognate count
+    ChurchSlavonic,                  // layer 3, learned and abstract vocabulary
+    Coined,                          // layer 4, native coinage from Ruthenian roots
+    GraecoLatin,                     // layer 5, adapted by the §12.3 table
+    Modern,                          // layer 6
+}
+
+/// How far the reconstruction had to reach. A form resting on one reflex is a
+/// weaker claim than one attested across four, and the two must not be
+/// indistinguishable — this is the type-level form of §12.2's "record the
+/// evidence".
+pub enum Confidence {
+    /// Reflexes agree across several source languages; the correspondence is
+    /// regular in each.
+    Converging { languages: u8 },
+    /// One language attests it; the Ruthenian form follows by regular
+    /// correspondence but has no cross-check.
+    Single(SourceLang),
+    /// The correspondence table did not determine a unique output and a
+    /// documented tie-break was applied.
+    TieBroken { rule: RuleId },
+    /// Borrowed by the §12.3 rules rather than inherited.
+    Borrowed { from: SourceLang },
+}
+
+/// The one place "where did this FORM come from" is expressed. Distinct from
+/// `Provenance`, which is about the lemma: this is about a single cell.
 pub enum Origin {
-    Attested,                        // the source lists this exact form
-    RuleDerived,                     // the rule engine produced it, unmodified
-    Regularized(RuleId),             // a declared departure from standard Russian
+    /// The rule engine produced it. This is the ordinary case — the language
+    /// is specified, so its forms are derived.
+    RuleDerived,
+    /// Stored in the tables because no rule predicts it.
+    Stored,
 }
 
 pub struct Form {
@@ -171,9 +227,32 @@ evaluator return it, and neither should own the other's vocabulary. It is the
 type the whole system converges on: the CLI prints it, the evaluator scores it,
 the tables are compressed against it.
 
-`partner: Option<EntryKey>` rather than `Option<String>` is law 12 in miniature —
-an aspect partner is a reference to another entry, and storing it as a string
-invites everyone downstream to re-resolve it differently.
+**`Origin` has no `Attested` variant, and that is the point.** No Ruthenian form
+is attested anywhere — the language is specified, not recorded
+(`DIRECTION.md`, "The specification is the ground truth"). A form is derived by
+rule or stored because no rule predicts it.
+An `Attested` variant would be a lie about every value it ever held, and would
+invite the evaluator to treat a source-language cognate as a target output, which
+is the error the whole design removes.
+
+Attestation has not disappeared; it moved to where it is true. `Provenance`
+records which *source languages* attest a cognate of the lemma, because that is a
+real fact about real data — it is evidence for the reconstruction, not a claim
+about any Ruthenian cell.
+
+**Three fields left `Inflection::Verb`**, each because the language removed the
+thing they stored:
+
+- `aspect` and `partner` — aspect is derived from surface shape (§7.2), and there
+  are no suppletive pairs to point at. `partner` was law 12 applied to a
+  relationship Ruthenian does not have.
+- `gaps: SlotSet` — gaps are structural and derived from
+  `(aspect, transitivity, slot)`, never stored (`ruthenian-core` §7).
+
+And `indeclinable: bool` left `Inflection::Noun`, because §12.3 is explicit that
+**Ruthenian has no indeclinables**: Russian leaves 1 193 loans undeclined and
+Ruthenian declines them all. A flag whose only legal value is `false` is law 5's
+hand-maintained boolean, and its dead branch would eventually become the bug.
 
 ## 3. Inputs and outputs
 
@@ -184,9 +263,10 @@ Two on-disk artifacts, both owned by this crate's format definition:
 
 - **`lexicon.jsonl`** — one `Entry` per line, sorted by key, deterministic field
   order. Inflection data only; the human-inspectable intermediate.
-- **`attested.tsv`** — `(key, slot, form)` triples, the evaluator's ground truth,
-  separated from the lexicon because it is large, write-once, and never consulted
-  at runtime.
+- **`evidence.tsv`** — `(key, source_lang, source_form)` triples: the cognates
+  each entry was reconstructed from. Separated from the lexicon because it is
+  large, write-once, and never consulted at runtime. It is **evidence, not ground
+  truth** — no line of it is a Ruthenian form.
 - **`senses.rdb`** — the binary sense blob described in §2a, embeddable with
   `include_bytes!` or readable at runtime.
 
@@ -220,12 +300,17 @@ reason is written in the `Cargo.toml`.
 4. `PrincipalParts` contains only what the rules cannot predict. Storing a form
    the rule engine already produces is a **schema violation**, checkable, and the
    check is what keeps the artifact small.
-5. `gaps` and `Policy::attested()` agree: a slot in `gaps` yields `None` from the
-   facade under the attested policy.
+5. No `Entry` stores a value the rules derive: not aspect, not an aspect
+   partner, not a gap set, not an `indeclinable` flag. Storing one creates a
+   second answer that will eventually disagree with the first.
 6. Serialization is deterministic — same `Entry`, same bytes, on any platform,
    with sorted keys and no floating point.
-7. `Origin::Regularized` always names a `RuleId` that exists in the core
-   registry.
+7. Every `Form` carries a non-empty trace naming the rules that built it.
+8. Every `Entry` carries a non-empty `Provenance`: an inherited lemma names the
+   cognates it rests on, a borrowed one names the layer and source. A lemma that
+   cannot say what it was reconstructed from is not admissible.
+9. No source-language classification appears in any type here — no Zaliznyak
+   index, accent letter or Russian stem class.
 
 ## 7. Guards
 
@@ -236,10 +321,12 @@ reason is written in the `Cargo.toml`.
 | `key_roundtrip_and_minimality` | Inv. 3a | Assign `Disambiguator::None` to a lemma that has a homograph, or add a class field that does not distinguish anything | required | seconds | crate |
 | `key_stable_across_refresh` | Keys derive from facts, not order | Introduce a sequence number into `EntryKey`; re-keying a shuffled input produces different keys | required | seconds | crate |
 | `principal_parts_minimal` | Inv. 4 | Store a rule-predictable present stem; the check recomputes and rejects it | required | seconds | crate |
-| `gaps_match_policy` | Inv. 5 | Mark a slot as a gap while the attested policy still emits a form | required | seconds | crate |
+| `no_derived_values_stored` | Inv. 5 | Add an `aspect` field to `Inflection::Verb`; the schema check fails **and** a differential test against `Rules::aspect_of` diverges | required | seconds | crate |
+| `provenance_non_empty` | Inv. 8 | Emit an inherited entry with no cognates recorded | required | ms | crate |
+| `no_source_classification` | Inv. 9 | Add `class: ZaliznyakVerbClass` to the schema | required | ms | crate |
 | `serialization_deterministic` | Inv. 6 | Swap a `BTreeMap` for a `HashMap` in any serialized structure | required | ms | crate |
 | `schema_version_enforced` | §3 | Load an artifact with a bumped version; must error | required | ms | crate |
-| `ruleid_resolves` | Inv. 7 | Reference a `RuleId` the core registry does not define | required | ms | crate |
+| `trace_non_empty` | Inv. 7 | Emit a `Form` whose trace has no steps | required | ms | crate |
 | `roundtrip_lemma_scripts` | Inv. 2 | Store a `lemma` that is not the transliteration of `source_lemma` | required | ms | crate |
 | `senses_are_verbatim_english` | Sense text is never transliterated or normalized | Run `to_latin` over a gloss; the check finds Ruthenian digraphs in English prose | required | ms | crate |
 | `senses_not_in_entry` | §2a — `Entry` carries no sense text | Add a `gloss` field to `Entry`; the lexicon JSONL size check and the type-shape test both fail | required | ms | crate |
@@ -260,11 +347,15 @@ silently grows into a full form table.
 
 ## 9. Done criteria
 
-- The eight guards present, each demonstrated to fail under its witness.
-- The schema expresses every metadata field the dump actually carries — verified
-  against real records, not assumed: gender, animacy, stem class, accent pattern,
-  reducible-stem marker, relational adjective, aspect, aspect partner,
-  transitivity, Zaliznyak class, principal parts, paradigm gaps.
+- The guards present, each demonstrated to fail under its witness.
+- The schema expresses every metadata field a Ruthenian entry needs — verified
+  against real reconstructions, not assumed: gender, animacy, declension and
+  hardness, relational adjective, transitivity, reflexivity, verb class,
+  principal parts, stress position, and the full `Provenance`.
+- The schema expresses **nothing the rules derive**. Aspect, aspect partners,
+  gap sets, reducibility and indeclinability are all absent by design, and each
+  absence is justified in §2 against the clause of `docs/RUTHENIAN.md` that
+  removes it.
 - A worked example in the crate docs: one noun and one verb entry, complete, with
   the real values taken from the records cited in `ruthenian-extract.md`.
 - Zero dependencies beyond `serde`; `#![forbid(unsafe_code)]`.
