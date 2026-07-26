@@ -17,6 +17,12 @@ contains that literal — so the cache is provably complete. It matches 517 691
 lines, of which 441 629 parse as Russian records; the difference is nested
 occurrences, which is why the records are JSON-parsed rather than pattern-matched.
 
+`endings.py` produces the comparative ending tables in
+`docs/COMPARATIVE_GRAMMAR.md` — noun and verb endings, case syncretism, dual and
+vocative inventories — for Russian, Ukrainian, Belarusian, Old Church Slavonic,
+Sanskrit and Proto-Indo-European. It needs the per-language record sets named in
+its docstring, each from a full scan.
+
 `measure.py` prints the class-code census, gap counts by aspect, the `+p`
 precision/recall check, the mutation table, stem-class and accent distributions,
 and writes `class-codes-full.txt` plus the random held-out samples.
