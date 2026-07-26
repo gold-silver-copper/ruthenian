@@ -41,11 +41,25 @@
     because `-atj` is class 1 or class 6; aspect because a closed class is
     inherently perfective. Everything else — declension, hardness, the stem, the
     palatalizations, the gaps — is derived, and storing any of it is a bug.
-  - **Nouns and adjectives are total; verbs and pronouns are not.** Every noun has
-    every cell (§3.9 removed number defectiveness), and the long adjective's
-    "missing" vocative is filled by the nominative (§4.2), so both return
-    `String`. A perfective verb has no present tense (§7.8) and the reflexive has
-    no nominative (§5.2), so both return `Option<String>`.
+  - **Nothing returns `Option`.** Six of the seven "gaps" turned out to be
+    artifacts of how the enums were named, not facts about the language, and the
+    principle that separates them is that **the crate generates forms, not
+    meanings**: a gap is when the morphology has nothing to produce, not when the
+    result is semantically odd. A perfective's "missing present" is `poczitaju`,
+    a real form whose sense is future — so the slot is `NonPast`, and aspect
+    leaves the verb signature entirely, since it changes what a form means and
+    never what it looks like. The imperative's "missing" third person came from
+    modelling five real cells as `Person × Number`; it is now `Addressee`, which
+    has exactly five variants. The intransitive passive participle is
+    morphologically fine and only semantically odd. Pronouns use the nominative
+    for the vocative, as §3.1 already does for the vocative plural.
+
+    That leaves **one** genuine gap in the language — the reflexive has no
+    nominative (§5.2) — and it is handled by a type: `reflexive` takes
+    `ObliqueCase`, which has no `Nominative` variant, so the impossible call
+    cannot be written. The periphrastic tenses are out of scope, since they are
+    two words; the crate supplies `l_participle`, `infinitive` and `copula`, and
+    the caller composes.
   - **`Prediction` and `Trace` are dropped.** They existed to serve an evaluator
     and a CLI, neither of which is in scope. With no consumer, the trace was
     structure nobody read. This is a deliberate relaxation of "return structure,
