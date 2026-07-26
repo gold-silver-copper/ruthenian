@@ -501,7 +501,7 @@ hard"; each names a subsystem with a size. Measured over the whole dump
 | **indeclinables** | 1 193 nouns, mostly loans (`кофе`, `метро`, `пальто`) | none — regularization by *addition*, since the loans are declined (§12.3) |
 | **number defectiveness** | 460 plural-only, 1 543 singular-only — **2 003** | every noun has all three numbers (§3.9) |
 | **fleeting vowel in the gen. pl.** | pervasive (`окно` → `окон`) | the genitive plural is uniformly `-ov` (§3.9) |
-| **lexical aspect pairing** | unpredictable, stored per lemma in every Slavic dictionary | derived from surface shape (§7.2) |
+| lexical aspect **irregularity** | suppletive pairs, biaspectual verbs, unpredictable partners | pairs are still stored, but every partner is a plain reference to another entry: no suppletion, no biaspectuals (§7.2) |
 
 Two entries in that table are **additions** rather than removals, and are the
 reason the paradigm barely grows: the vocative and the dual come back, and they
@@ -632,9 +632,42 @@ Keep the two-stem model and Zaliznyak classes 1–6, add the **dual** from OCS �
 | 2 | `-jeszj` | `-jeta` | `-jetje` |
 | 3 | `-jet` | `-jetje` | `-ut` |
 
-The aorist and imperfect are available as an **optional archaic register**, on
-Interslavic's model, rather than required — the OCS forms are fully attested
-(`-běxъ`, `-ěaxъ`) and cost nothing to specify while remaining unused by default.
+The aorist and imperfect are **core tenses**, not an optional register. This is
+where Ruthenian parts company with Interslavic most sharply, and the comparison
+is instructive.
+
+**Interslavic merges them away.** From its verbs page, verbatim:
+
+> Old Church Slavonic, as well as most South Slavic languages … distinguish[es]
+> between the imperfect, perfect, pluperfect and aorist tenses. Interslavic
+> projects in the 19th century tend to follow this model. In modern Interslavic,
+> we **simplify this system somewhat by merging the imperfect with the aorist**,
+> a solution that is justified by their similarity in endings.
+
+The result is one "simple past", with a linking vowel for consonant stems:
+
+| | vowel stem | consonant stem |
+|---|---|---|
+| endings | `-h, -še, -še, -hmo, -ste, -hu` | `-eh, -eše, -eše, -ehmo, -este, -ehu` |
+| `dělati` | `dělah, dělaše, dělaše, dělahmo, dělaste, dělahu` | |
+| `nesti` | | `neseh, neseše, neseše, nesehmo, neseste, nesehu` |
+
+Two observations follow. First, **the merged form is really an imperfect**: its
+2/3sg is `-še`. The diagnostic aorist shape — the *bare stem* in 2sg and 3sg — is
+exactly what merging discards. Ruthenian keeps it (`czita`, `czita`), which is
+the single most recognisable feature of a real aorist.
+
+Second, Interslavic warns against the whole area: *"For a vast majority of Slavs,
+the endings of the simple past are not understandable at all. In communication
+with Poles, Russians etc. it is wiser to avoid them altogether."* That is the
+correct advice for an auxiliary language optimising for comprehension across
+living speakers. Ruthenian optimises for conservatism instead, so the warning
+identifies a cost it accepts rather than a reason to change course.
+
+Ruthenian takes **one** aorist formation — OCS's productive new sigmatic
+(`-xъ`, `-xomъ`, `-šę` → `-h`, `-hom`, `-sza`) — rather than OCS's three. The
+root and sigmatic aorists are stem-specific and partly irregular, which is the
+kind of class-by-class irregularity §13.7 removes elsewhere.
 
 ## 13.6 The payoff: numeral agreement stops being a fossil
 

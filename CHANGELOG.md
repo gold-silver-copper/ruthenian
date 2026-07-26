@@ -18,6 +18,105 @@
 
 ### Changed
 
+- **Every open question in the specification is answered.** `OPEN_QUESTIONS.md`
+  goes from twenty-odd decisions to four items, none of which blocks the grammar.
+  The reasoning for each is below; the settled list is `RUTHENIAN.md` §13.
+
+#### What "conservative" means (§1)
+
+The prior question the spec had never answered, and it decides the rest.
+Ruthenian is **not uniformly conservative or uniformly regular**: grammar follows
+**OCS**, phonology follows **Russian**, and vocabulary is East Slavic with an OCS
+learned layer. Yat and the second palatalization are the two exceptions to
+"follow Russian", because Russian merged both and the OCS-shaped grammar needs
+them to keep eight cases distinguishable.
+
+#### The language
+
+- **§2.6 — the sound correspondences**, stated for the first time: pleophony
+  (`golova`), `*tj`/`*dj` → `cz`/`zz`, nasals → `u`/`ja`, `*dl` simplified,
+  initial `o-`. Marked citation-based, since historical sound laws cannot be
+  counted from a synchronic corpus.
+- **§2.6a — the OCS learned layer is productive.** Any eligible root forms its
+  doublet by rule (`golova`/`glava`, `gorozzanin`/`grazzdanin`,
+  `odin`/`jedinyj`), generalizing what Russian does lexically. Two costs stated:
+  the rule produces both members even where Russian attests one, and it treats
+  drifted pairs like `storona`/`strana` as one lexeme in two registers.
+- **§2.4 — the first palatalization extends to `c`**: `otjec` → `otjecze`, as OCS
+  `otьče`. This governs the whole `-jec` class. `dz → zz` is **not** added, since
+  Ruthenian has no `dz` — its second palatalization gives `z` (`druzi`).
+- **§3.9 — the fleeting vowel is abolished entirely**, not just in the genitive
+  plural. Stems are invariant (`son`, `sona`, `sonu`), so the citation form is
+  always the stem and no entry needs a reducibility flag.
+- **§3.7 — the animate accusative takes the ablative in the singular** and the
+  genitive in the plural. The prose said "genitive" throughout while every
+  paradigm table showed the ablative; the tables were right, because OCS forms it
+  with `raba` and that `-a` continues PIE `*-ōd`, which §3.1's whole argument
+  identifies as the ablative. `konjego` would be a form no Slavic language has.
+  Scope is unchanged: all animates, both numbers.
+- **§4 — the predicate takes either adjective form**, and the definiteness
+  contrast survives there: `on jestj dobr` "he is good" against `on jestj dobryj`
+  "he is the good one". OCS and Russian both state a *positional* rule; Ruthenian
+  has made the contrast semantic, so banning a form in a position would discard a
+  distinction the system already encodes.
+- **§5.1a — the clitic pronoun series is restored**, with §10.1a placing it in
+  Wackernagel second position. This also explains the reflexive: `sja` is the
+  accusative clitic OCS had, which Russian fused to the verb. **§5.2 makes it a
+  free clitic** (`on sja myjet`), so one morph no longer has two grammars.
+- **§7.7 — two pluperfects**, distinguished by their auxiliary as in OCS:
+  `bjeh czital` "I had read" against `bjah czital` "I had been reading". Both
+  auxiliaries already exist in §7.9.
+- **§7.10 — the third-person imperative** is particle + present. `da`, `nehaj`
+  and `pustj` are all permitted; `da` is listed first and is the generation
+  default.
+- **§7.5 — one aorist formation**, the productive OCS new sigmatic. Not all three:
+  the root and sigmatic types are stem-specific and partly irregular.
+- **§12.1 — seven lexical sources.** Czech and Serbo-Croatian added as secondary,
+  for lexical breadth only; the arguments that once justified them (vowel length,
+  pitch accent, a living aorist) are all moot. Their lemma counts are marked *not
+  yet measured*.
+- **§12.2 — reconstruction is Russian-anchored.** Take the Russian lemma, consult
+  the other six only at Russian's known mergers, apply §2.6. This turns n-way
+  cognate clustering into a lookup on a fixed list, which is what makes the
+  lexicon buildable; the fallback for words Russian lacks remains open.
+- **§12.4 — tiers break ties** within the inherited layers, keeping a
+  seven-source lexicon East Slavic in character.
+
+#### Aspect: the headline claim is withdrawn
+
+§7.2 claimed aspect was fully computable and that `po-` was an empty
+perfectivizer forming every pair. Neither survives the data, and the section now
+says so:
+
+- **A closed class of simplex verbs is inherently perfective** — `datj`,
+  `statj`, `sjestj`, and much of class 4 (`kupitj`, `brositj`, `rjeszitj`). No
+  surface property identifies them: `datj` is perfective while `pitj`, `mytj`,
+  `bitj`, `bytj` are identically shaped and imperfective, and `kupitj` and
+  `govoritj` are both class 4. It is stored.
+- **`po-` is delimitative, not empty.** `poczitatj` "read for a while"
+  re-imperfectivizes to `poczityvatj`, which would be pointless if `po-`
+  contributed nothing.
+- **The aspect partner is therefore stored**, since which prefix bleaches is
+  unpredictable per verb (`proczitatj`, `napisatj`, `sdjelatj`).
+- **§7.2a — determinate/indeterminate motion pairs are kept** (`idti`/`hoditj`),
+  a third axis inherited from OCS. Suppletive, and the one place §1's removal of
+  suppletion does not reach.
+
+§1's "Removed: lexical aspect pairing" is gone. What Ruthenian removes is lexical
+*irregularity* around aspect, not aspect as a lexical fact.
+
+#### Closed against restoration
+
+The **middle voice** (lost in all Slavic; would roughly double the verb paradigm
+for a category no Slavic language attests), **vowel quantity** (Russian has none,
+and pure ASCII cannot write it), and a **distinct ablative plural** — PIE does
+not have one either, ablative and dative being syncretic in the plural
+throughout, so `OPEN_QUESTIONS.md`'s suggestion to revive PIE `*-i̯os` was struck
+as an error rather than left as a live option.
+
+The **supine** was specified in §7.10a and has been **withdrawn**; §10.5 now uses
+the infinitive or a `da` clause for purpose. It remains open rather than rejected.
+
 - **The project is a constructed language, not a Russian NLP tool.**
   `DIRECTION.md` had opened by denying the specification — "Ruthenian is Russian
   written in a Latin alphabet", "every lemma comes from attested Russian", "not a
