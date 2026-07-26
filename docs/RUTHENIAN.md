@@ -65,7 +65,7 @@ materials may mark it; running text never does.
 > Interslavic's etymological alphabet — would let one spelling distinguish what
 > the standard orthography merges: yat (`ě`) from `e`, the nasals (`ę`, `ǫ`), the
 > jers, and stress. It is **not** part of the standard language and is deferred
-> until the lexicon can supply the etymological information (§10).
+> until the lexicon can supply the etymological information (§12).
 
 ## 2.2 Consonants
 
@@ -256,7 +256,7 @@ vowel alone.
 
 Ruthenian has three declensions, not Russian's eight. The velar, sibilant, `c`
 and vowel stem-classes of Russian are **not separate declensions** — they are the
-same endings with automatic spelling adjustments (§2.7).
+same endings with automatic spelling adjustments (§3.8).
 
 | Declension | Contents | Example |
 |---|---|---|
@@ -282,7 +282,7 @@ Each has a **hard** and a **soft** variant; the soft variant substitutes `je` fo
 | instrumental | `domom` | `domoma` | `domami` |
 | locative | `domi` | `domu` | `domah` |
 
-¹ animate nouns take the genitive form in the accusative (§2.6).
+¹ animate nouns take the genitive form in the accusative (§3.7).
 
 ### Soft: `konj` "horse" (stem `kon-`)
 
@@ -535,9 +535,10 @@ ablative proper.
 
 # 5. Pronouns
 
-## 5.1 Personal
+Pronouns decline **pronominally** — the declension the long adjective borrows
+(§4.2). All have dual forms.
 
-The dual pronouns are restored from OCS (`vě` "we two", `va` "you two").
+## 5.1 Personal
 
 | | 1sg | 2sg | **1du** | **2du** | 1pl | 2pl |
 |---|---|---|---|---|---|---|
@@ -549,58 +550,205 @@ The dual pronouns are restored from OCS (`vě` "we two", `va` "you two").
 | instrumental | `mnoj` | `toboj` | `nama` | `vama` | `nami` | `vami` |
 | locative | `mnje` | `tjebje` | `naju` | `vaju` | `nas` | `vas` |
 
-Third person `on` / `ona` / `ono`, plural `oni`, dual `ona`, declining like
-`dobryj` with the pronominal stem `j-`: `jego`, `jemu`, `jim`, `jem`.
+`vje` "we two" and `va` "you two" are the OCS duals, restored.
 
-**The *n-* prefix** is kept: after a preposition, third-person forms beginning in
-`j-` take `nj-` — `u njego`, `s njim`, `k njej`. This is a Slavic innovation from
-a reanalysed preposition-final nasal, shared by all four East Slavic lects.
+### Third person
+
+| | Masc sg | Neut sg | Fem sg | Dual | Plural |
+|---|---|---|---|---|---|
+| nominative | `on` | `ono` | `ona` | `ona` | `oni` |
+| accusative | `jego` | `jego` | `ju` | `ja` | `jih` |
+| genitive | `jego` | `jego` | `jeje` | `jeju` | `jih` |
+| **ablative** | `jego` | `jego` | `jeje` | = dat | = dat |
+| dative | `jemu` | `jemu` | `jej` | `jima` | `jim` |
+| instrumental | `jim` | `jim` | `jeju` | `jima` | `jimi` |
+| locative | `jem` | `jem` | `jej` | `jeju` | `jih` |
+
+**The *n-* prefix.** After a preposition, every `j-`-initial form takes `nj-`:
+`u njego`, `s njim`, `k njej`, `o njih`. Pan-Slavic, from a reanalysed
+preposition-final nasal. It applies to prepositions only, never to a bare
+oblique.
 
 ## 5.2 Reflexive
 
-`sjebja` (acc/abl), `sjebjego` (gen), `sjebje` (dat/loc), `soboj` (ins). No
-nominative — the cell does not exist. The bound reflexive verb suffix is `-sja`.
+No nominative — the cell does not exist.
 
-## 5.3 Demonstrative and interrogative
+| | |
+|---|---|
+| accusative / ablative | `sjebja` |
+| genitive | `sjebjego` |
+| dative / locative | `sjebje` |
+| instrumental | `soboj` |
 
-`toj` / `ta` / `to` "this, that"; `kto` "who", `czto` "what", declining
-pronominally: `kogo`, `komu`, `kjem`, `kom`.
+The bound verbal reflexive is `-sja`, written attached: `myjetsja` "washes
+oneself".
 
----
+## 5.3 Possessive
+
+Possessives are **adjectives** and decline as such, in both long and short forms.
+
+| | Singular | Dual | Plural |
+|---|---|---|---|
+| 1st | `moj` | `naju` | `nasz` |
+| 2nd | `tvoj` | `vaju` | `vasz` |
+| reflexive | `svoj` — "one's own", any person | | |
+
+`svoj` is obligatory when the possessor is the subject: `on czitajet svoju
+knigu` "he reads his own book" against `on czitajet jego knigu` "he reads
+someone else's".
+
+The third person has **no** possessive adjective: the genitive of the personal
+pronoun is used, indeclinably — `jego dom`, `jeje dom`, `jih dom`.
+
+## 5.4 Demonstrative
+
+Two degrees, as OCS had: `sjej` "this (near)" and `toj` "that (far)". Russian
+lost the near deixis; Ruthenian keeps it.
+
+`toj` is the model for the whole pronominal declension:
+
+| | Masc sg | Neut sg | Fem sg | Dual | Plural |
+|---|---|---|---|---|---|
+| nominative | `toj` | `to` | `ta` | `ta` | `ti` |
+| accusative | `toj` / `togo` ¹ | `to` | `tu` | `ta` | `ti` / `tjeh` ¹ |
+| genitive | `togo` | `togo` | `toj` | `toju` | `tjeh` |
+| **ablative** | `toga` | `toga` | `toj` | = dat | = dat |
+| dative | `tomu` | `tomu` | `toj` | `tjema` | `tjem` |
+| instrumental | `tjem` | `tjem` | `toj` | `tjema` | `tjemi` |
+| locative | `tom` | `tom` | `toj` | `toju` | `tjeh` |
+
+¹ animate. `sjej` declines identically on the stem `sj-`: `sjego`, `sjemu`,
+`sjim`, `sjem`.
+
+## 5.5 Interrogative and relative
+
+| | "who" | "what" |
+|---|---|---|
+| nominative | `kto` | `czto` |
+| accusative | `kogo` | `czto` |
+| genitive | `kogo` | `czjego` |
+| **ablative** | `koga` | `czjega` |
+| dative | `komu` | `czjemu` |
+| instrumental | `kjem` | `czjem` |
+| locative | `kom` | `czjem` |
+
+`kto` is animate and `czto` inanimate, which is why `kto` has the
+genitive-accusative and `czto` does not.
+
+Also `czij` "whose", `kotoryj` "which", `kakyj` "what kind of" — all adjectival.
+
+**The relative pronoun is `izzje`** (OCS `иже`), inflecting as `toj` plus the
+invariant `-zzje`: `izzje`, `jegozzje`, `jemuzzje`. Russian lost it in favour of
+`который`; Ruthenian keeps both, `izzje` for restrictive clauses and `kotoryj`
+for non-restrictive.
+
+## 5.6 Negative and indefinite
+
+Built by prefix from the interrogatives — fully regular, no suppletion:
+
+| Prefix | Sense | Example |
+|---|---|---|
+| `ni-` | negative | `nikto`, `nicztozze`, `niczij`, `nikakyj` |
+| `nje-` | indefinite-specific ("a certain") | `njekto`, `njeczto`, `njekyj` |
+| `-libo` | indefinite-nonspecific ("any") | `kto-libo`, `czto-libo` |
+| `vjesj-` | universal | `vsjakyj` "every" |
+
+Negative pronouns require **double negation**: `nikto nje czitajet` "nobody
+reads" — the negative particle stays on the verb. Pan-Slavic and obligatory.
+
+When a preposition intervenes, the prefix separates, as in OCS and Russian:
+`ni u kogo` "at nobody's".
 
 # 6. Numerals
 
 ## 6.1 Government — the payoff of the dual
 
-Russian's genitive singular after 2–4 is petrified **dual** agreement. With a real
-dual, the rule is not simplified — it disappears:
+Russian's genitive singular after 2–4 is petrified **dual** agreement. With a
+real dual the rule is not simplified — it disappears:
 
 | Numeral | Governs | Example |
 |---|---|---|
 | `odin` | agrees, singular | `odin dom` |
 | **`dva`** | **the dual** | `dva doma` |
-| `tri`, `czjetyrje` | nominative plural | `tri domi` |
+| `tri`, `czjetyrje` | nominative plural | `tri domy` |
 | `pjatj` and above | genitive plural | `pjatj domov` |
 
-`dva doma` is not "genitive singular after two" — it is the nominative **dual**,
-which is what it originally was. There is no 11–14 exception and no last-digit
-rule: 5 and above always take the genitive plural.
+`dva doma` is the nominative **dual**, which is what it originally was. There is
+no 11–14 exception and no last-digit rule: five and above always take the
+genitive plural, and a compound numeral is governed by its **last word** —
+`dvadcatj dva doma` (dual), `dvadcatj pjatj domov` (genitive plural).
 
-## 6.2 Cardinals
+In oblique cases the numeral and noun simply agree: `s dvuma domoma` "with two
+houses", `s pjatju domami` "with five houses".
 
-`odin`, `dva`, `tri`, `czjetyrje`, `pjatj`, `sjestj`, `sjedjem`, `vosjem`,
-`djevjatj`, `djesjatj`, `sto`, `tysjacza`.
+## 6.2 Cardinals 1–10
 
-`odin` declines as an adjective and agrees. `dva` has dual forms (`dva` /
-`dvuh` / `dvuma`). `tri` and `czjetyrje` decline. From `pjatj` upward the
-numerals decline as declension III nouns — inherited behaviour, kept.
+| | | | |
+|---|---|---|---|
+| 1 `odin` | 2 `dva` | 3 `tri` | 4 `czjetyrje` |
+| 5 `pjatj` | 6 `szjestj` | 7 `sjedmj` | 8 `osmj` |
+| 9 `djevjatj` | 10 `djesjatj` | | |
 
-## 6.3 Ordinals
+## 6.3 Teens, tens, hundreds — regularized
 
-`pjervyj`, `vtoryj`, `trjetij`, `czjetvjortyj`, `pjatyj` … declining as
-adjectives.
+Teens are transparently "N on ten", contracted to `-nadcatj`:
 
----
+`odinnadcatj, dvanadcatj, trinadcatj, czjetyrnadcatj, pjatnadcatj,
+szjestnadcatj, sjedmnadcatj, osmnadcatj, djevjatnadcatj`
+
+Tens are "N tens", with **no exceptions**:
+
+| | | | |
+|---|---|---|---|
+| 20 `dvadcatj` | 30 `tridcatj` | 40 **`czjetyrjedjesjat`** | 50 `pjatjdjesjat` |
+| 60 `szjestjdjesjat` | 70 `sjedmjdjesjat` | 80 `osmjdjesjat` | 90 **`djevjatjdjesjat`** |
+
+Russian's `сорок` (40) and `девяносто` (90) are lexical oddities with no
+transparent structure; Ruthenian regularizes both onto the pattern.
+
+Hundreds: `sto, dvjestje, trista, czjetyrjesta, pjatjsot, szjestjsot,
+sjedmjsot, osmjsot, djevjatjsot`. Then `tysjacza` (1 000), `miljon`, `miljard`.
+
+## 6.4 Declension
+
+`odin` declines as a **long adjective** and agrees in gender, number and case:
+`odin dom`, `odnogo doma`, `odnoj zzeny`.
+
+`dva` is a **dual** form and has only dual endings:
+
+| | Masc/neut | Fem |
+|---|---|---|
+| nom / acc | `dva` | `dvje` |
+| gen / loc | `dvu` | `dvu` |
+| dat / ins / abl | `dvjema` | `dvjema` |
+
+`tri` and `czjetyrje` decline as plurals:
+
+| | `tri` | `czjetyrje` |
+|---|---|---|
+| nominative | `tri` | `czjetyrje` |
+| genitive / locative | `trjeh` | `czjetyrjeh` |
+| dative | `trjem` | `czjetyrjem` |
+| instrumental | `trjemi` | `czjetyrjmi` |
+
+`pjatj` and above decline as **declension III** nouns (`noczj`): `pjatj`,
+`pjati`, `pjati`, `pjatj`, `pjatjju`, `pjati`. This is inherited — the higher
+numerals were feminine *i*-stem nouns in OCS and still behave like them.
+
+## 6.5 Ordinals
+
+Adjectives, long or short: `pjervyj, vtoryj, trjetij, czjetvjortyj, pjatyj,
+szjestyj, sjedmyj, osmyj, djevjatyj, djesjatyj`, then `odinnadcatyj` and so on;
+`sotyj`, `tysjacznyj`.
+
+## 6.6 Collectives and fractions
+
+Collective numerals count groups and mixed-gender sets, and govern the genitive
+plural: `dvoje, troje, czjetvjero, pjatjero, szjestjero, sjedmjero`. `dvoje
+djetjej` "two children".
+
+Fractions: `polovina` (½), `trjetj` (⅓), `czjetvjertj` (¼), thereafter the
+ordinal — `pjataja czastj` (⅕). `poltora` "one and a half" takes the dual.
 
 # 7. Verbs
 
@@ -763,6 +911,20 @@ Imperative: present stem + `-i`, or the bare stem after `j`.
 
 Conditional: `l`-participle + the invariant particle `by` — `czital by`.
 
+## 7.10a The supine
+
+OCS distinguished the infinitive from the **supine**, a separate form used for
+purpose after verbs of motion. Ruthenian keeps it: the infinitive ends `-tj`, the
+supine `-t`.
+
+| | Form | Use |
+|---|---|---|
+| infinitive | `lovitj` | complement — `hoczu lovitj` "I want to hunt" |
+| **supine** | `lovit` | purpose after motion — `idu lovit` "I go **in order to** hunt" |
+
+The supine governs the **genitive**, not the accusative, which is the inherited
+construction: `idu lovit zvjerjej` "I go to hunt beasts".
+
 ## 7.11 Present-stem mutation
 
 Applied **by class**, never by stem shape: a class-1 verb with a labial-final
@@ -793,27 +955,262 @@ any adjective — the short passive participle is how the passive is built:
 Their **existence** is structural: a perfective verb has no present participles
 or present gerund; an intransitive verb has no passive participle.
 
-# 8. The closed classes
+# 8. Word formation
 
-**Adverbs** are formed from adjectives in `-o`: `dobro` "well". Comparatives
-follow the adjective: `dobrjejje`.
+§12.4 ranks a native coinage above a Graeco-Latin borrowing. This section is the
+machinery that makes that possible: a fixed, productive inventory of affixes with
+which any root can be extended. Every suffix below is inherited and every one is
+regular — the seam alternations are those of §2.4 and nothing else.
 
-**Prepositions** govern case, and which case is lexical — it is listed in the
-dictionary, not derived. Ruthenian's ablative gives several prepositions a more
-transparent government than Russian's: `iz doma` "out of the house" takes the
-ablative, not the genitive.
+## 8.1 Nouns from verbs
 
-**Conjunctions** (`i`, `a`, `no`, `czto`, `jesli`), **particles** (`zzje`, `li`,
-`by`, `nje`) and **interjections** are indeclinable and lexical.
+| Suffix | Meaning | Gender | Example |
+|---|---|---|---|
+| `-nije` | the action, verbal noun | neut. II | `czitatj` → `czitanije` "reading" |
+| `-tjelj` | the agent | masc. II | `czitatj` → `czitatjelj` "reader" |
+| `-tjeljstvo` | the agent's activity | neut. II | → `czitatjeljstvo` |
+| `-tjeljka` | female agent | fem. I | → `czitatjeljka` |
+| `-ba` | the action, concrete | fem. I | `boritj` → `borjba` "struggle" |
+| `-ok` | a single instance | masc. II | `brositj` → `brosok` "a throw" |
+| `-lo` | the instrument | neut. II | `mytj` → `mylo` "soap" |
 
-**Negation takes the genitive.** `nje vizzu domogo` "I do not see the house" —
-the genitive of negation, which OCS has and which Polish still requires
-obligatorily. It is pan-Slavic, not a Russian complication, so Ruthenian keeps
-it.
+`-nije` is formed on the **past** stem and takes iotation: `poczitatj` →
+`poczitanije`, `vidjetj` → `vidjenije`.
+
+## 8.2 Nouns from nouns and adjectives
+
+| Suffix | Meaning | Gender | Example |
+|---|---|---|---|
+| `-ostj` | abstract quality | fem. III | `dobr` → `dobrostj` "goodness" |
+| `-stvo` | abstract or collective | neut. II | `czjelovjek` → `czjelovjeczstvo` |
+| `-nik` | agent, person concerned with | masc. II | `uk-` → `ucznik` "pupil" |
+| `-ica` | female, or the thing | fem. I | `car` → `carica` |
+| `-ka` | female, diminutive | fem. I | `ruka` → `ruczka` |
+| `-jec` | member, agent | masc. II | `borjec` "fighter" |
+| `-iszcze` | augmentative, place | neut. II | `dom` → `domiszcze` |
+| `-ok`, `-jek` | diminutive | masc. II | `dom` → `domok` |
+| `-cze` | diminutive | neut. II | `okno` → `okoncze` |
+
+`-ostj` is the productive abstract suffix and attaches to the **short**
+adjective: `dobr` → `dobrostj`, not `*dobryjostj`.
+
+## 8.3 Adjectives
+
+| Suffix | Meaning | Example |
+|---|---|---|
+| `-n-` | general relational | `dom` → `domnyj` |
+| `-sk-` | relational, of a place or people | `russ` → `russkyj` |
+| `-ov-`, `-in-` | possessive, of a specific owner | `otjec` → `otcov`, `zzena` → `zzenin` |
+| `-liv-` | inclined to | `czastj` → `czastlivyj` "fortunate" |
+| `-at-` | provided with | `boroda` → `borodatyj` "bearded" |
+| `-jenn-` | made of | `djerjevo` → `djerjevjennyj` |
+
+Possessive adjectives in `-ov`/`-in` are **short-form only** and are the normal
+way to say "X's" for a specific person, in place of a genitive: `otcov dom`
+"father's house".
+
+## 8.4 Verbs
+
+| Suffix | Meaning | Example |
+|---|---|---|
+| `-ova-` | denominal, do/be an X | `car` → `carovatj` |
+| `-i-` | causative / transitive | `bjel` → `bjelitj` "to whiten" |
+| `-nu-` | semelfactive, one instance | `dvig-` → `dvinutj` |
+| `-a-` | durative | `sjed-` → `sjedatj` |
+| `-yva-` | secondary imperfective (§7.2) | `napisatj` → `napisyvatj` |
+
+## 8.5 Prefixes
+
+Verbal prefixes carry meaning **and** perfectivize (§7.2):
+
+| | | | |
+|---|---|---|---|
+| `po-` empty perfectivizer | `na-` onto, a quantity | `za-` behind, beginning | `pri-` arrival |
+| `pjerje-` across, re- | `vy-` out | `do-` up to, completion | `ot-` away |
+| `pod-` under | `nad-` over | `raz-` apart | `s-` together, down |
+| `u-` away, completion | `v-` into | `iz-` out of | `pro-` through |
+
+Nominal and adjectival prefixes: `nje-` (negation, `njedobryj`), `bjez-`
+(without, `bjezdomnyj`), `so-` (co-, `sobjesjednik`), `pra-` (ancestral,
+`pradjed`), `naj-` (superlative).
+
+## 8.6 Compounding
+
+Two roots join with a **linking vowel** — `-o-` after a hard stem, `-je-` after a
+soft or sibilant one:
+
+`vod-o-provod` "water-conduit", `pol-je-vodstvo` "field-husbandry",
+`czjern-o-zjem` "black-earth".
+
+Compounding is fully productive and is the preferred device for coining
+technical vocabulary, ahead of Graeco-Latin borrowing (§12.4). `zjemljeopisanije`
+"geography" is available where `gjeografija` would otherwise be borrowed; both
+are well-formed and the choice is one of register.
 
 ---
 
-# 9. Summary of paradigm sizes
+# 9. The closed classes
+
+## 9.1 Adverbs
+
+Formed from the **short** adjective in `-o`, or `-je` after a soft stem:
+`dobro` "well", `iskrjennje` "sincerely". Comparatives follow the adjective:
+`dobrjejje`. Adverbs of place and time distinguish location from goal, as OCS
+did: `tu` "here" against `sjemo` "to here", `tam` / `tamo`.
+
+## 9.2 Prepositions and their government
+
+Government is lexical but the inventory is closed, so it is listed here in full.
+Ruthenian's ablative absorbs the "source" senses that Russian expresses with the
+genitive, which makes the system more transparent, not less.
+
+| Case | Prepositions | Sense |
+|---|---|---|
+| **ablative** | `iz`, `ot`, `s` (down from), `do` (starting from) | **source, origin, motion away** |
+| genitive | `u`, `bjez`, `dlja`, `okolo`, `protiv`, `vmjesto`, `krome`, `radi` | possession, relation, absence |
+| dative | `k`, `po` (along), `blagodarja` | goal, recipient |
+| accusative | `v`, `na`, `za`, `pod`, `czjerjez`, `pro`, `skvozj` | motion **into**, direction |
+| instrumental | `s` (together with), `za`, `pod`, `nad`, `mjezzdu`, `pjerjed` | accompaniment, location behind/above |
+| locative | `v`, `na`, `o`, `pri`, `po` (after) | location **in**, topic |
+
+Four prepositions govern two cases and the contrast is meaningful:
+
+| | + accusative | + locative |
+|---|---|---|
+| `v` | `v dom` "into the house" | `v domi` "in the house" |
+| `na` | `na stol` "onto the table" | `na stoli` "on the table" |
+| | **+ accusative** | **+ instrumental** |
+| `za` | `za dom` "to behind the house" | `za domom` "behind the house" |
+| `pod` | `pod dom` "to under the house" | `pod domom` "under the house" |
+
+And the ablative/instrumental pair on `s`:
+
+`s doma` "down from the house" (ablative) against `s domom` "with the house"
+(instrumental). Russian collapses the first into the genitive and loses the
+symmetry.
+
+## 9.3 Conjunctions
+
+Coordinating: `i` "and", `a` "and/but (contrastive)", `no` "but", `ili` "or",
+`ni…ni` "neither…nor". Subordinating: `czto` "that", `jesli` "if", `kogda`
+"when", `poka` "while", `jako` "as, since", `da` "so that".
+
+## 9.4 Particles
+
+`zzje` (emphatic), `li` (interrogative), `by` (conditional), `nje` (negation),
+`ni` (emphatic negation), `-to` (definitizing), `vot` (presentative), `li…li`
+(alternative). All are second-position clitics except `nje`, which is proclitic
+to the verb.
+
+## 9.5 Negation
+
+`nje` immediately precedes the verb. **Negation takes the genitive** for the
+direct object: `nje vizzu domogo` "I do not see the house" — the genitive of
+negation, which OCS has and Polish still requires obligatorily. It is pan-Slavic,
+not a Russian complication.
+
+Negative pronouns require double negation (§5.6): `nikto nje czitajet`.
+
+# 10. Syntax
+
+## 10.1 Word order
+
+Free, and used for **information structure** rather than grammatical relations —
+the case system already marks those. The unmarked order is **SVO**; anything
+fronted is topical, anything final is focal.
+
+```
+Ivan czitajet knigu.        Ivan reads a book.        (neutral)
+Knigu czitajet Ivan.        It is Ivan who reads the book.
+Czitajet Ivan knigu.        Ivan is READING the book.
+```
+
+Because the accusative `knigu` is distinct from the nominative `kniga`, no order
+is ambiguous. Within a noun phrase, order is fixed: demonstrative — possessive —
+adjective — noun (`ta moja dobraja kniga`).
+
+## 10.2 Agreement
+
+| Agrees with the head in | |
+|---|---|
+| adjectives, participles, ordinals, `odin` | gender, number, case, **and definiteness** |
+| the verb, present and future | person, number |
+| the verb, past (`l`-participle) | gender, number |
+| the copula | person, number |
+
+Definiteness agreement is the feature Russian lacks: a definite noun phrase takes
+long-form modifiers throughout — `ta dobraja kniga`, not `*ta dobra kniga`.
+
+**Dual agreement is obligatory.** Two of anything takes dual modifiers and a dual
+verb: `ta dobraja knizi jesta` "those two good books are".
+
+## 10.3 Definiteness without an article
+
+The long/short adjective (§4) is the only definiteness marker:
+
+```
+dobr czjelovjek jestj zdjesj.     A good man is here.
+dobryj czjelovjek jestj zdjesj.   The good man is here.
+```
+
+Where a noun phrase has no adjective, definiteness is unmarked — as in every
+Slavic language except Bulgarian and Macedonian. The particle `-to` may
+optionally definitize a bare noun (`dom-to`), which is colloquial rather than
+grammatical.
+
+## 10.4 Questions
+
+Three devices, in ascending formality:
+
+1. **Intonation alone** — `ty czitajeszj?`
+2. **The clitic `li`**, in second position — `czitajeszj li ty?` This is the
+   neutral written question.
+3. **An interrogative word**, fronted — `czto ty czitajeszj?`
+
+## 10.5 Subordination
+
+| Conjunction | Use |
+|---|---|
+| `czto` | statement complement — `znaju, czto on czitajet` |
+| `cztoby` | purpose or irrealis complement — `hoczu, cztoby on czital` |
+| `jesli` | condition — `jesli by on czital…` |
+| `kogda`, `poka` | time |
+| `jako` | cause, manner |
+
+Relative clauses use `izzje` when restrictive and `kotoryj` when
+non-restrictive (§5.5). The relative agrees with its antecedent in gender and
+number but takes its case from **its own clause**:
+
+```
+czjelovjek, jegozzje vizzu…        the man whom I see…      (acc in its clause)
+czjelovjek, izzje czitajet…        the man who reads…       (nom in its clause)
+```
+
+Purpose after a verb of motion uses the **supine** (§7.10a), not a `cztoby`
+clause: `idu lovit`, not `*idu, cztoby lovitj`.
+
+## 10.6 The cases in use
+
+| Case | Bare use | With a preposition |
+|---|---|---|
+| nominative | subject; predicate noun with the copula | — |
+| vocative | address | — |
+| accusative | direct object; duration | motion into (§9.2) |
+| genitive | possession; the object of negation; after 5+ | absence, relation |
+| **ablative** | standard of comparison; cause | **source, motion away** |
+| dative | indirect object; the logical subject of impersonals | goal |
+| instrumental | means; the predicate of `byti` in the past | accompaniment |
+| locative | — (never bare) | location, topic |
+
+The locative is the only case that **cannot** occur without a preposition —
+inherited, and true of every Slavic language.
+
+The instrumental predicate is worth noting: `on jestj vracz` (nominative,
+permanent) against `on byl vraczom` (instrumental, temporary or past role).
+
+---
+
+# 11. Summary of paradigm sizes
 
 Distinct **surface forms**, after syncretism — 24 nominal cells (8 cases × 3
 numbers) never yield 24 forms:
@@ -840,9 +1237,9 @@ heteroclitic stems, eight declensions — cost more than what was added.
 
 ---
 
-# 10. The lexicon: sources and borrowing
+# 12. The lexicon: sources and borrowing
 
-## 10.1 Why the lexicon is multi-source
+## 12.1 Why the lexicon is multi-source
 
 Ruthenian's vocabulary is drawn from all of East Slavic, plus Polish and Old
 Church Slavonic, plus a rule-governed borrowing system. This is not eclecticism:
@@ -866,7 +1263,7 @@ Measured lemma inventories, each from a full scan:
 | Belarusian | 6 899 |
 | Old Church Slavonic | 4 311 |
 
-## 10.2 How a Ruthenian word is chosen
+## 12.2 How a Ruthenian word is chosen
 
 A Ruthenian lemma is not "the Russian word transliterated". It is the reflex the
 **Proto-Slavic etymon** would have in Ruthenian's phonology, with the attested
@@ -890,7 +1287,7 @@ Where reconstruction is uncertain, the entry records that. A form derived from
 one language's reflex is not the same claim as one attested across four, and
 `Provenance` must distinguish them (`docs/specs/ruthenian-lexicon.md`).
 
-## 10.3 Borrowing: the regularized system
+## 12.3 Borrowing: the regularized system
 
 International vocabulary is adapted by rule rather than borrowed ad hoc, so that
 `nacija` is predictable from *natio* rather than memorized from Russian.
@@ -945,7 +1342,7 @@ regularization by *addition* — the loan is naturalized rather than quarantined
 Loans take **fixed stress on the syllable stressed in the source**, and keep it
 throughout the paradigm. No mobile patterns, ever.
 
-## 10.4 The layers are ordered
+## 12.4 The layers are ordered
 
 When two sources could supply a word, the earlier layer wins:
 
@@ -962,7 +1359,7 @@ not, by rule rather than by taste.
 
 ---
 
-# 11. Open questions
+# 13. Open questions
 
 Settled in this revision: the copula (full, with dual), aspect (rule-derived),
 the masculine dative (`-u`), negation (genitive), the alphabet (pure ASCII, no
@@ -974,7 +1371,7 @@ Still open:
 1. **The etymological alphabet.** A diacritic notation for dictionaries — ASCII
    plus diacritics, on the model of Interslavic's — distinguishing yat, the
    nasals, the jers and stress. Deferred until the lexicon can supply the
-   etymological information (§10.2). The standard orthography stays pure ASCII
+   etymological information (§12.2). The standard orthography stays pure ASCII
    regardless.
 2. **Ablative in the plural.** No attested language distinguishes it; Ruthenian
    follows. A maximally conservative variant could revive PIE `*-ios`.
@@ -983,7 +1380,7 @@ Still open:
    "maximum grammar" brief.
 4. **The middle voice.** Lost in all Slavic, its work done by `-sja`. Restoring
    it would be the most radical available conservatism.
-5. **Cognate grouping.** §10.2 — the unsolved lexicon problem. Explicit
+5. **Cognate grouping.** §12.2 — the unsolved lexicon problem. Explicit
    Proto-Slavic links cover 5 517 etyma with only 88 attested across all five
    source languages. Needs phonological matching and gloss pivoting; its own
    phase.
@@ -995,15 +1392,17 @@ Still open:
    of motion (`idǫ loviti` vs `idǫ lovitъ`). Not yet specified; it would fit the
    brief.
 
+## Written in this revision
+
+Word formation (§8), the full numeral system (§6), the full pronoun system
+including possessives, demonstratives, relatives and the negative/indefinite
+series (§5), the preposition-government table (§9.2), syntax (§10), and the
+supine (§7.10a).
+
 ## Still to write
 
-Not questions — work outstanding on this document:
-
-- **derivation** (§10.4 layer 4 assumes it): agent, abstract, diminutive and
-  verbal-noun suffixes, the prefix inventory, compounding;
-- **numerals in full**: 11–20, tens, hundreds, the declension of `dva`/`tri`/
-  `czjetyrje`, collectives, fractions;
-- **pronouns in full**: possessives, the declined demonstratives and
-  interrogatives, the negative and indefinite series;
-- **a preposition/case government table**, now that there are eight cases;
-- **syntax**: word order, agreement, questions, subordination.
+- **a phonological rule for the fleeting vowel** stated over the jer positions
+  rather than over consonant clusters, now that §2 gives a phoneme inventory;
+- **worked example texts** — the spec has paradigms but no connected prose, and
+  nothing tests a grammar like translating a page into it;
+- **a frequency-ordered core vocabulary**, which the lexicon phase will produce.
