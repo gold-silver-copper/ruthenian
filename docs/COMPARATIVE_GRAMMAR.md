@@ -489,6 +489,9 @@ enclitic, and both continue PIE second-position clitics.
 
 # 13. Designing Ruthenian: conservative but regular
 
+> The conclusions of this part are specified normatively, with full paradigms and
+> example words, in [`RUTHENIAN.md`](RUTHENIAN.md). What follows is the reasoning.
+
 The brief: **more conservative than Russian or Ukrainian, but more regular than
 either**, carrying the **ablative, vocative and dual**. The tables above make
 that a solvable problem rather than a wish, because they say precisely what a

@@ -1,5 +1,11 @@
 # Ruthenian — direction
 
+> **The language itself is specified in [`docs/RUTHENIAN.md`](docs/RUTHENIAN.md)**
+> — eight cases, three numbers, three declensions, with the etymology of each
+> restored category. The research behind it is in
+> [`docs/COMPARATIVE_GRAMMAR.md`](docs/COMPARATIVE_GRAMMAR.md) and
+> [`docs/RUSSIAN_GRAMMAR.md`](docs/RUSSIAN_GRAMMAR.md).
+
 ## What Ruthenian is
 
 Ruthenian is **Russian written in a Latin alphabet, and slightly more regular
