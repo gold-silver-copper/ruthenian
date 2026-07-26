@@ -30,8 +30,10 @@ inflector fits in ~1 MB. The coupling is explicit and enforced: "changing any
 rule here changes what counts as irregular and REQUIRES regenerating the
 tables," guarded by `rule_table_sync` and `regular_rules_golden`, with
 `cargo xtask accuracy` as the authoritative check. Ruthenian: this is the whole
-storage strategy. The Zaliznyak class plus productive rules predict most forms;
-the lexicon stores the residue.
+storage strategy. Ruthenian's own three declensions and six conjugation classes
+plus the productive rules predict most forms; the lexicon stores the residue.
+For a language specified to be regular, that residue should be small, and a
+large one is a signal that the rules or the specification is wrong.
 
 **A3. Stay typed until the last possible moment; stringify exactly once.**
 The PR #34 review's root cause R1 was premature flattening to `Vec<String>` plus
@@ -217,15 +219,23 @@ without a count of what was dropped and why (slovowiki's coverage JSON records
 `dropped_redirect_no_senses`, `dropped_multiword`, `dropped_non_content_pos`,
 `dropped_no_real_gloss`).
 
-## The five things Ruthenian must do differently
+## The six things Ruthenian must do differently
 
 1. **One engine, one result type, from day one** — the CLI and the eval read the
    same `Result`, so the published number always describes the shipped tool (A1).
-2. **Rules predict, tables hold the residue** — Zaliznyak class + productive
-   morphology as the compression scheme, with regeneration enforced (A2).
-3. **Provenance and policy on every form** — attested / rule-derived /
-   regularized-by-rule-X, queryable, not just documented (B1, and the whole
-   regularization idea depends on it).
+2. **Rules predict, tables hold the residue** — Ruthenian's declension and
+   conjugation classes + productive morphology as the compression scheme, with
+   regeneration enforced (A2).
+3. **Provenance on every form and every lemma** — a form is rule-derived,
+   stored, or produced under an optional variant; a lemma names the cognates its
+   reconstruction rests on and how far it had to reach. Queryable, not just
+   documented (B1).
+6. **Measure against the specification, not against a source language** — the
+   lesson this project had to learn on itself rather than inherit. Ruthenian is
+   specified, not attested, and most of its cells have no counterpart in any
+   natural language, so an "accuracy against Russian" figure would silently score
+   the overlapping minority and improve as the language drifted toward Russian
+   (`INVARIANTS.md` I3, I7).
 4. **Guards with failure witnesses, in a registry, from the first crate** — not
    accumulated around symptoms later (D1, D2).
 5. **Structure over strings at every boundary** — the mistake `interslavic` paid
