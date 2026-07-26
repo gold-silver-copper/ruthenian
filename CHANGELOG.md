@@ -142,6 +142,26 @@ them to keep eight cases distinguishable.
   or the loss of `budu`. One suppletive verb is cheaper than either, and it is now
   the language's only one.
 
+- **§7.3 — the conjugation classes are restated by operation**, closing a gap
+  that left monosyllabic vowel stems in no class at all. `mytj`, `pitj`, `bitj`,
+  `krytj`, `grjetj` matched none of the six: class 1 was written as `-atj`, class
+  4 as `-itj`, and reading `pitj` as class 4 would drop its theme vowel and leave
+  `*p-`, a stem of one consonant.
+
+  The fix is that a class is defined by **what it does to the stem**, not by how
+  the infinitive ends — which the section already implied, since classes 1 and 6
+  share `-atj` and differ only in operation. A monosyllabic stem has no theme
+  vowel to drop, the vowel being the root itself, so it takes class 1's operation:
+  `mytj` → `myj-`, `pitj` → `pij-`, exactly OCS `myti, myjǫ` and `piti, pijǫ`.
+  The count stays at six.
+
+  This also narrows what the class parameter is for. Stated by operation, every
+  ending determines its own class — `-itj` and `-jetj` by whether the stem is
+  monosyllabic — **except `-atj`**, which is genuinely undecidable between 1 and
+  6. A small residue remains: verbs whose root-final consonant the infinitive
+  hides (`zzitj` → `zziv-`, `plytj` → `plyv-`) take a listed present stem, the
+  same treatment §7.2 gives the inherently perfective verbs.
+
 - **§5.1 — the post-prepositional `n-` prefix is dropped**: `u jego`, not
   `u njego`. This is the one regularization with **no Slavic precedent** — OCS,
   Russian, Ukrainian, Belarusian, Polish and Interslavic all carry it — and the

@@ -276,7 +276,10 @@ and the list is short:
 |---|---|
 | **gender** (nouns) | `konj` "horse" is masculine declension II; `noczj` "night" is feminine declension III. Both end in `j`. No rule separates them. |
 | **animacy** (nouns) | The accusative depends on it — `vizzu dom` against `vizzu druga` (§3.7) — and nothing in the string marks it. |
-| **class** (verbs) | `-atj` is class 1 or class 6 (§7.3): `czitatj` → `czitaj-`, `pisatj` → `pisz-`. |
+| **class** (verbs) | Only `-atj` is undecidable — class 1 or class 6 (§7.3): `czitatj` → `czitaj-` against `pisatj` → `pisz-`. Every other ending determines its class, `-itj` and `-jetj` by whether the stem is monosyllabic. |
+
+A caller may still pass a class for any verb — it is a parameter, not a hint —
+but for everything except `-atj` it merely confirms what the ending already says.
 
 **Aspect is not on that list**, which is worth stating because it was on an
 earlier version. The endings are identical for both aspects, so aspect never

@@ -109,6 +109,11 @@ forgotten.
   so it has to be enumerated. Roughly 100–200 verbs, identifiable from Russian
   aspect metadata in the dump.
 
+- **The hidden-consonant verb list** (§7.3). Verbs whose root-final consonant the
+  infinitive does not show — `zzitj` → `zziv-`, `plytj` → `plyv-` — take a listed
+  present stem. A small closed set, identifiable from Russian present stems in
+  the dump.
+
 - **The aspect-partner mapping** (§7.2). Which prefix bleaches for each
   imperfective — `czitatj` → `proczitatj`, `pisatj` → `napisatj`. Also derivable
   from Russian pairs, and also a stored list.

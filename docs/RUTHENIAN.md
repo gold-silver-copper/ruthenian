@@ -1077,16 +1077,68 @@ and carries meaning nothing else expresses.
 
 ## 7.3 Conjugation classes
 
-Six, Zaliznyak's 1–6; classes 7–16 are regularized onto them.
+Six, corresponding to Zaliznyak's 1–6; his 7–16 are regularized onto them.
 
-| Class | Infinitive | Present stem | Conj. | Example |
+**A class is defined by what it does to the stem, not by how the infinitive
+ends.** Two classes share `-atj` and differ only in their operation, so the
+ending was never the definition:
+
+| Class | Present stem | Infinitives | Conj. | Example |
 |---|---|---|---|---|
-| 1 | `-atj` | stem + `j` | 1st | `czitatj` → `czitaj-` |
-| 2 | `-ovatj` | `ov` → `uj` | 1st | `njegodovatj` → `njegoduj-` |
-| 3 | `-nutj` | theme drops | 1st | `dvinutj` → `dvin-` |
-| 4 | `-itj` | theme drops, 1sg mutates | 2nd | `govoritj` → `govor-` |
-| 5 | `-jetj` | theme drops | 2nd | `vidjetj` → `vid-` |
-| 6 | `-atj` | theme drops, stem mutates | 1st | `pisatj` → `pisz-` |
+| 1 | theme vowel **stays**, `-j-` added | `-atj`, `-ytj`, monosyllabic `-itj` and `-jetj` | 1st | `czitatj` → `czitaj-`, `mytj` → `myj-`, `pitj` → `pij-` |
+| 2 | `ova` → `uj` | `-ovatj` | 1st | `njegodovatj` → `njegoduj-` |
+| 3 | theme drops | `-nutj` | 1st | `dvinutj` → `dvin-` |
+| 4 | theme drops, 1sg mutates | polysyllabic `-itj` | 2nd | `govoritj` → `govor-` |
+| 5 | theme drops | polysyllabic `-jetj` | 2nd | `vidjetj` → `vid-` |
+| 6 | theme drops, stem mutates | `-atj` | 1st | `pisatj` → `pisz-` |
+
+### Monosyllabic stems keep their vowel
+
+A verb whose stem is **one syllable** has no theme vowel to drop — the vowel *is*
+the root — so it takes class 1's operation regardless of which vowel it is:
+
+```
+mytj   → myj-    myju, myjeszj, myjet …      (OCS myti, myjǫ)
+pitj   → pij-    piju, pijeszj, pijet …      (OCS piti, pijǫ)
+bitj   → bij-    biju, bijeszj, bijet …      (OCS biti, bijǫ)
+krytj  → kryj-   kryju …                     (OCS kryti, kryjǫ)
+grjetj → grjej-  grjeju …                    (OCS grěti, grějǫ)
+```
+
+Without this, `-ytj` verbs belong to no class at all, and `pitj` would be read as
+class 4 and yield `*p-` — a stem of one consonant.
+
+### What the class actually disambiguates
+
+Once the classes are stated by operation, most infinitive endings determine the
+class by themselves:
+
+| Ending | Class | Derivable? |
+|---|---|---|
+| `-ovatj` | 2 | yes |
+| `-nutj` | 3 | yes |
+| `-itj` | 1 if the stem is monosyllabic, else 4 | **yes** |
+| `-jetj` | 1 if the stem is monosyllabic, else 5 | **yes** |
+| `-ytj` | 1 | yes |
+| `-atj` | **1 or 6** | **no** |
+
+So the only genuinely undecidable case is `-atj`: `czitatj` → `czitaj-` against
+`pisatj` → `pisz-`, where nothing on the surface says which. That is the whole
+reason a class has to be supplied at all.
+
+### The residue: stems with a hidden consonant
+
+A small closed set has a root-final consonant the infinitive does not show, so
+the monosyllabic rule predicts the wrong stem:
+
+| | infinitive | actual present stem | rule would give |
+|---|---|---|---|
+| "live" | `zzitj` | `zziv-` (OCS `žiti`, `živǫ`) | `*zzij-` |
+| "swim" | `plytj` | `plyv-` | `*plyj-` |
+
+These take a **listed present stem**, the same treatment §7.2 gives the
+inherently perfective verbs — a stored class, small and closed, not a rule. They
+are the only verbs where the class plus the infinitive is not enough.
 
 ## 7.4 Present
 
