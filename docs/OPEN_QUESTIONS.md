@@ -109,6 +109,12 @@ forgotten.
   so it has to be enumerated. Roughly 100–200 verbs, identifiable from Russian
   aspect metadata in the dump.
 
+- **The orthography crate must accept the word-final `'`** (§2.1). It currently
+  rejects a trailing hard sign, which predates the class mark, so
+  `Ruthenian::parse("pisatj'")` errors where the spec says it should succeed.
+  `to_cyrillic` should reject a marked lemma rather than emit `писатьъ`. The
+  Cyrillic-side rule is unchanged.
+
 - **The hidden-consonant verb list** (§7.3). Verbs whose root-final consonant the
   infinitive does not show — `zzitj` → `zziv-`, `plytj` → `plyv-` — take a listed
   present stem. A small closed set, identifiable from Russian present stems in

@@ -27,6 +27,20 @@ True **by construction**, not by accumulated special cases: the reader defines
 how Ruthenian is read, and the writer inserts a separator exactly where
 re-reading its own output would diverge.
 
+**Note the direction the contract is stated in.** It quantifies over *Cyrillic*
+strings, and that is deliberate: the guarantee needed is that transliterating
+source material loses nothing, so two Cyrillic words can never collapse into one
+Ruthenian word.
+
+It does **not** quantify over every Ruthenian string, and since
+`RUTHENIAN.md` §2.1 a Ruthenian word may end in `'` to mark an unpredicted
+inflectional class (`pisatj'`). No Cyrillic input can produce that — `ъ` may only
+stand before `е ё ю я и`, so a word-final hard sign is ill-formed Cyrillic — which
+means the mark never appears in a transliterated word and the contract above is
+untouched on its actual domain. Converting a *marked* lemma back to Cyrillic is
+undefined rather than wrong: the mark is Ruthenian's own morphology, and
+Ruthenian's orthography is not obliged to be expressible in another language's.
+
 | Measurement | Result |
 |---|---|
 | Corpus round-trip (`biblija_ru.txt`, 41 462 lines, 38 623 non-empty) | **0 failures** |
@@ -36,6 +50,19 @@ re-reading its own output would diverge.
 | Guards, each verified to fail under its stated mutation | 11 of 11 |
 
 Every count is printed by the guard that produced it. Measured 2026-07-25.
+
+> ### Known divergence: the word-final `'` is not yet accepted
+>
+> `Ruthenian::parse` currently rejects a trailing hard sign (`lib.rs`, the
+> `HardSignContext` check at end of input), which predates `RUTHENIAN.md` §2.1's
+> class mark. Until that check is relaxed, `Ruthenian::parse("pisatj'")` errors
+> where the specification says it should succeed.
+>
+> The change is small and local — a trailing `'` becomes valid, everything else
+> is unaffected — but it also needs `to_cyrillic` to reject a marked lemma
+> explicitly rather than emitting `писатьъ`, and it needs a guard pinning both.
+> The Cyrillic-side rule stays exactly as it is: `ъ` may still only stand before
+> `е ё ю я и`, so nothing about transliteration changes.
 
 ## Well-formedness is part of the alphabet
 

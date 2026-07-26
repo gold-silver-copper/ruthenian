@@ -142,6 +142,37 @@ them to keep eight cases distinguishable.
   or the loss of `budu`. One suppletive verb is cheaper than either, and it is now
   the language's only one.
 
+- **The conjugation class and the declension are now derived, and both enums are
+  gone from the API.** `noun` and `verb` take a word and grammar, nothing else.
+
+  Declension was free: it is a function of gender plus ending (feminine `-a` → I,
+  feminine consonant → III, masculine and neuter → II), and hardness is "the
+  citation form ends in `j`, `ja` or `je`". It was never a parameter, only a
+  public type.
+
+  The verb class needed one bit. After restating the classes by operation (below)
+  the only undecidable ending is `-atj`, class 1 against class 6 — a binary
+  choice. **§2.1 puts that bit in the word:** a word-final `'` marks a lemma whose
+  class is not the one its ending predicts, so `czitatj` is class 1 and `pisatj'`
+  is class 6, and the citation form alone determines the paradigm.
+
+  Word-finally the separator rule is vacuous — there is no next character — so
+  the position was genuinely free, and no Cyrillic input can produce a trailing
+  `'` because `ъ` may only stand before `е ё ю я и`. The round-trip contract is
+  therefore **narrowed rather than abandoned**: it quantifies over Cyrillic
+  strings, which is where the guarantee is actually needed, and a marked lemma is
+  outside its domain rather than a violation of it.
+
+  Two costs, both stated in the spec: `'` now has two jobs rather than one,
+  acceptable only because they are in complementary distribution; and the
+  unmarked spelling of a class-6 verb is a well-formed lemma of a different verb,
+  so `pisatj` yields `pisaju`. A lemma is written with its mark or it is a
+  different word.
+
+  **`ruthenian-orthography` does not implement this yet** — it rejects a trailing
+  hard sign — and the divergence is recorded in its README and in
+  `OPEN_QUESTIONS.md`.
+
 - **§7.3 — the conjugation classes are restated by operation**, closing a gap
   that left monosyllabic vowel stems in no class at all. `mytj`, `pitj`, `bitj`,
   `krytj`, `grjetj` matched none of the six: class 1 was written as `-atj`, class

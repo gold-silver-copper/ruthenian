@@ -97,10 +97,39 @@ new letter*. `sz'czi` is ш + ч rather than щ; `s'zadi` is с + з rather than
 Russian's hard sign is that same rule applied at a morpheme boundary
 (`pod'jezd`), so the two are one idea and not two.
 
-The correspondence is **bijective**, which is what makes the Cyrillic source
-languages mechanically readable. Its implementation, the context rules that make
-it invertible, and the round-trip evidence are in
+The correspondence is **bijective for every word transliterated from Cyrillic**,
+which is what makes the source languages mechanically readable. Its
+implementation, the context rules that make it invertible, and the round-trip
+evidence are in
 [`crates/ruthenian-orthography`](../crates/ruthenian-orthography/README.md).
+
+### The word-final `'` marks an unpredicted class
+
+Word-finally there is no next character, so the separator rule is vacuous there
+and the position is free. Ruthenian uses it: **a trailing `'` marks a lemma whose
+inflectional class is not the one its ending predicts.**
+
+```
+czitatj      class 1 — the prediction for -atj      czitaj-
+pisatj'      class 6 — marked, because it is not    pisz-
+```
+
+This is the one place the alphabet carries morphological rather than phonetic
+information, and it is what lets the class be **derived from the citation form**
+instead of supplied alongside it (§7.3).
+
+Two honest consequences:
+
+- **`'` now has two jobs**, not one. They are in complementary distribution — the
+  separator only ever occurs *between* letters, the class mark only ever at the
+  end — so no string is ambiguous, but the "one glyph, one rule" formulation is
+  no longer literally true.
+- **The mark has no Cyrillic counterpart.** No Cyrillic word can produce a
+  word-final `'`, because `ъ` may only stand before `е ё ю я и`, so the mark never
+  appears in a transliterated word and the round-trip contract is untouched on
+  its actual domain. Converting a *marked* lemma back to Cyrillic is simply
+  undefined: the mark is Ruthenian's own, and Ruthenian's orthography is not
+  obliged to be expressible in someone else's.
 
 **Stress is not written.** It is real, lexical and fixed per word, but ordinary
 text does not mark it — as in Russian, Ukrainian and Polish orthography, and as
@@ -1108,23 +1137,34 @@ grjetj → grjej-  grjeju …                    (OCS grěti, grějǫ)
 Without this, `-ytj` verbs belong to no class at all, and `pitj` would be read as
 class 4 and yield `*p-` — a stem of one consonant.
 
-### What the class actually disambiguates
+### The class is derived from the citation form
 
-Once the classes are stated by operation, most infinitive endings determine the
-class by themselves:
+Stated by operation, every ending decides its own class:
 
-| Ending | Class | Derivable? |
-|---|---|---|
-| `-ovatj` | 2 | yes |
-| `-nutj` | 3 | yes |
-| `-itj` | 1 if the stem is monosyllabic, else 4 | **yes** |
-| `-jetj` | 1 if the stem is monosyllabic, else 5 | **yes** |
-| `-ytj` | 1 | yes |
-| `-atj` | **1 or 6** | **no** |
+| Ending | Class |
+|---|---|
+| `-ovatj` | 2 |
+| `-nutj` | 3 |
+| `-itj` | 1 if the stem is monosyllabic, else 4 |
+| `-jetj` | 1 if the stem is monosyllabic, else 5 |
+| `-ytj` | 1 |
+| `-atj` | 1, **or 6 if the lemma carries the final `'`** |
 
-So the only genuinely undecidable case is `-atj`: `czitatj` → `czitaj-` against
-`pisatj` → `pisz-`, where nothing on the surface says which. That is the whole
-reason a class has to be supplied at all.
+`-atj` was the one genuinely undecidable case — `czitatj` → `czitaj-` against
+`pisatj` → `pisz-`, with nothing on the surface to separate them. The word-final
+mark (§2.1) supplies exactly the one bit needed, so **the citation form alone
+determines the class** and nothing has to be told to the inflection engine:
+
+```
+czitatj   → czitaj-   czitaju, czitajeszj, czitajet …
+pisatj'   → pisz-     piszu, piszeszj, piszet …
+```
+
+The mark is part of the lemma, not an argument, so it travels with the word
+wherever the word goes — in the lexicon, in a dictionary entry, in a citation.
+Its cost is that the *unmarked* spelling of a class-6 verb is a well-formed
+lemma of a different verb: `pisatj` would inflect as class 1 and yield `pisaju`.
+A lemma is written with its mark or it is a different word.
 
 ### The residue: stems with a hidden consonant
 

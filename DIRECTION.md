@@ -15,6 +15,10 @@ assert_eq!(noun("dom", Masculine, Inanimate, Genitive, Singular), "domogo");
 assert_eq!(noun("dom", Masculine, Inanimate, Ablative, Singular), "doma");
 assert_eq!(noun("dom", Masculine, Inanimate, Nominative, Dual),   "doma");
 assert_eq!(noun("drug", Masculine, Animate, Locative, Singular),  "druzi");
+
+// The class is in the lemma, not in the arguments: pisatj' is class 6.
+assert_eq!(verb("czitatj", First, Singular, NonPast), "czitaju");
+assert_eq!(verb("pisatj'", First, Singular, NonPast), "piszu");
 ```
 
 The goal is complete coverage: **every form of every word.** Given a citation
@@ -46,25 +50,24 @@ pub fn numeral(value: u64, case: Case, gender: Gender, animacy: Animacy) -> Stri
 // Verbs. `NonPast` is present for an imperfective and future for a perfective —
 // one slot, one form, meaning fixed by aspect (§7.8). Aspect is therefore NOT a
 // parameter: it changes what a form means, never what it looks like.
-pub fn verb(word: &str, class: VerbClass,
-            person: Person, number: Number, tense: FiniteTense) -> String;
+pub fn verb(word: &str, person: Person, number: Number,
+            tense: FiniteTense) -> String;
 
 // Person × Number. §7.10 has synthetic forms for five of the nine; the other
 // four return the present indicative, which is what the language's periphrastic
 // third-person imperative is built from (`da idjet`).
-pub fn imperative(word: &str, class: VerbClass,
-                  person: Person, number: Number) -> String;
+pub fn imperative(word: &str, person: Person, number: Number) -> String;
 
-pub fn participle(word: &str, class: VerbClass, kind: ParticipleKind,
-                  voice: Voice, case: Case, number: Number,
-                  gender: Gender, animacy: Animacy) -> String;
+pub fn participle(word: &str, kind: ParticipleKind, voice: Voice,
+                  case: Case, number: Number, gender: Gender,
+                  animacy: Animacy) -> String;
 
 // The parts the periphrastic tenses are built from.
 pub fn l_participle(word: &str, gender: Gender, number: Number) -> String;
 pub fn infinitive(word: &str) -> String;
 
 // `byti` is suppletive (§7.9) and belongs to no class, so it gets its own
-// function rather than a `VerbClass::Irregular` variant that every other call
+// function rather than an irregular-class escape hatch that every other call
 // site would have to handle and could never hit.
 pub fn byti(person: Person, number: Number, tense: FiniteTense) -> String;
 
@@ -257,8 +260,6 @@ pub enum AdjectiveForm { Short, Long }                       // definiteness —
 pub enum Degree { Positive, Comparative, Superlative }       // §4.3
 
 pub enum PronounStyle { Full, Clitic }                       // §5.1a
-pub enum Declension { First, Second, Third }                 // §3.2
-pub enum VerbClass { One, Two, Three, Four, Five, Six }      // §7.3
 ```
 
 Each is exhaustive and each maps to a numbered section of the specification. A
@@ -276,20 +277,27 @@ and the list is short:
 |---|---|
 | **gender** (nouns) | `konj` "horse" is masculine declension II; `noczj` "night" is feminine declension III. Both end in `j`. No rule separates them. |
 | **animacy** (nouns) | The accusative depends on it — `vizzu dom` against `vizzu druga` (§3.7) — and nothing in the string marks it. |
-| **class** (verbs) | Only `-atj` is undecidable — class 1 or class 6 (§7.3): `czitatj` → `czitaj-` against `pisatj` → `pisz-`. Every other ending determines its class, `-itj` and `-jetj` by whether the stem is monosyllabic. |
 
-A caller may still pass a class for any verb — it is a parameter, not a hint —
-but for everything except `-atj` it merely confirms what the ending already says.
+**Nothing about a verb is on that list.** The conjugation class used to be, but
+§7.3 now derives it from the citation form: every ending decides its own class,
+and `-atj` — the one genuinely ambiguous ending — is disambiguated by the
+word-final `'` that marks a class-6 lemma (§2.1). `pisatj'` carries its class in
+its spelling, so the engine is told nothing.
 
-**Aspect is not on that list**, which is worth stating because it was on an
-earlier version. The endings are identical for both aspects, so aspect never
+**Aspect is not on that list either**, which is worth stating because it was on
+an earlier version. The endings are identical for both aspects, so aspect never
 changes a form — only what `NonPast` means. A caller reasoning about *meaning*
 still needs it (and §7.2's closed perfective class still has to be stored
 somewhere), but that somewhere is not this crate.
 
 Everything else **is** derived, and storing any of it would be a bug:
 
-- **declension and hardness**, from gender plus the word's ending (§3.2);
+- **the conjugation class**, from the citation form's ending, plus the word-final
+  `'` where the ending alone is ambiguous (§7.3);
+- **declension and hardness**, from gender plus the word's ending (§3.2): a
+  feminine in `-a` is declension I, a feminine in a consonant is III, masculines
+  and neuters are II; a stem is soft exactly when the citation form ends in `j`,
+  `ja` or `je`;
 - **the stem**, which is the citation form itself, since there is no fleeting
   vowel (§3.9) — `son`, `sona`, `sonu`;
 - **the palatalizations**, from the ending's own trigger (§2.4, §3.8);
@@ -320,7 +328,7 @@ Short, and each falsifiable by a test.
 2. **One generation path.** `paradigm()` calls `form()`. A convenience wrapper
    that computes a form its own way is two implementations that will disagree.
 3. **Derive state; never store it.** No field duplicating something computable.
-   Declension, hardness, stem, gaps and palatalization are all derived. A stored
+   Class, declension, hardness, stem, gaps and palatalization are all derived. A stored
    flag drifts, and its dead branch becomes the bug.
 4. **Every function is total, and every fallback is declared.** No `Option`, no
    `Result`, no panic. Where the language has no form for a cell, the function
