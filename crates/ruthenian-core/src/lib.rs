@@ -39,9 +39,8 @@
 //!
 //! Verb classes 1–6 are implemented, which is **90.7 %** of Russian verb lemmas
 //! carrying a class code (11 584 of 12 773); every other class returns
-//! [`verb::Unsupported`]. Noun accent patterns `a` and `b` place stress
-//! (27 824 of 29 381 = **94.7 %** of attested nouns); `c`–`f` produce the correct
-//! segmental form and say so in the trace.
+//! [`verb::Unsupported`]. **All six** noun accent patterns place stress, from a
+//! table derived over 285 000 attested forms rather than quoted from a grammar.
 //!
 //! Accuracy on the random held-out sample — 5 747 attested cells drawn with a
 //! fixed seed from the whole dump, no hand-picking:
@@ -49,9 +48,9 @@
 //! | | segmental | strict (with stress) |
 //! |---|---:|---:|
 //! | adjective | 96.4 % | 91.6 % |
-//! | noun | 89.9 % | 81.9 % |
+//! | noun | 89.9 % | 83.4 % |
 //! | verb | 89.2 % | 86.9 % |
-//! | **all** | **90.5 %** | **86.1 %** |
+//! | **all** | **90.5 %** | **86.5 %** |
 //!
 //! The targeted fixture scores lower by design: it is a regression net over the
 //! hard tail, not a sample of the language (`INVARIANTS.md` I3).
