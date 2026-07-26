@@ -198,12 +198,31 @@ closed, nine-cell paradigm that the specification tabulates in full, so the
 function is checked against §7.9 by the same conformance corpus as everything
 else. If it ever grows a rule rather than a table, that exemption stops holding.
 
-One `interslavic-rs` idea does **not** transfer, and it is worth saying why.
-There, the future is periphrastic for *every* verb, so `byti`'s own future falls
-out for free as "auxiliary + empty string" — elegant, and it means no separate
-auxiliary function is needed. Ruthenian cannot do this: §7.8 gives perfectives a
-*synthetic* future built from present endings, so there is no universal
-periphrastic rule for `byti` to be a degenerate case of.
+### Where `budu` lives, and why it is a choice rather than a constraint
+
+`interslavic-rs` gets `byti`'s future for free: its future is periphrastic for
+*every* verb, so `bųdų byti` is emitted with the lexical verb elided and comes
+out as `bųdų`. One table serves both the auxiliary and the verb's own future.
+
+**That trick transfers to Ruthenian.** `byti` is imperfective, and Ruthenian's
+imperfective future *is* periphrastic — `budu` + infinitive (§7.8) — so `byti`'s
+future is the same rule with the infinitive elided. §7.8's synthetic *perfective*
+future is irrelevant here, because `byti` is not perfective; what it prevents is
+a single universal future rule for regular verbs, which is a different claim.
+
+So the `budu…` forms are one table, and the only question is what to call the
+function that holds it. `future_auxiliary` rather than `byti(.., Future)` because
+`FiniteTense` has no `Future` variant, and it has none because a regular verb's
+future is either **identical to its `NonPast`** (perfective) or **two words**
+(imperfective) — neither needs a slot of its own. `byti`'s future is the one
+one-word future form with nowhere else to live.
+
+That is a naming decision, not a structural one. Putting the table inside `byti`
+under a fourth tense value would work equally well and would cost one enum
+variant that only one verb can use; putting it in its own function costs one
+function name. Either is defensible, and `bǫd-` being a different root from
+`jes-` is the tiebreaker: the two are suppletively unified, not one stem inflected
+two ways, so naming them separately reflects what they are.
 
 Doing the composition here would mean doing agreement and word order, which is
 syntax, and the return value would stop being a word.
