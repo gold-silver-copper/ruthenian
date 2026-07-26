@@ -124,6 +124,24 @@ them to keep eight cases distinguishable.
   "he is the good one". OCS and Russian both state a *positional* rule; Ruthenian
   has made the contrast semantic, so banning a form in a position would discard a
   distinction the system already encodes.
+- **§7.9 — `byti`'s aorist corrected to `byh`.** It had been `bjeh`, which
+  continues OCS's *imperfect* stem `bě-`; the attested OCS aorist is `byxъ, by,
+  by, byxově, bysta, byste, byxomъ, byste, byšę`. The correction is worth more
+  than a form fix: §7.5's regular endings on the infinitive stem `by-` produce
+  exactly that paradigm, so **the aorist stops being irregular** — as does the
+  l-participle `byl`, on the same stem. `byti` keeps four irregular stems instead
+  of six, and §7.7's pluperfect becomes `byh czital`.
+
+  §7.9 now also records that **splitting `byti` into two verbs was considered and
+  declined.** `*h₁es-` supplies only the present, so the paradigm could be read as
+  a stative copula beside a dynamic "be, become" — a real distinction, and one
+  that would motivate §7.7's two auxiliaries. It was declined because the split
+  does not remove the suppletion: the `*bʰuH-` verb is itself `by-` against
+  `bud-`, so paying for it means regularizing onto one, and either choice loses
+  material every Slavic speaker knows on sight — `budjel` for the past of "to be",
+  or the loss of `budu`. One suppletive verb is cheaper than either, and it is now
+  the language's only one.
+
 - **§5.1 — the post-prepositional `n-` prefix is dropped**: `u jego`, not
   `u njego`. This is the one regularization with **no Slavic precedent** — OCS,
   Russian, Ukrainian, Belarusian, Polish and Interslavic all carry it — and the
@@ -139,7 +157,7 @@ them to keep eight cases distinguishable.
   accusative clitic OCS had, which Russian fused to the verb. **§5.2 makes it a
   free clitic** (`on sja myjet`), so one morph no longer has two grammars.
 - **§7.7 — two pluperfects**, distinguished by their auxiliary as in OCS:
-  `bjeh czital` "I had read" against `bjah czital` "I had been reading". Both
+  `byh czital` "I had read" against `bjah czital` "I had been reading". Both
   auxiliaries already exist in §7.9.
 - **§7.10 — the third-person imperative** is particle + present. `da`, `nehaj`
   and `pustj` are all permitted; `da` is listed first and is the generation

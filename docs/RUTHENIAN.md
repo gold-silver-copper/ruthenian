@@ -1140,7 +1140,7 @@ The `l`-participle, agreeing in gender and number, with the copula:
 | | `czital` | `czitala` | `czitalo` | `czitala` | `czitali` |
 
 - **perfect**: `jesmj czital` "I have read"
-- **pluperfect**: `bjeh czital` / `bjah czital` — see below
+- **pluperfect**: `byh czital` / `bjah czital` — see below
 
 Unlike Russian, the copula is **not** dropped: `jesmj czital`, not `*czital`.
 
@@ -1151,7 +1151,7 @@ the work it does elsewhere:
 
 | | Auxiliary | Sense |
 |---|---|---|
-| `bjeh czital` | aorist of `byti` | "I had read" — the anterior state is a completed point |
+| `byh czital` | aorist of `byti` | "I had read" — the anterior state is a completed point |
 | `bjah czital` | imperfect of `byti` | "I had been reading" — the anterior state was ongoing |
 
 This costs nothing: both auxiliaries already exist in §7.9's paradigm, and the
@@ -1175,7 +1175,7 @@ dual included, and **never omitted**.
 | | Singular | Dual | Plural |
 |---|---|---|---|
 | **present** | `jesmj`, `jesi`, `jestj` | `jesvje`, `jesta`, `jestje` | `jesm`, `jestje`, `sutj` |
-| **aorist** | `bjeh`, `bje`, `bje` | `bjehovje`, `bjesta`, `bjestje` | `bjehom`, `bjestje`, `bjesza` |
+| **aorist** | `byh`, `by`, `by` | `byhovje`, `bysta`, `bystje` | `byhom`, `bystje`, `bysza` |
 | **imperfect** | `bjah`, `bjasze`, `bjasze` | `bjahovje`, `bjaszeta`, `bjaszetje` | `bjahom`, `bjaszetje`, `bjahu` |
 | **future** | `budu`, `budjeszj`, `budjet` | `budjevje`, `budjeta`, `budjetje` | `budjem`, `budjetje`, `budut` |
 
@@ -1183,6 +1183,38 @@ Participle `byl/byla/bylo/byli`; infinitive `byti`; imperative `budi`.
 
 Russian's zero copula (`он врач`) is an East Slavic innovation. Ruthenian follows
 OCS, Polish and Ukrainian: `on jestj vracz`.
+
+### `byti` is the language's one suppletive verb, deliberately
+
+§1 removes suppletion everywhere else. `byti` keeps it, because it is the most
+frequent verb in the language and every Indo-European language tolerates
+suppletion in exactly this word — Latin `sum`/`fui`, English `is`/`was`/`been`,
+OCS `jesmь`/`byxъ`/`bǫdǫ`.
+
+The stems, and their sources:
+
+| slot | stem | from | regular? |
+|---|---|---|---|
+| present | `jes-`, 3pl `s-` | PIE `*h₁es-` "be, exist" | no — athematic |
+| aorist | `by-` | PIE `*bʰuH-` | **yes** — §7.5's endings on the infinitive stem |
+| l-participle | `by-` | `*bʰuH-` | **yes** — §7.7's rule on the same stem |
+| imperfect | `bja-` | `*bʰuH-` | no — regular would be `byja-` |
+| future | `bud-` | `*bʰuH-`, nasal present | no |
+| imperative | `bud-` | `*bʰuH-` | no |
+
+**Splitting it into two verbs was considered and declined.** `*h₁es-` supplies
+only the present, so the paradigm could be read as a stative copula `jesm`
+(present only) beside a dynamic verb `bytj` "be, become" — a real typological
+distinction (Irish `is`/`tá`, Spanish `ser`/`estar`), and one that would make
+§7.7's two auxiliaries motivated rather than arbitrary: the perfect takes the
+stative copula, the pluperfect the dynamic verb.
+
+It was declined because the split does not actually remove the suppletion — the
+`*bʰuH-` verb is itself `by-` against `bud-` — so paying for it would mean
+regularizing onto one of them, and either choice loses pan-Slavic material that
+every Slavic speaker knows on sight: onto `bud-` costs `byti`, `byl` and the
+aorist, giving a past `budjel`; onto `by-` costs `budu`, the most recognizable
+future marker in Slavic. One suppletive verb is cheaper than either.
 
 ## 7.10 Imperative and conditional
 

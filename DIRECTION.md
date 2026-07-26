@@ -158,7 +158,7 @@ parts and the caller composes:
 format!("{} {}", byti(First, Singular, NonPast),
                  l_participle("czitatj", Masculine, Singular));
 
-// pluperfect: bjeh czital (aorist aux) / bjah czital (imperfect aux) — §7.7
+// pluperfect: byh czital (aorist aux) / bjah czital (imperfect aux) — §7.7
 format!("{} {}", byti(First, Singular, Aorist),
                  l_participle("czitatj", Masculine, Singular));
 
