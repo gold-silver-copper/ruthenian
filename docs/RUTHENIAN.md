@@ -1361,6 +1361,12 @@ not, by rule rather than by taste.
 
 # 13. Open questions
 
+> The full list, with evidence and recommendations, is in
+> [`PROMPT_SPEC_COMPLETION.md`](../PROMPT_SPEC_COMPLETION.md) — including the
+> **sound-correspondence decisions** (pleophony, `*tj`/`*dj`, the nasals, the
+> jers) that this document has never addressed and that the multi-source lexicon
+> cannot be built without.
+
 Settled in this revision: the copula (full, with dual), aspect (rule-derived),
 the masculine dative (`-u`), negation (genitive), the alphabet (pure ASCII, no
 yat letter), the aorist and imperfect (core, not register), and the long/short
