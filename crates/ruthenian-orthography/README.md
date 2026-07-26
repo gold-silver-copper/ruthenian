@@ -47,22 +47,31 @@ Ruthenian's orthography is not obliged to be expressible in another language's.
 | The same corpus through the reference implementation | 3 failures (lines 12695, 13444, 31725) |
 | Every letter (62 cased forms), ordered pair (966) and ordered triple (30 101) | 0 failures |
 | Random well-formed strings (14 144) | 0 failures |
-| Guards, each verified to fail under its stated mutation | 11 of 11 |
+| Guards, each verified to fail under its stated mutation | 13 of 13 |
 
 Every count is printed by the guard that produced it. Measured 2026-07-25.
 
-> ### Known divergence: the word-final `'` is not yet accepted
->
-> `Ruthenian::parse` currently rejects a trailing hard sign (`lib.rs`, the
-> `HardSignContext` check at end of input), which predates `RUTHENIAN.md` §2.1's
-> class mark. Until that check is relaxed, `Ruthenian::parse("pisatj'")` errors
-> where the specification says it should succeed.
->
-> The change is small and local — a trailing `'` becomes valid, everything else
-> is unaffected — but it also needs `to_cyrillic` to reject a marked lemma
-> explicitly rather than emitting `писатьъ`, and it needs a guard pinning both.
-> The Cyrillic-side rule stays exactly as it is: `ъ` may still only stand before
-> `е ё ю я и`, so nothing about transliteration changes.
+## The word-final class mark
+
+`RUTHENIAN.md` §2.1 gives a word-final `'` a second job: it marks a lemma whose
+inflectional class is not the one its ending predicts (`pisatj'` is class 6 where
+`pisatj` would be class 1). The position is free because the separator rule is
+about what follows a `'`, and word-finally nothing does.
+
+| | |
+|---|---|
+| `Ruthenian::parse("pisatj'")` | **Ok** — the mark was already inside the allowed character set |
+| `Ruthenian::parse("pisatj''")` | **Err(Apostrophe)** — two marks are neither separator nor mark |
+| `marked.is_class_marked()` | `true`; a word-internal `pod'jezd` is `false` |
+| `marked.word()` | `"pisatj"` — the word without its mark |
+| `to_cyrillic(marked)` | `писать` — the mark is morphology, not sound |
+
+**Two lemmas differing only in the mark share a Cyrillic form, and that is not a
+round-trip failure.** The contract quantifies over *Cyrillic* strings, and
+`to_latin` can never emit a mark: `ъ` may only stand before `е ё ю я и`, so a
+word-final hard sign is ill-formed Cyrillic and no source word reaches that
+position. `transliteration_never_emits_a_class_mark` pins it. A caller who needs
+the distinction asks `is_class_marked` before converting.
 
 ## Well-formedness is part of the alphabet
 

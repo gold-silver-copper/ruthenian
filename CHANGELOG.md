@@ -169,9 +169,23 @@ them to keep eight cases distinguishable.
   so `pisatj` yields `pisaju`. A lemma is written with its mark or it is a
   different word.
 
-  **`ruthenian-orthography` does not implement this yet** — it rejects a trailing
-  hard sign — and the divergence is recorded in its README and in
-  `OPEN_QUESTIONS.md`.
+  **`ruthenian-orthography` implements this**, and doing so corrected two claims
+  made about it from reading the wrong function. `Ruthenian::parse` never
+  rejected a trailing `'` — the end-of-input hard-sign check is on the *Cyrillic*
+  side, and the Ruthenian side is a character-set test — so the mark was already
+  accepted. And `to_cyrillic` did not emit `писатьъ`; the reader discards a
+  word-final separator, so it silently produced `писать`.
+  - `Ruthenian::is_class_marked()` and `word()` are added, so the mark is a
+    queryable property rather than a character a caller might not notice.
+  - `to_cyrillic` converts `word()`, making the drop deliberate. Two lemmas
+    differing only in the mark share a Cyrillic form, which is not a round-trip
+    failure: the contract quantifies over Cyrillic strings and `to_latin` can
+    never emit a mark.
+  - `parse` rejects a doubled `''`, which is neither separator nor mark.
+  - Two guards, 11 → 13. One of them documents a mutation that does **not**
+    break it — reading `as_str()` instead of `word()` — because the reader
+    already discarded the mark, so that assertion states an intent rather than
+    holding a witness, and the guard says so instead of implying otherwise.
 
 - **§7.3 — the conjugation classes are restated by operation**, closing a gap
   that left monosyllabic vowel stems in no class at all. `mytj`, `pitj`, `bitj`,

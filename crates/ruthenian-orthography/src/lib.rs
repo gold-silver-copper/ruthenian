@@ -196,6 +196,17 @@ impl Ruthenian {
     /// assert_eq!(Ruthenian::parse("дом").unwrap_err().kind, Unmapped::CyrillicInLatin);
     /// ```
     pub fn parse(s: &str) -> Result<Self, AlphabetError> {
+        // A word-final `'` is the class mark (`RUTHENIAN.md` §2.1), not the
+        // separator: word-finally there is no next letter for the separator rule
+        // to be about, so the position is free and carries morphology instead.
+        // Two of them is neither, so it is rejected rather than half-read.
+        if s.ends_with(SEP) && s[..s.len() - SEP.len_utf8()].ends_with(SEP) {
+            return Err(AlphabetError {
+                offset: s.len() - SEP.len_utf8(),
+                found: SEP,
+                kind: Unmapped::Apostrophe,
+            });
+        }
         for (offset, c) in s.char_indices() {
             if ruthenian_char_allowed(c) {
                 continue;
@@ -218,6 +229,38 @@ impl Ruthenian {
 
     pub fn as_str(&self) -> &str {
         &self.0
+    }
+
+    /// Does this lemma carry the word-final class mark (`RUTHENIAN.md` §2.1)?
+    ///
+    /// The mark says the inflectional class is not the one the ending predicts —
+    /// `pisatj'` is class 6 where `pisatj` would be class 1.
+    ///
+    /// ```
+    /// use ruthenian_orthography::Ruthenian;
+    /// assert!(Ruthenian::parse("pisatj'").unwrap().is_class_marked());
+    /// assert!(!Ruthenian::parse("czitatj").unwrap().is_class_marked());
+    /// // A word-internal separator is not a mark.
+    /// assert!(!Ruthenian::parse("pod'jezd").unwrap().is_class_marked());
+    /// ```
+    pub fn is_class_marked(&self) -> bool {
+        self.0.ends_with(SEP)
+    }
+
+    /// The word without its class mark.
+    ///
+    /// The mark is morphology, not sound: it has no pronunciation and no
+    /// Cyrillic counterpart, so anything concerned with the *word* — including
+    /// [`to_cyrillic`] — sees this rather than [`as_str`](Self::as_str).
+    ///
+    /// ```
+    /// use ruthenian_orthography::Ruthenian;
+    /// assert_eq!(Ruthenian::parse("pisatj'").unwrap().word(), "pisatj");
+    /// assert_eq!(Ruthenian::parse("czitatj").unwrap().word(), "czitatj");
+    /// assert_eq!(Ruthenian::parse("pod'jezd").unwrap().word(), "pod'jezd");
+    /// ```
+    pub fn word(&self) -> &str {
+        self.0.strip_suffix(SEP).unwrap_or(&self.0)
     }
 }
 
@@ -250,7 +293,17 @@ pub fn to_latin(s: &Cyrillic) -> Ruthenian {
 /// assert_eq!(cyr("s'zadi"), "сзади");
 /// ```
 pub fn to_cyrillic(s: &Ruthenian) -> Cyrillic {
-    Cyrillic(reader::to_string(&reader::tokenize(&s.0, None)))
+    // Converts the WORD, so the class mark is dropped by intent rather than by
+    // accident. The reader would discard a word-final separator anyway — there is
+    // no next letter for it to separate — so this is a statement of purpose, not
+    // a behaviour change, and the guard says so rather than claiming a witness it
+    // does not have.
+    //
+    // Two lemmas differing only in the mark therefore share a Cyrillic form. That
+    // is not a round-trip failure: the contract quantifies over Cyrillic strings
+    // and `to_latin` never emits a mark. A caller needing the distinction asks
+    // `Ruthenian::is_class_marked` before converting.
+    Cyrillic(reader::to_string(&reader::tokenize(s.word(), None)))
 }
 
 /// A run of input that [`to_latin_mixed`] left alone.
