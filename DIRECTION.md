@@ -49,8 +49,11 @@ pub fn numeral(value: u64, case: Case, gender: Gender, animacy: Animacy) -> Stri
 pub fn verb(word: &str, class: VerbClass,
             person: Person, number: Number, tense: FiniteTense) -> String;
 
-// Exactly the five cells §7.10 has, so there are no holes to represent.
-pub fn imperative(word: &str, class: VerbClass, who: Addressee) -> String;
+// Person × Number. §7.10 has synthetic forms for five of the nine; the other
+// four return the present indicative, which is what the language's periphrastic
+// third-person imperative is built from (`da idjet`).
+pub fn imperative(word: &str, class: VerbClass,
+                  person: Person, number: Number) -> String;
 
 pub fn participle(word: &str, class: VerbClass, kind: ParticipleKind,
                   voice: Voice, case: Case, number: Number,
@@ -61,9 +64,13 @@ pub fn l_participle(word: &str, gender: Gender, number: Number) -> String;
 pub fn infinitive(word: &str) -> String;
 
 // `byti` is suppletive (§7.9) and belongs to no class, so it gets its own
-// function rather than a `VerbClass::Irregular` variant that would make every
-// other call site handle a case it can never hit.
-pub fn copula(person: Person, number: Number, tense: CopulaTense) -> String;
+// function rather than a `VerbClass::Irregular` variant that every other call
+// site would have to handle and could never hit.
+pub fn byti(person: Person, number: Number, tense: FiniteTense) -> String;
+
+// `budu` is a different root from `jes-` — suppletion, not a tense of one stem —
+// and its only job is to build the imperfective future, so it is named for that.
+pub fn future_auxiliary(person: Person, number: Number) -> String;
 
 // Pronouns. Personal pronouns are total: they have no distinct vocative, so the
 // vocative returns the nominative — the language's own convention, already used
@@ -71,13 +78,15 @@ pub fn copula(person: Person, number: Number, tense: CopulaTense) -> String;
 pub fn pronoun(p: Pronoun, case: Case, number: Number,
                gender: Gender, style: PronounStyle) -> String;
 
-// The reflexive has no nominative (§5.2) and no gender or number. Its case type
-// cannot name the nominative, so the gap is unrepresentable rather than runtime.
-pub fn reflexive(case: ObliqueCase, style: PronounStyle) -> String;
+// The reflexive has no gender or number. §5.2 gives it no nominative either;
+// asking for one returns `sjebja`, the form the pronoun is cited by.
+pub fn reflexive(case: Case, style: PronounStyle) -> String;
 ```
 
-**Nothing returns `Option`.** That is not a convenience; it is a claim about the
-language, and it is checked — see "One real gap" below.
+**Every function is total.** No `Option`, no `Result`, no panic: any combination
+of arguments the types permit returns a string. Where the language has no form
+for a cell, the function returns a defined fallback rather than nothing — see
+below.
 
 For repeated use, bind the lexical facts once and the per-call signature reduces
 to the grammar alone:
@@ -95,28 +104,36 @@ for (case, number, form) in dom.paradigm() {
 `paradigm()` is how "every possible form" is reached in practice, and it is the
 same code path as `form()` — not a second implementation that could disagree.
 
-### One real gap, and why the rest were not gaps
+### Totality, and what fills the empty cells
 
-**The crate generates forms, not meanings.** A gap is when the morphology has
-nothing to produce — not when the result is semantically odd. Applied honestly,
-that leaves exactly one gap in the whole language:
+**The crate generates forms, not meanings.** A cell is "missing" only when the
+morphology has nothing to produce — not when the result would be semantically
+odd. On that test almost nothing is missing:
 
 | Supposed gap | Real? | |
 |---|---|---|
 | perfective has no **present** | no | The morphology produces `poczitaju`; §7.8 says perfective present endings carry future sense. The form exists — only the label `Present` was wrong. Hence `NonPast`. |
 | imperfective has no synthetic **future** | no | `budu czitatj` is two words. Composition, not inflection. |
 | **perfect**, **pluperfect** | no | Participle + copula. Same. |
-| imperative has no **3rd person** or **1sg** | no | §7.10 has five cells. `Person × Number` invents four holes that were never in the language. Hence `Addressee`. |
 | intransitive has no **passive participle** | no | The suffix applies regardless; the oddness is semantic, not formal. |
 | pronouns have no **vocative** | no | The nominative is used — the same convention §3.1 applies to the vocative plural. |
-| **reflexive has no nominative** | **yes** | §5.2: there is no form, because a reflexive cannot be a subject. |
+| imperative has no **3rd person** or **1sg** | partly | No *synthetic* form; the language uses particle + present indicative (`da idjet`, §7.10). |
+| **reflexive has no nominative** | yes | §5.2: a reflexive cannot be a subject. |
 
-So the API does not represent it. `reflexive` takes `ObliqueCase`, which has no
-`Nominative` variant, and the impossible call cannot be written.
+The last two are filled rather than excluded:
 
-Every other function returns `String` because every cell it can be asked for
-exists. If that ever stops being true, the fix is a narrower type — not an
-`Option` sprinkled across the surface.
+| Call | Returns | Why |
+|---|---|---|
+| `imperative(w, c, Third, Singular)` | the present indicative, `idjet` | It is exactly the form §7.10's periphrastic imperative is built from; the caller prefixes `da`, `nehaj` or `pustj`. |
+| `imperative(w, c, First, Singular)` | the present indicative, `czitaju` | Same rule, though the construction is rarer. |
+| `reflexive(Nominative, ..)` | `sjebja` | The form the reflexive is cited by, standing in for a cell the language lacks. |
+
+**The cost, stated once.** A caller can ask a question the language does not have
+an answer to and get a plausible-looking string back. That is a deliberate trade:
+these combinations do not arise in real use, and paying for them with `Option` at
+every call site — or with three extra enums a caller must learn — is worse than
+paying for them with a documented fallback. Each fallback is a *defined* value,
+not a guess, and each is listed above.
 
 ### Why `String` and not something richer
 
@@ -138,25 +155,21 @@ parts and the caller composes:
 
 ```rust
 // perfect: jesmj czital
-format!("{} {}", copula(First, Singular, NonPast),
+format!("{} {}", byti(First, Singular, NonPast),
                  l_participle("czitatj", Masculine, Singular));
 
 // pluperfect: bjeh czital (aorist aux) / bjah czital (imperfect aux) — §7.7
-format!("{} {}", copula(First, Singular, Aorist),
+format!("{} {}", byti(First, Singular, Aorist),
                  l_participle("czitatj", Masculine, Singular));
 
 // imperfective future: budu czitatj
-format!("{} {}", copula(First, Singular, Future), infinitive("czitatj"));
+format!("{} {}", future_auxiliary(First, Singular), infinitive("czitatj"));
 ```
 
-The copula is the one verb whose non-past **splits**: `jesmj` "I am" and `budu`
-"I will be" are different stems, not one form with two readings. So it takes its
-own tense type, which is the only place `Present` and `Future` are separate
-variants:
-
-```rust
-pub enum CopulaTense { Present, Future, Aorist, Imperfect }   // §7.9
-```
+`byti`'s `NonPast` is the present (`jesmj`), not a present/future blend: the
+future uses a different root altogether (`bǫd-` against `jes-`), which is
+suppletion rather than a tense of one stem. That is why `future_auxiliary` is its
+own function and there is no fourth tense variant for one verb's sake.
 
 Doing the composition here would mean doing agreement and word order, which is
 syntax, and the return value would stop being a word.
@@ -180,17 +193,6 @@ pub enum Person { First, Second, Third }
 // for a perfective (§7.8). The perfect, pluperfect and imperfective future are
 // periphrastic and are composed by the caller.
 pub enum FiniteTense { NonPast, Aorist, Imperfect }
-
-// Exactly the imperative cells that exist (§7.10) — not Person × Number.
-pub enum Addressee { You, YouTwo, YouAll, WeTwo, WeAll }
-
-// `byti` alone distinguishes present from future, because they are different
-// stems rather than one form read two ways (§7.9).
-pub enum CopulaTense { Present, Future, Aorist, Imperfect }
-
-// Cases the reflexive has. No Nominative: §5.2 says the cell does not exist.
-pub enum ObliqueCase { Accusative, Genitive, Ablative,
-                       Dative, Instrumental, Locative }
 
 // A grammatical category of the language, but NOT an inflection parameter:
 // aspect decides what NonPast means, never what it looks like.
@@ -264,11 +266,11 @@ Short, and each falsifiable by a test.
 3. **Derive state; never store it.** No field duplicating something computable.
    Declension, hardness, stem, gaps and palatalization are all derived. A stored
    flag drifts, and its dead branch becomes the bug.
-4. **A cell that does not exist is unrepresentable, not `None`.** Where the
-   language has no form, the type system refuses the question: `ObliqueCase` has
-   no nominative, `Addressee` has no third person. An `Option` in a signature is
-   a claim that the language has a hole, and that claim must be defended — there
-   is currently exactly one hole, and it is handled by a type.
+4. **Every function is total, and every fallback is declared.** No `Option`, no
+   `Result`, no panic. Where the language has no form for a cell, the function
+   returns a *named* substitute listed in "Totality" above — never an
+   undocumented guess, and never nothing. Adding a fallback means adding a row to
+   that table, not quietly picking something in the code.
 5. **No droppable arguments.** If a caller can omit a lexical fact and still get
    a plausible-looking wrong answer, that fact belongs in the type signature.
    This is why `gender` is a parameter and not an `Option` with a guess behind it.
@@ -304,9 +306,10 @@ quietly checks less, and a currency check fails when the two drift.
 - Every cell of every paradigm the specification tabulates is reproduced exactly,
   checked against the committed corpus.
 - Nouns, adjectives, verbs, pronouns and numerals each resolve **every** slot for
-  every class, in all three numbers. No function returns `Option`, and a guard
-  asserts that the public API contains none — a gap that appears later is a
-  narrower type, not a widened return.
+  every class, in all three numbers. A guard asserts the public API contains no
+  `Option` and no `Result`, and a second asserts that every fallback in
+  "Totality" is exercised by a test — so a substitute cannot be added without
+  being written down.
 - `paradigm()` enumerates a complete table for each part of speech.
 - Every public function carries a doc test showing a real form.
 - Zero third-party dependencies; `#![forbid(unsafe_code)]`; no panic on any

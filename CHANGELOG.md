@@ -41,30 +41,37 @@
     because `-atj` is class 1 or class 6; aspect because a closed class is
     inherently perfective. Everything else — declension, hardness, the stem, the
     palatalizations, the gaps — is derived, and storing any of it is a bug.
-  - **Nothing returns `Option`.** Six of the seven "gaps" turned out to be
-    artifacts of how the enums were named, not facts about the language, and the
-    principle that separates them is that **the crate generates forms, not
-    meanings**: a gap is when the morphology has nothing to produce, not when the
-    result is semantically odd. A perfective's "missing present" is `poczitaju`,
-    a real form whose sense is future — so the slot is `NonPast`, and aspect
-    leaves the verb signature entirely, since it changes what a form means and
-    never what it looks like. The imperative's "missing" third person came from
-    modelling five real cells as `Person × Number`; it is now `Addressee`, which
-    has exactly five variants. The intransitive passive participle is
-    morphologically fine and only semantically odd. Pronouns use the nominative
-    for the vocative, as §3.1 already does for the vocative plural.
+  - **Every function is total.** No `Option`, no `Result`, no panic. Six of the
+    seven apparent gaps turned out to be artifacts of how the enums were named
+    rather than facts about the language, and the principle that separates them
+    is that **the crate generates forms, not meanings**: a cell is missing only
+    when the morphology has nothing to produce, not when the result would be
+    semantically odd.
 
-    That leaves **one** genuine gap in the language — the reflexive has no
-    nominative (§5.2) — and it is handled by a type: `reflexive` takes
-    `ObliqueCase`, which has no `Nominative` variant, so the impossible call
-    cannot be written. The periphrastic tenses are out of scope, since they are
-    two words; the crate supplies `l_participle`, `infinitive` and `copula`, and
-    the caller composes.
-  - **`Prediction` and `Trace` are dropped.** They existed to serve an evaluator
-    and a CLI, neither of which is in scope. With no consumer, the trace was
-    structure nobody read. This is a deliberate relaxation of "return structure,
-    not strings", and the cost — a caller cannot ask *why* — is stated rather
-    than hidden.
+    A perfective's "missing present" is `poczitaju`, a real form whose sense is
+    future — so the slot is `NonPast`, and **aspect leaves the verb signature
+    entirely**, since it changes what a form means and never what it looks like.
+    The intransitive passive participle is morphologically fine and only
+    semantically odd. Pronouns use the nominative for the vocative, as §3.1
+    already does for the vocative plural.
+
+    Two cells genuinely have no form, and both are **filled with a declared
+    substitute** rather than excluded by a narrower type: a third-person or
+    first-singular imperative returns the present indicative, which is exactly
+    what §7.10's periphrastic `da idjet` is built from, and `reflexive` in the
+    nominative returns `sjebja`, the form the pronoun is cited by. The cost is
+    stated once in the document: a caller can ask a question the language has no
+    answer to and get a plausible string back. That is the deliberate trade —
+    those combinations do not arise in real use, and paying for them with
+    `Option` at every call site, or with three extra enums to learn, is worse
+    than paying with a documented fallback.
+
+    The periphrastic tenses are out of scope, being two words; the crate supplies
+    `l_participle`, `infinitive`, `byti` and `future_auxiliary`, and the caller
+    composes. `byti` is a function of its own rather than a
+    `VerbClass::Irregular` variant every other call site would have to handle and
+    could never hit, and `budu` is separate from it because `bǫd-` and `jes-` are
+    different roots — suppletion, not a tense of one stem.
 
   The seventeen laws reduce to eight, keeping those a rules engine can actually
   break: the spec decides, one generation path, derive don't store, `None` means
