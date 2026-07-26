@@ -118,7 +118,19 @@ correct and cannot be assumed so.
 **Check:** `no_dependencies` in each crate's guard suite — a test, not a review
 habit.
 
-## I7 — Redistributed data carries its licence.
+## I7 — Grammar claims are measured, not quoted.
+
+A statement about how Russian works is backed by a count over the dump, not by a
+grammar reference alone. References say what to look for; the data says what is
+there.
+
+**Why.** A published summary of the noun stress patterns describes pattern `f`
+as stem-stressed in the singular. It is ending-stressed — see
+`docs/RUSSIAN_GRAMMAR.md` §2, where the whole table is derived from ~285 000
+attested forms. Implementing the quoted version would have been wrong for every
+`f` noun.
+
+## I8 — Redistributed data carries its licence.
 
 Any third-party data committed to this repository is recorded in
 `ATTRIBUTION.md` with its source and licence, in the same change that adds it.
