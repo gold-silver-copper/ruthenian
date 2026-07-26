@@ -41,7 +41,8 @@ Phase 4, where the difference between primary and derived data starts to matter.
 The theoretical companion. Establishes the derivational architecture of Russian
 nominal morphology and — the point that matters here — **identifies more than six
 cases**, including the partitive, the second locative, and special adnumeral
-forms. Estimates of the total run from eight to nine depending on the analyst.
+forms (Zaliznyak 1967, pp. 43–52; cf. Uspensky 1957). Counts of the total vary
+with the analyst's criteria for what makes a case.
 
 ## *Русская грамматика* (Academy Grammar, 1980, ed. Shvedova)
 
@@ -49,10 +50,12 @@ The comprehensive institutional description. Where to go for the boundaries of a
 category (what counts as a short form, when a participle is possible) rather than
 for a per-lemma index.
 
-## Timberlake, *A Reference Grammar of Russian* (2004); Wade, *A Comprehensive Russian Grammar*
+## Timberlake, *A Reference Grammar of Russian* (CUP, 2004)
 
-Descriptive references in English. Useful for prose statements of a rule; not a
-source of per-lemma data.
+Descriptive reference in English; useful for prose statements of a rule, not a
+source of per-lemma data. For cross-Slavic comparison the standard work is
+Comrie & Corbett (eds), *The Slavonic Languages* (Routledge, 1993) — see
+`COMPARATIVE_GRAMMAR.md`.
 
 ## Jakobson (1948) / Townsend (1975): the one-stem system
 
@@ -377,5 +380,6 @@ a standardized language could remove them:
 - *Cannot remove without changing the language* — aspect, animacy syncretism,
   the two-stem verb, structural gaps.
 
-That division, and what Ukrainian and Belarusian do with each, is the next
-conversation.
+That division, and what Proto-Indo-European, Sanskrit, Old Church Slavonic,
+Ukrainian, Belarusian and Interslavic each do with it, is worked through in
+[`COMPARATIVE_GRAMMAR.md`](COMPARATIVE_GRAMMAR.md).
