@@ -1902,19 +1902,64 @@ International vocabulary is adapted by rule rather than borrowed ad hoc, so that
 | Source ending | Ruthenian | Gender / declension | Example |
 |---|---|---|---|
 | `-tiō, -tiōnem` | `-cija` | fem., I | *natio* → `nacija` |
-| `-tās, -tātem` | `-tetj` | fem., III | *universitas* → `univjersitetj` |
+| `-tās, -tātem` | `-tet` | masc., II | *universitas* → `universitet` |
 | `-or, -ōrem` | `-or` | masc., II | *doctor* → `doktor` |
 | `-us` (2nd decl.) | `-∅` | masc., II | *circus* → `cirk` |
-| `-um` (2nd decl.) | `-o` | neut., II | *museum* → `muzjeo` |
+| `-um` (2nd decl.) | `-um`, unchanged | masc., II | *museum* → `museum` |
 | `-a` (1st decl.) | `-a` | fem., I | *forma* → `forma` |
 | Gk `-ισμός` | `-izm` | masc., II | *organismos* → `organizm` |
 | Gk `-ία` | `-ija` | fem., I | *philosophia* → `filosofija` |
 | Gk `-της` | `-t` | masc., II | *poiētēs* → `pojet` |
 
-The Latin **oblique** stem is the base, not the nominative — *natio* borrows as
-`nacij-` from *natiōn-*, exactly as Slavic has always done it. Once adapted, a
-loan declines as a native word of its class: `nacija`, `nacijy`, `naciji`,
-`nacijej`.
+The Latin **oblique** stem is the base, not the nominative — *natio* borrows
+from *natiōn-* and not from *natio*, exactly as Slavic has always done it,
+giving the citation form `nacija`. Once adapted, a loan declines as a native
+word of its class, and **strictly**: `nacija`, genitive `nacii`, dative
+`naciji`, instrumental `nacijoj` — soft declension I on the vowel-final stem
+`naci-` (§3.5). Russian's `-ия` sub-pattern is not imported; the endings are the
+ones `zjemlja` takes.
+
+### The learned layer stays close to its source
+
+**The source shape is kept wherever Ruthenian's own letters can write it.** A
+source `e` is borrowed as `e`, not `je`: Latin and Greek `e` does not palatalize
+a preceding consonant, and `e` is precisely the Ruthenian letter for that vowel
+(§2.1) — so `universitet`, not `univjersitjet`. The learned layer is borrowed
+**from Latin and Greek directly**, and re-spelling it as though it had arrived
+through Cyrillic would import a palatalization the source does not have.
+
+For the same reason a Latin ending that Ruthenian can spell is simply kept.
+*Museum* is `museum`, not `muzeo`: the `-um` is writable, it is recognizable —
+Russian had `музеум` before it had `музей` — and reshaping it to `-o` buys
+nothing the declension does not already give. A loan is naturalized by
+**declining** it (§3.9), not by resegmenting it.
+
+Two consequences, both accepted:
+
+- **A learned loan is not the transliteration of its Russian counterpart.**
+  `universitet` reads back as университэт rather than университет. No contract
+  is broken: §2.1's bijection is claimed over words transliterated *from*
+  Cyrillic, and these are not — they are borrowed from the source language, as
+  §12.2 borrows everything else from its etymon rather than from Russian's
+  spelling of it.
+- **The shape decides the class, so gender follows the ending and not the
+  source.** `universitet` ends in a plain consonant, which is masculine
+  declension II by §3.2, though *universitas* is feminine; `museum` is
+  masculine II for the same reason, though *museum* is neuter. This is what
+  "once adapted, a loan declines as a native word of its class" means; keeping
+  the Latin gender would take a word-final `j` and the mark
+  (`universitetj'`), which is a Slavic diacritic added to a form whose whole
+  point is to stay close to the source.
+
+**The one exception is a referent that has a sex.** A man's name, a male animal,
+a word for a woman: there the gender is a fact about the thing rather than about
+the ending, and agreement follows the thing. This needs no new machinery,
+because §2.1's two marks already say exactly this much — a **capital** first
+letter for animacy (§3.7), and the word-final **`'`** where the ending predicts
+the wrong gender (§3.2). A borrowed male name in `-a` is therefore `Seneka'`, on
+precisely the model of native `sluga'`: declension I in form, masculine and
+animate in agreement. Everything without a sex — and that is nearly the whole
+learned layer — takes its gender from its ending and carries no mark.
 
 ### Sanskrit — the purist layer
 
