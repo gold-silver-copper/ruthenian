@@ -168,6 +168,16 @@ them to keep eight cases distinguishable.
   is no longer about class alone; the crate reports it and leaves the
   interpretation to morphology.
 
+- **§3.5 — masculine nouns in `-a` are part of the language.** `sluga'`,
+  `vojevoda'`, `junosza'`: pan-Slavic, present in OCS, and exactly the case the
+  `-a` mark exists for. They **decline as declension I and agree as masculine**,
+  which is the whole point of the split — `moj sluga'` takes a masculine
+  adjective, while `vizzu slugu` takes declension I's own accusative `-u` rather
+  than the masculine ablative. Form follows the declension, agreement follows the
+  gender; nothing else is special, so `sluga'` is `zzena`'s paradigm throughout,
+  including the second palatalization in `sluzi`. §3.2's declension I is
+  correspondingly "nouns in `-a`, of either gender".
+
 - **The conjugation class and the declension are now derived, and both enums are
   gone from the API.** `noun` and `verb` take a word and grammar, nothing else.
 

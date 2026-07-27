@@ -437,7 +437,7 @@ same endings with automatic spelling adjustments (§3.8).
 
 | Declension | Contents | Example |
 |---|---|---|
-| **I** | feminine in `-a` | `zzena` (woman), `zjemlja` (earth) |
+| **I** | nouns in `-a`, of either gender | `zzena` (woman), `zjemlja` (earth), `sluga'` (servant, masc.) |
 | **II** | masculine, and neuter | `dom` (house), `konj` (horse), `okno` (window), `polje` (field) |
 | **III** | feminine ending in a consonant | `noczj` (night), `kostj` (bone) |
 
@@ -541,7 +541,7 @@ plural `polja` / `poljev` / `poljem` / `poljami` / `poljah`.
 The neuter dual `-i` continues OCS `-ě` (`dvě selě`), and the neuter vocative is
 the nominative in every language measured — Sanskrit 84 % ∅, OCS 45 %.
 
-## 3.5 Declension I — feminine in `-a`
+## 3.5 Declension I — nouns in `-a`
 
 ### Hard: `zzena` "woman" (stem `zzen-`)
 
@@ -579,6 +579,31 @@ Nominative `zjemlja`, vocative `zjemljo`, accusative `zjemlju`, genitive/ablativ
 `zjemli`, dative `zjemlji`, instrumental `zjemljoj`, locative `zjemli`; dual
 `zjemlji` / `zjemlju` / `zjemljama`; plural `zjemli` / `zjemljev` / `zjemljam` /
 `zjemljami` / `zjemljah`.
+
+### Masculine nouns in `-a`
+
+`sluga'` "servant", `vojevoda'` "commander", `junosza'` "youth" — masculine in
+meaning and in agreement, but `-a` in form. Pan-Slavic, and OCS has them.
+
+They **decline as declension I and agree as masculine**, and the split is the
+whole point:
+
+```
+moj sluga'         my servant        — masculine adjective (moj, not moja)
+vizzu slugu        I see the servant — declension I accusative -u, not the
+                                       masculine ablative
+o sluzi            about the servant — declension I locative, with the second
+                                       palatalization g -> z
+```
+
+Form follows the declension; agreement follows the gender. Nothing else is
+special: the paradigm is `zzena`'s throughout, so `sluga'` gives vocative
+`slugo`, dative and locative `sluzi`, dual `sluzi` / `slugu` / `slugama`, plural
+`slugy` / `slugov` / `slugam` / `slugami` / `slugah`.
+
+The `'` is what says so (§2.1): `-a` predicts feminine, and a masculine noun in
+`-a` is exactly the case the mark exists for. An animate one carries both marks —
+`Sluga'`.
 
 ## 3.6 Declension III — feminine in a consonant
 
