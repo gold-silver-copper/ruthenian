@@ -1,4 +1,4 @@
-//! The eleven guards from `docs/specs/ruthenian-orthography.md` §9.
+//! The thirteen guards this crate declares; see `README.md`.
 //!
 //! Every one names the minimal mutation that must make it fail. A guard that
 //! survives its own witness is stale and must be fixed or deleted.
@@ -554,5 +554,89 @@ fn reader_is_the_definition() {
     assert!(
         toks.iter().any(|g| matches!(g, Grapheme::Separator)),
         "a pure separator must read as Separator, not as a letter"
+    );
+}
+
+/// The word-final mark (`RUTHENIAN.md` §2.1) is accepted, is distinguishable,
+/// and is dropped from the Cyrillic form **declaredly** rather than incidentally.
+///
+/// The mark means "not what the ending predicts" — class 6 on a verb, an
+/// unpredicted gender on a noun — and this crate reports it without
+/// interpreting it.
+///
+/// Witnesses, each verified to fail this test: make `word()` return the whole
+/// string; make `is_marked()` return `false`; remove the doubled-mark
+/// check in `parse`.
+///
+/// Note what is deliberately **not** claimed. Making `to_cyrillic` read
+/// `as_str()` rather than `word()` does not break anything, because the reader
+/// already discards a word-final separator — there is no next letter for it to
+/// separate. `word()` therefore states an intent the reader happened to satisfy
+/// already, and the guard does not pretend otherwise.
+#[test]
+fn mark_is_carried_and_declared() {
+    use ruthenian_orthography::Ruthenian;
+
+    let marked = Ruthenian::parse("pisatj'").expect("the mark is legal");
+    let plain = Ruthenian::parse("pisatj").expect("the bare lemma is legal");
+
+    // The mark survives in the lemma and is visible to a caller.
+    assert_eq!(marked.as_str(), "pisatj'");
+    assert!(marked.is_marked());
+    assert!(!plain.is_marked());
+    assert_eq!(marked.word(), plain.as_str());
+
+    // A word-internal separator is not a mark.
+    let sep = Ruthenian::parse("pod'jezd").unwrap();
+    assert!(!sep.is_marked());
+    assert_eq!(sep.word(), "pod'jezd");
+
+    // The Cyrillic form is the word's. The collision is intended and is not a
+    // round-trip failure: the contract quantifies over Cyrillic strings, and the
+    // mark is morphology rather than sound.
+    let c = to_cyrillic(&marked);
+    assert_eq!(c.as_str(), to_cyrillic(&plain).as_str());
+    assert!(
+        Cyrillic::parse(c.as_str()).is_ok(),
+        "the result stays valid Cyrillic"
+    );
+
+    // Two marks are neither a separator nor a mark.
+    assert!(Ruthenian::parse("pisatj''").is_err());
+
+    // A noun carries it in the same position and the crate treats it the same.
+    let noun = Ruthenian::parse("noczj'").unwrap();
+    assert!(noun.is_marked());
+    assert_eq!(noun.word(), "noczj");
+
+    // Capitalisation is untouched by the mark: it is the animacy marker (§3.7)
+    // and rides the case layer, not the separator.
+    let animate = Ruthenian::parse("Drug").unwrap();
+    assert!(!animate.is_marked());
+    assert_eq!(animate.word(), "Drug");
+    assert_eq!(to_cyrillic(&animate).as_str(), "Друг");
+}
+
+/// `to_latin` never produces a class mark, which is why the round-trip contract
+/// is untouched by §2.1: no Cyrillic input can reach that position.
+///
+/// Witness: allow `ъ` word-finally in `Cyrillic::parse`; a corpus word could
+/// then transliterate to a trailing `'` and collide with a marked lemma.
+#[test]
+fn transliteration_never_emits_a_mark() {
+    for w in ["писать", "читать", "подъезд", "дом", "ночь", "друг"] {
+        let c = Cyrillic::parse(w).expect("well-formed Cyrillic");
+        let r = to_latin(&c);
+        assert!(
+            !r.is_marked(),
+            "{w} transliterated to a marked lemma: {}",
+            r.as_str()
+        );
+        assert_eq!(to_cyrillic(&r).as_str(), w);
+    }
+    // The Cyrillic side still forbids a word-final hard sign outright.
+    assert_eq!(
+        Cyrillic::parse("писатьъ").unwrap_err().kind,
+        Unmapped::HardSignContext
     );
 }
