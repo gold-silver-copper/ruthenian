@@ -20,7 +20,15 @@ pub const SIBILANTS: &[&str] = &["zz", "sz", "cz", "szcz"];
 /// The labials that take an epenthetic `l` in the present stem (§7.11).
 pub const LABIALS: &[&str] = &["p", "b", "v", "m"];
 
-/// The present-stem mutations of §7.11, longest and most specific first.
+/// The present-stem mutations of §7.11.
+///
+/// **Additive: the consonant stays and the palatal reflex is added after it.**
+/// The labial rules were always additive — `p` → `plj` keeps the `p` — and this
+/// is that one operation applied to every stem-final consonant. It keeps the
+/// root legible (`vidzzu` shows `vid-`, where Russian's `вижу` does not), and it
+/// separates two homograph pairs the replacive version created: `voditj` and
+/// `vozitj` both gave `vozzu`, and `letjetj` "fly" collided with `leczitj` "heal"
+/// at `leczu`.
 ///
 /// Applied **by class**, never by stem shape: a class-1 verb with a
 /// labial-final stem takes no mutation at all, verified across 1 977 Russian
@@ -28,23 +36,25 @@ pub const LABIALS: &[&str] = &["p", "b", "v", "m"];
 /// "ends in a labial" would corrupt all 1 977, which is why
 /// [`mutate_present_stem`] is only ever called for the classes that mutate.
 ///
-/// `ov` → `u` must precede the labials or `njegodov` ends in `v`, takes
-/// epenthesis, and comes out `njegodovlj` instead of `njegoduj-`. `st` → `szcz`
-/// must precede both `s` and `t`.
+/// `z` → `z'zz` carries the separator because `zzz` reads as `zz` + `z` rather
+/// than `z` + `zz`. It is the only output that needs one.
 ///
-/// `d` → `zz` and `z` → `zz` collide, exactly as they do in Russian
-/// (`voditj` and `voziti` both give `vozzu`). That is a real homograph, not a
-/// bug.
+/// `ov` → `u` is class 2's stem formation rather than iotation (§7.3), and it
+/// replaces rather than adds. It is listed first because `njegodov` ends in `v`
+/// and would otherwise take the labial rule, coming out `njegodovlj`.
+///
+/// §7.11's `st` → `szcz` and `sk` → `szcz` are **gone**: additively the general
+/// rule applies to the cluster's last consonant and the `s` is left alone, so
+/// `krjest` → `krjestcz` needs no rule of its own.
 pub const MUTATIONS: &[(&str, &str)] = &[
-    ("st", "szcz"),
     ("ov", "u"),
-    ("s", "sz"),
-    ("t", "cz"),
-    ("d", "zz"),
-    ("z", "zz"),
-    ("h", "sz"),
-    ("k", "cz"),
-    ("g", "zz"),
+    ("t", "tcz"),
+    ("d", "dzz"),
+    ("s", "ssz"),
+    ("z", "z'zz"),
+    ("k", "kcz"),
+    ("g", "gzz"),
+    ("h", "hsz"),
     ("p", "plj"),
     ("b", "blj"),
     ("v", "vlj"),
@@ -120,12 +130,23 @@ pub fn palatalize(stem: &str, which: Palatal) -> String {
 ///
 /// ```
 /// use ruthenian_core::spelling::mutate_present_stem;
-/// assert_eq!(mutate_present_stem("pis"), "pisz");        // pisatj' -> piszu
-/// assert_eq!(mutate_present_stem("vod"), "vozz");        // voditj -> vozzu
-/// assert_eq!(mutate_present_stem("ljub"), "ljublj");     // ljubitj -> ljubljy
-/// assert_eq!(mutate_present_stem("njegodov"), "njegodu"); // -ovatj -> -uj-
+/// // Additive: the root stays visible.
+/// assert_eq!(mutate_present_stem("vid"), "vidzz");   // vidjetj -> vidzzu
+/// assert_eq!(mutate_present_stem("let"), "letcz");   // letjetj -> letczu
+/// assert_eq!(mutate_present_stem("pis"), "pissz");   // pisatj' -> pisszu
+/// assert_eq!(mutate_present_stem("ljub"), "ljublj"); // ljubitj -> ljublju
+///
+/// // The two homographs the replacive version created are now distinct.
+/// assert_ne!(mutate_present_stem("vod"), mutate_present_stem("voz"));
+/// assert_eq!(mutate_present_stem("voz"), "voz'zz");  // the separator: zzz
+/// assert_eq!(mutate_present_stem("lecz"), "lecz");   // leczitj -> leczu
+///
+/// // Class 2's stem formation replaces rather than adds.
+/// assert_eq!(mutate_present_stem("njegodov"), "njegodu");
+///
 /// // An already-mutated stem is not mutated twice.
-/// assert_eq!(mutate_present_stem("pisz"), "pisz");
+/// assert_eq!(mutate_present_stem("vidzz"), "vidzz");
+/// assert_eq!(mutate_present_stem("pissz"), "pissz");
 /// ```
 pub fn mutate_present_stem(stem: &str) -> String {
     for (from, to) in MUTATIONS {
@@ -163,12 +184,15 @@ fn ends_with_letter(stem: &str, letter: &str) -> bool {
         return false;
     }
     let before = &stem[..stem.len() - letter.len()];
-    // `z` must not match the `z` of `zz` or `sz`; `c` must not match the `c` of
-    // `cz`... which cannot happen, since `cz` ends in `z`. But `s` must not
-    // match the `s` of `sz`, and `c` must not match the `sc` of nothing — the
-    // real cases are enumerated rather than inferred.
+    // `z` is the tail of *three* digraphs — `zz`, `sz` and `cz` — and `cz` is the
+    // one that is easy to forget, because `zz` and `sz` come to mind as a pair.
+    // Omitting it makes `lecz` (from `leczitj` "heal") match the `z` mutation and
+    // come out `lecz'zz`. `szcz` is covered by the same `c` test.
+    //
+    // The other letters need no exclusion: no Ruthenian digraph ends in `t`, `d`,
+    // `s`, `h`, `k`, `g` or a labial, except `sz` for `s`.
     match letter {
-        "z" => !(before.ends_with('z') || before.ends_with('s')),
+        "z" => !(before.ends_with('z') || before.ends_with('s') || before.ends_with('c')),
         "s" => !stem.ends_with("sz"),
         "c" => !stem.ends_with("cz"),
         _ => true,
