@@ -170,13 +170,6 @@ in Interslavic, which does not encode stress at all. Dictionaries and teaching
 materials may mark it with a combining acute on the vowel (`pisátj`); running
 text never does, and the marked and unmarked spellings are different strings.
 
-> **Planned: an etymological alphabet.** A second, diacritic-bearing notation for
-> dictionaries and etymology — ASCII with diacritics, on the model of
-> Interslavic's etymological alphabet — would let one spelling distinguish what
-> the standard orthography merges: yat (`ě`) from `e`, the nasals (`ę`, `ǫ`), the
-> jers, and stress. It is **not** part of the standard language and is deferred
-> until the lexicon can supply the etymological information (§12).
-
 ## 2.2 Consonants
 
 | | labial | dental | alveolar | palatal | velar |
@@ -1980,25 +1973,17 @@ and the Russian-anchored reconstruction method (§12.2).
 **Closed against restoration.** The middle voice — lost in all Slavic, its work
 done by the reflexive clitic, and restoring it would roughly double the verb
 paradigm for a category no Slavic language attests. Vowel quantity — Russian has
-none, and the pure-ASCII alphabet cannot write it. A distinct ablative plural —
+none, the pure-ASCII alphabet cannot write it, and Ruthenian has one orthography
+rather than a second diacritic notation to hide it in. A distinct ablative plural —
 PIE does not have one either (ablative and dative are syncretic in the plural
 throughout), so there is nothing to restore.
 
-**Still open.**
+**Still open.** One question about the language itself:
 
-1. **The supine.** OCS distinguished `idǫ lovitъ` "I go in order to hunt" from
-   the infinitive `idǫ loviti`, governing the genitive. It would fit the brief
-   and it was briefly specified, but it is deliberately deferred rather than
-   adopted, and §10.5 currently uses the infinitive or a `da` clause instead.
-2. **The etymological alphabet.** A diacritic notation for dictionaries,
-   distinguishing yat, the nasals, the jers and stress. Deferred, and now purely
-   a presentation feature: no part of the grammar depends on it, since §2.6
-   fixes the correspondences and §3.9 removed the jers' grammatical work.
-3. **Cognate grouping where Russian has no lemma.** §12.2's anchored method
-   covers the ordinary case; the fallback across the remaining six sources is
-   still the hardest unsolved problem in the lexicon, and its own phase.
-4. **Czech and Serbo-Croatian lemma counts** (§12.1), which must be measured by
-   a full scan before they are quoted.
+**The supine.** OCS distinguished `idǫ lovitъ` "I go in order to hunt" from the
+infinitive `idǫ loviti`, governing the genitive. It would fit the brief and it
+was briefly specified, but it is deliberately deferred rather than adopted, and
+§10.5 currently uses the infinitive or a `da` clause instead.
 
 ## Written in this revision
 

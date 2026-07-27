@@ -4,6 +4,10 @@ What [`RUTHENIAN.md`](RUTHENIAN.md) still owes. Each entry names **what it
 blocks** — an open question is not a note to self, it is a paradigm or a phase
 that cannot be finished.
 
+**One question about the language remains open**, and it blocks nothing. The rest
+of this file is prose the specification is missing, not decisions it is waiting
+on.
+
 **These are decisions, not options.** Nothing here is modelled as a runtime
 switch: when one closes, the specification changes, the code changes with it, and
 the changelog enumerates the affected slots.
@@ -11,9 +15,13 @@ the changelog enumerates the affected slots.
 The bulk of this document has been answered and moved into the specification.
 See §13 there for the settled list, and the changelog for the reasoning.
 
+Lexicon questions — cognate grouping, source-language inventories — are out of
+scope while the work is `ruthenian-core`, which needs no lexicon at all. They
+belong to whichever phase builds one.
+
 ---
 
-## 1. The supine
+## The supine
 
 OCS distinguished the supine from the infinitive for purpose after verbs of
 motion, governing the **genitive**:
@@ -32,50 +40,6 @@ is deferred rather than rejected.
 
 > **Blocks:** nothing structurally. §10.5 has a working construction. Adopting it
 > would add one `VerbSlot` and one government rule.
-
-## 2. The etymological alphabet
-
-A second, diacritic-bearing notation for dictionaries and etymology — ASCII plus
-diacritics on the model of Interslavic's — distinguishing what the standard
-orthography merges: yat behind `-i`, the nasals behind `u`/`ja`, the jers, and
-stress.
-
-Two decisions have made this **purely a presentation feature**. §2.6 fixes the
-sound correspondences as rules, so nothing needs to look up an etymology to
-inflect a word; and §3.9 abolished the fleeting vowel, which was the jers' only
-remaining grammatical job. The grammar no longer depends on etymological
-information at any point.
-
-The standard orthography stays pure ASCII regardless.
-
-> **Blocks:** nothing. It is a dictionary feature whose absence costs
-> explanatory power, not correctness.
-
-## 3. Cognate grouping where Russian has no lemma
-
-§12.2's method is Russian-anchored: take the Russian lemma, consult the other six
-only at Russian's known mergers, apply §2.6. That covers the ordinary case and
-needs no etymology tags.
-
-It does not cover a word Russian lacks entirely. There the fallback is n-way
-grouping across the remaining six sources, and the data is thin: **5 517 etyma
-carry explicit Proto-Slavic links, only 88 with reflexes tagged in all five
-original languages, and 2 700 in just one.** Etymology templates alone will not
-group them; it needs phonological matching and the English gloss as a pivot, as
-slovowiki does.
-
-> **Blocks:** the lexicon's coverage, though not its existence. The anchored path
-> can be built first and the fallback added later. It blocks nothing in
-> `ruthenian-core`, which needs no lexicon at all.
-
-## 4. Czech and Serbo-Croatian lemma counts
-
-§12.1 lists both as secondary sources with their inventories marked *not yet
-measured*. `COMPARATIVE_GRAMMAR.md`'s method requires a full scan per language
-code, so `tools/measure.py` must be run for `cs` and `sh`/`sr`/`hr` before those
-figures are quoted anywhere.
-
-> **Blocks:** the §12.1 table, and any claim about lexical coverage.
 
 ---
 

@@ -142,6 +142,14 @@ them to keep eight cases distinguishable.
   or the loss of `budu`. One suppletive verb is cheaper than either, and it is now
   the language's only one.
 
+- **The etymological alphabet is dropped.** It was a deferred second,
+  diacritic-bearing notation for dictionaries, and two decisions had already
+  hollowed it out: §2.6 fixes the sound correspondences as rules, so nothing
+  needs an etymology to inflect a word, and §3.9 abolished the fleeting vowel,
+  which was the jers' only grammatical job. **Ruthenian has one orthography.**
+  Vowel quantity loses its last possible home with it, which is consistent —
+  Russian has none and pure ASCII cannot write it.
+
 - **§4 — both adjective forms mark animacy, and the long form's animate
   accusative is corrected.** §4.1's short table showed no animate variant, and
   §4.2's long table gave `dobrogo` — the **genitive** — where §3.7 puts an animate
