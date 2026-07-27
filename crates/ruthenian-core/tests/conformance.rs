@@ -8,7 +8,7 @@
 //! time — see `tools/extract_paradigms.py` for why that distinction is
 //! load-bearing.
 
-use ruthenian_core::{Case, Number, noun};
+use ruthenian_core::{Animacy, Case, Gender, Number, adjective, noun, short_adjective};
 
 mod support;
 use support::{Row, corpus};
@@ -24,6 +24,15 @@ fn case_of(name: &str) -> Case {
         "Instrumental" => Case::Instrumental,
         "Locative" => Case::Locative,
         other => panic!("unknown case in corpus: {other}"),
+    }
+}
+
+fn gender_of(name: &str) -> Gender {
+    match name {
+        "Masculine" => Gender::Masculine,
+        "Feminine" => Gender::Feminine,
+        "Neuter" => Gender::Neuter,
+        other => panic!("unknown gender in corpus: {other}"),
     }
 }
 
@@ -62,6 +71,33 @@ fn conformance() {
                     .split_once('.')
                     .expect("features are Case.Number for a noun");
                 noun(lemma, case_of(case), number_of(number))
+            }
+            // Case.Number.Gender, optionally .Animate. Anything else is
+            // inanimate, which is the unmarked value.
+            "adjective" | "short_adjective" => {
+                let f: Vec<&str> = features.split('.').collect();
+                assert!(
+                    (3..=4).contains(&f.len()),
+                    "adjective features are Case.Number.Gender[.Animate], got {features:?}"
+                );
+                let animacy = match f.get(3) {
+                    Some(&"Animate") => Animacy::Animate,
+                    None => Animacy::Inanimate,
+                    Some(other) => panic!("unknown animacy in corpus: {other}"),
+                };
+                let f = |w: fn(&str, Case, Number, Gender, Animacy) -> String| {
+                    w(
+                        lemma,
+                        case_of(f[0]),
+                        number_of(f[1]),
+                        gender_of(f[2]),
+                        animacy,
+                    )
+                };
+                match pos.as_str() {
+                    "adjective" => f(adjective),
+                    _ => f(short_adjective),
+                }
             }
             // Milestones M3–M7 add their parts of speech here. An unknown `pos`
             // is a hard error rather than a skip, so a corpus row can never go

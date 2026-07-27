@@ -208,9 +208,67 @@ NOCZJ = noun(
            ins="noczami", loc="noczah"),
 )
 
+
+
+# --- §4 adjectives ----------------------------------------------------------
+# §4.1's and §4.2's tables give a column per gender in the singular but a
+# *single* Dual and Plural column. Those single columns are the masculine — the
+# nominal declension's dual differs by gender (`zzenama` against `domoma`), and
+# its neuter plural nominative is `-a`. So the dual and plural rows below are
+# transcribed as masculine, which is what the tables actually show; the other
+# genders are derived by §4.1's rule ("endings are the noun's, exactly") and are
+# checked by the noun paradigms instead.
+def adjective(pos, section, sg_m, sg_n, sg_f, du_m, pl_m, animate=None):
+    rows = []
+    for gender, cells in (("Masculine", sg_m), ("Neuter", sg_n), ("Feminine", sg_f)):
+        for case in CASES:
+            rows.append((pos, "dobr", f"{case}.Singular.{gender}", cells[case], section))
+    for number, cells in (("Dual", du_m), ("Plural", pl_m)):
+        for case in CASES:
+            rows.append((pos, "dobr", f"{case}.{number}.Masculine", cells[case], section))
+    for features, form in (animate or {}).items():
+        rows.append((pos, "dobr", features, form, section))
+    return rows
+
+
+SHORT = adjective(
+    "short_adjective", "4.1",
+    spread(nom_acc="dobr", voc="dobrje", gen="dobrogo", abl="dobra", dat="dobru",
+           ins="dobrom", loc="dobri"),
+    spread(nom_voc_acc="dobro", gen="dobrogo", abl="dobra", dat="dobru",
+           ins="dobrom", loc="dobri"),
+    spread(nom="dobra", voc="dobro", acc="dobru", gen_abl="dobry", dat="dobri",
+           ins="dobroj", loc="dobri"),
+    spread(nom_voc_acc="dobra", gen_loc="dobru", dat_ins_abl="dobroma"),
+    spread(nom_voc_acc="dobry", gen="dobrov", dat_abl="dobrom", ins="dobrami",
+           loc="dobrah"),
+    animate={
+        "Accusative.Singular.Masculine.Animate": "dobra",
+        "Accusative.Plural.Masculine.Animate": "dobrov",
+    },
+)
+
+# §4.2: no vocative — the nominative is used, as in every language measured.
+LONG = adjective(
+    "adjective", "4.2",
+    spread(nom_voc_acc="dobryj", gen="dobrogo", abl="dobra", dat="dobromu",
+           ins="dobrym", loc="dobrom"),
+    spread(nom_voc_acc="dobroje", gen="dobrogo", abl="dobra", dat="dobromu",
+           ins="dobrym", loc="dobrom"),
+    spread(nom_voc="dobraja", acc="dobruju",
+           gen_abl_dat_ins_loc="dobroj"),
+    spread(nom_voc_acc="dobraja", gen_loc="dobru", dat_ins_abl="dobryma"),
+    spread(nom_voc_acc="dobryje", gen_loc="dobryh", dat_abl="dobrym",
+           ins="dobrymi"),
+    animate={
+        "Accusative.Singular.Masculine.Animate": "dobra",
+        "Accusative.Plural.Masculine.Animate": "dobryh",
+    },
+)
+
 ROWS = (
     DOM + KONJ + DRUG + OKNO + POLJE + ZZENA + KNIGA + ZJEMLJA + NACIJA
-    + SLUGA + NOCZJ
+    + SLUGA + NOCZJ + SHORT + LONG
 )
 
 

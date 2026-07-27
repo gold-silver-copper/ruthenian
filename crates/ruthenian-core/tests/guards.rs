@@ -10,7 +10,10 @@
 //! is separate only because it is the one that runs the whole engine.
 
 use ruthenian_core::fallback::{UNREADABLE, is_unreadable};
-use ruthenian_core::{Animacy, Case, FiniteTense, Gender, Noun, Number, Person, noun};
+use ruthenian_core::{
+    Adjective, Animacy, Case, FiniteTense, Gender, Noun, Number, Person, adjective, comparative,
+    noun, short_adjective, superlative,
+};
 
 mod support;
 use support::{corpus, corpus_header, crate_dir, fnv1a64, repo_root};
@@ -65,13 +68,17 @@ fn spec_currency() {
 fn corpus_row_count() {
     let recorded: usize = corpus_header("rows").parse().expect("a row count");
     assert_eq!(recorded, corpus().len(), "corpus row count drifted");
-    // 11 nominal paradigms × 24 cells. Stated so that adding a paradigm is a
-    // deliberate edit here rather than a number that moves on its own.
+    // 11 nominal paradigms × 24 cells = 264, plus §4's two adjective tables at
+    // 40 cells each (three genders singular, plus a masculine dual and plural)
+    // and two animate accusatives each. Spelled out so that adding a paradigm
+    // is a deliberate edit here rather than a number that moves on its own.
     assert_eq!(
-        recorded % 24,
-        0,
-        "a nominal paradigm is 8 cases × 3 numbers"
+        recorded,
+        264 + 2 * 42,
+        "the corpus is 11 nouns + 2 adjectives"
     );
+    let nouns = corpus().iter().filter(|r| r.pos == "noun").count();
+    assert_eq!(nouns % 24, 0, "a nominal paradigm is 8 cases × 3 numbers");
 }
 
 // --------------------------------------------------------------------------
@@ -166,6 +173,25 @@ fn paradigm_is_form() {
             assert_eq!(form, noun(lemma, case, number), "{lemma}: and with noun()");
         }
     }
+
+    // The same law for both adjective declensions.
+    for stem in ["dobr", "dorog", "russk"] {
+        let a = Adjective::new(stem);
+        for animacy in Animacy::ALL {
+            for (long, short) in [(a.long_paradigm(animacy), a.short_paradigm(animacy))] {
+                assert_eq!(long.len(), 72, "{stem}: 8 cases × 3 numbers × 3 genders");
+                assert_eq!(short.len(), 72);
+                for (case, number, gender, form) in long {
+                    assert_eq!(form, a.long(case, number, gender, animacy));
+                    assert_eq!(form, adjective(stem, case, number, gender, animacy));
+                }
+                for (case, number, gender, form) in short {
+                    assert_eq!(form, a.short(case, number, gender, animacy));
+                    assert_eq!(form, short_adjective(stem, case, number, gender, animacy));
+                }
+            }
+        }
+    }
 }
 
 // --------------------------------------------------------------------------
@@ -219,6 +245,20 @@ fn totality_no_panic() {
         // The bound form must agree, including on hostile input.
         let n = Noun::new(word);
         assert_eq!(n.paradigm().len(), 24);
+
+        // And both adjective declensions, and the two derivations.
+        for gender in Gender::ALL {
+            for animacy in Animacy::ALL {
+                for number in Number::ALL {
+                    for case in Case::ALL {
+                        assert!(!adjective(word, case, number, gender, animacy).is_empty());
+                        assert!(!short_adjective(word, case, number, gender, animacy).is_empty());
+                    }
+                }
+            }
+        }
+        assert!(!comparative(word).is_empty());
+        assert!(!superlative(word).is_empty());
     }
 }
 

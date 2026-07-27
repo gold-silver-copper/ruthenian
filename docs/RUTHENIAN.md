@@ -863,6 +863,13 @@ as a word class.
 ¹ animate. Long adjectives have **no vocative** — the nominative is used, as in
 every language measured.
 
+**The Dual and Plural columns above are the masculine.** Both tables give one
+column where the declension needs three, and §4.1's rule decides the rest: its
+endings are the noun's, so the feminine dual is `dobrama` against the masculine
+`dobroma` (§3.5's `zzenama` against §3.3's `domoma`), and the neuter plural
+nominative is `dobra` against `dobry`. The long declension genuinely has one dual
+and one plural for all genders, as `toj` does (§5.4).
+
 The two declensions differ in the nominative, accusative, dative, instrumental
 and locative, and coincide in the genitive and ablative. That coincidence is
 inherited: contraction of the long forms (`dobrajego` → `dobrogo`) merged them in
@@ -906,6 +913,18 @@ Regular, no suppletion. The comparative triggers the **first** palatalization.
 
 `naj-` follows OCS, Ukrainian, Belarusian, Polish and Interslavic against
 Russian's analytic `самый`.
+
+**On a velar stem the suffix loses its own glide.** `dorog` palatalizes to
+`dorozz`, and `zz` is hard (§2.2), so §3.8's rule 2 removes the `j` of `-jejsz-`:
+
+```
+dobr   → dobrjejsz     dobrjejszij      (rule 1: y is written i after sz)
+dorog  → dorozzejsz    dorozzejszij     (first palatalization, then rule 2)
+tih    → tiszejsz      tiszejszij
+```
+
+The long form is `dobrjejszij` and not `*dobrjejszyj` for the same reason at the
+other seam — §3.8's first rule writes `y` as `i` after `sz`.
 
 Comparatives and superlatives exist in both long and short forms, and the
 comparative governs the **ablative** for the standard of comparison:

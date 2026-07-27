@@ -28,7 +28,7 @@ references throughout the source are to the specification.
 | | |
 |---|---|
 | **nouns** (§3.3–§3.6) | complete — all 8 cases × 3 numbers, three declensions, hard and soft |
-| adjectives (§4) | not yet |
+| **adjectives** (§4) | complete — both declensions × 3 genders, plus §4.3's degrees |
 | pronouns (§5) | not yet |
 | numerals (§6) | not yet |
 | verbs (§7) | not yet |
@@ -37,8 +37,9 @@ references throughout the source are to the specification.
 
 | | Result |
 |---|---|
-| Corpus cells reproduced (`tests/corpus/paradigms.tsv`) | **264 of 264** |
+| Corpus cells reproduced (`tests/corpus/paradigms.tsv`) | **348 of 348** |
 | Nominal paradigms covered | 11 — `dom`, `Konj`, `Drug`, `okno`, `polje`, `zzena`, `kniga`, `zjemlja`, `nacija`, `sluga'`, `noczj'` |
+| Adjective paradigms covered | 2 — `dobr` long and short, all three genders |
 | Guards, each verified to fail under its stated mutation | **12 of 12** |
 | Third-party dependencies | **0** |
 
@@ -80,7 +81,7 @@ stale and is deleted, not left in place looking reassuring.
 | 4 | `no_option_no_result` | make one public signature return `Option<String>` |
 | 5 | `every_fallback_exercised` | declare a sixth fallback with no test |
 | 6 | `paradigm_is_form` — law 2, one generation path | give `paradigm()` its own table |
-| 7 | `totality_no_panic` — 25 hostile inputs × 24 cells | remove the `is_word` guard in `lemma.rs` |
+| 7 | `totality_no_panic` — 25 hostile inputs across every entry point | remove the `is_word` guard in `lemma.rs` |
 | 8 | `output_is_lowercase` | stop folding the lemma's case |
 | 9 | `no_dependencies` | add any crates.io entry |
 | 10 | `no_stored_derivable_state` — law 3 | add a `gender` field to `Noun` |
@@ -120,7 +121,7 @@ specification does not contain (the script's verification).
 ## Running it
 
 ```bash
-cargo test -p ruthenian-core                  # 29 tests: 4 unit, 1 corpus, 12 guards, 12 doc
+cargo test -p ruthenian-core                  # 40 tests: 4 unit, 1 corpus, 11 guards, 24 doc
 cargo clippy -p ruthenian-core --all-targets  # clean
 python3 tools/extract_paradigms.py            # regenerate the corpus after a spec edit
 ```

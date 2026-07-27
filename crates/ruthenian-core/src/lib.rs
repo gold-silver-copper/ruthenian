@@ -46,11 +46,13 @@
 
 #![forbid(unsafe_code)]
 
+pub mod adjective;
 pub mod fallback;
 pub mod grammar;
 mod lemma;
 pub mod noun;
 pub mod spelling;
 
+pub use adjective::{Adjective, adjective, comparative, short_adjective, superlative};
 pub use grammar::{Animacy, Case, FiniteTense, Gender, Number, Person};
 pub use noun::{Noun, noun};

@@ -9,7 +9,7 @@
 //! cargo run -p ruthenian-core --example samples -- dom Drug  # named lemmas
 //! ```
 
-use ruthenian_core::{Case, Noun, Number};
+use ruthenian_core::{Adjective, Animacy, Case, Gender, Noun, Number, comparative, superlative};
 
 /// Lemmas that exercise something distinct, one per line of interest.
 const DEFAULT: &[(&str, &str)] = &[
@@ -57,5 +57,41 @@ fn main() {
             );
         }
     }
+    adjectives();
     println!();
+}
+
+/// §4's two declensions side by side, and §4.3's degrees.
+fn adjectives() {
+    for stem in ["dobr", "dorog"] {
+        let a = Adjective::new(stem);
+        println!("\n{stem}  — long / short, masculine · neuter · feminine");
+        println!("{}", "-".repeat(74));
+        println!("               long                        short");
+        for number in Number::ALL {
+            println!("  {number:?}");
+            for case in Case::ALL {
+                let g = |f: &dyn Fn(Case, Number, Gender) -> String| {
+                    Gender::ALL.map(|gender| f(case, number, gender)).join(" ")
+                };
+                println!(
+                    "  {:<12} {:<27} {}",
+                    format!("{case:?}").to_lowercase(),
+                    g(&|c, n, gd| a.long(c, n, gd, Animacy::Inanimate)),
+                    g(&|c, n, gd| a.short(c, n, gd, Animacy::Inanimate)),
+                );
+            }
+        }
+        println!(
+            "  degrees      {} / {}  ->  {}",
+            comparative(stem),
+            superlative(stem),
+            a.long(
+                Case::Nominative,
+                Number::Singular,
+                Gender::Masculine,
+                Animacy::Inanimate
+            ),
+        );
+    }
 }

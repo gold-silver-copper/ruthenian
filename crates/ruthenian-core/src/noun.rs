@@ -16,7 +16,7 @@ use crate::spelling::{Palatal, join, palatalize};
 /// Declension II splits by gender and the other two do not, so this is the
 /// declension crossed with just the distinction that matters.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum Set {
+pub(crate) enum Set {
     /// §3.3 — `dom`, `konj`, `drug`.
     IiMasculine,
     /// §3.4 — `okno`, `polje`.
@@ -73,7 +73,7 @@ pub fn noun(word: &str, case: Case, number: Number) -> String {
 /// dual has three forms (nom=voc=acc, gen=loc, dat=ins=abl), and the ablative
 /// merges with the dative in the dual and plural. §3.7 then puts an animate
 /// accusative on the ablative in the singular and the genitive in the plural.
-fn resolve(set: Set, case: Case, number: Number, animacy: Animacy) -> Case {
+pub(crate) fn resolve(set: Set, case: Case, number: Number, animacy: Animacy) -> Case {
     use Case::*;
     use Number::*;
 
@@ -114,7 +114,7 @@ fn resolve(set: Set, case: Case, number: Number, animacy: Animacy) -> Case {
 /// — the velar nominative plural `drugi`, the genitive `knigi` — is not
 /// yat-derived and must not palatalize. That distinction is the whole reason
 /// `knigi` (genitive) and `knizi` (dative) differ.
-fn ending(set: Set, soft: bool, case: Case, number: Number) -> (&'static str, Palatal) {
+pub(crate) fn ending(set: Set, soft: bool, case: Case, number: Number) -> (&'static str, Palatal) {
     use Case::*;
     use Number::*;
     let n = Palatal::None;
@@ -256,6 +256,29 @@ fn ending(set: Set, soft: bool, case: Case, number: Number) -> (&'static str, Pa
             (Locative, Plural) => ("jah", n),
         },
     }
+}
+
+/// The nominal declension, keyed by the gender it agrees in.
+///
+/// §4.1: the short adjective's "endings are the noun's, **exactly** — including
+/// the animacy syncretism, which belongs to the nominal declension rather than
+/// to nouns as a word class". This is that entry point, and it is why
+/// `short_adjective` restates nothing: it *is* this table.
+///
+/// Adjective stems are always hard — §1 removes soft adjective stems — so there
+/// is no hardness parameter.
+pub(crate) fn nominal(
+    gender: Gender,
+    case: Case,
+    number: Number,
+    animacy: Animacy,
+) -> (&'static str, crate::spelling::Palatal) {
+    let set = match gender {
+        Gender::Masculine => Set::IiMasculine,
+        Gender::Neuter => Set::IiNeuter,
+        Gender::Feminine => Set::I,
+    };
+    ending(set, false, resolve(set, case, number, animacy), number)
 }
 
 /// A noun with its lexical facts bound, so the per-call signature is the grammar
