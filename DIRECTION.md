@@ -40,36 +40,29 @@ ask for a case that does not exist, and you cannot get a form back without havin
 said which cell you wanted.
 
 ```rust
-// Nominals. Every one of these is total: the language has no gap here.
+// ---- nouns -----------------------------------------------------------------
 pub fn noun(word: &str, case: Case, number: Number) -> String;
 
-// An adjective agrees with a head noun, so its gender and animacy are the
-// HEAD's, not its own — they stay parameters because they come from elsewhere
-// in the sentence, not from the adjective's citation form.
-pub fn adjective(word: &str, form: AdjectiveForm, degree: Degree,
-                 case: Case, number: Number, gender: Gender,
-                 animacy: Animacy) -> String;
+// ---- adjectives: two paradigms, so two functions ---------------------------
+// Long = definite, declining pronominally; short = indefinite, declining as a
+// noun (§4). They are different tables, not two cells of one.
+pub fn adjective(word: &str, case: Case, number: Number,
+                 gender: Gender, animacy: Animacy) -> String;
+pub fn short_adjective(word: &str, case: Case, number: Number,
+                       gender: Gender, animacy: Animacy) -> String;
 
-pub fn numeral(value: u64, case: Case, gender: Gender, animacy: Animacy) -> String;
+// ---- derivation: word in, word out ----------------------------------------
+// Degree builds a new stem (§4.3), so it is a derivation rather than a cell.
+// The result declines through the two functions above like any other adjective.
+pub fn comparative(word: &str) -> String;    // "dobr" -> "dobrjejsz"
+pub fn superlative(word: &str) -> String;    // "dobr" -> "najdobrjejsz"
 
-// Verbs. `NonPast` is present for an imperfective and future for a perfective —
-// one slot, one form, meaning fixed by aspect (§7.8). Aspect is therefore NOT a
-// parameter: it changes what a form means, never what it looks like.
+// ---- verbs -----------------------------------------------------------------
 pub fn verb(word: &str, person: Person, number: Number,
             tense: FiniteTense) -> String;
-
-// Person × Number. §7.10 has synthetic forms for five of the nine; the other
-// four return the present indicative, which is what the language's periphrastic
-// third-person imperative is built from (`da idjet`).
 pub fn imperative(word: &str, person: Person, number: Number) -> String;
-
-pub fn participle(word: &str, kind: ParticipleKind, voice: Voice,
-                  case: Case, number: Number, gender: Gender,
-                  animacy: Animacy) -> String;
-
-// The parts the periphrastic tenses are built from.
-pub fn l_participle(word: &str, gender: Gender, number: Number) -> String;
 pub fn infinitive(word: &str) -> String;
+pub fn l_participle(word: &str, gender: Gender, number: Number) -> String;
 
 // `byti` is suppletive (§7.9) and belongs to no class, so it gets its own
 // function rather than an irregular-class escape hatch that every other call
@@ -80,16 +73,59 @@ pub fn byti(person: Person, number: Number, tense: FiniteTense) -> String;
 // and its only job is to build the imperfective future, so it is named for that.
 pub fn future_auxiliary(person: Person, number: Number) -> String;
 
-// Pronouns. Personal pronouns are total: they have no distinct vocative, so the
-// vocative returns the nominative — the language's own convention, already used
-// for the vocative plural (§3.1) and the long adjective (§4.2).
-pub fn pronoun(p: Pronoun, case: Case, number: Number,
-               gender: Gender, style: PronounStyle) -> String;
+// ---- participles: verb in, adjective lemma out ------------------------------
+// §7.12: "participles decline as adjectives and have both long and short forms".
+// So each is a derivation, and the result goes through adjective() or
+// short_adjective(). This is what removes ParticipleKind and Voice.
+pub fn present_active_participle(word: &str) -> String;
+pub fn past_active_participle(word: &str) -> String;
+pub fn present_passive_participle(word: &str) -> String;
+pub fn past_passive_participle(word: &str) -> String;
 
-// The reflexive has no gender or number. §5.2 gives it no nominative either;
-// asking for one returns `sjebja`, the form the pronoun is cited by.
-pub fn reflexive(case: Case, style: PronounStyle) -> String;
+// Gerunds are indeclinable, so these return a finished form rather than a stem.
+pub fn present_gerund(word: &str) -> String;   // "czitatj" -> "czitaja"
+pub fn past_gerund(word: &str) -> String;      // "czitatj" -> "czitav"
+
+// ---- pronouns: full and clitic are two paradigms ---------------------------
+pub fn pronoun(p: Pronoun, case: Case, number: Number, gender: Gender) -> String;
+pub fn clitic_pronoun(p: Pronoun, case: Case, number: Number,
+                      gender: Gender) -> String;
+
+// The reflexive has no gender and no number. §5.2 gives it no nominative
+// either; asking for one returns `sjebja`, the form the pronoun is cited by.
+pub fn reflexive(case: Case) -> String;
+pub fn clitic_reflexive(case: Case) -> String;
+
+// ---- numerals --------------------------------------------------------------
+pub fn numeral(value: u64, case: Case, gender: Gender, animacy: Animacy) -> String;
 ```
+
+### One rule decides what is a function and what is a parameter
+
+**An enum that selects a paradigm becomes a function. An enum that indexes
+within one stays a parameter.**
+
+Long and short adjectives are two declensions, so they are two functions; case
+and number index within either, so they are arguments. Full and clitic pronouns
+are two series, so they are two functions. Degree and the participles build new
+*words*, so they are derivations that hand their result back to the declension
+functions — which is what keeps the adjective API at two entry points instead of
+the twenty-four that `form × degree × participle-kind × voice` would produce.
+
+Applying it removed seven enums. `AdjectiveForm` and `PronounStyle` became
+function pairs; `Degree`, `ParticipleKind` and `Voice` became derivations, and
+`Voice` had no other use since Ruthenian's passive is participle + copula rather
+than a synthetic form; `Mood` and `Aspect` were already unused, the imperative
+being its own function, the conditional periphrastic, and aspect changing what a
+form means rather than what it looks like.
+
+What survives is seven types, each a genuine dimension of a paradigm: `Case`,
+`Number`, `Gender`, `Animacy`, `Person`, `FiniteTense`, `Pronoun`.
+
+`FiniteTense` stays a parameter deliberately. Person × number × tense is one
+table, so tense indexes within a paradigm rather than selecting between them —
+and splitting it would force the same three-way split on `byti` and lose the
+ability to walk the tenses when building a full paradigm.
 
 **Every function is total.** No `Option`, no `Result`, no panic: any combination
 of arguments the types permit returns a string. Where the language has no form
@@ -255,22 +291,24 @@ pub enum Person { First, Second, Third }
 // periphrastic and are composed by the caller.
 pub enum FiniteTense { NonPast, Aorist, Imperfect }
 
-// A grammatical category of the language, but NOT an inflection parameter:
-// aspect decides what NonPast means, never what it looks like.
-pub enum Aspect { Imperfective, Perfective }                 // no biaspectual — §7.2
-pub enum Mood { Indicative, Imperative, Conditional }
-pub enum Voice { Active, Passive }
-
-pub enum AdjectiveForm { Short, Long }                       // definiteness — §4
-pub enum Degree { Positive, Comparative, Superlative }       // §4.3
-
-pub enum PronounStyle { Full, Clitic }                       // §5.1a
+// Which pronoun, the way `word: &str` says which noun.
+pub enum Pronoun { Ja, Ty, On, Ona, Ono, My, Vy, Oni, Vje, Va }
 ```
 
-Each is exhaustive and each maps to a numbered section of the specification. A
-category the language does not have does not appear: there is no `Biaspectual`,
-because §7.2 abolishes it; no `AfterPreposition` pronoun style, because §5.1
-drops the `n-` prefix; no accent pattern, because stress is fixed (§2.1).
+**Seven types, and every one is a dimension of a paradigm.** Each is exhaustive
+and each maps to a numbered section of the specification.
+
+A category the language does not have does not appear: there is no
+`Biaspectual`, because §7.2 abolishes it; no `AfterPreposition` pronoun style,
+because §5.1 drops the `n-` prefix; no accent pattern, because stress is fixed
+(§2.1).
+
+And a category the language *does* have does not appear either, if the API never
+indexes by it. `Mood`, `Voice`, `Aspect`, `Degree`, `AdjectiveForm`,
+`ParticipleKind` and `PronounStyle` are all real (§7.1, §4, §5.1a) and none is a
+type here — they became functions, derivations, or nothing. §7.1 remains the
+place the language's categories are enumerated; this list is only what the
+inflector needs to be told.
 
 ## What must be supplied, and why
 
@@ -289,7 +327,7 @@ word-final `'` that marks a class-6 lemma (§2.1). `pisatj'` carries its class i
 its spelling, so the engine is told nothing.
 
 **Aspect is not on that list either**, which is worth stating because it was on
-an earlier version. The endings are identical for both aspects, so aspect never
+an earlier version. It changes what a form means, never what it looks like. The endings are identical for both aspects, so aspect never
 changes a form — only what `NonPast` means. A caller reasoning about *meaning*
 still needs it (and §7.2's closed perfective class still has to be stored
 somewhere), but that somewhere is not this crate.

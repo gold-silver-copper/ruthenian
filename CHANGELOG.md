@@ -142,6 +142,31 @@ them to keep eight cases distinguishable.
   or the loss of `budu`. One suppletive verb is cheaper than either, and it is now
   the language's only one.
 
+- **Seven enums removed from the API**, by one rule: *an enum that selects a
+  paradigm becomes a function; an enum that indexes within one stays a
+  parameter.*
+  - `AdjectiveForm` → `adjective()` and `short_adjective()`; `PronounStyle` →
+    `pronoun()`/`clitic_pronoun()` and `reflexive()`/`clitic_reflexive()`. Long
+    and short are two declensions, full and clitic two series — different tables,
+    not cells of one.
+  - `Degree`, `ParticipleKind` and `Voice` became **derivations**, because they
+    build new *words*: `comparative("dobr")` → `"dobrjejsz"` and
+    `past_passive_participle("poczitatj")` hand their result back to the
+    declension functions. §7.12 says participles "decline as adjectives and have
+    both long and short forms", so this follows the spec rather than working
+    around it. It is also what keeps the adjective API at two entry points
+    instead of the twenty-four `form × degree × kind × voice` would produce, and
+    `Voice` had no other use, Ruthenian's passive being participle + copula.
+  - `Mood` and `Aspect` were already unused — the imperative is its own function,
+    the conditional is periphrastic, and aspect changes what a form means rather
+    than what it looks like.
+
+  Seven types survive, each a genuine paradigm dimension: `Case`, `Number`,
+  `Gender`, `Animacy`, `Person`, `FiniteTense`, `Pronoun`. `FiniteTense` stays a
+  parameter deliberately: person × number × tense is one table, and splitting it
+  would force the same split on `byti` and lose the ability to walk the tenses
+  when building a paradigm.
+
 - **A noun's gender and animacy move into its lemma**, so `noun` takes a word, a
   case and a number — nothing else. `noun("Drug", Locative, Singular)` is
   `druzi`.
