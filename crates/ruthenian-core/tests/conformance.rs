@@ -1,0 +1,86 @@
+//! The engine against the committed corpus.
+//!
+//! Law 1: **the specification decides; the code conforms.** Where
+//! `docs/RUTHENIAN.md` states a form, that form is correct by definition and a
+//! disagreeing engine is wrong.
+//!
+//! The corpus is a committed artifact, not a parse of the specification at test
+//! time — see `tools/extract_paradigms.py` for why that distinction is
+//! load-bearing.
+
+use ruthenian_core::{Case, Number, noun};
+
+mod support;
+use support::{Row, corpus};
+
+fn case_of(name: &str) -> Case {
+    match name {
+        "Nominative" => Case::Nominative,
+        "Vocative" => Case::Vocative,
+        "Accusative" => Case::Accusative,
+        "Genitive" => Case::Genitive,
+        "Ablative" => Case::Ablative,
+        "Dative" => Case::Dative,
+        "Instrumental" => Case::Instrumental,
+        "Locative" => Case::Locative,
+        other => panic!("unknown case in corpus: {other}"),
+    }
+}
+
+fn number_of(name: &str) -> Number {
+    match name {
+        "Singular" => Number::Singular,
+        "Dual" => Number::Dual,
+        "Plural" => Number::Plural,
+        other => panic!("unknown number in corpus: {other}"),
+    }
+}
+
+/// Every cell of every paradigm the specification tabulates.
+///
+/// Reports **all** mismatches rather than stopping at the first, because one
+/// wrong ending typically shows up in several cells and the shape of the set is
+/// what identifies the rule at fault.
+#[test]
+fn conformance() {
+    let rows = corpus();
+    assert!(!rows.is_empty(), "the corpus is empty");
+
+    let mut failures = Vec::new();
+    let mut checked = 0usize;
+    for Row {
+        pos,
+        lemma,
+        features,
+        form,
+        section,
+    } in &rows
+    {
+        let got = match pos.as_str() {
+            "noun" => {
+                let (case, number) = features
+                    .split_once('.')
+                    .expect("features are Case.Number for a noun");
+                noun(lemma, case_of(case), number_of(number))
+            }
+            // Milestones M3–M7 add their parts of speech here. An unknown `pos`
+            // is a hard error rather than a skip, so a corpus row can never go
+            // silently unchecked.
+            other => panic!("no engine entry point for pos {other:?}"),
+        };
+        checked += 1;
+        if &got != form {
+            failures.push(format!(
+                "  §{section} {lemma} {features}: expected {form:?}, got {got:?}"
+            ));
+        }
+    }
+
+    assert!(
+        failures.is_empty(),
+        "{} of {checked} cells disagree with the specification:\n{}",
+        failures.len(),
+        failures.join("\n")
+    );
+    println!("{checked} cells conform");
+}

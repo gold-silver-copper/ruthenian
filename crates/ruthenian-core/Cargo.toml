@@ -1,0 +1,15 @@
+[package]
+name = "ruthenian-core"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "The inflectional morphology of Ruthenian: word plus grammar in, form out"
+
+# NO third-party dependencies, ever. Enforced by the `no_dependencies` guard,
+# not by convention. `ruthenian-orthography` supplies the alphabet and the
+# word-final class mark; nothing else belongs here.
+[dependencies]
+ruthenian-orthography = { path = "../ruthenian-orthography" }
