@@ -4,6 +4,26 @@
 
 ### Added
 
+- **`ruthenian-core`, and every noun in the language.** `noun(word, case,
+  number)` resolves all 24 cells of all three declensions, hard and soft, and
+  the lemma is the only thing it is told: gender, animacy, declension, hardness
+  and stem are derived per call from the citation form and never stored. 264
+  corpus cells, 11 paradigms, all conforming; 12 guards, each verified to fail
+  under its named mutation; zero third-party dependencies.
+
+  `src/spelling.rs` is §3.8 and §2.4 in one module, used by every part of
+  speech, because a second copy of a seam rule is a second rule. Its
+  `ends_with_letter` is the crate's most bug-prone operation: every hushing
+  consonant is a digraph whose second character is also a letter, so `sz` must
+  not be found to end in the letter `z`.
+
+  The conformance corpus is a committed artifact and `tools/extract_paradigms.py`
+  **transcribes** rather than parses, then verifies every form against the
+  specification. Parsing the spec inside the test was tried in an earlier
+  attempt and failed silently; the script's own first draft reproduced the same
+  class of bug, scanning the whole file for backticked spans so that one
+  unbalanced backtick flipped the parity of every span after it.
+
 - **The language specification.** [`docs/RUTHENIAN.md`](docs/RUTHENIAN.md) is
   now in the repository and is **normative**: eight cases, three numbers, three
   declensions, six conjugation classes, three past tenses, with the etymology of

@@ -735,14 +735,14 @@ is told apart by the difference — no pair of Ruthenian words differs only in
 `-om` against `-jem` after a hushing stem — so it costs no contrast, and it buys
 a spelling that is a function of the letters alone.
 
-**One form in this document does not follow from these rules.** §7.3 gives
-class 6's present as `piszu, piszeszj, piszet`, but §7.4's 1st-conjugation
-endings are `-u, -jeszj, -jet`, and `sz` keeps its glide by rule 2a — so the
-rules give `piszjeszj`. Either that spelling is correct and §7.3's example is
-wrong, or `sz` and `zz` belong with `cz` in rule 2a and the vocative `druzzje`
-is wrong. The nominal paradigms are tabulated in three places and the verb
-example in one, so the rules follow the paradigms and this is recorded as the
-open question rather than settled silently.
+**One form in this document does not follow from these rules**, and it is
+recorded in §13 rather than settled here. §7.3 gives class 6's present as
+`piszu, piszeszj, piszet`, but §7.4's 1st-conjugation endings are `-u, -jeszj,
+-jet`, and `sz` keeps its glide by rule 2a — so the rules give `piszjeszj`.
+Either that spelling is right and §7.3's example is wrong, or `sz` and `zz`
+belong with `cz` in rule 2a and the vocative `druzzje` is wrong. The nominal
+paradigms are tabulated in three places and the verb example in one, so the
+rules follow the paradigms.
 
 These replace Russian's velar-, sibilant-, `ц`- and vowel-stem declensions, which
 differ from the hard type *only* by these automatic effects.
@@ -2088,7 +2088,25 @@ already expressible two ways (§10.5), the distinction it draws is one no living
 Slavic language maintains, and a second infinitive-like form differing from the
 first by a single letter buys a contrast that would be inaudible in speech.
 
-**Nothing is open.** Every question this document raised has an answer above.
+**One thing is open**, found by implementing §3 rather than by reading it.
+
+**Does `sz` keep its glide before a `je`-ending?** §3.8's rule 2a says the
+vocative `-je` is written `-e` after `cz` and `szcz` only, which is where §2.2
+draws the line and which makes `otjecze` and `druzzje` both correct. But §7.3
+writes class 6's present as `piszeszj`, which needs `sz` in the rule too — and
+putting it there makes the vocative `druzze`, contradicting §3.3, §3.8 and §3.1.
+One of the two spellings is wrong:
+
+| if | then | cost |
+|---|---|---|
+| `piszjeszj` is right | §7.3's example is corrected, rule 2a stands | one verb example changes |
+| `piszeszj` is right | `sz` and `zz` join rule 2a, and the vocative becomes `druzze` | three tabulated nominal cells change |
+
+`ruthenian-core` implements the first, because the nominal paradigms are
+tabulated in three places and the verb example in one. It is listed here so the
+choice is visible rather than buried in a module.
+
+Everything else this document raised has an answer above.
 
 ## Written in this revision
 
