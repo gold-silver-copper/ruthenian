@@ -249,7 +249,7 @@ follows Russian** (§1), with the two exceptions noted there.
 | **yat `*ě`** | `*lěsъ`, `*domě` | **`-i`** (Ukrainian) | `ě` | `lis`, `domi` |
 
 The `*tj`/`*dj` row is **additive**, the same operation §7.11 applies to the
-present stem: the consonant stays and the palatal reflex follows it. This is a
+present stem: `t` and `d` are stops, so both survive in front of their reflex. This is a
 third departure from "follow Russian", and it is taken for transparency rather
 than for a category — `svjetcza` "candle" keeps `svjet-` "light" visible where
 Russian's `свеча` hides it, and `mjedzza` "boundary" keeps `mjed-`. Russian's
@@ -1523,50 +1523,54 @@ Applied **by class**, never by stem shape: a class-1 verb with a labial-final
 stem takes no mutation at all, verified across 1 977 Russian verbs without
 exception.
 
-**The mutation is additive: the consonant stays and the palatal reflex is added
-after it.** One operation, applied to whatever the stem ends in.
+**A stop keeps its place before its reflex; a fricative merges with its own.**
 
 | | | | |
 |---|---|---|---|
-| `t` → `tcz` | `d` → `dzz` | `s` → `ssz` | `z` → `z'zz` |
-| `k` → `kcz` | `g` → `gzz` | `h` → `hsz` | |
+| `t` → `tcz` | `d` → `dzz` | `k` → `kcz` | `g` → `gzz` |
 | `p` → `plj` | `b` → `blj` | `v` → `vlj` | `m` → `mlj` |
+| `s` → `sz` | `z` → `zz` | `h` → `sz` | |
+
+The first two rows are **additive** — the consonant survives and the reflex
+follows it. The third is **replacive**.
 
 ```
 vidjetj  → vidzz-    vidzzu     I see        (root vid- still visible)
 voditj   → vodzz-    vodzzu     I lead
-vozitj   → voz'zz-   voz'zzu    I carry
+vozitj   → vozz-     vozzu      I carry
 letjetj  → letcz-    letczu     I fly
 leczitj  → lecz-     leczu      I heal      (no mutation: cz is already palatal)
-pisatj'  → pissz-    pisszu     I write
+pisatj'  → pisz-     piszu      I write
+mahatj'  → masz-     maszu      I wave
 ljubitj  → ljublj-   ljublju    I love
 ```
 
-**Why additive.** The labial rules were always additive — `p` → `plj` keeps the
-`p` — and the dentals and velars were the inconsistent ones. Three things follow
-from making them all additive:
+**Why the split falls where it does.** A stop stays audible in front of its
+reflex, so writing it costs nothing and buys a legible root: `vidzzu` [vidʒu]
+shows `vid-` where Russian's `вижу` does not, and `dzz` [dʒ] is the voiced
+counterpart of `cz` [tʃ], which already contains its own stop. Two fricatives in
+sequence do not survive: `s` + `sz` would be [sʃ], which is no Slavic sound and
+collapses to [ʃː], so only the reflex is written.
 
-- **The root stays legible.** `vidzzu` shows `vid-`; Russian's `вижу` does not.
-  Since Ruthenian's brief is regularity rather than faithfulness to Russian's
-  accidents, a mutation that hides its own root is a cost with no benefit.
-- **It restores a parallelism Russian lost.** `t` → `cz` is [t] → [tʃ], where the
-  stop survives inside the affricate; `d` → `zz` was [d] → [ʒ], where it does
-  not. `d` → `dzz` [dʒ] makes the voiced series match the voiceless one.
-- **Two homographs disappear.** `voditj` and `vozitj` both gave `vozzu` before,
-  and `letjetj` "fly" collided with `leczitj` "heal" at `leczu`. Additive
-  separates both pairs: `vodzzu`/`voz'zzu` and `letczu`/`leczu`.
+The labial rules were always additive — `p` → `plj` keeps the `p` — so the stops
+are following a rule this table already had, and the fricatives are the ones that
+never could.
 
-And two rules disappear with it. `st` → `szcz` and `sk` → `szcz` were cluster
-special cases; additively the general rule applies to the cluster's last
-consonant and the `s` is simply left alone, so `krjestitj` → `krjestcz-` needs no
-rule of its own.
+Two homographs disappear, and they disappear *because* of where the split falls.
+`voditj` and `vozitj` both gave `vozzu` when `d` was replacive; `d` is a stop and
+`z` a fricative, so they now separate as `vodzzu` and `vozzu`. Likewise `letjetj`
+"fly" collided with `leczitj` "heal" at `leczu`, and now gives `letczu`.
 
-`z` → `z'zz` takes the separator (§2.1) because `zzz` would be read as `zz` + `z`
-rather than `z` + `zz`. It is the only output that needs one: `tcz`, `dzz`, `ssz`,
-`kcz`, `gzz` and `hsz` are each unambiguous under the greedy reader.
+Two rules disappear with it. `st` → `szcz` and `sk` → `szcz` were cluster special
+cases; the general rule applies to the cluster's last consonant, and `t` and `k`
+are both stops, so `krjestitj` → `krjestcz-` and `iskatj'` → `iskcz-` need no
+rules of their own.
+
+No output needs the separator `'`: `tcz`, `dzz`, `kcz` and `gzz` are each
+unambiguous under the greedy reader.
 
 `ov` → `u` is **not** in the table. It is class 2's stem formation (§7.3,
-`njegodovatj` → `njegoduj-`), not iotation, and it replaces rather than adds.
+`njegodovatj` → `njegoduj-`), not iotation, and it replaces.
 
 **Additive applies to iotation only — never to the palatalizations of §2.4.**
 Those are positional changes before a front vowel and they *replace*: `drug` →

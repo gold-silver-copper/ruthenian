@@ -22,13 +22,30 @@ pub const LABIALS: &[&str] = &["p", "b", "v", "m"];
 
 /// The present-stem mutations of §7.11.
 ///
-/// **Additive: the consonant stays and the palatal reflex is added after it.**
-/// The labial rules were always additive — `p` → `plj` keeps the `p` — and this
-/// is that one operation applied to every stem-final consonant. It keeps the
-/// root legible (`vidzzu` shows `vid-`, where Russian's `вижу` does not), and it
-/// separates two homograph pairs the replacive version created: `voditj` and
+/// **A stop keeps its place before its reflex; a fricative merges with its own.**
+///
+/// | | |
+/// |---|---|
+/// | stops `t d k g`, and the labials | additive — `letcz`, `vidzz`, `iskcz`, `ljublj` |
+/// | fricatives `s z h` | replacive — `pisz`, `vozz`, `masz` |
+///
+/// The split is phonetic rather than arbitrary. A stop stays audible in front of
+/// its reflex, so writing it costs nothing and keeps the root legible: `vidzz`
+/// [vidʒ] shows `vid-` where Russian's `вижу` does not. Two fricatives in
+/// sequence do not survive: `s` + `sz` would be [sʃ], which is no Slavic sound
+/// and collapses to [ʃː], so only the reflex is written.
+///
+/// The labial rules were always additive — `p` → `plj` keeps the `p` — so this
+/// is the rule they already followed, extended to the other stops.
+///
+/// Two homographs the fully replacive version created are gone: `voditj` and
 /// `vozitj` both gave `vozzu`, and `letjetj` "fly" collided with `leczitj` "heal"
-/// at `leczu`.
+/// at `leczu`. Both pairs separate here, and precisely because `d`/`t` are stops
+/// while `z` is a fricative — `vodzzu` against `vozzu`, `letczu` against `leczu`.
+///
+/// No output needs the separator `'`: `tcz`, `dzz`, `kcz` and `gzz` are each
+/// unambiguous under the greedy reader, and the one form that did need it —
+/// additive `z` → `z'zz` — is not taken.
 ///
 /// Applied **by class**, never by stem shape: a class-1 verb with a
 /// labial-final stem takes no mutation at all, verified across 1 977 Russian
@@ -36,29 +53,28 @@ pub const LABIALS: &[&str] = &["p", "b", "v", "m"];
 /// "ends in a labial" would corrupt all 1 977, which is why
 /// [`mutate_present_stem`] is only ever called for the classes that mutate.
 ///
-/// `z` → `z'zz` carries the separator because `zzz` reads as `zz` + `z` rather
-/// than `z` + `zz`. It is the only output that needs one.
-///
 /// `ov` → `u` is class 2's stem formation rather than iotation (§7.3), and it
-/// replaces rather than adds. It is listed first because `njegodov` ends in `v`
-/// and would otherwise take the labial rule, coming out `njegodovlj`.
+/// replaces. It is listed first because `njegodov` ends in `v` and would
+/// otherwise take the labial rule, coming out `njegodovlj`.
 ///
-/// §7.11's `st` → `szcz` and `sk` → `szcz` are **gone**: additively the general
-/// rule applies to the cluster's last consonant and the `s` is left alone, so
-/// `krjest` → `krjestcz` needs no rule of its own.
+/// §7.11's `st` → `szcz` and `sk` → `szcz` are **gone**: the general rule applies
+/// to the cluster's last consonant, both of which are stops, so `krjest` →
+/// `krjestcz` and `isk` → `iskcz` need no rules of their own.
 pub const MUTATIONS: &[(&str, &str)] = &[
     ("ov", "u"),
+    // stops — additive
     ("t", "tcz"),
     ("d", "dzz"),
-    ("s", "ssz"),
-    ("z", "z'zz"),
     ("k", "kcz"),
     ("g", "gzz"),
-    ("h", "hsz"),
     ("p", "plj"),
     ("b", "blj"),
     ("v", "vlj"),
     ("m", "mlj"),
+    // fricatives — replacive
+    ("s", "sz"),
+    ("z", "zz"),
+    ("h", "sz"),
 ];
 
 /// Which palatalization an ending triggers (§2.4).
@@ -130,15 +146,20 @@ pub fn palatalize(stem: &str, which: Palatal) -> String {
 ///
 /// ```
 /// use ruthenian_core::spelling::mutate_present_stem;
-/// // Additive: the root stays visible.
+/// // A stop is kept, so the root stays visible.
 /// assert_eq!(mutate_present_stem("vid"), "vidzz");   // vidjetj -> vidzzu
 /// assert_eq!(mutate_present_stem("let"), "letcz");   // letjetj -> letczu
-/// assert_eq!(mutate_present_stem("pis"), "pissz");   // pisatj' -> pisszu
+/// assert_eq!(mutate_present_stem("isk"), "iskcz");   // iskatj' -> iskczu
 /// assert_eq!(mutate_present_stem("ljub"), "ljublj"); // ljubitj -> ljublju
 ///
-/// // The two homographs the replacive version created are now distinct.
+/// // A fricative merges with its reflex: [s] + [sz] is no Slavic sound.
+/// assert_eq!(mutate_present_stem("pis"), "pisz");    // pisatj' -> piszeszj
+/// assert_eq!(mutate_present_stem("voz"), "vozz");    // vozitj  -> vozzu
+/// assert_eq!(mutate_present_stem("mah"), "masz");    // mahatj' -> maszu
+///
+/// // Both homographs of the fully replacive version stay separate, because
+/// // d and t are stops where z is a fricative.
 /// assert_ne!(mutate_present_stem("vod"), mutate_present_stem("voz"));
-/// assert_eq!(mutate_present_stem("voz"), "voz'zz");  // the separator: zzz
 /// assert_eq!(mutate_present_stem("lecz"), "lecz");   // leczitj -> leczu
 ///
 /// // Class 2's stem formation replaces rather than adds.
@@ -146,7 +167,7 @@ pub fn palatalize(stem: &str, which: Palatal) -> String {
 ///
 /// // An already-mutated stem is not mutated twice.
 /// assert_eq!(mutate_present_stem("vidzz"), "vidzz");
-/// assert_eq!(mutate_present_stem("pissz"), "pissz");
+/// assert_eq!(mutate_present_stem("pisz"), "pisz");
 /// ```
 pub fn mutate_present_stem(stem: &str) -> String {
     for (from, to) in MUTATIONS {
