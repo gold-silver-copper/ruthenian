@@ -179,9 +179,16 @@ text never does, and the marked and unmarked spellings are different strings.
 | nasal | `m` | `n` | | | |
 | liquid | | `l r` | | `j` | |
 
-Every consonant except `j`, `cz`, `szcz` has a **hard** and a **soft**
-(palatalized) value; softness before a vowel is written with the `j`-digraphs
-(`ja je jo ju`) and word-finally or before a consonant with `j` alone (`konj`).
+Every consonant except `j`, `cz`, `szcz`, `zz` and `sz` has a **hard** and a
+**soft** (palatalized) value; softness before a vowel is written with the
+`j`-digraphs (`ja je jo ju`) and word-finally or before a consonant with `j`
+alone (`konj`).
+
+**The five exceptions are exceptions for two different reasons.** `j` is itself
+the palatal; `cz` and `szcz` are inherently palatal, so there is no hard value to
+contrast with. `zz` and `sz` are the opposite case: they are inherently **hard**,
+as `ж` and `ш` are in Russian, and have no soft value. Either way the `j` has
+nothing to mark, which is why none of the five ever takes one (§3.8 rule 2a).
 
 ## 2.3 Vowels
 
@@ -417,7 +424,7 @@ over — in the vowel and in the consonant:
 | `g` | `zz` | `z` |
 | `h` | `sz` | `s` |
 
-`drug` → vocative `druzzje`, locative `druzi`.
+`drug` → vocative `druzze`, locative `druzi`.
 
 Whether to keep the second palatalization at all is a real choice, and the
 measured answer is that **Ruthenian sides with Ukrainian and OCS against
@@ -503,7 +510,7 @@ whether the form ends in `j`, `ja` or `je`.**
 | Case | Singular | Dual | Plural |
 |---|---|---|---|
 | nominative | `drug` | `druga` | `drugi` ² |
-| vocative | **`druzzje`** ³ | = nom | = nom |
+| vocative | **`druzze`** ³ | = nom | = nom |
 | accusative | `druga` | = nom | `drugov` |
 | genitive | `drugogo` | `drugu` | `drugov` |
 | **ablative** | `druga` | = dat | = dat |
@@ -641,11 +648,21 @@ The `'` is what says so (§2.1): `-a` predicts feminine, and a masculine noun in
 | nominative | `noczj` | `noczi` | `noczi` |
 | vocative | `noczi` | = nom | = nom |
 | accusative | `noczj` | `noczi` | `noczi` |
-| genitive | `noczi` | `noczju` | `noczjev` |
+| genitive | `noczi` | `noczu` | `noczev` |
 | **ablative** | `noczi` | = dat | = dat |
-| dative | `noczi` | `noczjma` | `noczjam` |
-| instrumental | `noczjju` | `noczjma` | `noczjami` |
-| locative | `noczi` | `noczju` | `noczjah` |
+| dative | `noczi` | `noczjma` | `noczam` |
+| instrumental | `noczjju` | `noczjma` | `noczami` |
+| locative | `noczi` | `noczu` | `noczah` |
+
+The `j` of the endings is a **softness marker**, so §3.8's rule 2 removes it
+after `cz`: the plural is `noczev`, `noczam`, `noczami`, `noczah` and not
+`*noczjev`, and this is Russian's own `ночей`, `ночам`, `ночами`, `ночах`, none
+of which carries a `ь`. Where the `j` is *not* a softness marker it stays — the
+nominative is the bare ending `-j`, and the instrumental `-jju` is the sign plus
+the ending.
+
+A stem that is not inherently palatal keeps them all: `kostj'` gives `kostjev`,
+`kostjam`, `kostjami`, `kostjah`.
 
 This is the inherited PIE *i*-stem declension. Its singular is heavily syncretic
 (`-i` for genitive, ablative, dative and locative) in Ruthenian as it is in
@@ -706,14 +723,13 @@ the paradigm gives.
 Not declensions — a single set of rules applied to every ending:
 
 1. after `k g h` and `zz sz cz szcz`, `y` is written `i` (`knigi`, not `*knigy`);
-2. after `zz sz cz szcz c`, an ending's `o` is written `je`;
-2a. the vocative `-je` is written `-e` after `cz` and `szcz` — §2.2 gives these
-   two no hard/soft distinction, so the glide has nothing to mark:
-   `otjecz` + `-je` → `otjecze`. `zz` and `sz` do have soft values and so keep
-   it: `druzz` + `-je` → `druzzje`;
+2. after `cz szcz zz sz`, an ending's initial `j` is **not written** — §2.2 gives
+   none of the four a hard/soft contrast, so the glide has nothing to mark:
+   `otjecz` + `-je` → `otjecze`, `druzz` + `-je` → `druzze`,
+   `pisz` + `-jeszj` → `piszeszj`;
 3. a stem-final soft sign belongs to the ending, not the stem (`kon` + `j`);
 4. **first palatalization** before the vocative `-je`: `k`→`cz`, `g`→`zz`,
-   `h`→`sz`, `c`→`cz` (`drug` → `druzzje`, `otjec` → `otjecze`);
+   `h`→`sz`, `c`→`cz` (`drug` → `druzze`, `otjec` → `otjecze`);
 5. **second palatalization** before any yat-derived `-i` — the locative
    singular, the feminine dative singular, the neuter and feminine dual:
    `k`→`c`, `g`→`z`, `h`→`s` (`drug` → `druzi`, `kniga` → `knizi`).
@@ -722,39 +738,30 @@ Rules 4 and 5 are morphophonemic rather than orthographic — they change the
 consonant, not just its spelling — but they are fully automatic and belong with
 the others.
 
-**Rule 2 no longer conditions on stress, and rule 2a is why it does not have
-to.** It formerly read "*unstressed* `o` is written `je`", following Russian's
-`ножом` against `товарищем`. That cannot be implemented and cannot be checked:
-§2.1 makes stress real but unwritten, so nothing in a Ruthenian string says
-which syllable carries it, and no paradigm in this document exercised the rule
-to pin what it should produce.
+**There used to be a rule between 1 and 3, and deleting it is what let rule 2
+become simple.** It read "after `zz sz cz szcz c`, *unstressed* `o` is written
+`je`", following Russian's `ножом` against `товарищем`. Two things were wrong
+with it. It cannot be implemented or checked, because §2.1 makes stress real but
+unwritten and no paradigm here exercised the rule. And its output was
+phonologically wrong: `nozzjem` claims a palatalized `zz`, and §2.2 has no such
+consonant — `zz` and `sz` are hard, as `ж` and `ш` are in Russian.
 
-Rule 2a is not an addition so much as a fact this document was already relying
-on: rule 4's own `otjecze` writes the vocative `-je` as `-e` after `cz`, and
-without 2a it does not derive.
+With the rule gone the endings are simply invariant, and the forms it was
+reaching for come out right anyway: `nozzom` and `otjecom` are Russian's `ножом`
+and `отцом`. What the rule captured was the *unstressed* `товарищем` type, which
+is precisely the part Ruthenian cannot see.
 
-**It is doubly narrow, and both bounds are load-bearing.** It stops at the line
-§2.2 already draws — `cz` and `szcz` have no soft value to mark, while `zz` and
-`sz` do — which is what keeps `otjecze` and `druzzje` both correct; a wider
-consonant set makes the second `druzze`. And it is about the vocative ending
-alone, because everywhere else a leading `j` is rule 3's soft sign rather than a
-glide; a wider ending set makes §3.6's `noczjju` into `noczju` and its
-`noczjev` into `noczev`.
+**Rule 2 is what remains, and it is now one statement about four consonants.**
+An ending never marks softness on a consonant that has no soft value. That
+covers the vocative (`otjecze`, `druzze`), the present endings (`piszeszj`,
+§7.3), and the `-jem`/`-jego` series, which after these stems is simply `-om`
+and `-ogo` — there was never a `j` to drop, because rule 2 no longer puts one
+there.
 
-The cost is one divergence from Russian, stated plainly: `nozzjem` where Russian
-writes `ножом`, since Ruthenian cannot see that the ending is stressed. Nothing
-is told apart by the difference — no pair of Ruthenian words differs only in
-`-om` against `-jem` after a hushing stem — so it costs no contrast, and it buys
-a spelling that is a function of the letters alone.
-
-**One form in this document does not follow from these rules**, and it is
-recorded in §13 rather than settled here. §7.3 gives class 6's present as
-`piszu, piszeszj, piszet`, but §7.4's 1st-conjugation endings are `-u, -jeszj,
--jet`, and `sz` keeps its glide by rule 2a — so the rules give `piszjeszj`.
-Either that spelling is right and §7.3's example is wrong, or `sz` and `zz`
-belong with `cz` in rule 2a and the vocative `druzzje` is wrong. The nominal
-paradigms are tabulated in three places and the verb example in one, so the
-rules follow the paradigms.
+Its one bound is that it applies to an ending's **initial** `j` and not to a `j`
+anywhere in an ending: everywhere else a leading `j` is rule 3's soft sign rather
+than a glide, so §3.6's instrumental `-jju` keeps both, and a wider rule makes
+`noczjju` into `noczju`.
 
 These replace Russian's velar-, sibilant-, `ц`- and vowel-stem declensions, which
 differ from the hard type *only* by these automatic effects.
@@ -1563,7 +1570,7 @@ rather than `z` + `zz`. It is the only output that needs one: `tcz`, `dzz`, `ssz
 
 **Additive applies to iotation only — never to the palatalizations of §2.4.**
 Those are positional changes before a front vowel and they *replace*: `drug` →
-vocative `druzzje`, not `*drugzzje`. The two processes look alike in their
+vocative `druzze`, not `*drugzze`. The two processes look alike in their
 outputs and are not the same rule.
 
 ## 7.12 Participles and gerunds
@@ -2144,23 +2151,25 @@ already expressible two ways (§10.5), the distinction it draws is one no living
 Slavic language maintains, and a second infinitive-like form differing from the
 first by a single letter buys a contrast that would be inaudible in speech.
 
-**One thing is open**, found by implementing §3 rather than by reading it.
+**Nothing is open**, and the last thing that was is worth recording because
+implementing §3 is what settled it.
 
-**Does `sz` keep its glide before a `je`-ending?** §3.8's rule 2a says the
-vocative `-je` is written `-e` after `cz` and `szcz` only, which is where §2.2
-draws the line and which makes `otjecze` and `druzzje` both correct. But §7.3
-writes class 6's present as `piszeszj`, which needs `sz` in the rule too — and
-putting it there makes the vocative `druzze`, contradicting §3.3, §3.8 and §3.1.
-One of the two spellings is wrong:
+Rule 2a used to admit `cz` and `szcz` only, on the strength of §2.2's exception
+list, which made `otjecze` and `druzzje` both derivable but left §7.3's
+`piszeszj` underivable. The resolution was that §2.2's list was wrong: `zz` and
+`sz` are inherently **hard**, as `ж` and `ш` are in Russian, so they have no soft
+value for a `j` to mark either. Both kinds of consonant reject the glide, for
+opposite reasons, and one rule now covers all four — `otjecze`, `druzze`,
+`piszeszj`.
 
-| if | then | cost |
-|---|---|---|
-| `piszjeszj` is right | §7.3's example is corrected, rule 2a stands | one verb example changes |
-| `piszeszj` is right | `sz` and `zz` join rule 2a, and the vocative becomes `druzze` | three tabulated nominal cells change |
+Three consequences fell out, and each turned out to move *towards* Russian rather
+than away:
 
-`ruthenian-core` implements the first, because the nominal paradigms are
-tabulated in three places and the verb example in one. It is listed here so the
-choice is visible rather than buried in a module.
+| | was | is | Russian |
+|---|---|---|---|
+| vocative of `drug` | `druzzje` | `druzze` | `друже` |
+| instrumental of `nozz` | `nozzjem` | `nozzom` | `ножом` |
+| plural of `noczj'` | `noczjev`, `noczjam` | `noczev`, `noczam` | `ночей`, `ночам` |
 
 Everything else this document raised has an answer above.
 

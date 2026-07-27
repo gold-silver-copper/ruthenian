@@ -633,7 +633,7 @@ different PIE endings — `*-oi`, which became yat, against the bare `*-e` — a
 Ruthenian keeps them apart by taking the Ukrainian reflex of yat (`RUTHENIAN.md`
 §3.1). Collapsing them here would discard the distinction §2.6's yat row exists
 to preserve, and would take the velar stems' second palatalization with it
-(`druzi` against `druzzje`).
+(`druzi` against `druzze`).
 
 Feminine `zzen-`: vocative `-o` (OCS 42 %, Ukrainian 25 %), dual NAV `-i` — OCS
 `-ě`, and yat is `-i` in Ruthenian throughout — GL `-u`, DAT/INS `-ama`. Neuter:

@@ -45,7 +45,7 @@ enum Set {
 ///
 /// // The velar stem distinguishes the vocative from the locative twice over —
 /// // first palatalization against second (§3.1).
-/// assert_eq!(noun("Drug", Case::Vocative, Number::Singular), "druzzje");
+/// assert_eq!(noun("Drug", Case::Vocative, Number::Singular), "druzze");
 /// assert_eq!(noun("Drug", Case::Locative, Number::Singular), "druzi");
 ///
 /// // §3.6, and the mark that makes it feminine rather than a soft masculine
@@ -124,7 +124,7 @@ fn ending(set: Set, soft: bool, case: Case, number: Number) -> (&'static str, Pa
         Set::IiMasculine if !soft => match (case, number) {
             (Nominative, Singular) => ("", n),
             // The vocative `-je` is the one first-palatalization environment in
-            // the nominal system: `drug` -> `druzzje`, `otjec` -> `otjecze`.
+            // the nominal system: `drug` -> `druzze`, `otjec` -> `otjecze`.
             (Vocative, Singular) => ("je", Palatal::First),
             (Accusative, Singular) => ("", n),
             (Genitive, Singular) => ("ogo", n),

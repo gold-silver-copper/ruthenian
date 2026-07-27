@@ -65,7 +65,7 @@ pub const MUTATIONS: &[(&str, &str)] = &[
 ///
 /// Ruthenian keeps all three. Russian levelled the second away entirely (0 %);
 /// Ukrainian keeps it at 99 % and OCS at 66 %. It is not decoration: it is what
-/// distinguishes the locative `druzi` from the vocative `druzzje` in the
+/// distinguishes the locative `druzi` from the vocative `druzze` in the
 /// consonant, while `-i` against `-je` distinguishes them in the vowel. A
 /// morphophonology ported from a Russian implementation will not have it, and
 /// every velar stem is then silently wrong in two cells.
@@ -87,7 +87,7 @@ pub enum Palatal {
 ///
 /// ```
 /// use ruthenian_core::spelling::{palatalize, Palatal};
-/// // first: the vocative `drug` -> `druzzje`
+/// // first: the vocative `drug` -> `druzze`
 /// assert_eq!(palatalize("drug", Palatal::First), "druzz");
 /// // first also applies to `c`, which governs the whole -jec class (§2.4):
 /// // `otjec` -> `otjecze`
@@ -168,11 +168,6 @@ fn ends_sibilant(stem: &str) -> bool {
     SIBILANTS.iter().any(|v| ends_with_letter(stem, v))
 }
 
-/// True when the stem ends in `c` — the `ц` stems, and not `cz`.
-fn ends_ts(stem: &str) -> bool {
-    ends_with_letter(stem, "c")
-}
-
 /// `ends_with` that does not mistake the tail of a digraph for a letter: `sz`
 /// ends in the letter `sz`, not in the letter `z`.
 ///
@@ -201,67 +196,69 @@ fn ends_with_letter(stem: &str, letter: &str) -> bool {
 
 /// The spelling adjustments of §3.8 that apply at a stem/ending seam.
 ///
-/// Three rules, in order:
+/// Two rules:
 ///
 /// 1. after `k g h` and `zz sz cz szcz`, `y` is written `i` (`knigi`, not
 ///    `*knigy`);
-/// 2. after `zz sz cz szcz c`, an ending's `o` is written `je`;
-/// 3. (rule 2a) the vocative `-je` is written `-e` after `cz` and `szcz` — §2.2
-///    gives these two no hard/soft distinction, so the glide has nothing to
-///    mark. `zz` and `sz` do have soft values and keep it.
+/// 2. after `cz szcz zz sz`, an ending's initial `j` is **not written** — §2.2
+///    gives none of the four a hard/soft contrast, so the glide has nothing to
+///    mark.
 ///
-/// Rule 2a is doubly narrow, and both bounds are load-bearing. It stops at the
-/// line §2.2 draws, which is what keeps `otjecze` and `druzzje` both right — a
-/// wider consonant set makes the second `druzze`, contradicting §3.3, §3.8 and
-/// §3.1. And it applies to the vocative ending alone, because everywhere else a
-/// leading `j` is rule 3's soft sign rather than a glide: a wider ending set
-/// makes §3.6's `noczjju` into `noczju` and its `noczjev` into `noczev`.
+/// Rule 2 covers the vocative (`otjecze`, `druzze`), the present endings
+/// (`piszeszj`, §7.3) and the `-jem`/`-jego` series, which after these stems is
+/// simply `-om` and `-ogo`.
 ///
-/// Rule 2 no longer conditions on stress, because §2.1 never writes it — see
-/// §3.8's note.
+/// **There used to be a third rule and its deletion is why this one is simple.**
+/// It wrote an ending's `o` as `je` after these stems, conditioned on the ending
+/// being unstressed — unimplementable, since §2.1 never writes stress, and
+/// phonologically wrong besides: `nozzjem` claims a palatalized `zz`, and §2.2
+/// has no such consonant. Without it the endings are invariant and `nozzom`,
+/// `otjecom` come out as Russian's `ножом`, `отцом`.
 ///
 /// ```
 /// use ruthenian_core::spelling::spell_ending;
 /// // rule 1
 /// assert_eq!(spell_ending("knig", "y"), "i");        // knigi
 /// assert_eq!(spell_ending("dom", "y"), "y");         // domy
-/// // rule 2a, at the §2.2 line: `cz` drops the glide, `zz` keeps it
+/// // rule 2, across all four hard-or-inherently-palatal consonants
 /// assert_eq!(spell_ending("otjecz", "je"), "e");     // otjecze
-/// assert_eq!(spell_ending("druzz", "je"), "je");     // druzzje
-/// // rule 2
-/// assert_eq!(spell_ending("nozz", "om"), "jem");     // nozzjem
-/// assert_eq!(spell_ending("otjec", "om"), "jem");    // otjecjem
-/// // a plain stem is untouched
+/// assert_eq!(spell_ending("druzz", "je"), "e");      // druzze
+/// assert_eq!(spell_ending("pisz", "jeszj"), "eszj"); // piszeszj
+/// // the deleted rule's cells: the ending is simply invariant now
+/// assert_eq!(spell_ending("nozz", "om"), "om");      // nozzom
+/// assert_eq!(spell_ending("otjec", "ogo"), "ogo");   // otjecogo
 /// assert_eq!(spell_ending("dom", "om"), "om");       // domom
+/// // and rule 2 does not touch a soft sign: §3.6 keeps both
+/// assert_eq!(spell_ending("nocz", "jju"), "jju");    // noczjju
 /// ```
 pub fn spell_ending(stem: &str, ending: &str) -> String {
     let mut out = ending.to_string();
     if (ends_velar(stem) || ends_sibilant(stem)) && out.starts_with('y') {
         out.replace_range(0..1, "i");
     }
-    if (ends_sibilant(stem) || ends_ts(stem)) && out.starts_with('o') {
-        out.replace_range(0..1, "je");
-    }
-    // Rule 2a, and it is deliberately about the vocative `-je` alone rather
-    // than about any `j`-initial ending. Everywhere else a leading `j` is the
-    // *soft sign* that rule 3 assigns to the ending — `konj` + `-jem`, and
-    // declension III's `-jju`, which §3.6 says keeps the sign and takes the
-    // ending both. Stripping those gives `noczju` for `noczjju` and `noczev`
-    // for `noczjev`.
-    if ending == "je" && ends_inherently_palatal(stem) {
-        out = "e".to_string();
+    // Rule 2 drops a **glide**, which is `j` before a vowel. A `j` that is not
+    // before a vowel is rule 3's soft sign and stays: declension III's
+    // nominative is the bare `-j` (`noczj`), its instrumental `-jju` keeps the
+    // sign and takes the ending both (`noczjju`), and `-jma` is the sign before
+    // a consonant (`noczjma`). Dropping those gives `nocz`, `noczju`, `noczma`.
+    if ends_sibilant(stem) && is_glide(&out) {
+        out.replace_range(0..1, "");
     }
     out
 }
 
-/// True when the stem ends in `cz` or `szcz` — the two consonants §2.2 gives no
-/// hard/soft distinction, and so the two that reject an ending's glide.
-///
-/// `zz` and `sz` are deliberately excluded: they have soft values, and
-/// `druzzje` depends on it.
-fn ends_inherently_palatal(stem: &str) -> bool {
-    stem.ends_with("cz") || stem.ends_with("szcz")
+/// Does this ending begin with a glide — `j` immediately before a vowel, and not
+/// doubled?
+fn is_glide(ending: &str) -> bool {
+    let mut c = ending.chars();
+    if c.next() != Some('j') {
+        return false;
+    }
+    matches!(c.next(), Some(v) if VOWELS.contains(&v))
 }
+
+/// The plain vowels (§2.3).
+const VOWELS: [char; 6] = ['a', 'e', 'i', 'o', 'u', 'y'];
 
 /// Join a stem and an ending, applying §3.8's seam rules.
 ///

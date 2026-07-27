@@ -115,7 +115,7 @@ KONJ = noun(
 DRUG = noun(
     "Drug",
     "3.3",
-    spread(nom="drug", voc="druzzje", acc_abl="druga", gen="drugogo",
+    spread(nom="drug", voc="druzze", acc_abl="druga", gen="drugogo",
            dat="drugu", ins="drugom", loc="druzi"),
     spread(nom_voc_acc="druga", gen_loc="drugu", dat_ins_abl="drugoma"),
     spread(nom_voc="drugi", acc_gen="drugov", dat_abl="drugom", ins="drugami",
@@ -203,9 +203,9 @@ NOCZJ = noun(
     "noczj'",
     "3.6",
     spread(nom_acc="noczj", voc_gen_abl_dat_loc="noczi", ins="noczjju"),
-    spread(nom_voc_acc="noczi", gen_loc="noczju", dat_ins_abl="noczjma"),
-    spread(nom_voc_acc="noczi", gen="noczjev", dat_abl="noczjam",
-           ins="noczjami", loc="noczjah"),
+    spread(nom_voc_acc="noczi", gen_loc="noczu", dat_ins_abl="noczjma"),
+    spread(nom_voc_acc="noczi", gen="noczev", dat_abl="noczam",
+           ins="noczami", loc="noczah"),
 )
 
 ROWS = (
