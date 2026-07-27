@@ -319,7 +319,7 @@ pub fn pronoun_paradigm(person: Person, number: Number, gender: Gender) -> Vec<(
 /// assert_eq!(pronominal("t", Case::Nominative, Number::Singular, Gender::Neuter, In), "to");
 /// assert_eq!(pronominal("t", Case::Nominative, Number::Singular, Gender::Feminine, In), "ta");
 /// assert_eq!(pronominal("t", Case::Genitive, Number::Dual, M, In), "toju");
-/// assert_eq!(pronominal("t", Case::Nominative, Number::Plural, M, In), "ti");
+/// assert_eq!(pronominal("t", Case::Nominative, Number::Plural, M, In), "tje");
 /// assert_eq!(pronominal("t", Case::Genitive, Number::Plural, M, In), "tjeh");
 ///
 /// // §3.7: the animate accusative is the ablative in the singular and the
@@ -365,7 +365,10 @@ pub fn pronominal(
         },
         Plural => match case {
             Accusative if animacy == Animacy::Animate => "jeh",
-            Nominative | Accusative => "i",
+            // `-je`, not `-i`: the rest of the plural is built on `tje-`
+            // (`tjeh`, `tjem`, `tjemi`) and the nominative was the one cell
+            // that was not. Russian levelled it the same way, to `те`.
+            Nominative | Accusative => "je",
             Genitive | Locative => "jeh",
             Instrumental => "jemi",
             _ => "jem",
@@ -463,9 +466,9 @@ pub fn who(case: Case) -> String {
 /// assert_eq!(what(Case::Genitive), "czjego");
 /// assert_eq!(what(Case::Ablative), "czjega");
 /// assert_eq!(what(Case::Dative), "czjemu");
-/// // §5.5 gives one form for the instrumental and the locative alike.
+/// // The instrumental and locative are distinct, as Russian's чем and чём are.
 /// assert_eq!(what(Case::Instrumental), "czjem");
-/// assert_eq!(what(Case::Locative), "czjem");
+/// assert_eq!(what(Case::Locative), "czjom");
 /// ```
 pub fn what(case: Case) -> String {
     match case {
@@ -473,7 +476,8 @@ pub fn what(case: Case) -> String {
         Case::Genitive => "czjego",
         Case::Ablative => "czjega",
         Case::Dative => "czjemu",
-        Case::Instrumental | Case::Locative => "czjem",
+        Case::Instrumental => "czjem",
+        Case::Locative => "czjom",
     }
     .to_string()
 }

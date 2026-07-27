@@ -1082,8 +1082,8 @@ lost the near deixis; Ruthenian keeps it.
 
 | | Masc sg | Neut sg | Fem sg | Dual | Plural |
 |---|---|---|---|---|---|
-| nominative | `toj` | `to` | `ta` | `ta` | `ti` |
-| accusative | `toj` / `toga` ¹ | `to` | `tu` | `ta` | `ti` / `tjeh` ¹ |
+| nominative | `toj` | `to` | `ta` | `ta` | `tje` |
+| accusative | `toj` / `toga` ¹ | `to` | `tu` | `ta` | `tje` / `tjeh` ¹ |
 | genitive | `togo` | `togo` | `toj` | `toju` | `tjeh` |
 | **ablative** | `toga` | `toga` | `toj` | = dat | = dat |
 | dative | `tomu` | `tomu` | `toj` | `tjema` | `tjem` |
@@ -1107,7 +1107,14 @@ split the two cases apart, and §4.2's `dobra` had it right already.
 | **ablative** | `koga` | `czjega` |
 | dative | `komu` | `czjemu` |
 | instrumental | `kjem` | `czjem` |
-| locative | `kom` | `czjem` |
+| locative | `kom` | `czjom` |
+
+The plural nominative is `tje` and not `ti`: the rest of the plural is built on
+`tje-` — `tjeh`, `tjem`, `tjemi` — and the nominative was the one cell that was
+not. OCS had `ти` there, and Russian levelled it to `те` for the same reason.
+
+`czto`'s instrumental and locative are distinct, `czjem` against `czjom`, as
+Russian's `чем` and `чём` are. An earlier revision merged them.
 
 `kto` is animate and `czto` inanimate, which is why `kto` has an oblique
 accusative and `czto` does not. It is the **ablative** `koga`, not the genitive

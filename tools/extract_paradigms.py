@@ -375,7 +375,7 @@ DEMONSTRATIVE = [
         ("Nominative", "Dual", "Masculine", "ta"),
         ("Genitive", "Dual", "Masculine", "toju"),
         ("Dative", "Dual", "Masculine", "tjema"),
-        ("Nominative", "Plural", "Masculine", "ti"),
+        ("Nominative", "Plural", "Masculine", "tje"),
         ("Genitive", "Plural", "Masculine", "tjeh"),
         ("Dative", "Plural", "Masculine", "tjem"),
         ("Instrumental", "Plural", "Masculine", "tjemi"),
@@ -400,7 +400,7 @@ INTERROGATIVE = [
     for case, form in [
         ("Nominative", "czto"), ("Accusative", "czto"), ("Genitive", "czjego"),
         ("Ablative", "czjega"), ("Dative", "czjemu"),
-        ("Instrumental", "czjem"), ("Locative", "czjem"),
+        ("Instrumental", "czjem"), ("Locative", "czjom"),
     ]
 ] + [
     ("relative", "-", f"{case}.Singular.Masculine", form, "5.5")

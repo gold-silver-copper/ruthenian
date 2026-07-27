@@ -31,10 +31,7 @@ fn main() {
     let m = Gender::Masculine;
     let sg = Number::Singular;
     let pl = Number::Plural;
-    println!(
-        "{:<28} {:<12} {:<12} {}",
-        "  cell", "ruthenian", "russian", "cyrillic"
-    );
+    println!("  cell                       ruthenian    russian      cyrillic");
 
     println!("\ntoj  — against Russian тот");
     println!("{}", "-".repeat(70));
