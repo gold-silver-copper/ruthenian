@@ -610,7 +610,11 @@ o sluzi            about the servant — declension I locative, with the second
 Form follows the declension; agreement follows the gender. Nothing else is
 special: the paradigm is `zzena`'s throughout, so `sluga'` gives vocative
 `slugo`, dative and locative `sluzi`, dual `sluzi` / `slugu` / `slugama`, plural
-`slugy` / `slugov` / `slugam` / `slugami` / `slugah`.
+`slugi` / `slugov` / `slugam` / `slugami` / `slugah`, and instrumental singular
+`slugoj`.
+
+(`slugi`, not `slugy`: §3.8's first rule writes `y` as `i` after a velar, and
+`kniga` → `knigi` two paradigms above is the same rule on the same consonant.)
 
 The `'` is what says so (§2.1): `-a` predicts feminine, and a masculine noun in
 `-a` is exactly the case the mark exists for. An animate one carries both marks —
@@ -690,7 +694,11 @@ the paradigm gives.
 Not declensions — a single set of rules applied to every ending:
 
 1. after `k g h` and `zz sz cz szcz`, `y` is written `i` (`knigi`, not `*knigy`);
-2. after `zz sz cz szcz c`, unstressed `o` is written `je`;
+2. after `zz sz cz szcz c`, an ending's `o` is written `je`;
+2a. the vocative `-je` is written `-e` after `cz` and `szcz` — §2.2 gives these
+   two no hard/soft distinction, so the glide has nothing to mark:
+   `otjecz` + `-je` → `otjecze`. `zz` and `sz` do have soft values and so keep
+   it: `druzz` + `-je` → `druzzje`;
 3. a stem-final soft sign belongs to the ending, not the stem (`kon` + `j`);
 4. **first palatalization** before the vocative `-je`: `k`→`cz`, `g`→`zz`,
    `h`→`sz`, `c`→`cz` (`drug` → `druzzje`, `otjec` → `otjecze`);
@@ -701,6 +709,40 @@ Not declensions — a single set of rules applied to every ending:
 Rules 4 and 5 are morphophonemic rather than orthographic — they change the
 consonant, not just its spelling — but they are fully automatic and belong with
 the others.
+
+**Rule 2 no longer conditions on stress, and rule 2a is why it does not have
+to.** It formerly read "*unstressed* `o` is written `je`", following Russian's
+`ножом` against `товарищем`. That cannot be implemented and cannot be checked:
+§2.1 makes stress real but unwritten, so nothing in a Ruthenian string says
+which syllable carries it, and no paradigm in this document exercised the rule
+to pin what it should produce.
+
+Rule 2a is not an addition so much as a fact this document was already relying
+on: rule 4's own `otjecze` writes the vocative `-je` as `-e` after `cz`, and
+without 2a it does not derive.
+
+**It is doubly narrow, and both bounds are load-bearing.** It stops at the line
+§2.2 already draws — `cz` and `szcz` have no soft value to mark, while `zz` and
+`sz` do — which is what keeps `otjecze` and `druzzje` both correct; a wider
+consonant set makes the second `druzze`. And it is about the vocative ending
+alone, because everywhere else a leading `j` is rule 3's soft sign rather than a
+glide; a wider ending set makes §3.6's `noczjju` into `noczju` and its
+`noczjev` into `noczev`.
+
+The cost is one divergence from Russian, stated plainly: `nozzjem` where Russian
+writes `ножом`, since Ruthenian cannot see that the ending is stressed. Nothing
+is told apart by the difference — no pair of Ruthenian words differs only in
+`-om` against `-jem` after a hushing stem — so it costs no contrast, and it buys
+a spelling that is a function of the letters alone.
+
+**One form in this document does not follow from these rules.** §7.3 gives
+class 6's present as `piszu, piszeszj, piszet`, but §7.4's 1st-conjugation
+endings are `-u, -jeszj, -jet`, and `sz` keeps its glide by rule 2a — so the
+rules give `piszjeszj`. Either that spelling is correct and §7.3's example is
+wrong, or `sz` and `zz` belong with `cz` in rule 2a and the vocative `druzzje`
+is wrong. The nominal paradigms are tabulated in three places and the verb
+example in one, so the rules follow the paradigms and this is recorded as the
+open question rather than settled silently.
 
 These replace Russian's velar-, sibilant-, `ц`- and vowel-stem declensions, which
 differ from the hard type *only* by these automatic effects.
