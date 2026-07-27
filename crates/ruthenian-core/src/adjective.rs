@@ -131,7 +131,10 @@ fn pronominal(case: Case, number: Number, gender: Gender, animacy: Animacy) -> &
     match number {
         Dual => match case {
             Nominative | Accusative => "aja",
-            Genitive | Locative => "u",
+            // `-oju`, not `-u`: every o-initial ending is shared with the
+            // pronominal declension, and this was the one cell where the two
+            // disagreed — the nominal dual `domu`, borrowed by mistake.
+            Genitive | Locative => "oju",
             _ => "yma",
         },
         Plural => match case {

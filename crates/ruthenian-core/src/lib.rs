@@ -57,4 +57,7 @@ pub mod spelling;
 pub use adjective::{Adjective, adjective, comparative, short_adjective, superlative};
 pub use grammar::{Animacy, Case, FiniteTense, Gender, Number, Person};
 pub use noun::{Noun, noun};
-pub use pronoun::{clitic_pronoun, clitic_reflexive, pronoun, pronoun_paradigm, reflexive};
+pub use pronoun::{
+    clitic_pronoun, clitic_reflexive, pronominal, pronoun, pronoun_paradigm, reflexive, relative,
+    what, who,
+};

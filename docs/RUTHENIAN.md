@@ -854,11 +854,11 @@ as a word class.
 |---|---|---|---|---|---|
 | nominative | `dobryj` | `dobroje` | `dobraja` | `dobraja` | `dobryje` |
 | accusative | `dobryj` / `dobra` ¹ | `dobroje` | `dobruju` | `dobraja` | `dobryje` / `dobryh` ¹ |
-| genitive | `dobrogo` | `dobrogo` | `dobroj` | `dobru` | `dobryh` |
+| genitive | `dobrogo` | `dobrogo` | `dobroj` | `dobroju` | `dobryh` |
 | **ablative** | `dobra` | `dobra` | `dobroj` | = dat | = dat |
 | dative | `dobromu` | `dobromu` | `dobroj` | `dobryma` | `dobrym` |
 | instrumental | `dobrym` | `dobrym` | `dobroj` | `dobryma` | `dobrymi` |
-| locative | `dobrom` | `dobrom` | `dobroj` | `dobru` | `dobryh` |
+| locative | `dobrom` | `dobrom` | `dobroj` | `dobroju` | `dobryh` |
 
 ¹ animate. Long adjectives have **no vocative** — the nominative is used, as in
 every language measured.
@@ -869,6 +869,15 @@ endings are the noun's, so the feminine dual is `dobrama` against the masculine
 `dobroma` (§3.5's `zzenama` against §3.3's `domoma`), and the neuter plural
 nominative is `dobra` against `dobry`. The long declension genuinely has one dual
 and one plural for all genders, as `toj` does (§5.4).
+
+**"The pronoun `toj`'s" means the declension *type*, not the same endings.**
+Thirteen of the seventeen differ, because the long adjective is the contracted
+`short + jь` form: `dobryj` against `toj`, `dobryje` against `ti`, `dobrym`
+against `tjem`. What the two share is every ending that begins in `o` — the
+genitive `-ogo`, the dative `-omu`, the locative `-om`, the feminine oblique
+`-oj` and the dual `-oju`. The dual was `-u` in an earlier revision, the one
+`o`-initial cell where the tables disagreed, and it was the nominal dual `domu`
+borrowed by mistake.
 
 The two declensions differ in the nominative, accusative, dative, instrumental
 and locative, and coincide in the genitive and ablative. That coincidence is
@@ -1093,15 +1102,16 @@ split the two cases apart, and §4.2's `dobra` had it right already.
 | | "who" | "what" |
 |---|---|---|
 | nominative | `kto` | `czto` |
-| accusative | `kogo` | `czto` |
+| accusative | `koga` | `czto` |
 | genitive | `kogo` | `czjego` |
 | **ablative** | `koga` | `czjega` |
 | dative | `komu` | `czjemu` |
 | instrumental | `kjem` | `czjem` |
 | locative | `kom` | `czjem` |
 
-`kto` is animate and `czto` inanimate, which is why `kto` has the
-genitive-accusative and `czto` does not.
+`kto` is animate and `czto` inanimate, which is why `kto` has an oblique
+accusative and `czto` does not. It is the **ablative** `koga`, not the genitive
+`kogo` — §3.7 again, and the same correction §5.4's `toga` needed.
 
 Also `czij` "whose", `kotoryj` "which", `kakyj` "what kind of" — all adjectival.
 

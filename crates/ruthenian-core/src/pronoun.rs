@@ -20,7 +20,7 @@
 //! prefix, and it is a Slavic-internal reanalysis rather than an inheritance, so
 //! declining it is conservative in the same sense the ablative and the dual are.
 
-use crate::grammar::{Case, Gender, Number, Person};
+use crate::grammar::{Animacy, Case, Gender, Number, Person};
 
 /// A personal pronoun, full series (§5.1).
 ///
@@ -287,4 +287,219 @@ pub fn pronoun_paradigm(person: Person, number: Number, gender: Gender) -> Vec<(
         .iter()
         .map(|&case| (case, pronoun(person, number, gender, case)))
         .collect()
+}
+
+/// The **pronominal declension** itself (§5.4), for any stem that takes it.
+///
+/// `toj` "that" is `pronominal("t", ..)` and `sjej` "this" is
+/// `pronominal("sj", ..)`. Two degrees of deixis, as OCS had — Russian lost the
+/// near one and Ruthenian keeps it.
+///
+/// **Hardness comes from the stem**, by §3.2's rule: a stem is soft exactly when
+/// it ends in `j`. The soft series is the hard one with an `o`-initial ending
+/// written `e` and a `je`-initial ending written `i`, since the stem's own `j`
+/// already carries the softness.
+///
+/// This is *not* the long adjective's table. §4.2 says its endings are "the
+/// pronoun `toj`'s", but that names the declension type: thirteen of the
+/// seventeen endings differ, because the long adjective is the contracted
+/// `short + jь` form. What the two genuinely share is every `o`-initial ending.
+///
+/// ```
+/// use ruthenian_core::{pronominal, Case, Gender, Number, Animacy};
+/// use Gender::Masculine as M;
+/// use Animacy::Inanimate as In;
+///
+/// // §5.4's table, on the hard stem `t-`.
+/// assert_eq!(pronominal("t", Case::Nominative, Number::Singular, M, In), "toj");
+/// assert_eq!(pronominal("t", Case::Genitive, Number::Singular, M, In), "togo");
+/// assert_eq!(pronominal("t", Case::Ablative, Number::Singular, M, In), "toga");
+/// assert_eq!(pronominal("t", Case::Dative, Number::Singular, M, In), "tomu");
+/// assert_eq!(pronominal("t", Case::Instrumental, Number::Singular, M, In), "tjem");
+/// assert_eq!(pronominal("t", Case::Nominative, Number::Singular, Gender::Neuter, In), "to");
+/// assert_eq!(pronominal("t", Case::Nominative, Number::Singular, Gender::Feminine, In), "ta");
+/// assert_eq!(pronominal("t", Case::Genitive, Number::Dual, M, In), "toju");
+/// assert_eq!(pronominal("t", Case::Nominative, Number::Plural, M, In), "ti");
+/// assert_eq!(pronominal("t", Case::Genitive, Number::Plural, M, In), "tjeh");
+///
+/// // §3.7: the animate accusative is the ablative in the singular and the
+/// // genitive in the plural.
+/// let anim = Animacy::Animate;
+/// assert_eq!(pronominal("t", Case::Accusative, Number::Singular, M, anim), "toga");
+/// assert_eq!(pronominal("t", Case::Accusative, Number::Plural, M, anim), "tjeh");
+///
+/// // The soft stem `sj-`, and the four forms §5.4 cites for it.
+/// assert_eq!(pronominal("sj", Case::Nominative, Number::Singular, M, In), "sjej");
+/// assert_eq!(pronominal("sj", Case::Genitive, Number::Singular, M, In), "sjego");
+/// assert_eq!(pronominal("sj", Case::Dative, Number::Singular, M, In), "sjemu");
+/// assert_eq!(pronominal("sj", Case::Instrumental, Number::Singular, M, In), "sjim");
+/// assert_eq!(pronominal("sj", Case::Locative, Number::Singular, M, In), "sjem");
+/// ```
+pub fn pronominal(
+    stem: &str,
+    case: Case,
+    number: Number,
+    gender: Gender,
+    animacy: Animacy,
+) -> String {
+    use Case::*;
+    use Number::*;
+
+    let Some(s) = bound_stem(stem) else {
+        return crate::fallback::UNREADABLE.to_string();
+    };
+    let soft = s.ends_with('j');
+
+    let case = if case == Vocative { Nominative } else { case };
+    let case = if case == Ablative && number != Singular {
+        Dative
+    } else {
+        case
+    };
+
+    let hard = match number {
+        Dual => match case {
+            Nominative | Accusative => "a",
+            Genitive | Locative => "oju",
+            _ => "jema",
+        },
+        Plural => match case {
+            Accusative if animacy == Animacy::Animate => "jeh",
+            Nominative | Accusative => "i",
+            Genitive | Locative => "jeh",
+            Instrumental => "jemi",
+            _ => "jem",
+        },
+        Singular => match gender {
+            Gender::Feminine => match case {
+                Nominative => "a",
+                Accusative => "u",
+                _ => "oj",
+            },
+            g => match case {
+                Accusative if animacy == Animacy::Animate => "oga",
+                Nominative | Accusative => {
+                    if g == Gender::Neuter {
+                        "o"
+                    } else {
+                        "oj"
+                    }
+                }
+                Genitive => "ogo",
+                Ablative => "oga",
+                Dative => "omu",
+                Instrumental => "jem",
+                _ => "om",
+            },
+        },
+    };
+
+    // §3.2's soft alternation, applied to the ending: the stem's own `j` carries
+    // the softness, so an `o` fronts to `e` and a `je` contracts to `i`.
+    let ending = match soft {
+        false => hard.to_string(),
+        true => match hard.strip_prefix("je") {
+            Some(rest) => format!("i{rest}"),
+            None => match hard.strip_prefix('o') {
+                Some(rest) => format!("e{rest}"),
+                None => hard.to_string(),
+            },
+        },
+    };
+    format!("{s}{ending}")
+}
+
+/// A **bound** stem, as opposed to a lemma.
+///
+/// `t-` and `sj-` are the demonstratives' stems and neither contains a vowel, so
+/// the vowel test a citation form must pass (see `lemma`) would reject both. A
+/// bound morpheme is not a word and is not required to look like one; it must
+/// only be spellable.
+fn bound_stem(s: &str) -> Option<String> {
+    let parsed = ruthenian_orthography::Ruthenian::parse(s).ok()?;
+    let bare = parsed.word().to_lowercase();
+    let ok = !bare.is_empty() && bare.chars().all(|c| c.is_ascii_alphabetic() || c == '\'');
+    ok.then_some(bare)
+}
+
+/// `kto` "who" (§5.5) — animate, and so with an oblique accusative.
+///
+/// A closed word with an irregular nominative, so it is tabulated rather than
+/// derived. Its accusative is the **ablative** `koga` and not the genitive
+/// `kogo`, by §3.7 — the same correction §5.4's `toga` needed.
+///
+/// ```
+/// use ruthenian_core::{who, Case};
+/// assert_eq!(who(Case::Nominative), "kto");
+/// assert_eq!(who(Case::Accusative), "koga");
+/// assert_eq!(who(Case::Genitive), "kogo");
+/// assert_eq!(who(Case::Ablative), "koga");
+/// assert_eq!(who(Case::Dative), "komu");
+/// assert_eq!(who(Case::Instrumental), "kjem");
+/// assert_eq!(who(Case::Locative), "kom");
+///
+/// // §5.6 builds the negative and indefinite series by prefix, which is
+/// // composition rather than inflection: `nikto`, `njekto`, `kto-libo`.
+/// assert_eq!(format!("ni{}", who(Case::Genitive)), "nikogo");
+/// ```
+pub fn who(case: Case) -> String {
+    match case {
+        Case::Nominative | Case::Vocative => "kto",
+        Case::Accusative | Case::Ablative => "koga",
+        Case::Genitive => "kogo",
+        Case::Dative => "komu",
+        Case::Instrumental => "kjem",
+        Case::Locative => "kom",
+    }
+    .to_string()
+}
+
+/// `czto` "what" (§5.5) — inanimate, so the accusative is the nominative.
+///
+/// ```
+/// use ruthenian_core::{what, Case};
+/// assert_eq!(what(Case::Nominative), "czto");
+/// assert_eq!(what(Case::Accusative), "czto");
+/// assert_eq!(what(Case::Genitive), "czjego");
+/// assert_eq!(what(Case::Ablative), "czjega");
+/// assert_eq!(what(Case::Dative), "czjemu");
+/// // §5.5 gives one form for the instrumental and the locative alike.
+/// assert_eq!(what(Case::Instrumental), "czjem");
+/// assert_eq!(what(Case::Locative), "czjem");
+/// ```
+pub fn what(case: Case) -> String {
+    match case {
+        Case::Nominative | Case::Vocative | Case::Accusative => "czto",
+        Case::Genitive => "czjego",
+        Case::Ablative => "czjega",
+        Case::Dative => "czjemu",
+        Case::Instrumental | Case::Locative => "czjem",
+    }
+    .to_string()
+}
+
+/// `izzje` (§5.5), the **restrictive** relative — OCS `иже`, which Russian lost
+/// in favour of `который`. Ruthenian keeps both, `izzje` for restrictive clauses
+/// and `kotoryj` (an ordinary adjective) for non-restrictive.
+///
+/// It is the third-person pronoun plus the invariant `-zzje`, so it agrees with
+/// its antecedent in gender and number while taking its case from its own
+/// clause: `czjelovjek, jegozzje vizzu` "the man whom I see".
+///
+/// ```
+/// use ruthenian_core::{relative, Case, Gender, Number};
+/// use Gender::Masculine as M;
+///
+/// assert_eq!(relative(Case::Nominative, Number::Singular, M), "izzje");
+/// assert_eq!(relative(Case::Accusative, Number::Singular, M), "jegozzje");
+/// assert_eq!(relative(Case::Genitive, Number::Singular, M), "jegozzje");
+/// assert_eq!(relative(Case::Dative, Number::Singular, M), "jemuzzje");
+/// ```
+pub fn relative(case: Case, number: Number, gender: Gender) -> String {
+    // §5.5 gives only the nominative `izzje`, without a gender or number series
+    // for it; the obliques are the pronoun's own forms plus the particle.
+    match case {
+        Case::Nominative | Case::Vocative => "izzje".to_string(),
+        _ => format!("{}zzje", pronoun(Person::Third, number, gender, case)),
+    }
 }

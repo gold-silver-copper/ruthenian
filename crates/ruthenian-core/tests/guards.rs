@@ -12,8 +12,8 @@
 use ruthenian_core::fallback::{UNREADABLE, is_unreadable};
 use ruthenian_core::{
     Adjective, Animacy, Case, FiniteTense, Gender, Noun, Number, Person, adjective, clitic_pronoun,
-    clitic_reflexive, comparative, noun, pronoun, pronoun_paradigm, reflexive, short_adjective,
-    superlative,
+    clitic_reflexive, comparative, noun, pronominal, pronoun, pronoun_paradigm, reflexive,
+    relative, short_adjective, superlative, what, who,
 };
 
 mod support;
@@ -75,10 +75,11 @@ fn corpus_row_count() {
     // 11 nominal paradigms × 24 cells; §4's two adjective tables at 42 each
     // (three genders singular, a masculine dual and plural, two animate
     // accusatives); §5.1's 11 pronouns × 8; §5.1a's 14 clitics; §5.2's 6
-    // reflexives and 2 clitic reflexives.
+    // reflexives and 2 clitic reflexives; §5.4's 18 `toj` cells and 5 `sjej`;
+    // §5.5's 7 + 7 interrogatives and 4 relative forms.
     assert_eq!(
         recorded,
-        11 * 24 + 2 * 42 + 11 * 8 + 14 + 6 + 2,
+        11 * 24 + 2 * 42 + 11 * 8 + 14 + 6 + 2 + 18 + 5 + 7 + 7 + 4,
         "the corpus is 11 nouns + 2 adjectives + §5"
     );
     let nouns = corpus().iter().filter(|r| r.pos == "noun").count();
@@ -309,6 +310,24 @@ fn totality_no_panic() {
         }
         assert!(!comparative(word).is_empty());
         assert!(!superlative(word).is_empty());
+    }
+
+    // The non-personal series, over both a hostile stem and the real ones.
+    for s in ["t", "sj", "", "'", "дом", "!"] {
+        for gender in Gender::ALL {
+            for number in Number::ALL {
+                for case in Case::ALL {
+                    for animacy in Animacy::ALL {
+                        assert!(!pronominal(s, case, number, gender, animacy).is_empty());
+                    }
+                    assert!(!relative(case, number, gender).is_empty());
+                }
+            }
+        }
+    }
+    for case in Case::ALL {
+        assert!(!who(case).is_empty());
+        assert!(!what(case).is_empty());
     }
 
     // The pronouns take no word at all, so their totality is over the enums.

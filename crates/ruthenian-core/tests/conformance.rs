@@ -10,7 +10,7 @@
 
 use ruthenian_core::{
     Animacy, Case, Gender, Number, Person, adjective, clitic_pronoun, clitic_reflexive, noun,
-    pronoun, reflexive, short_adjective,
+    pronominal, pronoun, reflexive, relative, short_adjective, what, who,
 };
 
 mod support;
@@ -128,6 +128,24 @@ fn conformance() {
             }
             // The reflexive has no gender and no number (§5.2), so its only
             // feature is the case.
+            // Case.Number.Gender on a stem given in the lemma column.
+            "pronominal" => {
+                let f: Vec<&str> = features.split('.').collect();
+                assert_eq!(f.len(), 3, "pronominal features are Case.Number.Gender");
+                pronominal(
+                    lemma,
+                    case_of(f[0]),
+                    number_of(f[1]),
+                    gender_of(f[2]),
+                    Animacy::Inanimate,
+                )
+            }
+            "who" => who(case_of(features)),
+            "what" => what(case_of(features)),
+            "relative" => {
+                let f: Vec<&str> = features.split('.').collect();
+                relative(case_of(f[0]), number_of(f[1]), gender_of(f[2]))
+            }
             "reflexive" => reflexive(case_of(features)),
             "clitic_reflexive" => clitic_reflexive(case_of(features)),
             // Milestones M5–M7 add their parts of speech here. An unknown `pos`

@@ -257,7 +257,7 @@ LONG = adjective(
            ins="dobrym", loc="dobrom"),
     spread(nom_voc="dobraja", acc="dobruju",
            gen_abl_dat_ins_loc="dobroj"),
-    spread(nom_voc_acc="dobraja", gen_loc="dobru", dat_ins_abl="dobryma"),
+    spread(nom_voc_acc="dobraja", gen_loc="dobroju", dat_ins_abl="dobryma"),
     spread(nom_voc_acc="dobryje", gen_loc="dobryh", dat_abl="dobrym",
            ins="dobrymi"),
     animate={
@@ -352,9 +352,68 @@ REFLEXIVE = [
     ("clitic_reflexive", "-", "Dative", "si", "5.2"),
 ]
 
+
+
+# --- §5.4-§5.5 the non-personal series --------------------------------------
+# The pronominal declension itself, on the hard stem `t-` and the soft `sj-`,
+# plus the two interrogatives. `sjej` is given in §5.4 as four cited forms
+# rather than a table, so only those four are asserted.
+DEMONSTRATIVE = [
+    ("pronominal", "t", f"{case}.{number}.{gender}", form, "5.4")
+    for case, number, gender, form in [
+        ("Nominative", "Singular", "Masculine", "toj"),
+        ("Accusative", "Singular", "Masculine", "toj"),
+        ("Genitive", "Singular", "Masculine", "togo"),
+        ("Ablative", "Singular", "Masculine", "toga"),
+        ("Dative", "Singular", "Masculine", "tomu"),
+        ("Instrumental", "Singular", "Masculine", "tjem"),
+        ("Locative", "Singular", "Masculine", "tom"),
+        ("Nominative", "Singular", "Neuter", "to"),
+        ("Nominative", "Singular", "Feminine", "ta"),
+        ("Accusative", "Singular", "Feminine", "tu"),
+        ("Genitive", "Singular", "Feminine", "toj"),
+        ("Nominative", "Dual", "Masculine", "ta"),
+        ("Genitive", "Dual", "Masculine", "toju"),
+        ("Dative", "Dual", "Masculine", "tjema"),
+        ("Nominative", "Plural", "Masculine", "ti"),
+        ("Genitive", "Plural", "Masculine", "tjeh"),
+        ("Dative", "Plural", "Masculine", "tjem"),
+        ("Instrumental", "Plural", "Masculine", "tjemi"),
+    ]
+] + [
+    ("pronominal", "sj", f"{case}.Singular.Masculine", form, "5.4")
+    for case, form in [
+        ("Nominative", "sjej"), ("Genitive", "sjego"), ("Dative", "sjemu"),
+        ("Instrumental", "sjim"), ("Locative", "sjem"),
+    ]
+]
+
+INTERROGATIVE = [
+    ("who", "-", case, form, "5.5")
+    for case, form in [
+        ("Nominative", "kto"), ("Accusative", "koga"), ("Genitive", "kogo"),
+        ("Ablative", "koga"), ("Dative", "komu"), ("Instrumental", "kjem"),
+        ("Locative", "kom"),
+    ]
+] + [
+    ("what", "-", case, form, "5.5")
+    for case, form in [
+        ("Nominative", "czto"), ("Accusative", "czto"), ("Genitive", "czjego"),
+        ("Ablative", "czjega"), ("Dative", "czjemu"),
+        ("Instrumental", "czjem"), ("Locative", "czjem"),
+    ]
+] + [
+    ("relative", "-", f"{case}.Singular.Masculine", form, "5.5")
+    for case, form in [
+        ("Nominative", "izzje"), ("Accusative", "jegozzje"),
+        ("Genitive", "jegozzje"), ("Dative", "jemuzzje"),
+    ]
+]
+
 ROWS = (
     DOM + KONJ + DRUG + OKNO + POLJE + ZZENA + KNIGA + ZJEMLJA + NACIJA
     + SLUGA + NOCZJ + SHORT + LONG + PERSONAL + CLITICS + REFLEXIVE
+    + DEMONSTRATIVE + INTERROGATIVE
 )
 
 
