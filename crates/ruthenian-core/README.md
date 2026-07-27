@@ -29,7 +29,7 @@ references throughout the source are to the specification.
 |---|---|
 | **nouns** (§3.3–§3.6) | complete — all 8 cases × 3 numbers, three declensions, hard and soft |
 | **adjectives** (§4) | complete — both declensions × 3 genders, plus §4.3's degrees |
-| pronouns (§5) | not yet |
+| **pronouns** (§5.1, §5.1a, §5.2) | complete — personal, clitic and reflexive. §5.4–§5.6's non-personal series have **no entry point yet** |
 | numerals (§6) | not yet |
 | verbs (§7) | not yet |
 
@@ -37,9 +37,10 @@ references throughout the source are to the specification.
 
 | | Result |
 |---|---|
-| Corpus cells reproduced (`tests/corpus/paradigms.tsv`) | **348 of 348** |
+| Corpus cells reproduced (`tests/corpus/paradigms.tsv`) | **458 of 458** |
 | Nominal paradigms covered | 11 — `dom`, `Konj`, `Drug`, `okno`, `polje`, `zzena`, `kniga`, `zjemlja`, `nacija`, `sluga'`, `noczj'` |
 | Adjective paradigms covered | 2 — `dobr` long and short, all three genders |
+| Pronoun paradigms covered | 11 personal + 14 clitics + the reflexive |
 | Guards, each verified to fail under its stated mutation | **12 of 12** |
 | Third-party dependencies | **0** |
 
@@ -54,13 +55,14 @@ is the only place one may be introduced.
 |---|---|---|
 | any function, on an unreadable lemma | `?` | Not a word at all: unparseable, empty, no vowel, or non-letters. `?` is outside the alphabet, so it cannot collide with a form. |
 | `reflexive(Nominative)` | `sjebja` | §5.2 gives the reflexive no nominative — it cannot be a subject. |
-| `imperative(w, First \| Third, Singular)` | the present indicative | §7.10 builds these with a particle; this is the form it attaches to. |
 | `pronoun(_, _, _, Vocative)` | the nominative | §5.1's table has no vocative row; §3.1's convention applies. |
-| `clitic_pronoun` outside acc/dat | the full form | §5.1a gives clitics for the accusative and dative only. |
+| `clitic_pronoun` outside the cells §5.1a lists | the full form | §5.1a gives clitics for the accusative and dative, singular and plural — there are no dual clitics. |
+| `clitic_reflexive` outside acc/dat | the full reflexive | §5.2 gives `sja` and `si` and nothing else. |
+| `imperative(w, First \| Third, Singular)` | the present indicative | §7.10 builds these with a particle; this is the form it attaches to. |
 
-The last four arrive with their milestones. The `every_fallback_exercised` guard
-counts the rows in this table against the tests, so a substitute cannot be added
-without being both written down and exercised.
+All but the last are implemented; the imperative's arrives with M6. The
+`every_fallback_exercised` guard counts the rows in this table against the tests,
+so a substitute cannot be added without being both written down and exercised.
 
 **The cost, stated once.** A caller can ask a question the language does not
 have an answer to and get a plausible-looking string back. That is deliberate:
@@ -121,7 +123,7 @@ specification does not contain (the script's verification).
 ## Running it
 
 ```bash
-cargo test -p ruthenian-core                  # 40 tests: 4 unit, 1 corpus, 11 guards, 24 doc
+cargo test -p ruthenian-core                  # 45 tests: 4 unit, 1 corpus, 11 guards, 29 doc
 cargo clippy -p ruthenian-core --all-targets  # clean
 python3 tools/extract_paradigms.py            # regenerate the corpus after a spec edit
 ```

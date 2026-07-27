@@ -11,8 +11,9 @@
 
 use ruthenian_core::fallback::{UNREADABLE, is_unreadable};
 use ruthenian_core::{
-    Adjective, Animacy, Case, FiniteTense, Gender, Noun, Number, Person, adjective, comparative,
-    noun, short_adjective, superlative,
+    Adjective, Animacy, Case, FiniteTense, Gender, Noun, Number, Person, adjective, clitic_pronoun,
+    clitic_reflexive, comparative, noun, pronoun, pronoun_paradigm, reflexive, short_adjective,
+    superlative,
 };
 
 mod support;
@@ -68,14 +69,17 @@ fn spec_currency() {
 fn corpus_row_count() {
     let recorded: usize = corpus_header("rows").parse().expect("a row count");
     assert_eq!(recorded, corpus().len(), "corpus row count drifted");
-    // 11 nominal paradigms × 24 cells = 264, plus §4's two adjective tables at
-    // 40 cells each (three genders singular, plus a masculine dual and plural)
-    // and two animate accusatives each. Spelled out so that adding a paradigm
-    // is a deliberate edit here rather than a number that moves on its own.
+    // Spelled out as a sum so that adding a paradigm is a deliberate edit here
+    // rather than a number that moves on its own.
+    //
+    // 11 nominal paradigms × 24 cells; §4's two adjective tables at 42 each
+    // (three genders singular, a masculine dual and plural, two animate
+    // accusatives); §5.1's 11 pronouns × 8; §5.1a's 14 clitics; §5.2's 6
+    // reflexives and 2 clitic reflexives.
     assert_eq!(
         recorded,
-        264 + 2 * 42,
-        "the corpus is 11 nouns + 2 adjectives"
+        11 * 24 + 2 * 42 + 11 * 8 + 14 + 6 + 2,
+        "the corpus is 11 nouns + 2 adjectives + §5"
     );
     let nouns = corpus().iter().filter(|r| r.pos == "noun").count();
     assert_eq!(nouns % 24, 0, "a nominal paradigm is 8 cases × 3 numbers");
@@ -134,6 +138,39 @@ fn every_fallback_exercised() {
     // It is not a plausible Ruthenian word, so it cannot collide with a form.
     assert!(!UNREADABLE.chars().all(|c| c.is_ascii_alphabetic()));
 
+    // §5.2 gives the reflexive no nominative: the citation form stands in.
+    assert_eq!(reflexive(Case::Nominative), "sjebja");
+    assert_eq!(reflexive(Case::Nominative), reflexive(Case::Accusative));
+
+    // §5.1 has no vocative row: the nominative is used.
+    for person in Person::ALL {
+        for number in Number::ALL {
+            for gender in Gender::ALL {
+                assert_eq!(
+                    pronoun(person, number, gender, Case::Vocative),
+                    pronoun(person, number, gender, Case::Nominative),
+                );
+            }
+        }
+    }
+
+    // §5.1a gives clitics for the accusative and dative, singular and plural.
+    // Everywhere else the full form stands in — including the whole dual.
+    for person in Person::ALL {
+        for gender in Gender::ALL {
+            for case in [Case::Genitive, Case::Instrumental, Case::Locative] {
+                let full = pronoun(person, Number::Singular, gender, case);
+                assert_eq!(clitic_pronoun(person, Number::Singular, gender, case), full);
+            }
+            for case in Case::ALL {
+                let full = pronoun(person, Number::Dual, gender, case);
+                assert_eq!(clitic_pronoun(person, Number::Dual, gender, case), full);
+            }
+        }
+    }
+    // §5.2's clitic reflexive is `sja` and `si` and nothing else.
+    assert_eq!(clitic_reflexive(Case::Genitive), reflexive(Case::Genitive));
+
     // Each fallback named in src/fallback.rs's table must appear above. The
     // count is asserted so that documenting a new one without testing it fails.
     let text = std::fs::read_to_string(crate_dir().join("src/fallback.rs")).expect("readable");
@@ -145,9 +182,9 @@ fn every_fallback_exercised() {
         .count()
         .saturating_sub(1);
     assert_eq!(
-        declared, 5,
+        declared, 6,
         "src/fallback.rs declares {declared} fallbacks; this guard exercises the \
-         one that is implemented and the rest arrive with M4–M6. Update both together."
+         ones that are implemented; the imperative's arrives with M6. Update both together."
     );
 }
 
@@ -171,6 +208,19 @@ fn paradigm_is_form() {
                 "{lemma} {case:?}.{number:?}: paradigm() disagrees with form()"
             );
             assert_eq!(form, noun(lemma, case, number), "{lemma}: and with noun()");
+        }
+    }
+
+    // And every personal pronoun's table.
+    for person in Person::ALL {
+        for number in Number::ALL {
+            for gender in Gender::ALL {
+                let table = pronoun_paradigm(person, number, gender);
+                assert_eq!(table.len(), 8, "eight cases");
+                for (case, form) in table {
+                    assert_eq!(form, pronoun(person, number, gender, case));
+                }
+            }
         }
     }
 
@@ -259,6 +309,22 @@ fn totality_no_panic() {
         }
         assert!(!comparative(word).is_empty());
         assert!(!superlative(word).is_empty());
+    }
+
+    // The pronouns take no word at all, so their totality is over the enums.
+    for person in Person::ALL {
+        for number in Number::ALL {
+            for gender in Gender::ALL {
+                for case in Case::ALL {
+                    assert!(!pronoun(person, number, gender, case).is_empty());
+                    assert!(!clitic_pronoun(person, number, gender, case).is_empty());
+                }
+            }
+        }
+    }
+    for case in Case::ALL {
+        assert!(!reflexive(case).is_empty());
+        assert!(!clitic_reflexive(case).is_empty());
     }
 }
 

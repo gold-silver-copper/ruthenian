@@ -266,9 +266,95 @@ LONG = adjective(
     },
 )
 
+
+
+# --- §5 pronouns ------------------------------------------------------------
+# Features are Person.Number.Gender.Case throughout. Gender is inert outside the
+# third-person singular (§5.1), so the first and second persons are emitted as
+# Masculine only rather than three identical times.
+def pronoun(pos, section, person, number, gender, cells):
+    return [
+        (pos, "-", f"{person}.{number}.{gender}.{case}", cells[case], section)
+        for case in CASES
+    ]
+
+
+PERSONAL = (
+    pronoun("pronoun", "5.1", "First", "Singular", "Masculine",
+            spread(nom="ja", voc="ja", acc_abl="mjenja", gen="mjenjego",
+                   dat_loc="mnje", ins="mnoj"))
+    + pronoun("pronoun", "5.1", "Second", "Singular", "Masculine",
+              spread(nom="ty", voc="ty", acc_abl="tjebja", gen="tjebjego",
+                     dat_loc="tjebje", ins="toboj"))
+    + pronoun("pronoun", "5.1", "First", "Dual", "Masculine",
+              spread(nom="vje", voc="vje", acc="na", gen_loc="naju",
+                     dat_ins_abl="nama"))
+    + pronoun("pronoun", "5.1", "Second", "Dual", "Masculine",
+              spread(nom_voc_acc="va", gen_loc="vaju", dat_ins_abl="vama"))
+    + pronoun("pronoun", "5.1", "First", "Plural", "Masculine",
+              spread(nom="my", voc="my", acc_gen_loc="nas", dat_abl="nam",
+                     ins="nami"))
+    + pronoun("pronoun", "5.1", "Second", "Plural", "Masculine",
+              spread(nom="vy", voc="vy", acc_gen_loc="vas", dat_abl="vam",
+                     ins="vami"))
+    # Third person, §5.1's own table.
+    + pronoun("pronoun", "5.1", "Third", "Singular", "Masculine",
+              spread(nom_voc="on", acc_gen_abl="jego", dat="jemu", ins="jim",
+                     loc="jem"))
+    + pronoun("pronoun", "5.1", "Third", "Singular", "Neuter",
+              spread(nom_voc="ono", acc_gen_abl="jego", dat="jemu", ins="jim",
+                     loc="jem"))
+    + pronoun("pronoun", "5.1", "Third", "Singular", "Feminine",
+              spread(nom_voc="ona", acc="ju", gen_abl="jeje", dat_loc="jej",
+                     ins="jeju"))
+    + pronoun("pronoun", "5.1", "Third", "Dual", "Masculine",
+              spread(nom_voc="ona", acc="ja", gen_loc="jeju",
+                     dat_ins_abl="jima"))
+    + pronoun("pronoun", "5.1", "Third", "Plural", "Masculine",
+              spread(nom_voc="oni", acc_gen_loc="jih", dat_abl="jim",
+                     ins="jimi"))
+)
+
+# §5.1a lists clitics for the accusative and dative only, so only those cells
+# are asserted. Everything else falls back to the full form, which the
+# `every_fallback_exercised` guard checks rather than the corpus.
+CLITICS = [
+    ("clitic_pronoun", "-", f"{p}.{n}.{g}.{c}", form, "5.1a")
+    for p, n, g, c, form in [
+        ("First", "Singular", "Masculine", "Accusative", "mja"),
+        ("First", "Singular", "Masculine", "Dative", "mi"),
+        ("Second", "Singular", "Masculine", "Accusative", "tja"),
+        ("Second", "Singular", "Masculine", "Dative", "ti"),
+        ("Third", "Singular", "Masculine", "Accusative", "go"),
+        ("Third", "Singular", "Masculine", "Dative", "mu"),
+        ("Third", "Singular", "Feminine", "Accusative", "ju"),
+        ("Third", "Singular", "Feminine", "Dative", "ji"),
+        ("First", "Plural", "Masculine", "Accusative", "ny"),
+        ("First", "Plural", "Masculine", "Dative", "ni"),
+        ("Second", "Plural", "Masculine", "Accusative", "vy"),
+        ("Second", "Plural", "Masculine", "Dative", "vi"),
+        ("Third", "Plural", "Masculine", "Accusative", "jih"),
+        ("Third", "Plural", "Masculine", "Dative", "jim"),
+    ]
+]
+
+# §5.2. The nominative is the declared fallback rather than a form, so it is
+# left to the guard.
+REFLEXIVE = [
+    ("reflexive", "-", case, form, "5.2")
+    for case, form in [
+        ("Accusative", "sjebja"), ("Ablative", "sjebja"),
+        ("Genitive", "sjebjego"), ("Dative", "sjebje"),
+        ("Locative", "sjebje"), ("Instrumental", "soboj"),
+    ]
+] + [
+    ("clitic_reflexive", "-", "Accusative", "sja", "5.2"),
+    ("clitic_reflexive", "-", "Dative", "si", "5.2"),
+]
+
 ROWS = (
     DOM + KONJ + DRUG + OKNO + POLJE + ZZENA + KNIGA + ZJEMLJA + NACIJA
-    + SLUGA + NOCZJ + SHORT + LONG
+    + SLUGA + NOCZJ + SHORT + LONG + PERSONAL + CLITICS + REFLEXIVE
 )
 
 
@@ -324,7 +410,8 @@ def main() -> None:
     # `sluga'` never appears in the specification as the bare nominative
     # `sluga`. The nominative *form* is still the lemma without its mark.
     for _, lemma, _, _, _ in ROWS:
-        attested.add(lemma.rstrip("'").lower())
+        if lemma != "-":
+            attested.add(lemma.rstrip("'").lower())
 
     unattested = sorted(
         {(lemma, form) for _, lemma, _, form, _ in ROWS if form not in attested}

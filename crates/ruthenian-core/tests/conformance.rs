@@ -8,7 +8,10 @@
 //! time — see `tools/extract_paradigms.py` for why that distinction is
 //! load-bearing.
 
-use ruthenian_core::{Animacy, Case, Gender, Number, adjective, noun, short_adjective};
+use ruthenian_core::{
+    Animacy, Case, Gender, Number, Person, adjective, clitic_pronoun, clitic_reflexive, noun,
+    pronoun, reflexive, short_adjective,
+};
 
 mod support;
 use support::{Row, corpus};
@@ -24,6 +27,15 @@ fn case_of(name: &str) -> Case {
         "Instrumental" => Case::Instrumental,
         "Locative" => Case::Locative,
         other => panic!("unknown case in corpus: {other}"),
+    }
+}
+
+fn person_of(name: &str) -> Person {
+    match name {
+        "First" => Person::First,
+        "Second" => Person::Second,
+        "Third" => Person::Third,
+        other => panic!("unknown person in corpus: {other}"),
     }
 }
 
@@ -99,7 +111,26 @@ fn conformance() {
                     _ => f(short_adjective),
                 }
             }
-            // Milestones M3–M7 add their parts of speech here. An unknown `pos`
+            // Person.Number.Gender.Case
+            "pronoun" | "clitic_pronoun" => {
+                let f: Vec<&str> = features.split('.').collect();
+                assert_eq!(f.len(), 4, "pronoun features are Person.Number.Gender.Case");
+                let (p, n, g, c) = (
+                    person_of(f[0]),
+                    number_of(f[1]),
+                    gender_of(f[2]),
+                    case_of(f[3]),
+                );
+                match pos.as_str() {
+                    "pronoun" => pronoun(p, n, g, c),
+                    _ => clitic_pronoun(p, n, g, c),
+                }
+            }
+            // The reflexive has no gender and no number (§5.2), so its only
+            // feature is the case.
+            "reflexive" => reflexive(case_of(features)),
+            "clitic_reflexive" => clitic_reflexive(case_of(features)),
+            // Milestones M5–M7 add their parts of speech here. An unknown `pos`
             // is a hard error rather than a skip, so a corpus row can never go
             // silently unchecked.
             other => panic!("no engine entry point for pos {other:?}"),

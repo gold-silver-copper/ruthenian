@@ -1074,15 +1074,19 @@ lost the near deixis; Ruthenian keeps it.
 | | Masc sg | Neut sg | Fem sg | Dual | Plural |
 |---|---|---|---|---|---|
 | nominative | `toj` | `to` | `ta` | `ta` | `ti` |
-| accusative | `toj` / `togo` ¹ | `to` | `tu` | `ta` | `ti` / `tjeh` ¹ |
+| accusative | `toj` / `toga` ¹ | `to` | `tu` | `ta` | `ti` / `tjeh` ¹ |
 | genitive | `togo` | `togo` | `toj` | `toju` | `tjeh` |
 | **ablative** | `toga` | `toga` | `toj` | = dat | = dat |
 | dative | `tomu` | `tomu` | `toj` | `tjema` | `tjem` |
 | instrumental | `tjem` | `tjem` | `toj` | `tjema` | `tjemi` |
 | locative | `tom` | `tom` | `toj` | `toju` | `tjeh` |
 
-¹ animate. `sjej` declines identically on the stem `sj-`: `sjego`, `sjemu`,
-`sjim`, `sjem`.
+¹ animate — and the **ablative** `toga`, not the genitive `togo`. §3.7 puts the
+animate accusative singular on the ablative, because the `-a` form every Slavic
+language uses there continues PIE `*-ōd`; `togo` was a leftover from before §3.1
+split the two cases apart, and §4.2's `dobra` had it right already.
+
+`sjej` declines identically on the stem `sj-`: `sjego`, `sjemu`, `sjim`, `sjem`.
 
 ## 5.5 Interrogative and relative
 

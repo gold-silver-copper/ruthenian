@@ -9,7 +9,10 @@
 //! cargo run -p ruthenian-core --example samples -- dom Drug  # named lemmas
 //! ```
 
-use ruthenian_core::{Adjective, Animacy, Case, Gender, Noun, Number, comparative, superlative};
+use ruthenian_core::{
+    Adjective, Animacy, Case, Gender, Noun, Number, Person, clitic_pronoun, comparative, pronoun,
+    reflexive, superlative,
+};
 
 /// Lemmas that exercise something distinct, one per line of interest.
 const DEFAULT: &[(&str, &str)] = &[
@@ -58,7 +61,35 @@ fn main() {
         }
     }
     adjectives();
+    pronouns();
     println!();
+}
+
+/// §5's personal series, with the clitic beside the full form.
+fn pronouns() {
+    println!("\n§5.1 personal — full (clitic where §5.1a gives one)");
+    println!("{}", "-".repeat(74));
+    for person in Person::ALL {
+        for number in Number::ALL {
+            let gender = Gender::Masculine;
+            let cells: Vec<String> = Case::ALL
+                .iter()
+                .map(|&case| {
+                    let full = pronoun(person, number, gender, case);
+                    let clitic = clitic_pronoun(person, number, gender, case);
+                    if clitic == full {
+                        full
+                    } else {
+                        format!("{full}/{clitic}")
+                    }
+                })
+                .collect();
+            println!("  {person:?} {number:?}: {}", cells.join("  "));
+        }
+    }
+    let refl: Vec<String> = Case::ALL.iter().map(|&c| reflexive(c)).collect();
+    println!("  reflexive (no nom): {}", refl.join("  "));
+    println!("  order: nom voc acc gen abl dat ins loc");
 }
 
 /// §4's two declensions side by side, and §4.3's degrees.

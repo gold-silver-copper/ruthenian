@@ -16,7 +16,8 @@
 //! | `reflexive(Nominative)` | `sjebja` | §5.2 gives the reflexive no nominative: it cannot be a subject. The citation form stands in. |
 //! | `imperative(w, First \| Third, Singular)` | the present indicative | §7.10 builds these periphrastically; this is the form the particle attaches to. |
 //! | `pronoun(_, _, _, Vocative)` | the nominative | §5.1's table has no vocative row; §3.1's convention is that the nominative is used. |
-//! | `clitic_pronoun` outside acc/dat | the full form | §5.1a gives clitics for the accusative and dative only. |
+//! | `clitic_reflexive` outside acc/dat | the full reflexive | §5.2 gives `sja` and `si` and nothing else. |
+//! | `clitic_pronoun` outside the cells §5.1a lists | the full form | §5.1a gives clitics for the accusative and dative, singular and plural — there are no dual clitics. |
 //! | anything, on an unreadable lemma | [`UNREADABLE`] | See below. |
 //!
 //! # The unreadable lemma
