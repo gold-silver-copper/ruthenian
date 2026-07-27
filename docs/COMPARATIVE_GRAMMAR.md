@@ -608,27 +608,37 @@ Sanskrit.
 
 ## 13.3 The proposed noun paradigm
 
-Hard masculine stem `dom-`, in Ruthenian orthography.
+Hard masculine stem `dom-`, in Ruthenian orthography. This is
+[`RUTHENIAN.md`](RUTHENIAN.md) §3.3, which is normative; it is repeated here
+because §13.4–13.7 argue from it.
 
 | Case | Singular | Dual | Plural |
 |---|---|---|---|
-| nominative | `dom` | `doma` | `domi` |
+| nominative | `dom` | `doma` | `domy` |
 | vocative | `domje` | = nom | = nom |
-| accusative | `dom` / `doma` (anim.) | = nom | `domy` |
+| accusative | `dom` / `doma` (anim.) | = nom | `domy` / `domov` (anim.) |
 | genitive | `domogo` | `domu` | `domov` |
 | **ablative** | `doma` | = dat | = dat |
 | dative | `domu` | `domoma` | `domom` |
 | instrumental | `domom` | `domoma` | `domami` |
-| locative | `domje` | `domu` | `domah` |
+| locative | `domi` | `domu` | `domah` |
 
-Distinct forms: 8 singular, 3 dual, 6 plural. Sources: the dual from OCS
-(`-a`/`-u`/`-oma`), the vocative from OCS and Ukrainian (which agree: `-e`, 34 %
-and 51 % respectively), the ablative and genitive as §13.2, everything else the
-East Slavic consensus.
+Distinct forms: 7 singular, 3 dual, 5 plural — fifteen, as §11 of the
+specification counts them. Sources: the dual from OCS (`-a`/`-u`/`-oma`), the
+vocative from OCS and Ukrainian (which agree: `-e`, 34 % and 51 % respectively),
+the ablative and genitive as §13.2, everything else the East Slavic consensus.
 
-Feminine `žen-`: vocative `-o` (OCS 42 %, Ukrainian 25 %), dual NAV `-ě`→`-je`,
-GL `-u`, DAT/INS `-ama`. Neuter: vocative = nominative throughout, as in OCS
-(45 % `-o` = the nominative ending) and Sanskrit (84 % ∅).
+The locative singular is `-i`, **not** the vocative's `-je`: the two continue
+different PIE endings — `*-oi`, which became yat, against the bare `*-e` — and
+Ruthenian keeps them apart by taking the Ukrainian reflex of yat (`RUTHENIAN.md`
+§3.1). Collapsing them here would discard the distinction §2.6's yat row exists
+to preserve, and would take the velar stems' second palatalization with it
+(`druzi` against `druzzje`).
+
+Feminine `zzen-`: vocative `-o` (OCS 42 %, Ukrainian 25 %), dual NAV `-i` — OCS
+`-ě`, and yat is `-i` in Ruthenian throughout — GL `-u`, DAT/INS `-ama`. Neuter:
+vocative = nominative throughout, as in OCS (45 % `-o` = the nominative ending)
+and Sanskrit (84 % ∅).
 
 ## 13.4 Where the regularity comes from
 
@@ -641,9 +651,9 @@ because the irregularity is removed rather than the categories:
 | mobile stress (patterns `c`–`f`, primed) | Interslavic marks no stress at all; 1 465 Russian nouns affected |
 | heteroclitics (`-mę`, `dětę`, `mati`) | ~15 lemmas, memorized individually in every Slavic language |
 | the four Russian marginal cases | absent from every sister language; the partitive and 2nd locative are absorbed by the ablative, which does their semantic work |
-| short/long adjective split | a Slavic innovation absent from PIE and Sanskrit; lexically unpredictable in Russian (4 571 / 9 999) |
+| Russian's *lexical* short-form gaps | which adjectives have a short form is unpredictable in Russian (4 571 of 9 999, no rule); Ruthenian gives every adjective both, so the opposition is grammatical rather than memorized |
 | soft adjective stems | 1.6 % of adjectives carrying a parallel ending set |
-| indeclinable loans | regularized by **addition** — `metro`, `metra`, `metru` |
+| indeclinable loans | regularized by **addition** — `metro`, `metrogo`, `metru` |
 | Russian numeral government | replaced by real dual agreement (§13.6) |
 | verb classes 7–16 | 9.3 % of verbs; regularized onto 1–6 |
 
@@ -653,6 +663,14 @@ because the irregularity is removed rather than the categories:
 | animacy | shared by all four, information-bearing |
 | reflexive, participle structure | pan-Slavic |
 | iotation | 675 `ov→u` alone; removing it would make the verb unrecognizable |
+| **the long/short adjective** | OCS's definiteness opposition, productive there and the source of the `-ogo` genitive §13.2 puts to work; `RUTHENIAN.md` §4 restores it as the language's only definiteness marker |
+
+An earlier revision of this part listed the long/short split among the
+*removals*, on the strength of the 4 571 / 9 999 figure. The specification
+restored it, and the figure turns out to argue the other way: what is
+unpredictable in Russian is not the opposition but *which lemmas participate*,
+and giving every adjective both forms removes exactly that irregularity while
+keeping the distinction. The row above is corrected accordingly.
 
 ## 13.5 The verb
 
@@ -708,7 +726,7 @@ Russian's genitive singular after 2–4 is petrified dual agreement (§4). A
 Ruthenian **with a dual** does not need the rule at all:
 
 - `dva doma` — *nominative dual*, not "genitive singular"
-- `tri domi` / `pjatj domov` — nominative plural / genitive plural
+- `tri domy` / `pjatj domov` — nominative plural / genitive plural
 
 The rule that most reliably defeats Russian learners disappears not by
 simplification but by **restoring the category that made it make sense**. That is
