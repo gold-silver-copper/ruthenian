@@ -142,6 +142,21 @@ them to keep eight cases distinguishable.
   or the loss of `budu`. One suppletive verb is cheaper than either, and it is now
   the language's only one.
 
+- **The supine is dropped, and with it the last open question.** OCS
+  distinguished `idǫ lovitъ` "I go in order to hunt" from the infinitive `idǫ
+  loviti`, governing the genitive; Ruthenian does not keep it. It is the one
+  category the language declines that OCS had and the brief would otherwise want,
+  so §13 states the reason: purpose after a verb of motion is already expressible
+  two ways (§10.5), no living Slavic language maintains the distinction, and a
+  second infinitive-like form differing by one letter buys a contrast inaudible
+  in speech.
+
+- **`docs/OPEN_QUESTIONS.md` is deleted.** With the supine closed it held no open
+  questions, only a list of prose the specification is missing — which is
+  `RUTHENIAN.md`'s own business and now lives in its "Still to write". That list
+  was itself stale, naming a fleeting-vowel rule since abolished and Wackernagel
+  placement since written into §10.1a. Three documents remain, plus the record.
+
 - **The etymological alphabet is dropped.** It was a deferred second,
   diacritic-bearing notation for dictionaries, and two decisions had already
   hollowed it out: §2.6 fixes the sound correspondences as rules, so nothing

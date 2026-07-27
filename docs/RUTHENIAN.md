@@ -12,8 +12,7 @@ precedent in a sister language or in Interslavic. Nothing here is invented; the
 novelty is in the combination. The evidence is in
 [`COMPARATIVE_GRAMMAR.md`](COMPARATIVE_GRAMMAR.md), measured over full corpora of
 Proto-Indo-European, Sanskrit, Old Church Slavonic, Russian, Ukrainian and
-Belarusian. What this document still owes is in
-[`OPEN_QUESTIONS.md`](OPEN_QUESTIONS.md).
+Belarusian. What this document still owes is in §13.
 
 All forms below are in the Ruthenian Latin alphabet, specified in §2.1.
 
@@ -1745,8 +1744,8 @@ czjelovjek, izzje czitajet…        the man who reads…       (nom in its clau
 ```
 
 Purpose after a verb of motion uses the infinitive or a `da` clause: `idu
-lovitj`, `idu, da lovju`. (OCS distinguished a **supine** here, `idǫ lovitъ`
-against `idǫ loviti`; Ruthenian does not restore it — see §13.)
+lovitj`, `idu, da lovju`. OCS distinguished a **supine** here — `idǫ lovitъ`
+against `idǫ loviti` — which Ruthenian does not keep (§13).
 
 ## 10.6 The cases in use
 
@@ -1957,9 +1956,6 @@ not, by rule rather than by taste.
 
 # 13. Open questions
 
-> Tracked with evidence and consequences in
-> [`OPEN_QUESTIONS.md`](OPEN_QUESTIONS.md).
-
 **Settled in this revision.** What "conservative" means (§1: grammar from OCS,
 phonology from Russian, vocabulary East Slavic with an OCS learned layer); the
 sound correspondences (§2.6) and the productive learned layer (§2.6a); the
@@ -1978,12 +1974,15 @@ rather than a second diacritic notation to hide it in. A distinct ablative plura
 PIE does not have one either (ablative and dative are syncretic in the plural
 throughout), so there is nothing to restore.
 
-**Still open.** One question about the language itself:
+The **supine** — OCS distinguished `idǫ lovitъ` "I go in order to hunt" from the
+infinitive `idǫ loviti`, governing the genitive, and Ruthenian does not keep it.
+It is the one category this document declines that OCS had and the brief would
+otherwise want, so the reason is worth stating: purpose after a verb of motion is
+already expressible two ways (§10.5), the distinction it draws is one no living
+Slavic language maintains, and a second infinitive-like form differing from the
+first by a single letter buys a contrast that would be inaudible in speech.
 
-**The supine.** OCS distinguished `idǫ lovitъ` "I go in order to hunt" from the
-infinitive `idǫ loviti`, governing the genitive. It would fit the brief and it
-was briefly specified, but it is deliberately deferred rather than adopted, and
-§10.5 currently uses the infinitive or a `da` clause instead.
+**Nothing is open.** Every question this document raised has an answer above.
 
 ## Written in this revision
 
@@ -1993,8 +1992,34 @@ series (§5), the preposition-government table (§9.2), and syntax (§10).
 
 ## Still to write
 
-Tracked, with sources, in [`OPEN_QUESTIONS.md`](OPEN_QUESTIONS.md) §F: a
-fleeting-vowel rule stated over jer positions rather than consonant clusters;
-worked example texts, since nothing tests a grammar like translating a page into
-it; a frequency-ordered core vocabulary; and clitic placement under Wackernagel's
-law.
+Not decisions — prose this document is missing, listed so it is not forgotten.
+
+- **The conditioning environments of the palatalizations.** §2.4 gives the
+  outputs but not the conditions, the relative chronology, or why the second and
+  third produce the same consonants.
+  > Lunt, *OCS Grammar*, §3. Shevelov, *A Prehistory of Slavic*, chs. 20–22.
+
+- **The law of open syllables.** One paragraph in §2 would make pleophony, the
+  jers and `*dl`/`*tl` look like the single development they are.
+  > Schenker, *The Dawn of Slavic*, Yale, 1995, ch. 2. Meillet, *Le slave
+  > commun*, 2nd ed., 1934.
+
+- **Worked example texts.** The spec has paradigms and no connected prose, and
+  nothing tests a grammar like translating a page into it. Suggested: the OCS
+  Lord's Prayer, attested in every source language so all columns can stand side
+  by side; a narrative passage for the aorist/imperfect contrast; and a technical
+  paragraph to exercise derivation and borrowing. **This will surface gaps no
+  paradigm table can** — it is the highest-value item here.
+
+- **A frequency-ordered core vocabulary** — a Swadesh or Leipzig–Jakarta list
+  realized in Ruthenian, as the minimum demonstration that §2.6's correspondences
+  produce usable words.
+
+Three closed lists the grammar calls for, each enumerable from Russian data:
+
+- **The inherently perfective verbs** (§7.2) — roughly 100–200, identifiable from
+  aspect metadata.
+- **The aspect partners** (§7.2) — which prefix bleaches for each imperfective,
+  `czitatj` → `proczitatj`, `pisatj` → `napisatj`.
+- **The hidden-consonant verbs** (§7.3) — `zzitj` → `zziv-`, `plytj` → `plyv-`,
+  which take a listed present stem.
