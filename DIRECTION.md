@@ -88,9 +88,13 @@ pub fn present_gerund(word: &str) -> String;   // "czitatj" -> "czitaja"
 pub fn past_gerund(word: &str) -> String;      // "czitatj" -> "czitav"
 
 // ---- pronouns: full and clitic are two paradigms ---------------------------
-pub fn pronoun(p: Pronoun, case: Case, number: Number, gender: Gender) -> String;
-pub fn clitic_pronoun(p: Pronoun, case: Case, number: Number,
-                      gender: Gender) -> String;
+// A pronoun is named by the features it agrees in, not by a variant of its own:
+// person × number × gender covers §5.1 and its third-person table exactly. See
+// "A pronoun has no name" below. Gender is inert outside the third singular.
+pub fn pronoun(person: Person, number: Number, gender: Gender,
+               case: Case) -> String;
+pub fn clitic_pronoun(person: Person, number: Number, gender: Gender,
+                      case: Case) -> String;
 
 // The reflexive has no gender and no number. §5.2 gives it no nominative
 // either; asking for one returns `sjebja`, the form the pronoun is cited by.
@@ -120,8 +124,49 @@ than a synthetic form; `Mood` and `Aspect` were already unused, the imperative
 being its own function, the conditional periphrastic, and aspect changing what a
 form means rather than what it looks like.
 
-What survives is seven types, each a genuine dimension of a paradigm: `Case`,
-`Number`, `Gender`, `Animacy`, `Person`, `FiniteTense`, `Pronoun`.
+**The rule has a third clause, and it removes an eighth enum.** An enum that
+names a *word* is neither: it is a lexical identity, and this API already has
+two mechanisms for that — `word: &str` and the function name. `Pronoun { Ja, Ty,
+On, Ona, Ono, My, Vy, Oni, Vje, Va }` was the one type here that was not a
+dimension of anything, and its own justification said so: *which pronoun, the
+way `word: &str` says which noun.*
+
+What survives is six types, each a genuine dimension of a paradigm: `Case`,
+`Number`, `Gender`, `Animacy`, `Person`, `FiniteTense`.
+
+### A pronoun has no name
+
+It is exhausted by the features it agrees in, so `pronoun` takes those and the
+enum is gone. The mapping is exact — every former variant is one cell of
+person × number × gender, and every cell is a variant:
+
+| | Singular | Dual | Plural |
+|---|---|---|---|
+| **1st** | `ja` | `vje` | `my` |
+| **2nd** | `ty` | `va` | `vy` |
+| **3rd** | `on` / `ono` / `ona` by gender | `ona` | `oni` |
+
+The enum was not merely redundant. It let the identity and the parameters
+contradict each other — `pronoun(Ja, .., Plural, ..)` asked for a first-person
+*singular* pronoun in the plural, and something had to be returned — and it gave
+§5.1's third-person **dual** three names, since that column has no gender and
+`On`, `Ono` and `Ona` each plus `Dual` denoted it with nothing marking one
+canonical. Both defects are unstateable in the new signature, which is why
+neither needs a fallback in "Totality" below.
+
+**Gender is inert outside the third-person singular**, and that is the language
+rather than a wart: Ruthenian's first and second persons do not inflect for
+gender, and §5.1's third-person dual and plural do not either. `pronoun(First,
+Singular, Feminine, Nominative)` is `ja`. The argument is ignored, not guessed,
+so law 5 is untouched — and neither `Gender::Unspecified` nor an `Option` is
+added to say what the table already says.
+
+This is the one place the crate names a closed class by feature rather than by
+string, and it is worth being clear why that is not a precedent for `byti` or
+the reflexive: those are single words, so there is nothing to index. §5's other
+series — `toj`, `sjej`, `kto`, `czto`, `izzje` and the §5.6 prefixed forms —
+have no entry point at all yet, which is an open hole rather than a decision;
+see "What this crate is not".
 
 `FiniteTense` stays a parameter deliberately. Person × number × tense is one
 table, so tense indexes within a paradigm rather than selecting between them —
@@ -169,8 +214,8 @@ The last two are filled rather than excluded:
 
 | Call | Returns | Why |
 |---|---|---|
-| `imperative(w, c, Third, Singular)` | the present indicative, `idjet` | It is exactly the form §7.10's periphrastic imperative is built from; the caller prefixes `da`, `nehaj` or `pustj`. |
-| `imperative(w, c, First, Singular)` | the present indicative, `czitaju` | Same rule, though the construction is rarer. |
+| `imperative(w, Third, Singular)` | the present indicative, `idjet` | It is exactly the form §7.10's periphrastic imperative is built from; the caller prefixes `da`, `nehaj` or `pustj`. |
+| `imperative(w, First, Singular)` | the present indicative, `czitaju` | Same rule, though the construction is rarer. |
 | `reflexive(Nominative, ..)` | `sjebja` | The form the reflexive is cited by, standing in for a cell the language lacks. |
 
 **The cost, stated once.** A caller can ask a question the language does not have
@@ -291,12 +336,9 @@ pub enum Person { First, Second, Third }
 // for a perfective (§7.8). The perfect, pluperfect and imperfective future are
 // periphrastic and are composed by the caller.
 pub enum FiniteTense { NonPast, Aorist, Imperfect }
-
-// Which pronoun, the way `word: &str` says which noun.
-pub enum Pronoun { Ja, Ty, On, Ona, Ono, My, Vy, Oni, Vje, Va }
 ```
 
-**Seven types, and every one is a dimension of a paradigm.** Each is exhaustive
+**Six types, and every one is a dimension of a paradigm.** Each is exhaustive
 and each maps to a numbered section of the specification.
 
 A category the language does not have does not appear: there is no
@@ -310,6 +352,12 @@ indexes by it. `Mood`, `Voice`, `Aspect`, `Degree`, `AdjectiveForm`,
 type here — they became functions, derivations, or nothing. §7.1 remains the
 place the language's categories are enumerated; this list is only what the
 inflector needs to be told.
+
+Nor does a **word** appear as a type. `Pronoun` did, and was removed for it: the
+personal pronouns are a closed class, but so are the prepositions and the
+conjunctions, and enumerating a closed class in the type system is a lexicon
+inside a crate that declares it has none. A pronoun is reached the way every
+other word is — by the features that select it.
 
 ## What must be supplied, and why
 
@@ -367,6 +415,23 @@ Everything else **is** derived, and storing any of it would be a bug:
   determinate/indeterminate motion pairs (§7.2, §7.2a) — arrive as arguments.
 - **Not a text engine.** No agreement across words, no sentences, no
   tokenization. One word at a time.
+
+### One thing it is not yet, and should be
+
+**§5's non-personal pronouns have no entry point.** `toj` and `sjej` (§5.4),
+`kto`, `czto` and `izzje` (§5.5) and the `ni-`/`nje-`/`-libo` series (§5.6) are
+all specified, and `toj`'s paradigm is tabulated in full, but no function above
+produces a cell of any of them. This is a gap rather than a decision, and it
+predates the removal of the `Pronoun` enum, which never covered them either.
+
+`adjective()` does not absorb them: it builds the long adjective, whose
+masculine nominative singular is stem + `-yj`, so `toj` is not `adjective("t",
+..)`. The resolution that follows the rules already stated here is to expose the
+**pronominal declension itself** — one entry point that `toj`, `sjej`, `izzje`
+and the long adjective all route through, since §4.2's whole claim is that
+`dobryj`'s endings *are* `toj`'s. That makes one paradigm one function, and one
+table serve both. It is not implemented, and until it is, the conformance corpus
+will carry §5.4's rows with nothing to check them against.
 
 ## The laws
 
