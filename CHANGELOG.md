@@ -142,6 +142,26 @@ them to keep eight cases distinguishable.
   or the loss of `budu`. One suppletive verb is cheaper than either, and it is now
   the language's only one.
 
+- **§4 — both adjective forms mark animacy, and the long form's animate
+  accusative is corrected.** §4.1's short table showed no animate variant, and
+  §4.2's long table gave `dobrogo` — the **genitive** — where §3.7 puts an animate
+  noun in the **ablative**. Together those made `vizzu dobrogo druga` put the
+  adjective and its head in different cases.
+
+  Both are fixed by the same principle: an adjective agrees with its head, and
+  the animate accusative is a syncretism **of the nominal declension** rather
+  than a property of nouns as a word class. So anything declining nominally
+  inherits it — which is what `COMPARATIVE_GRAMMAR.md` §2 records for OCS, whose
+  short adjective "declines like a noun". Both forms now read `dobra` in the
+  animate accusative singular and the genitive in the plural:
+  `vizzu dobra druga`, `vizzu dobrov drugov`.
+
+  A pleasant consequence: the two forms **coincide** in the animate accusative
+  singular, since they already coincide in the ablative. The definiteness
+  contrast is neutralized in exactly that cell — which is what case systems do,
+  not a defect. `short_adjective()` therefore keeps its `animacy` parameter, and
+  the two adjective functions keep identical signatures.
+
 - **§7.12 — the past passive participle's `n` is single, not doubled.** Russian
   writes `-nnyj` long against `-n` short (`прочитанный` / `прочитан`), which gives
   the two forms **different stems**. Ruthenian writes one `n` throughout —

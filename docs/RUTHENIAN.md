@@ -759,13 +759,15 @@ predicate instrumental (§10.2).
 
 ## 4.1 Short (indefinite) — nominal declension
 
-`dobr` "good", masculine. Endings are the noun's, exactly.
+`dobr` "good", masculine. Endings are the noun's, **exactly** — including the
+animacy syncretism, which belongs to the nominal declension rather than to nouns
+as a word class.
 
 | Case | Masc sg | Neut sg | Fem sg | Dual | Plural |
 |---|---|---|---|---|---|
 | nominative | `dobr` | `dobro` | `dobra` | `dobra` | `dobry` |
 | vocative | `dobrje` | = nom | `dobro` | = nom | = nom |
-| accusative | `dobr` | `dobro` | `dobru` | = nom | `dobry` |
+| accusative | `dobr` / `dobra` ¹ | `dobro` | `dobru` | = nom | `dobry` / `dobrov` ¹ |
 | genitive | `dobrogo` | `dobrogo` | `dobry` | `dobru` | `dobrov` |
 | **ablative** | `dobra` | `dobra` | `dobry` | = dat | = dat |
 | dative | `dobru` | `dobru` | `dobri` | `dobroma` | `dobrom` |
@@ -779,7 +781,7 @@ predicate instrumental (§10.2).
 | Case | Masc sg | Neut sg | Fem sg | Dual | Plural |
 |---|---|---|---|---|---|
 | nominative | `dobryj` | `dobroje` | `dobraja` | `dobraja` | `dobryje` |
-| accusative | `dobryj` / `dobrogo` ¹ | `dobroje` | `dobruju` | `dobraja` | `dobryje` / `dobryh` ¹ |
+| accusative | `dobryj` / `dobra` ¹ | `dobroje` | `dobruju` | `dobraja` | `dobryje` / `dobryh` ¹ |
 | genitive | `dobrogo` | `dobrogo` | `dobroj` | `dobru` | `dobryh` |
 | **ablative** | `dobra` | `dobra` | `dobroj` | = dat | = dat |
 | dative | `dobromu` | `dobromu` | `dobroj` | `dobryma` | `dobrym` |
@@ -793,6 +795,32 @@ The two declensions differ in the nominative, accusative, dative, instrumental
 and locative, and coincide in the genitive and ablative. That coincidence is
 inherited: contraction of the long forms (`dobrajego` → `dobrogo`) merged them in
 exactly those cells across all of Slavic.
+
+### Both forms mark animacy, and both agree with the noun
+
+An adjective agrees with its head in case, so where §3.7 puts an animate noun in
+the **ablative** in the singular and the **genitive** in the plural, an agreeing
+adjective goes there too — in either form:
+
+```
+vizzu dobr dom          I see the good house      (inanimate: acc = nom)
+vizzu dobra druga       I see the good friend     (animate sg: acc = ABL)
+vizzu dobrov drugov     I see the good friends    (animate pl: acc = gen)
+```
+
+Two consequences fall out of the tables above.
+
+**The short form marks animacy too.** §4.1's endings are the noun's, and the
+animate accusative is a syncretism *of the nominal declension* rather than a
+property of nouns as a word class — so anything declining nominally inherits it.
+`COMPARATIVE_GRAMMAR.md` §2 records OCS's short adjective as declining like a
+noun, which is the same statement.
+
+**The two forms coincide in the animate accusative singular**, both giving
+`dobra`, because they already coincide in the ablative. So `vizzu dobra druga`
+is well-formed whether the adjective is definite or not — the definiteness
+contrast is neutralized in exactly that cell, which is the sort of thing a case
+system does and not a defect.
 
 ## 4.3 Degrees
 

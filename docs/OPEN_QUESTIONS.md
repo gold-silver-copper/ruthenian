@@ -68,21 +68,7 @@ slovowiki does.
 > can be built first and the fallback added later. It blocks nothing in
 > `ruthenian-core`, which needs no lexicon at all.
 
-## 4. Do short adjectives mark animacy?
-
-§4.2's long table gives the masculine accusative as `dobryj` / `dobrogo`, the
-second marked "animate". §4.1's short table gives `dobr` with no such split. But
-§4 says the short form "declines as a **noun**", and nouns do mark animacy
-(§3.7).
-
-So either the §4.1 table is incomplete, or short adjectives genuinely do not
-mark it — in which case `short_adjective()` needs no `animacy` parameter and the
-two adjective functions have different signatures.
-
-> **Blocks:** `short_adjective`'s signature, and any sentence with an animate
-> masculine head and an indefinite adjective (`vizzu dobr'` or `vizzu dobra`?).
-
-## 5. Czech and Serbo-Croatian lemma counts
+## 4. Czech and Serbo-Croatian lemma counts
 
 §12.1 lists both as secondary sources with their inventories marked *not yet
 measured*. `COMPARATIVE_GRAMMAR.md`'s method requires a full scan per language
