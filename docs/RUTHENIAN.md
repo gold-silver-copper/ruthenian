@@ -572,6 +572,25 @@ Nominative `zjemlja`, vocative `zjemljo`, accusative `zjemlju`, genitive/ablativ
 `zjemlji` / `zjemlju` / `zjemljama`; plural `zjemli` / `zjemljev` / `zjemljam` /
 `zjemljami` / `zjemljah`.
 
+### Vowel-final stems: `nacija` "nation" (stem `naci-`)
+
+A stem may end in a vowel, and nothing about the declension changes. §3.8's
+rule 3 puts the soft sign in the ending rather than the stem, so `nacija` is
+`naci-` plus the same endings `zjemlja` takes:
+
+Nominative `nacija`, vocative `nacijo`, accusative `naciju`, genitive/ablative
+`nacii`, dative `naciji`, instrumental `nacijoj`, locative `nacii`; dual
+`naciji` / `naciju` / `nacijama`; plural `nacii` / `nacijev` / `nacijam` /
+`nacijami` / `nacijah`.
+
+**The doubled `i` of `nacii` is regular and is not repaired.** It is simply
+`naci-` + `-i`, and Ruthenian has no rule contracting a vowel sequence. Russian
+gives this class a sub-pattern of its own (`нация`, `нации`, `нацией`), and
+Ruthenian does not: that would be a fourth declension to learn, for a class the
+third already handles. The class is not marginal — §12.3's `-cija` and `-ija`
+borrowings are large and productive — which is the reason to state it here
+rather than leave it to be inferred at each loan.
+
 ### Masculine nouns in `-a`
 
 `sluga'` "servant", `vojevoda'` "commander", `junosza'` "youth" — masculine in
