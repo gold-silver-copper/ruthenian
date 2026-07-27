@@ -77,10 +77,11 @@ pub fn future_auxiliary(person: Person, number: Number) -> String;
 // §7.12: "participles decline as adjectives and have both long and short forms".
 // So each is a derivation, and the result goes through adjective() or
 // short_adjective(). This is what removes ParticipleKind and Voice.
+// §7.12's past passive `n` is single, so one stem serves both.
 pub fn present_active_participle(word: &str) -> String;
 pub fn past_active_participle(word: &str) -> String;
 pub fn present_passive_participle(word: &str) -> String;
-pub fn past_passive_participle(word: &str) -> String;
+pub fn past_passive_participle(word: &str) -> String;   // "poczitatj" -> "poczitan"
 
 // Gerunds are indeclinable, so these return a finished form rather than a stem.
 pub fn present_gerund(word: &str) -> String;   // "czitatj" -> "czitaja"

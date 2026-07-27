@@ -43,7 +43,7 @@ copula, and the **full/clitic pronoun opposition** with second-position
 placement.
 **Removed:** mobile stress, heteroclitics, marginal cases, soft adjective stems,
 indeclinables, **the fleeting vowel entirely**, irregular numeral government,
-verb classes 7–16.
+verb classes 7–16, and the doubled `n` of the past passive participle.
 **Kept:** aspect, animacy, reflexives, iotation, participles,
 determinate/indeterminate motion pairs, **all three palatalizations** (Ukrainian
 99 %, Russian 0 %), and the yat distinction via the Ukrainian reflex `-i`.
@@ -1436,13 +1436,29 @@ exception.
 | present active | `-uszczij` / `-jaszczij` | `czitajuszczij` |
 | past active | `-vszij` | `czitavszij` |
 | present passive | `-jemyj` / `-imyj` | `czitajemyj` |
-| past passive | `-nnyj` / `-jonnyj` / `-tyj` | `poczitannyj` |
+| past passive | `-nyj` / `-jonyj` / `-tyj` | `poczitanyj` |
 | present gerund | `-ja` | `czitaja` |
 | past gerund | `-v` | `czitav` |
 
 Participles decline as adjectives and have **both long and short forms**, like
 any adjective — the short passive participle is how the passive is built:
 `dom jestj poczitan` "the house is read".
+
+**The past passive `n` is single, not doubled.** Russian writes `-nnyj` long
+against `-n` short (`прочитанный` / `прочитан`), which gives the long and short
+forms *different stems*. Ruthenian writes one `n` throughout, so there is one
+stem and the participle behaves like every other adjective:
+
+| verb | stem | long | short |
+|---|---|---|---|
+| `poczitatj` | `poczitan` | `poczitanyj` | `poczitan` |
+| `rjeszitj` | `rjeszjon` | `rjeszjonyj` | `rjeszjon` |
+| `bitj` | `bit` | `bityj` | `bit` |
+
+The doubling in Russian is orthographic convention rather than a distinction the
+language uses — nothing is told apart by it — so removing it costs no contrast
+and buys a participle that is a plain adjective stem. Which of `-n-`, `-jon-` and
+`-t-` applies is decided by the conjugation class, not stored.
 
 Their **existence** is structural: a perfective verb has no present participles
 or present gerund; an intransitive verb has no passive participle.

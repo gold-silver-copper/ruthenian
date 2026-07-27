@@ -142,6 +142,19 @@ them to keep eight cases distinguishable.
   or the loss of `budu`. One suppletive verb is cheaper than either, and it is now
   the language's only one.
 
+- **§7.12 — the past passive participle's `n` is single, not doubled.** Russian
+  writes `-nnyj` long against `-n` short (`прочитанный` / `прочитан`), which gives
+  the two forms **different stems**. Ruthenian writes one `n` throughout —
+  `poczitan` → `poczitanyj` / `poczitan` — so the participle is a plain adjective
+  stem and one derivation feeds both declension functions.
+
+  This was load-bearing rather than cosmetic: the participle-as-derivation design
+  assumes `past_passive_participle()` returns exactly one lemma, which the
+  doubling would have made impossible. The doubling is orthographic convention in
+  Russian — nothing is told apart by it — so removing it costs no contrast.
+  Which of `-n-`, `-jon-` and `-t-` applies stays decided by the conjugation
+  class.
+
 - **Seven enums removed from the API**, by one rule: *an enum that selects a
   paradigm becomes a function; an enum that indexes within one stays a
   parameter.*

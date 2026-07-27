@@ -82,21 +82,7 @@ two adjective functions have different signatures.
 > **Blocks:** `short_adjective`'s signature, and any sentence with an animate
 > masculine head and an indefinite adjective (`vizzu dobr'` or `vizzu dobra`?).
 
-## 5. Does the past passive participle double its `n`?
-
-§7.12 gives the suffix as `-nnyj` but its short form as `poczitan`, one `n` — the
-Russian pattern (`прочитанный` / `прочитан`). If the doubling is real, the long
-and short participles have **different stems**, so one derivation function cannot
-feed both `adjective()` and `short_adjective()`.
-
-Regularizing to a single `-n-` throughout (`poczitanyj` / `poczitan`) gives one
-stem and costs nothing the language needs, which would suit "more regular than
-either".
-
-> **Blocks:** whether `past_passive_participle()` can return one lemma. Everything
-> else in the participle design depends on it returning exactly one.
-
-## 6. Czech and Serbo-Croatian lemma counts
+## 5. Czech and Serbo-Croatian lemma counts
 
 §12.1 lists both as secondary sources with their inventories marked *not yet
 measured*. `COMPARATIVE_GRAMMAR.md`'s method requires a full scan per language
