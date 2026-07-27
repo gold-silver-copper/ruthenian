@@ -694,7 +694,7 @@ differ from the hard type *only* by these automatic effects.
 | **the fleeting vowel, entirely** | `okno` → `okon`, `son` → `sna` | the stem is invariant; see below |
 | heteroclitics | `vremja/vremeni` | ~15 lemmas memorized individually in every Slavic language |
 | partitive, 2nd locative, count form | 436 Russian lemmas | the ablative does their semantic work |
-| indeclinables | 1 193 Russian nouns | regularized **by addition**: `metro`, `metrogo`, `metru` |
+| indeclinables | 1 193 Russian nouns | regularized **by addition**: `mjetro`, `mjetrogo`, `mjetru` |
 | plural-/singular-only defectiveness | 2 003 nouns | every noun has all three numbers |
 
 **The fleeting vowel goes further than the genitive plural.** Two facts made the
@@ -1595,7 +1595,7 @@ genitive, which makes the system more transparent, not less.
 | Case | Prepositions | Sense |
 |---|---|---|
 | **ablative** | `iz`, `ot`, `s` (down from), `do` (starting from) | **source, origin, motion away** |
-| genitive | `u`, `bjez`, `dlja`, `okolo`, `protiv`, `vmjesto`, `krome`, `radi` | possession, relation, absence |
+| genitive | `u`, `bjez`, `dlja`, `okolo`, `protiv`, `vmjesto`, `kromje`, `radi` | possession, relation, absence |
 | dative | `k`, `po` (along), `blagodarja` | goal, recipient |
 | accusative | `v`, `na`, `za`, `pod`, `czjerjez`, `pro`, `skvozj` | motion **into**, direction |
 | instrumental | `s` (together with), `za`, `pod`, `nad`, `mjezzdu`, `pjerjed` | accompaniment, location behind/above |
