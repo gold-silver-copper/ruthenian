@@ -149,10 +149,13 @@ pub(crate) fn ending(set: Set, soft: bool, case: Case, number: Number) -> (&'sta
             (Ablative, Singular) => ("ja", n),
             (Dative, Singular) => ("ju", n),
             (Instrumental, Singular) => ("jem", n),
-            (Locative, Singular) => ("ji", n),
+            // Yat: `-i` after a hard stem, `-je` after a soft one.
+            (Locative, Singular) => ("je", n),
             (Nominative | Vocative | Accusative, Dual) => ("ja", n),
             (Genitive | Locative, Dual) => ("ju", n),
             (Dative | Instrumental | Ablative, Dual) => ("jema", n),
+            // Not yat — rule 1's `y` written `i` — and so `-i`, not `-je`.
+            // The seam rule then drops the glide: `koni`, against `konje`.
             (Nominative | Vocative | Accusative, Plural) => ("ji", n),
             (Genitive, Plural) => ("jev", n),
             (Dative | Ablative, Plural) => ("jem", n),
@@ -185,8 +188,9 @@ pub(crate) fn ending(set: Set, soft: bool, case: Case, number: Number) -> (&'sta
             (Ablative, Singular) => ("ja", n),
             (Dative, Singular) => ("ju", n),
             (Instrumental, Singular) => ("jem", n),
-            (Locative, Singular) => ("ji", n),
-            (Nominative | Vocative | Accusative, Dual) => ("ji", n),
+            // Yat, twice: the locative singular and the neuter dual.
+            (Locative, Singular) => ("je", n),
+            (Nominative | Vocative | Accusative, Dual) => ("je", n),
             (Genitive | Locative, Dual) => ("ju", n),
             (Dative | Instrumental | Ablative, Dual) => ("jema", n),
             (Nominative | Vocative | Accusative, Plural) => ("ja", n),
@@ -228,7 +232,8 @@ pub(crate) fn ending(set: Set, soft: bool, case: Case, number: Number) -> (&'sta
             // paradigm has and the footnote justifies.
             (Dative | Locative, Singular) => ("je", n),
             (Instrumental, Singular) => ("joj", n),
-            (Nominative | Vocative | Accusative, Dual) => ("ji", n),
+            // Yat: the feminine dual, as the dative and locative above.
+            (Nominative | Vocative | Accusative, Dual) => ("je", n),
             (Genitive | Locative, Dual) => ("ju", n),
             (Dative | Instrumental | Ablative, Dual) => ("jama", n),
             (Nominative | Vocative | Accusative, Plural) => ("i", n),

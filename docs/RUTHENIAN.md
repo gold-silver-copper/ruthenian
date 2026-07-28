@@ -496,14 +496,14 @@ whether the form ends in `j`, `ja` or `je`.**
 
 | Case | Singular | Dual | Plural |
 |---|---|---|---|
-| nominative | `konj` | `konja` | `konji` |
+| nominative | `konj` | `konja` | `koni` |
 | vocative | `konju` | = nom | = nom |
 | accusative | `konja` (anim.) | = nom | `konjev` |
 | genitive | `konjego` | `konju` | `konjev` |
 | **ablative** | `konja` | = dat | = dat |
 | dative | `konju` | `konjema` | `konjem` |
 | instrumental | `konjem` | `konjema` | `konjami` |
-| locative | `konji` | `konju` | `konjah` |
+| locative | `konje` | `konju` | `konjah` |
 
 ### Velar: `drug` "friend" (animate, stem `drug-`)
 
@@ -546,7 +546,7 @@ noun takes dual modifiers and a dual verb.
 ### Soft: `polje` "field" (stem `pol-`)
 
 Nominative `polje`, genitive `poljego`, ablative `polja`, dative `polju`,
-instrumental `poljem`, locative `polji`; dual `polji` / `polju` / `poljema`;
+instrumental `poljem`, locative `polje`; dual `polje` / `polju` / `poljema`;
 plural `polja` / `poljev` / `poljem` / `poljami` / `poljah`.
 
 The neuter dual `-i` continues OCS `-ě` (`dvě selě`), and the neuter vocative is
@@ -588,7 +588,7 @@ Ukrainian pattern (`knyhy` / `knyzi`) and is lost in Russian, where both are
 
 Nominative `zjemlja`, vocative `zjemljo`, accusative `zjemlju`, genitive/ablative
 `zjemli`, dative/locative `zjemlje`, instrumental `zjemljoj`; dual
-`zjemlji` / `zjemlju` / `zjemljama`; plural `zjemli` / `zjemljev` / `zjemljam` /
+`zjemlje` / `zjemlju` / `zjemljama`; plural `zjemli` / `zjemljev` / `zjemljam` /
 `zjemljami` / `zjemljah`.
 
 ### Vowel-final stems: `nacija` "nation" (stem `naci-`)
@@ -599,13 +599,20 @@ rule 3 puts the soft sign in the ending rather than the stem, so `nacija` is
 
 Nominative `nacija`, vocative `nacijo`, accusative `naciju`, genitive/ablative
 `nacii`, dative/locative `nacije`, instrumental `nacijoj`; dual
-`naciji` / `naciju` / `nacijama`; plural `nacii` / `nacijev` / `nacijam` /
+`nacije` / `naciju` / `nacijama`; plural `nacii` / `nacijev` / `nacijam` /
 `nacijami` / `nacijah`.
 
 **The yat ending is `-i` after a hard stem and `-je` after a soft one.** That is
 why the dative and locative coincide here as they do in `zzena` — `zjemlje`,
 `nacije` — which is what footnote ³ above requires and what Russian's `земле`
-has. An earlier revision gave the dative `-ji` and the locative `-i`, breaking
+has. It holds in **every** yat cell, not only these two: the locative singular
+of `konj` is `konje` and of `polje` is `polje`, and the feminine and neuter
+duals are `zjemlje`, `nacije` and `polje`.
+
+Together with rule 3a this pulls two cells apart that used to be one. `konj`'s
+locative singular and nominative plural were both `konji`; the locative is yat
+and so becomes `konje`, while the plural is rule 1's `y` written `i` and so
+becomes `koni`. Russian distinguishes them the same way, `коне` against `кони`. An earlier revision gave the dative `-ji` and the locative `-i`, breaking
 the one syncretism §3.5 goes out of its way to justify. §3.2's soft substitution
 (`je` for `o`, `ju` for `u`, `i` for `y`) does not reach this ending; it is
 listed for the soft series rather than derived from the hard one.
@@ -736,6 +743,10 @@ Not declensions — a single set of rules applied to every ending:
    `otjecz` + `-je` → `otjecze`, `druzz` + `-je` → `druzze`,
    `pisz` + `-jeszj` → `piszeszj`;
 3. a stem-final soft sign belongs to the ending, not the stem (`kon` + `j`);
+3a. **no `j` is written before `i`.** `i` is a front vowel and palatalizes on its
+   own, so the glide has nothing left to mark: `kon` + `-ji` → `koni`, and
+   `sj` + `-im` → `sim`. The `j` may sit on either side of the seam — it is the
+   ending's in the first and the stem's in the second;
 4. **first palatalization** before the vocative `-je`: `k`→`cz`, `g`→`zz`,
    `h`→`sz`, `c`→`cz` (`drug` → `druzze`, `otjec` → `otjecze`);
 5. **second palatalization** before any yat-derived `-i` — the locative
@@ -1103,7 +1114,7 @@ animate accusative singular on the ablative, because the `-a` form every Slavic
 language uses there continues PIE `*-ōd`; `togo` was a leftover from before §3.1
 split the two cases apart, and §4.2's `dobra` had it right already.
 
-`sjej` declines identically on the stem `sj-`: `sjego`, `sjemu`, `sjim`, `sjem`.
+`sjej` declines identically on the stem `sj-`: `sjego`, `sjemu`, `sim`, `sjem`.
 
 ## 5.5 Interrogative and relative
 

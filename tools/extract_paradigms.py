@@ -106,9 +106,9 @@ KONJ = noun(
     "Konj",
     "3.3",
     spread(nom="konj", voc="konju", acc_abl="konja", gen="konjego", dat="konju",
-           ins="konjem", loc="konji"),
+           ins="konjem", loc="konje"),
     spread(nom_voc_acc="konja", gen_loc="konju", dat_ins_abl="konjema"),
-    spread(nom_voc="konji", acc_gen="konjev", dat_abl="konjem", ins="konjami",
+    spread(nom_voc="koni", acc_gen="konjev", dat_abl="konjem", ins="konjami",
            loc="konjah"),
 )
 
@@ -137,8 +137,8 @@ POLJE = noun(
     "polje",
     "3.4",
     spread(nom_voc_acc="polje", gen="poljego", abl="polja", dat="polju",
-           ins="poljem", loc="polji"),
-    spread(nom_voc_acc="polji", gen_loc="polju", dat_ins_abl="poljema"),
+           ins="poljem", loc="polje"),
+    spread(nom_voc_acc="polje", gen_loc="polju", dat_ins_abl="poljema"),
     spread(nom_voc_acc="polja", gen="poljev", dat_abl="poljem", ins="poljami",
            loc="poljah"),
 )
@@ -169,7 +169,7 @@ ZJEMLJA = noun(
     "3.5",
     spread(nom="zjemlja", voc="zjemljo", acc="zjemlju", gen_abl="zjemli",
            dat_loc="zjemlje", ins="zjemljoj"),
-    spread(nom_voc_acc="zjemlji", gen_loc="zjemlju", dat_ins_abl="zjemljama"),
+    spread(nom_voc_acc="zjemlje", gen_loc="zjemlju", dat_ins_abl="zjemljama"),
     spread(nom_voc_acc="zjemli", gen="zjemljev", dat_abl="zjemljam",
            ins="zjemljami", loc="zjemljah"),
 )
@@ -181,7 +181,7 @@ NACIJA = noun(
     "3.5",
     spread(nom="nacija", voc="nacijo", acc="naciju", gen_abl="nacii",
            dat_loc="nacije", ins="nacijoj"),
-    spread(nom_voc_acc="naciji", gen_loc="naciju", dat_ins_abl="nacijama"),
+    spread(nom_voc_acc="nacije", gen_loc="naciju", dat_ins_abl="nacijama"),
     spread(nom_voc_acc="nacii", gen="nacijev", dat_abl="nacijam",
            ins="nacijami", loc="nacijah"),
 )
@@ -384,7 +384,7 @@ DEMONSTRATIVE = [
     ("pronominal", "sj", f"{case}.Singular.Masculine", form, "5.4")
     for case, form in [
         ("Nominative", "sjej"), ("Genitive", "sjego"), ("Dative", "sjemu"),
-        ("Instrumental", "sjim"), ("Locative", "sjem"),
+        ("Instrumental", "sim"), ("Locative", "sjem"),
     ]
 ]
 

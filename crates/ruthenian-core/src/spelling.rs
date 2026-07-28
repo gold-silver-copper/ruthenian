@@ -290,8 +290,21 @@ const VOWELS: [char; 6] = ['a', 'e', 'i', 'o', 'u', 'y'];
 /// use ruthenian_core::spelling::join;
 /// assert_eq!(join("dom", "ogo"), "domogo");
 /// assert_eq!(join("knig", "y"), "knigi");     // rule 1
-/// assert_eq!(join("otjecz", "je"), "otjecze"); // rule 2a
+/// assert_eq!(join("otjecz", "je"), "otjecze"); // rule 2
+/// assert_eq!(join("kon", "ji"), "koni");       // rule 3a, the ending's j
+/// assert_eq!(join("sj", "im"), "sim");         // rule 3a, the stem's ja
 /// ```
 pub fn join(stem: &str, ending: &str) -> String {
-    format!("{stem}{}", spell_ending(stem, ending))
+    let ending = spell_ending(stem, ending);
+    // Rule 3a: no `j` is written before `i`. `i` is a front vowel and palatalizes
+    // on its own, so the glide has nothing left to mark — `koni`, not `*konji`,
+    // and `sim`, not `*sjim`. The `j` may sit on either side of the seam: it is
+    // the ending's in `kon` + `-ji`, and the stem's in `sj` + `-im`.
+    if let Some(rest) = ending.strip_prefix("ji") {
+        return format!("{stem}i{rest}");
+    }
+    if ending.starts_with('i') && stem.ends_with('j') {
+        return format!("{}{ending}", &stem[..stem.len() - 1]);
+    }
+    format!("{stem}{ending}")
 }

@@ -1,8 +1,12 @@
-//! Compare §5's pronouns against their Russian equivalents.
+//! Compare Ruthenian forms against their Russian equivalents.
 //!
 //! The Russian forms are transliterated by `ruthenian-orthography` rather than
-//! by hand, so the comparison is of the same alphabet on both sides and no
-//! typo of mine can create a spurious difference.
+//! by hand, so both sides are in the same alphabet and no typo of mine can
+//! invent a difference.
+//!
+//! Only the cells Russian **has** are compared: six cases in two numbers. The
+//! vocative, the ablative and the whole dual are Ruthenian's own restorations
+//! and there is nothing to compare them against.
 //!
 //! This is an *example*, not a test: Russian is evidence about what a reader
 //! will recognize, not an authority over the specification (§1 — grammar
@@ -12,10 +16,18 @@
 //! cargo run -p ruthenian-core --example against_russian
 //! ```
 
-use ruthenian_core::{
-    Animacy::Inanimate, Case, Gender, Number, pronominal, relative, that, what, who,
-};
+use ruthenian_core::{Animacy, Case, Gender, Number, noun, relative, that, this, what, who};
 use ruthenian_orthography::{Cyrillic, to_latin};
+
+/// The six cases Russian kept, in a fixed order.
+const CASES: [(&str, Case); 6] = [
+    ("nom", Case::Nominative),
+    ("acc", Case::Accusative),
+    ("gen", Case::Genitive),
+    ("dat", Case::Dative),
+    ("ins", Case::Instrumental),
+    ("loc", Case::Locative),
+];
 
 fn ru(cyrillic: &str) -> String {
     to_latin(&Cyrillic::parse(cyrillic).expect("well-formed Cyrillic"))
@@ -23,165 +35,123 @@ fn ru(cyrillic: &str) -> String {
         .to_string()
 }
 
-fn row(label: &str, ours: String, theirs_cyrillic: &str) {
-    let theirs = ru(theirs_cyrillic);
-    let mark = if ours == theirs { "" } else { "  <-- differs" };
-    println!("  {label:<26} {ours:<12} {theirs:<12} {theirs_cyrillic:<10}{mark}");
+struct Tally {
+    same: usize,
+    diff: usize,
+}
+
+impl Tally {
+    fn row(&mut self, label: &str, ours: &str, theirs_cyrillic: &str) {
+        let theirs = ru(theirs_cyrillic);
+        let mark = if ours == theirs {
+            self.same += 1;
+            ""
+        } else {
+            self.diff += 1;
+            "  <-- differs"
+        };
+        println!("  {label:<18} {ours:<12} {theirs:<12} {theirs_cyrillic:<9}{mark}");
+    }
+
+    /// Six cases of one gender/number block, against six Cyrillic forms.
+    fn block(&mut self, title: &str, f: &dyn Fn(Case) -> String, russian: [&str; 6]) {
+        for (i, (name, case)) in CASES.iter().enumerate() {
+            self.row(&format!("{title} {name}"), &f(*case), russian[i]);
+        }
+    }
 }
 
 fn main() {
-    let m = Gender::Masculine;
-    let sg = Number::Singular;
-    let pl = Number::Plural;
-    println!("  cell                       ruthenian    russian      cyrillic");
+    let mut t = Tally { same: 0, diff: 0 };
+    let (m, n, f) = (Gender::Masculine, Gender::Neuter, Gender::Feminine);
+    let (sg, pl) = (Number::Singular, Number::Plural);
+    let inan = Animacy::Inanimate;
+    println!("  cell               ruthenian    russian      cyrillic\n");
 
-    println!("\ntot  — against Russian тот");
-    println!("{}", "-".repeat(70));
-    row("nom sg m", that(Case::Nominative, sg, m, Inanimate), "тот");
-    row(
-        "gen sg m",
-        pronominal("t", Case::Genitive, sg, m, Inanimate),
+    println!("tot — Russian тот");
+    t.block(
+        "sg m",
+        &|c| that(c, sg, m, inan),
+        ["тот", "тот", "того", "тому", "тем", "том"],
+    );
+    t.block(
+        "sg n",
+        &|c| that(c, sg, n, inan),
+        ["то", "то", "того", "тому", "тем", "том"],
+    );
+    t.block(
+        "sg f",
+        &|c| that(c, sg, f, inan),
+        ["та", "ту", "той", "той", "той", "той"],
+    );
+    t.block(
+        "pl",
+        &|c| that(c, pl, m, inan),
+        ["те", "те", "тех", "тем", "теми", "тех"],
+    );
+    t.row(
+        "sg m acc anim",
+        &that(Case::Accusative, sg, m, Animacy::Animate),
         "того",
     );
-    row(
-        "dat sg m",
-        pronominal("t", Case::Dative, sg, m, Inanimate),
-        "тому",
+
+    println!("\nsjej — Russian сей (archaic; the everyday word is этот)");
+    t.block(
+        "sg m",
+        &|c| this(c, sg, m, inan),
+        ["сей", "сей", "сего", "сему", "сим", "сем"],
     );
-    row(
-        "ins sg m",
-        pronominal("t", Case::Instrumental, sg, m, Inanimate),
-        "тем",
+    t.block(
+        "sg n",
+        &|c| this(c, sg, n, inan),
+        ["сие", "сие", "сего", "сему", "сим", "сем"],
     );
-    row(
-        "loc sg m",
-        pronominal("t", Case::Locative, sg, m, Inanimate),
-        "том",
+    t.block(
+        "sg f",
+        &|c| this(c, sg, f, inan),
+        ["сия", "сию", "сей", "сей", "сею", "сей"],
     );
-    row(
-        "nom sg n",
-        pronominal("t", Case::Nominative, sg, Gender::Neuter, Inanimate),
-        "то",
-    );
-    row(
-        "nom sg f",
-        pronominal("t", Case::Nominative, sg, Gender::Feminine, Inanimate),
-        "та",
-    );
-    row(
-        "acc sg f",
-        pronominal("t", Case::Accusative, sg, Gender::Feminine, Inanimate),
-        "ту",
-    );
-    row(
-        "gen sg f",
-        pronominal("t", Case::Genitive, sg, Gender::Feminine, Inanimate),
-        "той",
-    );
-    row(
-        "nom pl",
-        pronominal("t", Case::Nominative, pl, m, Inanimate),
-        "те",
-    );
-    row(
-        "gen pl",
-        pronominal("t", Case::Genitive, pl, m, Inanimate),
-        "тех",
-    );
-    row(
-        "dat pl",
-        pronominal("t", Case::Dative, pl, m, Inanimate),
-        "тем",
-    );
-    row(
-        "ins pl",
-        pronominal("t", Case::Instrumental, pl, m, Inanimate),
-        "теми",
+    t.block(
+        "pl",
+        &|c| this(c, pl, m, inan),
+        ["сии", "сии", "сих", "сим", "сими", "сих"],
     );
 
-    println!("\nzjemlja — against Russian земля (soft declension I)");
-    println!("{}", "-".repeat(70));
-    row(
-        "nom sg",
-        ruthenian_core::noun("zjemlja", Case::Nominative, sg),
-        "земля",
+    println!("\nkto / czto — Russian кто / что");
+    t.block("kto", &who, ["кто", "кого", "кого", "кому", "кем", "ком"]);
+    t.block("czto", &what, ["что", "что", "чего", "чему", "чем", "чём"]);
+
+    println!("\nizzje — Russian иже (a relic; the modern word is который)");
+    t.row("nom", &relative(Case::Nominative, sg, m), "иже");
+    t.row("gen", &relative(Case::Genitive, sg, m), "егоже");
+    t.row("dat", &relative(Case::Dative, sg, m), "емуже");
+
+    println!("\nthe soft nouns, which meet the same seam");
+    t.block(
+        "konj sg",
+        &|c| noun("Konj", c, sg),
+        ["конь", "коня", "коня", "коню", "конём", "коне"],
     );
-    row(
-        "gen sg",
-        ruthenian_core::noun("zjemlja", Case::Genitive, sg),
+    t.row("konj nom pl", &noun("Konj", Case::Nominative, pl), "кони");
+    t.block(
+        "zjemlja sg",
+        &|c| noun("zjemlja", c, sg),
+        ["земля", "землю", "земли", "земле", "землёй", "земле"],
+    );
+    t.row(
+        "zjemlja nom pl",
+        &noun("zjemlja", Case::Nominative, pl),
         "земли",
     );
-    row(
-        "dat sg",
-        ruthenian_core::noun("zjemlja", Case::Dative, sg),
-        "земле",
-    );
-    row(
-        "loc sg",
-        ruthenian_core::noun("zjemlja", Case::Locative, sg),
-        "земле",
-    );
-    row(
-        "acc sg",
-        ruthenian_core::noun("zjemlja", Case::Accusative, sg),
-        "землю",
+    t.block(
+        "polje sg",
+        &|c| noun("polje", c, sg),
+        ["поле", "поле", "поля", "полю", "полем", "поле"],
     );
 
-    println!("\nsjej — against Russian сей (archaic; the everyday word is этот)");
-    println!("{}", "-".repeat(70));
-    row(
-        "nom sg m",
-        pronominal("sj", Case::Nominative, sg, m, Inanimate),
-        "сей",
+    let total = t.same + t.diff;
+    println!(
+        "\n{} of {total} identical to Russian; {} differ",
+        t.same, t.diff
     );
-    row(
-        "gen sg m",
-        pronominal("sj", Case::Genitive, sg, m, Inanimate),
-        "сего",
-    );
-    row(
-        "dat sg m",
-        pronominal("sj", Case::Dative, sg, m, Inanimate),
-        "сему",
-    );
-    row(
-        "ins sg m",
-        pronominal("sj", Case::Instrumental, sg, m, Inanimate),
-        "сим",
-    );
-    row(
-        "loc sg m",
-        pronominal("sj", Case::Locative, sg, m, Inanimate),
-        "сем",
-    );
-    row(
-        "nom pl",
-        pronominal("sj", Case::Nominative, pl, m, Inanimate),
-        "сии",
-    );
-
-    println!("\nkto — against Russian кто");
-    println!("{}", "-".repeat(70));
-    row("nominative", who(Case::Nominative), "кто");
-    row("accusative", who(Case::Accusative), "кого");
-    row("genitive", who(Case::Genitive), "кого");
-    row("dative", who(Case::Dative), "кому");
-    row("instrumental", who(Case::Instrumental), "кем");
-    row("locative", who(Case::Locative), "ком");
-
-    println!("\nczto — against Russian что");
-    println!("{}", "-".repeat(70));
-    row("nominative", what(Case::Nominative), "что");
-    row("accusative", what(Case::Accusative), "что");
-    row("genitive", what(Case::Genitive), "чего");
-    row("dative", what(Case::Dative), "чему");
-    row("instrumental", what(Case::Instrumental), "чем");
-    row("locative", what(Case::Locative), "чём");
-
-    println!("\nizzje — against Russian иже (lost; the modern word is который)");
-    println!("{}", "-".repeat(70));
-    row("nominative", relative(Case::Nominative, sg, m), "иже");
-    row("genitive", relative(Case::Genitive, sg, m), "егоже");
-    row("dative", relative(Case::Dative, sg, m), "емуже");
-    println!();
 }
