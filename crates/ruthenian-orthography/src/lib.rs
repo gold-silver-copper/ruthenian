@@ -48,7 +48,7 @@ pub use alphabet::{AlphabetError, STRESS, Unmapped};
 pub use reader::Grapheme;
 
 use alphabet::{
-    AFTER_HARD_SIGN, Class, SEP, classify_foreign, find_cyrillic, is_neutral,
+    AFTER_HARD_SIGN, Class, SEP, classify_foreign, find_cyrillic, is_hushing, is_neutral,
     ruthenian_char_allowed,
 };
 
@@ -142,6 +142,18 @@ impl Cyrillic {
                     });
                 }
                 _ => {}
+            }
+
+            // `ж ш ч щ` are never followed by `э`. Declared, not assumed: the
+            // sequence occurs zero times in the 41 462-line corpus, and it is
+            // what makes `e` after a hushing consonant read back as `е` rather
+            // than `э` — see `is_hushing`.
+            if (c == 'э' || c == 'Э') && prev_char.is_some_and(is_hushing) {
+                return Err(AlphabetError {
+                    offset,
+                    found: c,
+                    kind: Unmapped::HushingContext,
+                });
             }
 
             // The hard sign constrains what follows it, so it is checked one

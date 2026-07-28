@@ -108,6 +108,23 @@ pub const DIGRAPHS: &[(&str, char)] = &[
 /// a rule derived from three real words rather than from tidiness.
 pub const AFTER_HARD_SIGN: &[char] = &['е', 'ё', 'ю', 'я', 'и', 'Е', 'Ё', 'Ю', 'Я', 'И'];
 
+/// The hushing consonants `ж ш ч щ`, after which `е` is written `e` and never
+/// `je`.
+///
+/// They are all outputs of palatalization — `*g > ž`, `*x > š`, `*k > č`,
+/// `*skj > šč` — so each was inherently soft in Common Slavic, and `ж`/`ш` then
+/// hardened in East Slavic while `ч`/`щ` stayed soft. Neither era gives any of
+/// the four a hard/soft **contrast**, so the `j` has never marked anything after
+/// them (`RUTHENIAN.md` §2.2, §3.8 rule 2).
+///
+/// The reverse reading is exact rather than a guess, on the same evidential
+/// footing as the alphabet's other context rules: `ж ш ч щ` is followed by `э`
+/// **zero** times in the 41 462-line corpus, so `e` after one of them can only
+/// be `е`.
+pub fn is_hushing(c: char) -> bool {
+    matches!(c, 'ж' | 'ш' | 'ч' | 'щ' | 'Ж' | 'Ш' | 'Ч' | 'Щ')
+}
+
 pub fn find_cyrillic(c: char) -> Option<&'static Letter> {
     LETTERS.iter().find(|l| l.lower == c || l.upper == c)
 }
@@ -135,6 +152,9 @@ fn is_combining(c: char) -> bool {
 /// Every rejection names one of these; nothing falls through silently.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Unmapped {
+    /// `э` after `ж ш ч щ`. The hushing consonants take `е`, never `э`, so `e`
+    /// after one of them reads back as `е` — see [`is_hushing`].
+    HushingContext,
     /// ѣ ѳ і ѵ and friends — recognized only well enough to be refused.
     PreReform,
     /// Cyrillic, but not Russian: ґ є ї ў …

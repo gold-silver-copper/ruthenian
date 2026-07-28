@@ -47,7 +47,7 @@ Ruthenian's orthography is not obliged to be expressible in another language's.
 | The same corpus through the reference implementation | 3 failures (lines 12695, 13444, 31725) |
 | Every letter (62 cased forms), ordered pair (966) and ordered triple (30 101) | 0 failures |
 | Random well-formed strings (14 144) | 0 failures |
-| Guards, each verified to fail under its stated mutation | 13 of 13 |
+| Guards, each verified to fail under its stated mutation | 14 of 14 |
 
 Every count is printed by the guard that produced it. Measured 2026-07-25.
 
@@ -86,6 +86,7 @@ validated against the corpus before being declared:
 | `ь` follows a consonant | `ь` and `й` are both written `j`; this is half of how the reader tells them apart | 50 036 instances, none after a vowel |
 | `й` does not follow a consonant | the other half | 31 285 instances, none after a consonant |
 | a hard sign agrees in case with the letter after it | `'` is caseless, so `Ъ`/`ъ` is recovered from its neighbour | no counter-example; `подЪезд` is not orthography |
+| `ж ш ч щ` are not followed by `э` | they take `e` rather than `je`, so `e` after one of them reads back as `е` | **0** occurrences against 33 308 of `ж ш ч щ` + `е` |
 
 Violations are `AlphabetError { offset, found, kind }` — never a silent
 passthrough. `Unmapped` names the reason: `PreReform`, `ForeignCyrillic`,

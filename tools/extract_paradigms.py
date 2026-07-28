@@ -412,15 +412,15 @@ INTERROGATIVE = [
 ] + [
     ("what", "-", case, form, "5.5")
     for case, form in [
-        ("Nominative", "czto"), ("Accusative", "czto"), ("Genitive", "czjego"),
-        ("Ablative", "czjega"), ("Dative", "czjemu"),
-        ("Instrumental", "czjem"), ("Locative", "czjom"),
+        ("Nominative", "czto"), ("Accusative", "czto"), ("Genitive", "czego"),
+        ("Ablative", "czega"), ("Dative", "czemu"),
+        ("Instrumental", "czem"), ("Locative", "czom"),
     ]
 ] + [
     ("relative", "-", f"{case}.Singular.Masculine", form, "5.5")
     for case, form in [
-        ("Nominative", "izzje"), ("Accusative", "jegozzje"),
-        ("Genitive", "jegozzje"), ("Dative", "jemuzzje"),
+        ("Nominative", "izze"), ("Accusative", "jegozze"),
+        ("Genitive", "jegozze"), ("Dative", "jemuzze"),
     ]
 ]
 

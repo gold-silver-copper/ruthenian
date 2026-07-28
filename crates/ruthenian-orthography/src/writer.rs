@@ -7,7 +7,7 @@
 //! `j` decision). The exhaustive triples guard is what proves the window is big
 //! enough — if a triple ever fails, the window is too small, not the rule.
 
-use crate::alphabet::{Class, Letter, SEP, STRESS, find_cyrillic};
+use crate::alphabet::{Class, Letter, SEP, STRESS, find_cyrillic, is_hushing};
 use crate::reader::{Grapheme, tokenize};
 
 #[derive(Clone, Copy)]
@@ -75,12 +75,13 @@ fn write_token(items: &[Item], out: &mut String) {
                 out.push(SEP);
             }
         }
-        push_spelling(*u, all_upper, out);
+        let after_hushing = n > 0 && is_hushing(units[n - 1].letter.lower);
+        push_spelling(*u, all_upper, after_hushing, out);
     }
 }
 
-fn push_spelling(u: Unit, all_upper: bool, out: &mut String) {
-    let lat = u.letter.latin;
+fn push_spelling(u: Unit, all_upper: bool, after_hushing: bool, out: &mut String) {
+    let lat = spelling(u.letter, after_hushing);
     if !u.upper {
         out.push_str(lat);
     } else if all_upper {
@@ -121,10 +122,23 @@ fn push_spelling(u: Unit, all_upper: bool, out: &mut String) {
 /// one: `ъ` is only ever followed by `е ё ю я и`, whose spellings begin with `j`
 /// or `i`, and no digraph contains either in a non-initial position. Only the
 /// first two letters are asserted on; `next` is context, not a claim.
+/// How a letter is spelled, given whether a hushing consonant precedes it.
+///
+/// `е` is `je` everywhere except after `ж ш ч щ`, where the `j` would mark a
+/// softness contrast none of the four has (`RUTHENIAN.md` §2.2, §3.8 rule 2).
+/// The reader inverts it exactly, because the alphabet declares that no hushing
+/// consonant is followed by `э`.
+fn spelling(l: &Letter, after_hushing: bool) -> &'static str {
+    match after_hushing && l.lower == 'е' {
+        true => "e",
+        false => l.latin,
+    }
+}
+
 fn reads_back(prev: &Letter, cur: &Letter, next: Option<&Letter>, before: Option<Class>) -> bool {
     let mut probe = String::with_capacity(12);
     probe.push_str(prev.latin);
-    probe.push_str(cur.latin);
+    probe.push_str(spelling(cur, is_hushing(prev.lower)));
     if cur.class == Class::HardSign
         && let Some(n) = next
     {

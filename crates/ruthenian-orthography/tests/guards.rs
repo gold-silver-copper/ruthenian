@@ -640,3 +640,51 @@ fn transliteration_never_emits_a_mark() {
         Unmapped::HardSignContext
     );
 }
+
+// --------------------------------------------------------------------------
+// 14. hushing_takes_e
+//     Witness: delete the `is_hushing` branch in `writer::spelling`, or the
+//     `э`-after-hushing check in `Cyrillic::parse`.
+// --------------------------------------------------------------------------
+/// `ж ш ч щ` take `e`, never `je`, and the reading inverts it exactly.
+///
+/// The four are all outputs of palatalization, so none of them has a hard/soft
+/// contrast for a `j` to mark (`RUTHENIAN.md` §2.2). This is what makes
+/// transliteration produce a *Ruthenian* spelling rather than one a lexicon
+/// step would have to correct: `жена` is `zzena`, which is the word §3.5
+/// declines.
+///
+/// The inverse is exact rather than a guess because the alphabet declares that
+/// no hushing consonant is followed by `э` — measured at **zero** occurrences
+/// in the 41 462-line corpus, the same standard as the other context rules.
+#[test]
+fn hushing_takes_e() {
+    for (cyr, lat) in [
+        ("жена", "zzena"),
+        ("пишешь", "piszeszj"),
+        ("шесть", "szestj"),
+        ("четыре", "czetyrje"),
+        ("человек", "czelovjek"),
+        ("иже", "izze"),
+        ("чего", "czego"),
+        ("щека", "szczeka"),
+    ] {
+        let c = Cyrillic::parse(cyr).expect("well-formed");
+        let r = to_latin(&c);
+        assert_eq!(r.as_str(), lat, "{cyr}");
+        assert_eq!(to_cyrillic(&r).as_str(), cyr, "{cyr} does not round-trip");
+    }
+
+    // Not after anything else: `e` is `э` and `je` is `е` as before.
+    let c = Cyrillic::parse("это").expect("well-formed");
+    assert_eq!(to_latin(&c).as_str(), "eto");
+    let c = Cyrillic::parse("небо").expect("well-formed");
+    assert_eq!(to_latin(&c).as_str(), "njebo");
+
+    // And the rule is *declared*, so the sequence it rules out is refused
+    // rather than silently mapped.
+    assert_eq!(
+        Cyrillic::parse("жэ").unwrap_err().kind,
+        Unmapped::HushingContext
+    );
+}

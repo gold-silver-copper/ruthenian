@@ -528,47 +528,47 @@ pub fn who(case: Case) -> String {
 /// use ruthenian_core::{what, Case};
 /// assert_eq!(what(Case::Nominative), "czto");
 /// assert_eq!(what(Case::Accusative), "czto");
-/// assert_eq!(what(Case::Genitive), "czjego");
-/// assert_eq!(what(Case::Ablative), "czjega");
-/// assert_eq!(what(Case::Dative), "czjemu");
+/// assert_eq!(what(Case::Genitive), "czego");
+/// assert_eq!(what(Case::Ablative), "czega");
+/// assert_eq!(what(Case::Dative), "czemu");
 /// // The instrumental and locative are distinct, as Russian's чем and чём are.
-/// assert_eq!(what(Case::Instrumental), "czjem");
-/// assert_eq!(what(Case::Locative), "czjom");
+/// assert_eq!(what(Case::Instrumental), "czem");
+/// assert_eq!(what(Case::Locative), "czom");
 /// ```
 pub fn what(case: Case) -> String {
     match case {
         Case::Nominative | Case::Vocative | Case::Accusative => "czto",
-        Case::Genitive => "czjego",
-        Case::Ablative => "czjega",
-        Case::Dative => "czjemu",
-        Case::Instrumental => "czjem",
-        Case::Locative => "czjom",
+        Case::Genitive => "czego",
+        Case::Ablative => "czega",
+        Case::Dative => "czemu",
+        Case::Instrumental => "czem",
+        Case::Locative => "czom",
     }
     .to_string()
 }
 
-/// `izzje` (§5.5), the **restrictive** relative — OCS `иже`, which Russian lost
-/// in favour of `который`. Ruthenian keeps both, `izzje` for restrictive clauses
+/// `izze` (§5.5), the **restrictive** relative — OCS `иже`, which Russian lost
+/// in favour of `который`. Ruthenian keeps both, `izze` for restrictive clauses
 /// and `kotoryj` (an ordinary adjective) for non-restrictive.
 ///
 /// It is the third-person pronoun plus the invariant `-zzje`, so it agrees with
 /// its antecedent in gender and number while taking its case from its own
-/// clause: `czjelovjek, jegozzje vizzu` "the man whom I see".
+/// clause: `czjelovjek, jegozze vizzu` "the man whom I see".
 ///
 /// ```
 /// use ruthenian_core::{relative, Case, Gender, Number};
 /// use Gender::Masculine as M;
 ///
-/// assert_eq!(relative(Case::Nominative, Number::Singular, M), "izzje");
-/// assert_eq!(relative(Case::Accusative, Number::Singular, M), "jegozzje");
-/// assert_eq!(relative(Case::Genitive, Number::Singular, M), "jegozzje");
-/// assert_eq!(relative(Case::Dative, Number::Singular, M), "jemuzzje");
+/// assert_eq!(relative(Case::Nominative, Number::Singular, M), "izze");
+/// assert_eq!(relative(Case::Accusative, Number::Singular, M), "jegozze");
+/// assert_eq!(relative(Case::Genitive, Number::Singular, M), "jegozze");
+/// assert_eq!(relative(Case::Dative, Number::Singular, M), "jemuzze");
 /// ```
 pub fn relative(case: Case, number: Number, gender: Gender) -> String {
-    // §5.5 gives only the nominative `izzje`, without a gender or number series
+    // §5.5 gives only the nominative `izze`, without a gender or number series
     // for it; the obliques are the pronoun's own forms plus the particle.
     match case {
-        Case::Nominative | Case::Vocative => "izzje".to_string(),
-        _ => format!("{}zzje", pronoun(Person::Third, number, gender, case)),
+        Case::Nominative | Case::Vocative => "izze".to_string(),
+        _ => format!("{}zze", pronoun(Person::Third, number, gender, case)),
     }
 }

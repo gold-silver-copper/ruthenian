@@ -276,7 +276,7 @@ form its OCS-shaped doublet by rule.**
 | Ruthenian | learned doublet |
 |---|---|
 | `golova`, `gorod`, `moloko`, `bjerjeg`, `djerjevo` | `glava`, `grad`, `mljeko`, `brjeg`, `drjevo` |
-| `svjetcza`, `gorozzanin` | `osvjeszczjenije`, `grazzdanin` |
+| `svjetcza`, `gorozzanin` | `osvjeszczenije`, `grazzdanin` |
 | `odin` | `jedinyj` |
 
 Two consequences, both deliberate:
@@ -738,9 +738,10 @@ the paradigm gives.
 Not declensions — a single set of rules applied to every ending:
 
 1. after `k g h` and `zz sz cz szcz`, `y` is written `i` (`knigi`, not `*knigy`);
-2. after `cz szcz zz sz`, an ending's initial `j` is **not written** — §2.2 gives
-   none of the four a hard/soft contrast, so the glide has nothing to mark:
-   `otjecz` + `-je` → `otjecze`, `druzz` + `-je` → `druzze`,
+2. **`j` is never written after `cz szcz zz sz`** — §2.2 gives none of the four
+   a hard/soft contrast, so the glide has nothing to mark. This is a fact about
+   the alphabet rather than about endings, and it holds inside a root as much as
+   at a seam: `zzena`, `czelovjek`, `szestj`, and `otjecz` + `-je` → `otjecze`,
    `pisz` + `-jeszj` → `piszeszj`;
 3. a stem-final soft sign belongs to the ending, not the stem (`kon` + `j`);
 3a. **a stem-final `j` is not written before `i`**: a front vowel palatalizes on
@@ -1124,11 +1125,11 @@ split the two cases apart, and §4.2's `dobra` had it right already.
 |---|---|---|
 | nominative | `kto` | `czto` |
 | accusative | `koga` | `czto` |
-| genitive | `kogo` | `czjego` |
-| **ablative** | `koga` | `czjega` |
-| dative | `komu` | `czjemu` |
-| instrumental | `kjem` | `czjem` |
-| locative | `kom` | `czjom` |
+| genitive | `kogo` | `czego` |
+| **ablative** | `koga` | `czega` |
+| dative | `komu` | `czemu` |
+| instrumental | `kjem` | `czem` |
+| locative | `kom` | `czom` |
 
 ² **The masculine nominative is reduplicated, and that one cell is the whole
 irregularity.** The declension gives `toj`, which is what OCS `тъи` and
@@ -1142,8 +1143,9 @@ The plural nominative is `tje` and not `ti`: the rest of the plural is built on
 `tje-` — `tjeh`, `tjem`, `tjemi` — and the nominative was the one cell that was
 not. OCS had `ти` there, and Russian levelled it to `те` for the same reason.
 
-`czto`'s instrumental and locative are distinct, `czjem` against `czjom`, as
-Russian's `чем` and `чём` are. An earlier revision merged them.
+`czto`'s instrumental and locative are distinct, `czem` against `czom`, as
+Russian's `чем` and `чём` are — the vowel differs, and the `j` that used to
+stand before it does not, by rule 2. An earlier revision merged the two cells.
 
 `kto` is animate and `czto` inanimate, which is why `kto` has an oblique
 accusative and `czto` does not. It is the **ablative** `koga`, not the genitive
@@ -1151,9 +1153,9 @@ accusative and `czto` does not. It is the **ablative** `koga`, not the genitive
 
 Also `czij` "whose", `kotoryj` "which", `kakyj` "what kind of" — all adjectival.
 
-**The relative pronoun is `izzje`** (OCS `иже`), inflecting as `toj` plus the
-invariant `-zzje`: `izzje`, `jegozzje`, `jemuzzje`. Russian lost it in favour of
-`который`; Ruthenian keeps both, `izzje` for restrictive clauses and `kotoryj`
+**The relative pronoun is `izze`** (OCS `иже`), inflecting as `toj` plus the
+invariant `-zze`: `izze`, `jegozze`, `jemuzze`. Russian lost it in favour of
+`который`; Ruthenian keeps both, `izze` for restrictive clauses and `kotoryj`
 for non-restrictive.
 
 ## 5.6 Negative and indefinite
@@ -1184,7 +1186,7 @@ real dual the rule is not simplified — it disappears:
 |---|---|---|
 | `odin` | agrees, singular | `odin dom` |
 | **`dva`** | **the dual** | `dva doma` |
-| `tri`, `czjetyrje` | nominative plural | `tri domy` |
+| `tri`, `czetyrje` | nominative plural | `tri domy` |
 | `pjatj` and above | genitive plural | `pjatj domov` |
 
 `dva doma` is the nominative **dual**, which is what it originally was. There is
@@ -1199,28 +1201,28 @@ houses", `s pjatju domami` "with five houses".
 
 | | | | |
 |---|---|---|---|
-| 1 `odin` | 2 `dva` | 3 `tri` | 4 `czjetyrje` |
-| 5 `pjatj` | 6 `szjestj` | 7 `sjedmj` | 8 `osmj` |
+| 1 `odin` | 2 `dva` | 3 `tri` | 4 `czetyrje` |
+| 5 `pjatj` | 6 `szestj` | 7 `sjedmj` | 8 `osmj` |
 | 9 `djevjatj` | 10 `djesjatj` | | |
 
 ## 6.3 Teens, tens, hundreds — regularized
 
 Teens are transparently "N on ten", contracted to `-nadcatj`:
 
-`odinnadcatj, dvanadcatj, trinadcatj, czjetyrnadcatj, pjatnadcatj,
-szjestnadcatj, sjedmnadcatj, osmnadcatj, djevjatnadcatj`
+`odinnadcatj, dvanadcatj, trinadcatj, czetyrnadcatj, pjatnadcatj,
+szestnadcatj, sjedmnadcatj, osmnadcatj, djevjatnadcatj`
 
 Tens are "N tens", with **no exceptions**:
 
 | | | | |
 |---|---|---|---|
-| 20 `dvadcatj` | 30 `tridcatj` | 40 **`czjetyrjedjesjat`** | 50 `pjatjdjesjat` |
-| 60 `szjestjdjesjat` | 70 `sjedmjdjesjat` | 80 `osmjdjesjat` | 90 **`djevjatjdjesjat`** |
+| 20 `dvadcatj` | 30 `tridcatj` | 40 **`czetyrjedjesjat`** | 50 `pjatjdjesjat` |
+| 60 `szestjdjesjat` | 70 `sjedmjdjesjat` | 80 `osmjdjesjat` | 90 **`djevjatjdjesjat`** |
 
 Russian's `сорок` (40) and `девяносто` (90) are lexical oddities with no
 transparent structure; Ruthenian regularizes both onto the pattern.
 
-Hundreds: `sto, dvjestje, trista, czjetyrjesta, pjatjsot, szjestjsot,
+Hundreds: `sto, dvjestje, trista, czetyrjesta, pjatjsot, szestjsot,
 sjedmjsot, osmjsot, djevjatjsot`. Then `tysjacza` (1 000), `miljon`, `miljard`.
 
 ## 6.4 Declension
@@ -1236,14 +1238,14 @@ sjedmjsot, osmjsot, djevjatjsot`. Then `tysjacza` (1 000), `miljon`, `miljard`.
 | gen / loc | `dvu` | `dvu` |
 | dat / ins / abl | `dvjema` | `dvjema` |
 
-`tri` and `czjetyrje` decline as plurals:
+`tri` and `czetyrje` decline as plurals:
 
-| | `tri` | `czjetyrje` |
+| | `tri` | `czetyrje` |
 |---|---|---|
-| nominative | `tri` | `czjetyrje` |
-| genitive / locative | `trjeh` | `czjetyrjeh` |
-| dative | `trjem` | `czjetyrjem` |
-| instrumental | `trjemi` | `czjetyrjmi` |
+| nominative | `tri` | `czetyrje` |
+| genitive / locative | `trjeh` | `czetyrjeh` |
+| dative | `trjem` | `czetyrjem` |
+| instrumental | `trjemi` | `czetyrjmi` |
 
 `pjatj` and above decline as **declension III** nouns (`noczj`): `pjatj`,
 `pjati`, `pjati`, `pjatj`, `pjatjju`, `pjati`. This is inherited — the higher
@@ -1251,17 +1253,17 @@ numerals were feminine *i*-stem nouns in OCS and still behave like them.
 
 ## 6.5 Ordinals
 
-Adjectives, long or short: `pjervyj, vtoryj, trjetij, czjetvjortyj, pjatyj,
-szjestyj, sjedmyj, osmyj, djevjatyj, djesjatyj`, then `odinnadcatyj` and so on;
+Adjectives, long or short: `pjervyj, vtoryj, trjetij, czetvjortyj, pjatyj,
+szestyj, sjedmyj, osmyj, djevjatyj, djesjatyj`, then `odinnadcatyj` and so on;
 `sotyj`, `tysjacznyj`.
 
 ## 6.6 Collectives and fractions
 
 Collective numerals count groups and mixed-gender sets, and govern the genitive
-plural: `dvoje, troje, czjetvjero, pjatjero, szjestjero, sjedmjero`. `dvoje
+plural: `dvoje, troje, czetvjero, pjatjero, szestjero, sjedmjero`. `dvoje
 djetjej` "two children".
 
-Fractions: `polovina` (½), `trjetj` (⅓), `czjetvjertj` (¼), thereafter the
+Fractions: `polovina` (½), `trjetj` (⅓), `czetvjertj` (¼), thereafter the
 ordinal — `pjataja czastj` (⅕). `poltora` "one and a half" takes the dual.
 
 # 7. Verbs
@@ -1288,7 +1290,7 @@ rather than by aspect:
 | pluperfect | past before the past | `l`-participle + past copula |
 
 Aspect and the past tenses are **independent** axes, as in OCS: a perfective verb
-has an imperfect (`poczitaszje` "he kept finishing"), an imperfective has an
+has an imperfect (`poczitajasze` "he kept finishing"), an imperfective has an
 aorist (`czita` "he read, once"). This is a large grammar, deliberately.
 
 ## 7.2 Aspect: mostly derived, with two stored classes
@@ -1680,7 +1682,7 @@ stem and the participle behaves like every other adjective:
 | verb | stem | long | short |
 |---|---|---|---|
 | `poczitatj` | `poczitan` | `poczitanyj` | `poczitan` |
-| `rjeszitj` | `rjeszjon` | `rjeszjonyj` | `rjeszjon` |
+| `rjeszitj` | `rjeszon` | `rjeszonyj` | `rjeszon` |
 | `bitj` | `bit` | `bityj` | `bit` |
 
 The doubling in Russian is orthographic convention rather than a distinction the
@@ -1718,7 +1720,7 @@ regular — the seam alternations are those of §2.4 and nothing else.
 | Suffix | Meaning | Gender | Example |
 |---|---|---|---|
 | `-ostj` | abstract quality | fem. III | `dobr` → `dobrostj` "goodness" |
-| `-stvo` | abstract or collective | neut. II | `czjelovjek` → `czjelovjeczstvo` |
+| `-stvo` | abstract or collective | neut. II | `czelovjek` → `czelovjeczstvo` |
 | `-nik` | agent, person concerned with | masc. II | `uk-` → `ucznik` "pupil" |
 | `-ica` | female, or the thing | fem. I | `car` → `carica` |
 | `-ka` | female, diminutive | fem. I | `ruka` → `ruczka` |
@@ -1776,7 +1778,7 @@ Two roots join with a **linking vowel** — `-o-` after a hard stem, `-je-` afte
 soft or sibilant one:
 
 `vod-o-provod` "water-conduit", `pol-je-vodstvo` "field-husbandry",
-`czjern-o-zjem` "black-earth".
+`czern-o-zjem` "black-earth".
 
 Compounding is fully productive and is the preferred device for coining
 technical vocabulary, ahead of Graeco-Latin borrowing (§12.4). `zjemljeopisanije`
@@ -1805,7 +1807,7 @@ genitive, which makes the system more transparent, not less.
 | **ablative** | `iz`, `ot`, `s` (down from), `do` (starting from) | **source, origin, motion away** |
 | genitive | `u`, `bjez`, `dlja`, `okolo`, `protiv`, `vmjesto`, `kromje`, `radi` | possession, relation, absence |
 | dative | `k`, `po` (along), `blagodarja` | goal, recipient |
-| accusative | `v`, `na`, `za`, `pod`, `czjerjez`, `pro`, `skvozj` | motion **into**, direction |
+| accusative | `v`, `na`, `za`, `pod`, `czerjez`, `pro`, `skvozj` | motion **into**, direction |
 | instrumental | `s` (together with), `za`, `pod`, `nad`, `mjezzdu`, `pjerjed` | accompaniment, location behind/above |
 | locative | `v`, `na`, `o`, `pri`, `po` (after) | location **in**, topic |
 
@@ -1833,7 +1835,7 @@ Coordinating: `i` "and", `a` "and/but (contrastive)", `no` "but", `ili` "or",
 
 ## 9.4 Particles
 
-`zzje` (emphatic), `li` (interrogative), `by` (conditional), `nje` (negation),
+`zze` (emphatic), `li` (interrogative), `by` (conditional), `nje` (negation),
 `ni` (emphatic negation), `-to` (definitizing), `vot` (presentative), `li…li`
 (alternative). All are second-position clitics except `nje`, which is proclitic
 to the verb.
@@ -1913,8 +1915,8 @@ verb: `ta dobraja knizi jesta` "those two good books are".
 The long/short adjective (§4) is the only definiteness marker:
 
 ```
-dobr czjelovjek jestj zdjesj.     A good man is here.
-dobryj czjelovjek jestj zdjesj.   The good man is here.
+dobr czelovjek jestj zdjesj.     A good man is here.
+dobryj czelovjek jestj zdjesj.   The good man is here.
 ```
 
 Where a noun phrase has no adjective, definiteness is unmarked — as in every
@@ -1942,13 +1944,13 @@ Three devices, in ascending formality:
 | `kogda`, `poka` | time |
 | `jako` | cause, manner |
 
-Relative clauses use `izzje` when restrictive and `kotoryj` when
+Relative clauses use `izze` when restrictive and `kotoryj` when
 non-restrictive (§5.5). The relative agrees with its antecedent in gender and
 number but takes its case from **its own clause**:
 
 ```
-czjelovjek, jegozzje vizzu…        the man whom I see…      (acc in its clause)
-czjelovjek, izzje czitajet…        the man who reads…       (nom in its clause)
+czelovjek, jegozze vizzu…        the man whom I see…      (acc in its clause)
+czelovjek, izze czitajet…        the man who reads…       (nom in its clause)
 ```
 
 Purpose after a verb of motion uses the infinitive or a `da` clause: `idu
