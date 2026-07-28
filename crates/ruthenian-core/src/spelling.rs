@@ -291,18 +291,19 @@ const VOWELS: [char; 6] = ['a', 'e', 'i', 'o', 'u', 'y'];
 /// assert_eq!(join("dom", "ogo"), "domogo");
 /// assert_eq!(join("knig", "y"), "knigi");     // rule 1
 /// assert_eq!(join("otjecz", "je"), "otjecze"); // rule 2
-/// assert_eq!(join("kon", "ji"), "koni");       // rule 3a, the ending's j
-/// assert_eq!(join("sj", "im"), "sim");         // rule 3a, the stem's ja
+/// assert_eq!(join("sj", "im"), "sim");         // rule 3a: a stem-final j
+/// assert_eq!(join("kon", "ji"), "konji");      // but not the ending'sa
 /// ```
 pub fn join(stem: &str, ending: &str) -> String {
     let ending = spell_ending(stem, ending);
-    // Rule 3a: no `j` is written before `i`. `i` is a front vowel and palatalizes
-    // on its own, so the glide has nothing left to mark — `koni`, not `*konji`,
-    // and `sim`, not `*sjim`. The `j` may sit on either side of the seam: it is
-    // the ending's in `kon` + `-ji`, and the stem's in `sj` + `-im`.
-    if let Some(rest) = ending.strip_prefix("ji") {
-        return format!("{stem}i{rest}");
-    }
+    // Rule 3a: a **stem-final** `j` is not written before `i`. A front vowel
+    // palatalizes on its own, so a stem that already ends in the palatal has
+    // nothing left to mark — `sj` + `-im` is `sim`.
+    //
+    // It is deliberately about the stem's `j` and not the ending's. Rule 3
+    // assigns the soft sign to the *ending*, so the soft series is uniformly
+    // `-ja -je -ji -ju -jego -jem -jev -jami -jah`, and `-ji` is one of them:
+    // `konji`, not `koni`, or the series has a single exception in one cell.
     if ending.starts_with('i') && stem.ends_with('j') {
         return format!("{}{ending}", &stem[..stem.len() - 1]);
     }

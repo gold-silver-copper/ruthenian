@@ -154,8 +154,8 @@ pub(crate) fn ending(set: Set, soft: bool, case: Case, number: Number) -> (&'sta
             (Nominative | Vocative | Accusative, Dual) => ("ja", n),
             (Genitive | Locative, Dual) => ("ju", n),
             (Dative | Instrumental | Ablative, Dual) => ("jema", n),
-            // Not yat — rule 1's `y` written `i` — and so `-i`, not `-je`.
-            // The seam rule then drops the glide: `koni`, against `konje`.
+            // Not yat — rule 1's `y` written `i` — and so `-i`, not `-je`,
+            // which is what keeps it distinct from the locative `konje`.
             (Nominative | Vocative | Accusative, Plural) => ("ji", n),
             (Genitive, Plural) => ("jev", n),
             (Dative | Ablative, Plural) => ("jem", n),

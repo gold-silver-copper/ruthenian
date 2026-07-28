@@ -108,7 +108,7 @@ KONJ = noun(
     spread(nom="konj", voc="konju", acc_abl="konja", gen="konjego", dat="konju",
            ins="konjem", loc="konje"),
     spread(nom_voc_acc="konja", gen_loc="konju", dat_ins_abl="konjema"),
-    spread(nom_voc="koni", acc_gen="konjev", dat_abl="konjem", ins="konjami",
+    spread(nom_voc="konji", acc_gen="konjev", dat_abl="konjem", ins="konjami",
            loc="konjah"),
 )
 

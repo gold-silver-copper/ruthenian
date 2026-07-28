@@ -496,7 +496,7 @@ whether the form ends in `j`, `ja` or `je`.**
 
 | Case | Singular | Dual | Plural |
 |---|---|---|---|
-| nominative | `konj` | `konja` | `koni` |
+| nominative | `konj` | `konja` | `konji` |
 | vocative | `konju` | = nom | = nom |
 | accusative | `konja` (anim.) | = nom | `konjev` |
 | genitive | `konjego` | `konju` | `konjev` |
@@ -609,10 +609,10 @@ has. It holds in **every** yat cell, not only these two: the locative singular
 of `konj` is `konje` and of `polje` is `polje`, and the feminine and neuter
 duals are `zjemlje`, `nacije` and `polje`.
 
-Together with rule 3a this pulls two cells apart that used to be one. `konj`'s
-locative singular and nominative plural were both `konji`; the locative is yat
-and so becomes `konje`, while the plural is rule 1's `y` written `i` and so
-becomes `koni`. Russian distinguishes them the same way, `коне` against `кони`. An earlier revision gave the dative `-ji` and the locative `-i`, breaking
+It also pulls two cells apart that used to be one. `konj`'s locative singular
+and nominative plural were both `konji`; the locative is yat, so it is `konje`,
+while the plural is rule 1's `y` written `i` and stays `konji`. Russian draws
+the same line in the same place, `коне` against `кони`. An earlier revision gave the dative `-ji` and the locative `-i`, breaking
 the one syncretism §3.5 goes out of its way to justify. §3.2's soft substitution
 (`je` for `o`, `ju` for `u`, `i` for `y`) does not reach this ending; it is
 listed for the soft series rather than derived from the hard one.
@@ -743,10 +743,12 @@ Not declensions — a single set of rules applied to every ending:
    `otjecz` + `-je` → `otjecze`, `druzz` + `-je` → `druzze`,
    `pisz` + `-jeszj` → `piszeszj`;
 3. a stem-final soft sign belongs to the ending, not the stem (`kon` + `j`);
-3a. **no `j` is written before `i`.** `i` is a front vowel and palatalizes on its
-   own, so the glide has nothing left to mark: `kon` + `-ji` → `koni`, and
-   `sj` + `-im` → `sim`. The `j` may sit on either side of the seam — it is the
-   ending's in the first and the stem's in the second;
+3a. **a stem-final `j` is not written before `i`**: a front vowel palatalizes on
+   its own, so a stem already ending in the palatal has nothing left to mark —
+   `sj` + `-im` → `sim`. This is about the *stem's* `j` and not the ending's,
+   because rule 3 puts the soft sign in the ending: the soft series is uniformly
+   `-ja -je -ji -ju -jego -jem -jev -jami -jah`, and `-ji` is one of them, so
+   `kon` + `-ji` is `konji`;
 4. **first palatalization** before the vocative `-je`: `k`→`cz`, `g`→`zz`,
    `h`→`sz`, `c`→`cz` (`drug` → `druzze`, `otjec` → `otjecze`);
 5. **second palatalization** before any yat-derived `-i` — the locative
