@@ -13,8 +13,10 @@ use ruthenian_core::fallback::{UNREADABLE, is_unreadable};
 use ruthenian_core::{
     Adjective, Animacy, Case, FiniteTense, Gender, Noun, Number, Person, adjective, byti,
     clitic_pronoun, clitic_reflexive, comparative, future_auxiliary, imperative, infinitive,
-    l_participle, noun, pronominal, pronoun, pronoun_paradigm, reflexive, relative,
-    short_adjective, superlative, that, this, verb, verb_paradigm, what, who,
+    l_participle, noun, past_active_participle, past_gerund, past_passive_participle,
+    present_active_participle, present_gerund, present_passive_participle, pronominal, pronoun,
+    pronoun_paradigm, reflexive, relative, short_adjective, superlative, that, this, verb,
+    verb_paradigm, what, who,
 };
 
 mod support;
@@ -78,10 +80,10 @@ fn corpus_row_count() {
     // accusatives); §5.1's 11 pronouns × 8; §5.1a's 14 clitics; §5.2's 6
     // reflexives and 2 clitic reflexives; §5.4's 18 `toj` cells and 5 `sjej`;
     // §5.4's 7 `tot` cells; §5.5's 7 + 7 interrogatives and 4 relative forms;
-    // and §7's 78 verb cells.
+    // §7's 78 verb cells; and §7.12's 8 derivations with 6 long forms.
     assert_eq!(
         recorded,
-        11 * 24 + 2 * 42 + 11 * 8 + 14 + 6 + 2 + 18 + 5 + 7 + 7 + 7 + 4 + 78,
+        11 * 24 + 2 * 42 + 11 * 8 + 14 + 6 + 2 + 18 + 5 + 7 + 7 + 7 + 4 + 78 + 14,
         "the corpus is 11 nouns + 2 adjectives + §5"
     );
     let nouns = corpus().iter().filter(|r| r.pos == "noun").count();
@@ -376,6 +378,17 @@ fn totality_no_panic() {
             }
         }
         assert!(!infinitive(w).is_empty());
+        // §7.12's six derivations, on hostile lemmas too.
+        for f in [
+            present_active_participle,
+            past_active_participle,
+            present_passive_participle,
+            past_passive_participle,
+            present_gerund,
+            past_gerund,
+        ] {
+            assert!(!f(w).is_empty(), "{w}");
+        }
         assert_eq!(verb_paradigm(w).len(), 27);
     }
     for number in Number::ALL {

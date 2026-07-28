@@ -10,8 +10,10 @@
 
 use ruthenian_core::{
     Animacy, Case, FiniteTense, Gender, Number, Person, adjective, byti, clitic_pronoun,
-    clitic_reflexive, future_auxiliary, imperative, infinitive, l_participle, noun, pronominal,
-    pronoun, reflexive, relative, short_adjective, that, verb, what, who,
+    clitic_reflexive, future_auxiliary, imperative, infinitive, l_participle, noun,
+    past_active_participle, past_gerund, past_passive_participle, present_active_participle,
+    present_gerund, present_passive_participle, pronominal, pronoun, reflexive, relative,
+    short_adjective, that, verb, what, who,
 };
 
 mod support;
@@ -184,6 +186,13 @@ fn conformance() {
                 l_participle(lemma, gender_of(f[0]), number_of(f[1]))
             }
             "infinitive" => infinitive(lemma),
+            // §7.12 — a derivation, so the only input is the lemma.
+            "present_active_participle" => present_active_participle(lemma),
+            "past_active_participle" => past_active_participle(lemma),
+            "present_passive_participle" => present_passive_participle(lemma),
+            "past_passive_participle" => past_passive_participle(lemma),
+            "present_gerund" => present_gerund(lemma),
+            "past_gerund" => past_gerund(lemma),
             "who" => who(case_of(features)),
             "what" => what(case_of(features)),
             "relative" => {

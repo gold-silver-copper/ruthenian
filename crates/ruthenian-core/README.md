@@ -30,8 +30,8 @@ references throughout the source are to the specification.
 | **nouns** (§3.3–§3.6) | complete — all 8 cases × 3 numbers, three declensions, hard and soft |
 | **adjectives** (§4) | complete — both declensions × 3 genders, plus §4.3's degrees |
 | **pronouns** (§5.1, §5.1a, §5.2) | complete — personal, clitic and reflexive. §5.4–§5.6's non-personal series have **no entry point yet** |
-| numerals (§6) | not yet |
-| **verbs** (§7.3–§7.10) | complete — six classes, three synthetic tenses, the imperative, `byti`, `budu`, the `l`-participle |
+| numerals (§6) | not yet — blocked on §6 having no word for zero and no rule for compounds |
+| **verbs** (§7.3–§7.12) | complete — six classes, three synthetic tenses, the imperative, `byti`, `budu`, the `l`-participle, four participles and two gerunds |
 
 ## Measurements
 

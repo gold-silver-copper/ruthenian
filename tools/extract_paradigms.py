@@ -493,6 +493,25 @@ VERB = (
            ("Second", "Plural", "czitajtje"),
            ("First", "Dual", "czitajvje"), ("First", "Plural", "czitajm")]]
     + [("infinitive", "bytj", "-", "bytj", "7.9")]
+    # §7.12. The participles return an adjective *stem*, so the corpus holds the
+    # stem and the long form the stem declines to; the gerunds are indeclinable
+    # and are finished forms.
+    + [(pos, lemma, "-", form, "7.12") for pos, lemma, form in [
+        ("present_active_participle", "czitatj", "czitajuszcz"),
+        ("past_active_participle", "czitatj", "czitavsz"),
+        ("present_passive_participle", "czitatj", "czitajem"),
+        ("past_passive_participle", "poczitatj", "poczitan"),
+        ("past_passive_participle", "rjeszitj", "rjeszen"),
+        ("past_passive_participle", "bitj", "bit"),
+        ("present_gerund", "czitatj", "czitaja"),
+        ("past_gerund", "czitatj", "czitav"),
+    ]]
+    # …and the long forms §7.12 tabulates, through the ordinary adjective.
+    + [("adjective", stem, "Nominative.Singular.Masculine", form, "7.12")
+       for stem, form in [
+           ("czitajuszcz", "czitajuszczij"), ("czitavsz", "czitavszij"),
+           ("czitajem", "czitajemyj"), ("poczitan", "poczitanyj"),
+           ("rjeszen", "rjeszenyj"), ("bit", "bityj")]]
 )
 
 ROWS = (

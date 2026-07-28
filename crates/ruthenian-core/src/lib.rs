@@ -62,4 +62,8 @@ pub use pronoun::{
     clitic_pronoun, clitic_reflexive, pronominal, pronoun, pronoun_paradigm, reflexive, relative,
     that, this, what, who,
 };
-pub use verb::{byti, future_auxiliary, imperative, infinitive, l_participle, verb, verb_paradigm};
+pub use verb::{
+    byti, future_auxiliary, imperative, infinitive, l_participle, past_active_participle,
+    past_gerund, past_passive_participle, present_active_participle, present_gerund,
+    present_passive_participle, verb, verb_paradigm,
+};

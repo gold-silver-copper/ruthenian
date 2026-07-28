@@ -11,7 +11,9 @@
 
 use ruthenian_core::{
     Adjective, Animacy, Case, FiniteTense, Gender, Noun, Number, Person, clitic_pronoun,
-    comparative, imperative, infinitive, l_participle, pronoun, reflexive, superlative, verb,
+    comparative, imperative, infinitive, l_participle, past_active_participle, past_gerund,
+    past_passive_participle, present_active_participle, present_gerund, present_passive_participle,
+    pronoun, reflexive, superlative, verb,
 };
 
 /// Lemmas that exercise something distinct, one per line of interest.
@@ -90,6 +92,16 @@ fn verbs() {
                 .collect();
             println!("  {:<10} {}", format!("{tense:?}"), row.join("  "));
         }
+        println!(
+            "  {:<10} {}  {}  {}  {}  {}  {}",
+            "§7.12",
+            present_active_participle(lemma),
+            past_active_participle(lemma),
+            present_passive_participle(lemma),
+            past_passive_participle(lemma),
+            present_gerund(lemma),
+            past_gerund(lemma),
+        );
         println!(
             "  {:<10} {}  ·  l-part {}  ·  inf {}",
             "imperative",

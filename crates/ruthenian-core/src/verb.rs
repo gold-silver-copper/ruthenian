@@ -466,3 +466,167 @@ pub fn verb_paradigm(word: &str) -> Vec<(Person, Number, FiniteTense, String)> {
     }
     out
 }
+
+// --- §7.12 participles and gerunds ------------------------------------------
+
+impl Verb {
+    /// One syllable in the infinitive stem — the vowel *is* the root (§7.3).
+    fn monosyllabic(&self) -> bool {
+        vowels(&self.infinitive) == 1
+    }
+}
+
+/// The **present active** participle stem (§7.12): `-uszcz-` in the 1st
+/// conjugation, `-jaszcz-` in the 2nd, on the present stem.
+///
+/// A participle is a derivation, not a cell: it returns an adjective **stem**
+/// that declines through [`crate::adjective`] and
+/// [`crate::short_adjective`] like any other, in both the long and the short
+/// form. That is what keeps the adjective API at two entry points.
+///
+/// ```
+/// use ruthenian_core::{present_active_participle as pap, adjective};
+/// use ruthenian_core::{Case, Number, Gender, Animacy::Inanimate};
+///
+/// assert_eq!(pap("czitatj"), "czitajuszcz");
+/// assert_eq!(pap("govoritj"), "govorjaszcz");
+///
+/// // and it declines
+/// let long = adjective(&pap("czitatj"), Case::Nominative, Number::Singular,
+///                      Gender::Masculine, Inanimate);
+/// assert_eq!(long, "czitajuszczij");
+/// ```
+pub fn present_active_participle(word: &str) -> String {
+    let Some(v) = Verb::read(word) else {
+        return UNREADABLE.to_string();
+    };
+    let suffix = match v.class.second_conjugation() {
+        true => "jaszcz",
+        false => "uszcz",
+    };
+    join(&v.present(), suffix)
+}
+
+/// The **past active** participle stem (§7.12): `-vsz-` on the infinitive stem.
+///
+/// ```
+/// use ruthenian_core::{past_active_participle as pap, adjective};
+/// use ruthenian_core::{Case, Number, Gender, Animacy::Inanimate};
+///
+/// assert_eq!(pap("czitatj"), "czitavsz");
+/// let long = adjective(&pap("czitatj"), Case::Nominative, Number::Singular,
+///                      Gender::Masculine, Inanimate);
+/// assert_eq!(long, "czitavszij");
+/// ```
+pub fn past_active_participle(word: &str) -> String {
+    match Verb::read(word) {
+        Some(v) => join(&v.infinitive, "vsz"),
+        None => UNREADABLE.to_string(),
+    }
+}
+
+/// The **present passive** participle stem (§7.12): `-jem-` in the 1st
+/// conjugation, `-im-` in the 2nd, on the present stem.
+///
+/// ```
+/// use ruthenian_core::{present_passive_participle as ppp, adjective};
+/// use ruthenian_core::{Case, Number, Gender, Animacy::Inanimate};
+///
+/// assert_eq!(ppp("czitatj"), "czitajem");
+/// assert_eq!(ppp("ljubitj"), "ljubim");
+///
+/// let long = adjective(&ppp("czitatj"), Case::Nominative, Number::Singular,
+///                      Gender::Masculine, Inanimate);
+/// assert_eq!(long, "czitajemyj");
+/// ```
+pub fn present_passive_participle(word: &str) -> String {
+    let Some(v) = Verb::read(word) else {
+        return UNREADABLE.to_string();
+    };
+    let suffix = match v.class.second_conjugation() {
+        true => "im",
+        false => "jem",
+    };
+    join(&v.present(), suffix)
+}
+
+/// The **past passive** participle stem (§7.12): `-n-`, `-jen-` or `-t-`,
+/// decided by the class and not stored.
+///
+/// §7.12 says the class decides but does not say how. The division is the one
+/// Russian draws, and it falls out of what each class does to its stem:
+///
+/// | | suffix | on | because |
+/// |---|---|---|---|
+/// | classes 4 and 5 | `-jen` | the **present** stem | the theme vowel is gone, so the suffix meets the bare stem |
+/// | class 3, and a monosyllabic class 1 | `-t` | the infinitive stem | there is no theme vowel to carry an `-n` |
+/// | otherwise | `-n` | the infinitive stem | the theme vowel is there to carry it |
+///
+/// **The `n` is single, not doubled.** Russian writes `-nnyj` long against `-n`
+/// short, which gives the two forms different stems; Ruthenian writes one `n`
+/// throughout, so the participle is a plain adjective stem and nothing is told
+/// apart by the difference.
+///
+/// ```
+/// use ruthenian_core::{past_passive_participle as ppp, adjective, short_adjective};
+/// use ruthenian_core::{Case, Number, Gender, Animacy::Inanimate};
+///
+/// // §7.12's own three examples.
+/// assert_eq!(ppp("poczitatj"), "poczitan");
+/// assert_eq!(ppp("rjeszitj"), "rjeszen");
+/// assert_eq!(ppp("bitj"), "bit");
+///
+/// // -t also for the -nutj class, which has no theme vowel to carry an -n.
+/// assert_eq!(ppp("dvinutj"), "dvinut");
+/// assert_eq!(ppp("vidjetj"), "vidjen");
+///
+/// // One stem, so the long and short forms are the same adjective.
+/// let s = ppp("poczitatj");
+/// let long = adjective(&s, Case::Nominative, Number::Singular, Gender::Masculine, Inanimate);
+/// let short = short_adjective(&s, Case::Nominative, Number::Singular, Gender::Masculine, Inanimate);
+/// assert_eq!((long.as_str(), short.as_str()), ("poczitanyj", "poczitan"));
+/// ```
+pub fn past_passive_participle(word: &str) -> String {
+    let Some(v) = Verb::read(word) else {
+        return UNREADABLE.to_string();
+    };
+    match v.class {
+        // The theme vowel is gone, so the suffix meets the bare present stem.
+        // `rjesz` + `-jen` is `rjeszen` by §3.8's rule 2, with no special case.
+        Class::Four | Class::Five => join(&v.present(), "jen"),
+        // No theme vowel to carry an `-n`.
+        Class::Three => join(&v.infinitive, "t"),
+        Class::One if v.monosyllabic() => join(&v.infinitive, "t"),
+        _ => join(&v.infinitive, "n"),
+    }
+}
+
+/// The **present gerund** (§7.12): `-ja` on the present stem.
+///
+/// Gerunds are indeclinable, so this returns a finished form rather than a stem.
+///
+/// ```
+/// use ruthenian_core::present_gerund;
+/// assert_eq!(present_gerund("czitatj"), "czitaja");
+/// assert_eq!(present_gerund("govoritj"), "govorja");
+/// ```
+pub fn present_gerund(word: &str) -> String {
+    match Verb::read(word) {
+        Some(v) => join(&v.present(), "ja"),
+        None => UNREADABLE.to_string(),
+    }
+}
+
+/// The **past gerund** (§7.12): `-v` on the infinitive stem.
+///
+/// ```
+/// use ruthenian_core::past_gerund;
+/// assert_eq!(past_gerund("czitatj"), "czitav");
+/// assert_eq!(past_gerund("govoritj"), "govoriv");
+/// ```
+pub fn past_gerund(word: &str) -> String {
+    match Verb::read(word) {
+        Some(v) => join(&v.infinitive, "v"),
+        None => UNREADABLE.to_string(),
+    }
+}
