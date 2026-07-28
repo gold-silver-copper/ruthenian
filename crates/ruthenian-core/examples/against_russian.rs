@@ -32,7 +32,11 @@ const CASES: [(&str, Case); 6] = [
 ];
 
 fn ru(cyrillic: &str) -> String {
-    to_latin(&Cyrillic::parse(cyrillic).expect("well-formed Cyrillic"))
+    // `ё` is not in the declared alphabet — it is stressed `е` — so a Russian
+    // text is normalized first, which is what Russian orthography mostly does
+    // anyway (`Unmapped::Yo`).
+    let normalized = cyrillic.replace('ё', "е").replace('Ё', "Е");
+    to_latin(&Cyrillic::parse(&normalized).expect("well-formed Cyrillic"))
         .as_str()
         .to_string()
 }

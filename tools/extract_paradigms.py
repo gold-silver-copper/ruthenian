@@ -414,7 +414,7 @@ INTERROGATIVE = [
     for case, form in [
         ("Nominative", "czto"), ("Accusative", "czto"), ("Genitive", "czego"),
         ("Ablative", "czega"), ("Dative", "czemu"),
-        ("Instrumental", "czem"), ("Locative", "czom"),
+        ("Instrumental", "czem"), ("Locative", "czem"),
     ]
 ] + [
     ("relative", "-", f"{case}.Singular.Masculine", form, "5.5")

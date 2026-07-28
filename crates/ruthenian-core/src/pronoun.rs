@@ -531,9 +531,10 @@ pub fn who(case: Case) -> String {
 /// assert_eq!(what(Case::Genitive), "czego");
 /// assert_eq!(what(Case::Ablative), "czega");
 /// assert_eq!(what(Case::Dative), "czemu");
-/// // The instrumental and locative are distinct, as Russian's чем and чём are.
+/// // One form for both: Russian's чём is stressed чем, and §2.3 does not
+/// // spell the shift.
 /// assert_eq!(what(Case::Instrumental), "czem");
-/// assert_eq!(what(Case::Locative), "czom");
+/// assert_eq!(what(Case::Locative), "czem");
 /// ```
 pub fn what(case: Case) -> String {
     match case {
@@ -541,8 +542,7 @@ pub fn what(case: Case) -> String {
         Case::Genitive => "czego",
         Case::Ablative => "czega",
         Case::Dative => "czemu",
-        Case::Instrumental => "czem",
-        Case::Locative => "czom",
+        Case::Instrumental | Case::Locative => "czem",
     }
     .to_string()
 }

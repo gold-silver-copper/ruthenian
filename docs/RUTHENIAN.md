@@ -84,12 +84,15 @@ The alphabet, against the Cyrillic it corresponds to:
 | г | `g` | н | `n` | ъ | `'` |
 | д | `d` | о | `o` | ы | `y` |
 | е | `je` | п | `p` | ь | `j` |
-| ё | `jo` | р | `r` | э | `e` |
-| ж | `zz` | с | `s` | ю | `ju` |
-| з | `z` | т | `t` | я | `ja` |
-| и | `i` | у | `u` | | |
-| й | `j` | ф | `f` | | |
+| ж | `zz` | р | `r` | э | `e` |
+| з | `z` | с | `s` | ю | `ju` |
+| и | `i` | т | `t` | я | `ja` |
+| й | `j` | у | `u` | | |
+| | | ф | `f` | | |
 | | | х | `h` | | |
+
+Thirty-two letters, not thirty-three: **`ё` is not one of them** (§2.3). It is
+stressed `е`, and Ruthenian writes `je` for both.
 
 **The separator `'` is one glyph with one rule**: *the next character starts a
 new letter*. `sz'czi` is ш + ч rather than щ; `s'zadi` is с + з rather than ш.
@@ -193,7 +196,20 @@ nothing to mark, which is why none of the five ever takes one (§3.8 rule 2a).
 ## 2.3 Vowels
 
 `a e i o u y` — six, with `y` the back counterpart of `i`. The iotated series
-`ja je jo ju` are `j` + vowel, not separate phonemes.
+`ja je ju` are `j` + vowel, not separate phonemes.
+
+**There is no `jo`.** Russian's `ё` is not a vowel of its own: it is stressed
+`е` after the East Slavic `*e > o` shift, so `нёс` and `несу` are one root
+differing only in where the accent falls. §2.1 does not write stress, so
+spelling the shift would encode an alternation the language cannot see, and the
+stem would stop being invariant (§2.5) — the same objection that removed the
+fleeting vowel and the stress clause of §3.8's rule 2. Ruthenian writes `je`
+throughout: `zzeltyj`, `njes` beside `njesu`, `czetvjertyj`.
+
+Russian's own orthography prints `е` for `ё` outside dictionaries, so this is
+also what a Russian text mostly looks like already. The sequence `jo` is
+therefore free to be `j` + `o`, which is what `bataljon` and the soft endings
+`-jo` and `-joj` (§3.5's `zjemljo`, `zjemljoj`) need it to be.
 
 ## 2.4 The three palatalizations
 
@@ -1129,7 +1145,7 @@ split the two cases apart, and §4.2's `dobra` had it right already.
 | **ablative** | `koga` | `czega` |
 | dative | `komu` | `czemu` |
 | instrumental | `kjem` | `czem` |
-| locative | `kom` | `czom` |
+| locative | `kom` | `czem` |
 
 ² **The masculine nominative is reduplicated, and that one cell is the whole
 irregularity.** The declension gives `toj`, which is what OCS `тъи` and
@@ -1143,9 +1159,10 @@ The plural nominative is `tje` and not `ti`: the rest of the plural is built on
 `tje-` — `tjeh`, `tjem`, `tjemi` — and the nominative was the one cell that was
 not. OCS had `ти` there, and Russian levelled it to `те` for the same reason.
 
-`czto`'s instrumental and locative are distinct, `czem` against `czom`, as
-Russian's `чем` and `чём` are — the vowel differs, and the `j` that used to
-stand before it does not, by rule 2. An earlier revision merged the two cells.
+`czto`'s instrumental and locative are one form, `czem`. Russian writes `чем`
+and `чём`, but that `ё` is stressed `е` (§2.3) and Ruthenian does not spell the
+shift, so the two fall together — as they did before a revision that split them
+on the strength of a distinction the alphabet cannot carry.
 
 `kto` is animate and `czto` inanimate, which is why `kto` has an oblique
 accusative and `czto` does not. It is the **ablative** `koga`, not the genitive
@@ -1253,7 +1270,7 @@ numerals were feminine *i*-stem nouns in OCS and still behave like them.
 
 ## 6.5 Ordinals
 
-Adjectives, long or short: `pjervyj, vtoryj, trjetij, czetvjortyj, pjatyj,
+Adjectives, long or short: `pjervyj, vtoryj, trjetij, czetvjertyj, pjatyj,
 szestyj, sjedmyj, osmyj, djevjatyj, djesjatyj`, then `odinnadcatyj` and so on;
 `sotyj`, `tysjacznyj`.
 
@@ -1666,7 +1683,7 @@ outputs and are not the same rule.
 | present active | `-uszczij` / `-jaszczij` | `czitajuszczij` |
 | past active | `-vszij` | `czitavszij` |
 | present passive | `-jemyj` / `-imyj` | `czitajemyj` |
-| past passive | `-nyj` / `-jonyj` / `-tyj` | `poczitanyj` |
+| past passive | `-nyj` / `-jenyj` / `-tyj` | `poczitanyj` |
 | present gerund | `-ja` | `czitaja` |
 | past gerund | `-v` | `czitav` |
 
@@ -1682,12 +1699,12 @@ stem and the participle behaves like every other adjective:
 | verb | stem | long | short |
 |---|---|---|---|
 | `poczitatj` | `poczitan` | `poczitanyj` | `poczitan` |
-| `rjeszitj` | `rjeszon` | `rjeszonyj` | `rjeszon` |
+| `rjeszitj` | `rjeszen` | `rjeszenyj` | `rjeszen` |
 | `bitj` | `bit` | `bityj` | `bit` |
 
 The doubling in Russian is orthographic convention rather than a distinction the
 language uses — nothing is told apart by it — so removing it costs no contrast
-and buys a participle that is a plain adjective stem. Which of `-n-`, `-jon-` and
+and buys a participle that is a plain adjective stem. Which of `-n-`, `-jen-` and
 `-t-` applies is decided by the conjugation class, not stored.
 
 Their **existence** is structural: a perfective verb has no present participles

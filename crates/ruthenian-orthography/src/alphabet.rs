@@ -60,7 +60,6 @@ letters![
     ('г', 'Г', "g", Consonant),
     ('д', 'Д', "d", Consonant),
     ('е', 'Е', "je", Vowel),
-    ('ё', 'Ё', "jo", Vowel),
     ('ж', 'Ж', "zz", Consonant),
     ('з', 'З', "z", Consonant),
     ('и', 'И', "i", Vowel),
@@ -99,14 +98,15 @@ pub const DIGRAPHS: &[(&str, char)] = &[
     ("zz", 'ж'),
     ("ja", 'я'),
     ("je", 'е'),
-    ("jo", 'ё'),
     ("ju", 'ю'),
 ];
 
 /// The letters `ъ` may precede. Widened from the iotated vowels to include `и`
 /// because the corpus attests `предъидешь`, `предъизбранным`, `предъизбрал` —
 /// a rule derived from three real words rather than from tidiness.
-pub const AFTER_HARD_SIGN: &[char] = &['е', 'ё', 'ю', 'я', 'и', 'Е', 'Ё', 'Ю', 'Я', 'И'];
+/// `ъ` may only stand before these. `ё` is **not** among them: it is not in the
+/// declared alphabet at all (see [`Unmapped::Yo`]).
+pub const AFTER_HARD_SIGN: &[char] = &['е', 'ю', 'я', 'и', 'Е', 'Ю', 'Я', 'И'];
 
 /// The hushing consonants `ж ш ч щ`, after which `е` is written `e` and never
 /// `je`.
@@ -152,6 +152,19 @@ fn is_combining(c: char) -> bool {
 /// Every rejection names one of these; nothing falls through silently.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Unmapped {
+    /// `ё`, which is **not in the declared alphabet**.
+    ///
+    /// It is not a vowel of its own: it is stressed `е` after the East Slavic
+    /// `*e > o` shift, so `нёс` and `несу` are one root. The shift is
+    /// conditioned entirely by stress, and `RUTHENIAN.md` §2.1 does not write
+    /// stress — so spelling it would encode an alternation the language cannot
+    /// see, and the stem would stop being invariant (§2.5).
+    ///
+    /// Russian's own orthography prints `е` for `ё` outside dictionaries, so
+    /// normalizing `ё` to `е` before conversion is what a Russian text mostly
+    /// does already. Declaring it out keeps the round-trip exact rather than
+    /// silently lossy.
+    Yo,
     /// `э` after `ж ш ч щ`. The hushing consonants take `е`, never `э`, so `e`
     /// after one of them reads back as `е` — see [`is_hushing`].
     HushingContext,
