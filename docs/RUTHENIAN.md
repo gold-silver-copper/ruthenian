@@ -1217,7 +1217,7 @@ real dual the rule is not simplified — it disappears:
 `dva doma` is the nominative **dual**, which is what it originally was. There is
 no 11–14 exception and no last-digit rule: five and above always take the
 genitive plural, and a compound numeral is governed by its **last word** —
-`dvadcatj dva doma` (dual), `dvadcatj pjatj domov` (genitive plural).
+`dvadjesjat dva doma` (dual), `dvadjesjat pjatj domov` (genitive plural).
 
 In oblique cases the numeral and noun simply agree: `s dvuma domoma` "with two
 houses", `s pjatju domami` "with five houses".
@@ -1226,42 +1226,79 @@ houses", `s pjatju domami` "with five houses".
 
 | | | | |
 |---|---|---|---|
-| 1 `odin` | 2 `dva` | 3 `tri` | 4 `czetyrje` |
-| 5 `pjatj` | 6 `szestj` | 7 `sjedmj` | 8 `osmj` |
-| 9 `djevjatj` | 10 `djesjatj` | | |
+| 0 `nolj` | 1 `odin` | 2 `dva` | 3 `tri` |
+| 4 `czetyrje` | 5 `pjatj` | 6 `szestj` | 7 `sjedmj` |
+| 8 `osmj` | 9 `djevjatj` | 10 `djesjatj` | |
+
+`nolj` is a soft masculine of declension II and governs the genitive plural,
+`nolj domov`.
 
 ## 6.3 Teens, tens, hundreds — regularized
 
-Teens are transparently "N on ten", contracted to `-nadcatj`:
+**One rule per rank, and no exceptions in any of them.**
 
-`odinnadcatj, dvanadcatj, trinadcatj, czetyrnadcatj, pjatnadcatj,
-szestnadcatj, sjedmnadcatj, osmnadcatj, djevjatnadcatj`
+Teens are "N on ten", on the unit's stem — the cardinal less a final `j` or
+`je`:
 
-Tens are "N tens", with **no exceptions**:
+`odinnadjesjat, dvanadjesjat, trinadjesjat, czetyrnadjesjat, pjatnadjesjat,
+szestnadjesjat, sjedmnadjesjat, osmnadjesjat, djevjatnadjesjat`
+
+Tens are "N tens", on the unit whole:
 
 | | | | |
 |---|---|---|---|
-| 20 `dvadcatj` | 30 `tridcatj` | 40 **`czetyrjedjesjat`** | 50 `pjatjdjesjat` |
-| 60 `szestjdjesjat` | 70 `sjedmjdjesjat` | 80 `osmjdjesjat` | 90 **`djevjatjdjesjat`** |
+| 20 `dvadjesjat` | 30 `tridjesjat` | 40 `czetyrjedjesjat` | 50 `pjatjdjesjat` |
+| 60 `szestjdjesjat` | 70 `sjedmjdjesjat` | 80 `osmjdjesjat` | 90 `djevjatjdjesjat` |
 
-Russian's `сорок` (40) and `девяносто` (90) are lexical oddities with no
-transparent structure; Ruthenian regularizes both onto the pattern.
+Hundreds are "N hundred", likewise:
 
-Hundreds: `sto, dvjestje, trista, czetyrjesta, pjatjsot, szestjsot,
-sjedmjsot, osmjsot, djevjatjsot`. Then `tysjacza` (1 000), `miljon`, `miljard`.
+`sto, dvjesto, tristo, czetyrjesto, pjatjsto, szestjsto, sjedmjsto, osmjsto,
+djevjatjsto`
+
+Russian has four separate formations here and Ruthenian has three, one per
+rank. Gone with them: `сорок` and `девяносто`, which have no transparent
+structure at all; `-дцать`, a second tens formation beside `-десят`; and the
+`-сти`/`-ста`/`-сот` variation in the hundreds. Two hundred keeps `dvje` rather
+than `dva`, because `sto` was historically a dual there.
+
+Above that the scale words are **nouns**, and the short scale is used, as in
+English: each step is a thousand times the last.
+
+| | | | |
+|---|---|---|---|
+| 10³ `tysjacza` (fem. I) | 10⁶ `miljon` | 10⁹ `biljon` | 10¹² `triljon` |
+| 10¹⁵ `kvadriljon` | 10¹⁸ `kvintiljon` | | |
+
+There is no `miljard`: it belongs to the long scale, where `biljon` would be
+10¹². `q` is not a letter (§2.1), so *quadrillion* is `kvadriljon`.
+
+Being nouns, they are governed by their count like any other: `dvje tysjaczi`
+(dual), `pjatj tysjaczov` (genitive plural), `tri miljony` (nominative plural).
+
+A compound is written as separate words, one per rank — `sto tridjesjat dva`,
+`djevjatjsto djevjatjdjesjat djevjatj` — and **only its last word declines**.
+§6.1 already makes a compound's *government* its last word's; the declension
+follows it, so `dvadjesjat pjati` and not Russian's `двадцати пяти`, where every
+part inflects.
 
 ## 6.4 Declension
 
 `odin` declines as a **long adjective** and agrees in gender, number and case:
-`odin dom`, `odnogo doma`, `odnoj zzeny`.
+`odin dom`, `odinogo doma`, `odinoj zzeny`. Its masculine nominative is the bare
+stem, as `tot`'s is.
 
-`dva` is a **dual** form and has only dual endings:
+The stem is `odin-` throughout and not `odn-`: §3.9 abolished the fleeting vowel
+for every word, and a numeral is not an exception to it. Russian's `одного`
+against `один` is exactly the alternation `son`/`sona` no longer has.
+
+`dva` is a **dual** form and has only dual endings — the plain nominal ones, so
+it declines exactly as `dom` does in the dual (`doma` / `domu` / `domoma`):
 
 | | Masc/neut | Fem |
 |---|---|---|
 | nom / acc | `dva` | `dvje` |
 | gen / loc | `dvu` | `dvu` |
-| dat / ins / abl | `dvjema` | `dvjema` |
+| dat / ins / abl | `dvoma` | `dvoma` |
 
 `tri` and `czetyrje` decline as plurals:
 
@@ -1278,7 +1315,7 @@ numerals were feminine *i*-stem nouns in OCS and still behave like them.
 
 ## 6.5 Ordinals
 
-Adjectives, long or short: `pjervyj, vtoryj, trjetij, czetvjertyj, pjatyj,
+Adjectives, long or short: `pjervyj, vtoryj, trjetyj, czetvjertyj, pjatyj,
 szestyj, sjedmyj, osmyj, djevjatyj, djesjatyj`, then `odinnadcatyj` and so on;
 `sotyj`, `tysjacznyj`.
 

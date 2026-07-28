@@ -507,6 +507,51 @@ VERB = (
         ("past_gerund", "czitatj", "czitav"),
     ]]
     # …and the long forms §7.12 tabulates, through the ordinary adjective.
+    # --- §6 numerals --------------------------------------------------------
+    + [("numeral", str(v), "Nominative", form, sec) for v, form, sec in [
+        (0, "nolj", "6.2"), (1, "odin", "6.2"), (2, "dva", "6.2"),
+        (3, "tri", "6.2"), (4, "czetyrje", "6.2"), (5, "pjatj", "6.2"),
+        (6, "szestj", "6.2"), (7, "sjedmj", "6.2"), (8, "osmj", "6.2"),
+        (9, "djevjatj", "6.2"), (10, "djesjatj", "6.2"),
+        (11, "odinnadjesjat", "6.3"), (12, "dvanadjesjat", "6.3"),
+        (13, "trinadjesjat", "6.3"), (14, "czetyrnadjesjat", "6.3"),
+        (15, "pjatnadjesjat", "6.3"), (16, "szestnadjesjat", "6.3"),
+        (17, "sjedmnadjesjat", "6.3"), (18, "osmnadjesjat", "6.3"),
+        (19, "djevjatnadjesjat", "6.3"),
+        (20, "dvadjesjat", "6.3"), (30, "tridjesjat", "6.3"),
+        (40, "czetyrjedjesjat", "6.3"), (50, "pjatjdjesjat", "6.3"),
+        (60, "szestjdjesjat", "6.3"), (70, "sjedmjdjesjat", "6.3"),
+        (80, "osmjdjesjat", "6.3"), (90, "djevjatjdjesjat", "6.3"),
+        (100, "sto", "6.3"), (200, "dvjesto", "6.3"), (300, "tristo", "6.3"),
+        (400, "czetyrjesto", "6.3"), (500, "pjatjsto", "6.3"),
+        (600, "szestjsto", "6.3"), (700, "sjedmjsto", "6.3"),
+        (800, "osmjsto", "6.3"), (900, "djevjatjsto", "6.3"),
+        (1000, "tysjacza", "6.3"), (1000000, "miljon", "6.3"),
+        (1000000000, "biljon", "6.3"),
+        (132, "sto tridjesjat dva", "6.3"),
+    ]]
+    # §6.4's declensions, and §6.1's worked examples.
+    + [("numeral", "2", case, form, "6.4") for case, form in [
+        ("Genitive", "dvu"), ("Locative", "dvu"),
+        ("Dative", "dvoma"), ("Instrumental", "dvoma"), ("Ablative", "dvoma")]]
+    + [("numeral", "3", case, form, "6.4") for case, form in [
+        ("Genitive", "trjeh"), ("Locative", "trjeh"),
+        ("Dative", "trjem"), ("Instrumental", "trjemi")]]
+    + [("numeral", "4", case, form, "6.4") for case, form in [
+        ("Genitive", "czetyrjeh"), ("Dative", "czetyrjem"),
+        ("Instrumental", "czetyrjmi")]]
+    + [("numeral", "5", case, form, "6.4") for case, form in [
+        ("Genitive", "pjati"), ("Dative", "pjati"), ("Accusative", "pjatj"),
+        ("Instrumental", "pjatjju"), ("Locative", "pjati")]]
+    + [("numeral", "1", case, form, "6.4") for case, form in [
+        ("Genitive", "odinogo")]]
+    # §6.5's ordinal stems, through the ordinary adjective.
+    + [("ordinal", str(v), "Nominative.Singular.Masculine", form, "6.5")
+       for v, form in [
+           (1, "pjervyj"), (2, "vtoryj"), (3, "trjetyj"), (4, "czetvjertyj"),
+           (5, "pjatyj"), (6, "szestyj"), (7, "sjedmyj"), (8, "osmyj"),
+           (9, "djevjatyj"), (10, "djesjatyj"), (100, "sotyj"),
+           (1000, "tysjacznyj")]]
     + [("adjective", stem, "Nominative.Singular.Masculine", form, "7.12")
        for stem, form in [
            ("czitajuszcz", "czitajuszczij"), ("czitavsz", "czitavszij"),

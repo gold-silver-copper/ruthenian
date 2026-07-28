@@ -13,10 +13,10 @@ use ruthenian_core::fallback::{UNREADABLE, is_unreadable};
 use ruthenian_core::{
     Adjective, Animacy, Case, FiniteTense, Gender, Noun, Number, Person, adjective, byti,
     clitic_pronoun, clitic_reflexive, comparative, future_auxiliary, imperative, infinitive,
-    l_participle, noun, past_active_participle, past_gerund, past_passive_participle,
-    present_active_participle, present_gerund, present_passive_participle, pronominal, pronoun,
-    pronoun_paradigm, reflexive, relative, short_adjective, superlative, that, this, verb,
-    verb_paradigm, what, who,
+    l_participle, noun, numeral, ordinal, past_active_participle, past_gerund,
+    past_passive_participle, present_active_participle, present_gerund, present_passive_participle,
+    pronominal, pronoun, pronoun_paradigm, reflexive, relative, short_adjective, superlative, that,
+    this, verb, verb_paradigm, what, who,
 };
 
 mod support;
@@ -80,10 +80,10 @@ fn corpus_row_count() {
     // accusatives); §5.1's 11 pronouns × 8; §5.1a's 14 clitics; §5.2's 6
     // reflexives and 2 clitic reflexives; §5.4's 18 `toj` cells and 5 `sjej`;
     // §5.4's 7 `tot` cells; §5.5's 7 + 7 interrogatives and 4 relative forms;
-    // §7's 78 verb cells; and §7.12's 8 derivations with 6 long forms.
+    // §7's 78 verb cells; §7.12's 8 derivations with 6 long forms; and §6's 71.
     assert_eq!(
         recorded,
-        11 * 24 + 2 * 42 + 11 * 8 + 14 + 6 + 2 + 18 + 5 + 7 + 7 + 7 + 4 + 78 + 14,
+        11 * 24 + 2 * 42 + 11 * 8 + 14 + 6 + 2 + 18 + 5 + 7 + 7 + 7 + 4 + 78 + 14 + 71,
         "the corpus is 11 nouns + 2 adjectives + §5"
     );
     let nouns = corpus().iter().filter(|r| r.pos == "noun").count();
@@ -398,6 +398,47 @@ fn totality_no_panic() {
                 assert!(!byti(person, number, tense).is_empty());
             }
         }
+    }
+
+    // Numerals, over the whole u64 range's edges and a spread between.
+    for v in [
+        0u64,
+        1,
+        2,
+        3,
+        4,
+        5,
+        9,
+        10,
+        11,
+        19,
+        20,
+        21,
+        99,
+        100,
+        101,
+        999,
+        1_000,
+        1_001,
+        2_000,
+        5_000,
+        999_999,
+        1_000_000,
+        u64::MAX / 2,
+        u64::MAX - 1,
+        u64::MAX,
+    ] {
+        for gender in Gender::ALL {
+            for animacy in Animacy::ALL {
+                for case in Case::ALL {
+                    let got = numeral(v, case, gender, animacy);
+                    assert!(!got.is_empty(), "numeral({v}, {case:?})");
+                    assert!(!got.contains("  "), "numeral({v}) has a doubled space");
+                    assert!(!got.starts_with(' ') && !got.ends_with(' '), "numeral({v})");
+                }
+            }
+        }
+        assert!(!ordinal(v).is_empty(), "ordinal({v})");
     }
 
     // The pronouns take no word at all, so their totality is over the enums.
