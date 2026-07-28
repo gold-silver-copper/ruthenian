@@ -64,6 +64,36 @@ fn spec_currency() {
 }
 
 // --------------------------------------------------------------------------
+// 2b. spec_tables_current
+//     Witness: edit any cell inside a render block in docs/RUTHENIAN.md.
+// --------------------------------------------------------------------------
+/// Every marked table in the specification is byte-identical to a fresh
+/// rendering from the engine, and every renderer's block is present.
+///
+/// This is the other half of law 1: prose is normative and the corpus checks
+/// the code against it; tables are rendered and this checks the spec against
+/// the code. A hand edit inside a marked block cannot survive, and a renderer
+/// whose block was deleted from the spec cannot go silently unpublished.
+#[test]
+fn spec_tables_current() {
+    let path = repo_root().join("docs/RUTHENIAN.md");
+    let spec = std::fs::read_to_string(&path).expect("the specification is in the repository");
+    for (id, _) in ruthenian_core::render::blocks() {
+        assert!(
+            spec.contains(&format!("<!-- render:{id} -->")),
+            "the spec has no block for `{id}` — its table is unpublished"
+        );
+    }
+    let fresh = ruthenian_core::render::apply(&spec).expect("markers are well-formed");
+    assert!(
+        fresh == spec,
+        "docs/RUTHENIAN.md's rendered tables differ from the engine.\n\
+         Run `cargo run -p ruthenian-core --example render_spec`, then\n\
+         `python3 tools/extract_paradigms.py`."
+    );
+}
+
+// --------------------------------------------------------------------------
 // 3. corpus_row_count
 //    Witness: delete a row from paradigms.tsv.
 // --------------------------------------------------------------------------
@@ -105,6 +135,12 @@ fn corpus_row_count() {
 fn no_option_no_result() {
     let mut offenders = Vec::new();
     for (name, text) in sources() {
+        // render.rs is tooling, not grammar: it regenerates the spec's tables,
+        // and a broken marker must be an error the caller sees, not a form.
+        // Law 4 binds the functions that answer grammatical queries.
+        if name == "render.rs" {
+            continue;
+        }
         for (n, line) in text.lines().enumerate() {
             let line = line.trim();
             if !line.starts_with("pub fn") {
@@ -282,6 +318,67 @@ fn paradigm_is_form() {
 ///
 /// This is the guard that finds real bugs, because it is the only one that does
 /// not know what the answer should be — only that there must be one.
+#[test]
+fn paradigm_totality() {
+    // The DSL's ending tables mark unreachable cells with `-`, which is a
+    // claim: "case resolution never sends a query here." This walks every
+    // grammatical combination on lemmas covering all four sets, both
+    // hardnesses and both animacies, and fails if any resolves onto a missing
+    // cell — the only way `noun` can emit UNREADABLE on a readable lemma.
+    let lemmas = [
+        "dom", "Drug", "otjec", "Konj", "nozz", "nozzj", // II masculine
+        "okno", "polje", // II neuter
+        "zzena", "kniga", "zjemlja", "nacija", "Sluga'", // I
+        "noczj'", "kostj'", "Myszj'", // III — the last animate, on a hushing stem
+    ];
+    for lemma in lemmas {
+        for case in Case::ALL {
+            for number in Number::ALL {
+                let form = ruthenian_core::noun(lemma, case, number);
+                assert!(
+                    !is_unreadable(&form),
+                    "{lemma} resolved {case:?} {number:?} onto a `-` cell"
+                );
+            }
+        }
+    }
+
+    // The long adjective's table and the verb tables make the same claim.
+    let dobr = Adjective::new("dobr");
+    for case in Case::ALL {
+        for number in Number::ALL {
+            for gender in Gender::ALL {
+                for animacy in [Animacy::Animate, Animacy::Inanimate] {
+                    for form in [
+                        dobr.long(case, number, gender, animacy),
+                        dobr.short(case, number, gender, animacy),
+                    ] {
+                        assert!(
+                            !is_unreadable(&form),
+                            "dobr resolved {case:?} {number:?} {gender:?} onto a `-` cell"
+                        );
+                    }
+                }
+            }
+        }
+    }
+    for lemma in ["czitatj", "govoritj", "pisatj'", "dvinutj", "njegodovatj"] {
+        for person in Person::ALL {
+            for number in Number::ALL {
+                for form in [
+                    ruthenian_core::verb(lemma, person, number),
+                    ruthenian_core::imperative(lemma, person, number),
+                ] {
+                    assert!(
+                        !is_unreadable(&form),
+                        "{lemma} resolved {person:?} {number:?} onto a missing row"
+                    );
+                }
+            }
+        }
+    }
+}
+
 #[test]
 fn totality_no_panic() {
     let hostile = [

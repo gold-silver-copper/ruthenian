@@ -70,7 +70,9 @@ pub fn noun(word: &str, case: Case, number: Number) -> String {
         (Declension::II, _) => Set::IiMasculine,
     };
     let case = resolve(set, case, number, n.animacy);
-    let (ending, palatal) = ending(set, n.soft, case, number);
+    let Some((ending, palatal)) = ending(set, n.soft, case, number) else {
+        return UNREADABLE.to_string();
+    };
     join(&palatalize(&n.stem, palatal), &ending)
 }
 
@@ -94,18 +96,20 @@ pub(crate) fn resolve(set: Set, case: Case, number: Number, animacy: Animacy) ->
     }
     if case == Accusative {
         return match (set, number, animacy) {
-            // The neuter accusative is the nominative throughout (§3.4).
-            (Set::IiNeuter, _, _) => Nominative,
             // The dual accusative is the nominative in every paradigm (§3.3).
             (_, Dual, _) => Nominative,
-            // §3.5, stated outright for `sluga'`: "vizzu slugu — declension I
-            // accusative -u, not the masculine ablative". Declension I has its
-            // own accusative singular, so animacy cannot reach it.
+            // §3.7: the singular's oblique accusative belongs to **declension
+            // II masculine alone**. §3.5 states it outright for `sluga'`
+            // ("vizzu slugu — declension I accusative -u, not the masculine
+            // ablative"), the neuter keeps its nominative (`vizzu okno`, as
+            // every Slavic language has it), and declension III patterns with
+            // the other feminines (`vizzu myszj`, Russian `вижу мышь`).
             (Set::I, Singular, _) => Accusative,
-            // §3.7: animate accusative = ablative in the singular, genitive in
-            // the plural. The plural has no distinct ablative, so the genitive
-            // is the oblique the paradigm makes available.
-            (_, Singular, Animacy::Animate) => Ablative,
+            (Set::IiNeuter | Set::Iii, Singular, _) => Nominative,
+            (Set::IiMasculine, Singular, Animacy::Animate) => Ablative,
+            // §3.7: the plural genitive-accusative reaches **every** animate
+            // noun, the neuter included — the adjective's one plural column
+            // could not agree with a neuter noun that opted out.
             (_, Plural, Animacy::Animate) => Genitive,
             (_, _, Animacy::Inanimate) => Nominative,
         };
@@ -137,125 +141,113 @@ fn soften(hard: &str) -> String {
     }
 }
 
-/// The **hard** ending for one resolved cell, and the palatalization it triggers.
-///
-/// Only the hard series is tabulated; [`soften`] derives the soft one. That is
-/// not a space saving — it is what stops the two drifting apart, which they did
-/// while both were written out.
-///
-/// The `Second` palatalization goes with a **yat-derived** `-i` and nothing else
-/// (§3.8 rule 5): the locative singular, the feminine dative singular, and the
-/// neuter and feminine dual. An `-i` that is merely rule 1's respelling of `-y`
-/// — the velar nominative plural `drugi`, the genitive `knigi` — is not
-/// yat-derived and must not palatalize. That distinction is the whole reason
-/// `knigi` (genitive) and `knizi` (dative) differ.
-fn hard_ending(set: Set, case: Case, number: Number) -> (&'static str, Palatal) {
-    use Case::*;
-    use Number::*;
-    let n = Palatal::None;
+crate::dsl::paradigm! {
+    /// §3.3 — declension II masculine, hard series. `dom`, `drug`.
+    ///
+    /// Only the hard series is tabulated, here and below; [`soften`] derives
+    /// the soft one. That is not a space saving — it is what stops the two
+    /// drifting apart, which they did while both were written out.
+    ///
+    /// A `Second` goes with a **yat-derived** `-i` and nothing else (§3.8 rule
+    /// 5). An `-i` that is merely rule 1's respelling of `-y` — the velar
+    /// nominative plural `drugi`, the genitive `knigi` — is not yat-derived and
+    /// must not palatalize; that distinction is the whole reason `knigi`
+    /// (genitive) and `knizi` (dative) differ. The vocative `-je` is the one
+    /// first-palatalization environment in the nominal system: `druzze`,
+    /// `otjecze`.
+    pub const II_MASCULINE = [
+        //   singular        dual      plural
+        nom: "",             "a",      "y";
+        voc: (First "je"),   -,        -;
+        acc: -,              -,        -;
+        gen: "ogo",          "u",      "ov";
+        abl: "a",            -,        -;
+        dat: "u",            "oma",    "om";
+        ins: "om",           "oma",    "ami";
+        loc: (Second "i"),   "u",      "ah";
+    ];
 
+    /// §3.4 — declension II neuter. `okno`.
+    ///
+    /// The dual `-i` continues OCS `-ě` (`dvje selje`), so it is yat-derived
+    /// and palatalizes.
+    pub const II_NEUTER = [
+        //   singular        dual           plural
+        nom: "o",            (Second "i"),  "a";
+        voc: "o",            -,             -;
+        acc: -,              -,             -;
+        gen: "ogo",          "u",           "ov";
+        abl: "a",            -,             -;
+        dat: "u",            "oma",         "om";
+        ins: "om",           "oma",         "ami";
+        loc: (Second "i"),   "u",           "ah";
+    ];
+
+    /// §3.5 — declension I. `zzena`, `kniga`, and (soft) `zjemlja`.
+    ///
+    /// Genitive `-y` is not yat: `kniga` -> `knigi` by rule 1 alone, against
+    /// the dative/locative `knizi`. Declension I keeps its own accusative
+    /// (`slugu`), so it is the one table with an `acc` cell.
+    pub const I = [
+        //   singular        dual           plural
+        nom: "a",            (Second "i"),  "y";
+        voc: "o",            -,             -;
+        acc: "u",            -,             -;
+        gen: "y",            "u",           "ov";
+        abl: "y",            -,             -;
+        dat: (Second "i"),   "ama",         "am";
+        ins: "oj",           "ama",         "ami";
+        loc: (Second "i"),   "u",           "ah";
+    ];
+
+    /// §3.6 — declension III, the inherited PIE i-stem. `noczj'`, `kostj'`.
+    ///
+    /// No hard/soft pair: its endings are its own, and [`soften`] is never
+    /// applied to them. The plural nominative `-i` is the i-stem's own vowel,
+    /// not yat, so it does not palatalize — unlike the dual's.
+    pub const III = [
+        //   singular        dual           plural
+        nom: "j",            (Second "i"),  "i";
+        voc: "i",            -,             -;
+        acc: -,              -,             -;
+        gen: "i",            "ju",          "jev";
+        abl: "i",            -,             -;
+        dat: (Second "i"),   "jma",         "jam";
+        ins: "jju",          "jma",         "jami";
+        loc: (Second "i"),   "ju",          "jah";
+    ];
+}
+
+/// The table a set declines by.
+fn table(set: Set) -> &'static crate::dsl::Paradigm {
     match set {
-        // ---- §3.3, declension II masculine -----------------------------------
-        Set::IiMasculine => match (case, number) {
-            (Nominative | Accusative, Singular) => ("", n),
-            // The vocative `-je` is the one first-palatalization environment in
-            // the nominal system: `drug` -> `druzze`, `otjec` -> `otjecze`.
-            (Vocative, Singular) => ("je", Palatal::First),
-            (Genitive, Singular) => ("ogo", n),
-            (Ablative, Singular) => ("a", n),
-            (Dative, Singular) => ("u", n),
-            (Instrumental, Singular) => ("om", n),
-            (Locative, Singular) => ("i", Palatal::Second),
-            (Nominative | Vocative | Accusative, Dual) => ("a", n),
-            (Genitive | Locative, Dual) => ("u", n),
-            (Dative | Instrumental | Ablative, Dual) => ("oma", n),
-            (Nominative | Vocative | Accusative, Plural) => ("y", n),
-            (Genitive, Plural) => ("ov", n),
-            (Dative | Ablative, Plural) => ("om", n),
-            (Instrumental, Plural) => ("ami", n),
-            (Locative, Plural) => ("ah", n),
-        },
-
-        // ---- §3.4, declension II neuter --------------------------------------
-        Set::IiNeuter => match (case, number) {
-            (Nominative | Vocative | Accusative, Singular) => ("o", n),
-            (Genitive, Singular) => ("ogo", n),
-            (Ablative, Singular) => ("a", n),
-            (Dative, Singular) => ("u", n),
-            (Instrumental, Singular) => ("om", n),
-            (Locative, Singular) => ("i", Palatal::Second),
-            // The neuter dual `-i` continues OCS `-ě` (`dvje selje`), so it is
-            // yat-derived and palatalizes.
-            (Nominative | Vocative | Accusative, Dual) => ("i", Palatal::Second),
-            (Genitive | Locative, Dual) => ("u", n),
-            (Dative | Instrumental | Ablative, Dual) => ("oma", n),
-            (Nominative | Vocative | Accusative, Plural) => ("a", n),
-            (Genitive, Plural) => ("ov", n),
-            (Dative | Ablative, Plural) => ("om", n),
-            (Instrumental, Plural) => ("ami", n),
-            (Locative, Plural) => ("ah", n),
-        },
-
-        // ---- §3.5, declension I ----------------------------------------------
-        Set::I => match (case, number) {
-            (Nominative, Singular) => ("a", n),
-            (Vocative, Singular) => ("o", n),
-            (Accusative, Singular) => ("u", n),
-            // Genitive `-y` is not yat: `kniga` -> `knigi` by rule 1 alone,
-            // against the dative/locative `knizi`.
-            (Genitive | Ablative, Singular) => ("y", n),
-            (Dative | Locative, Singular) => ("i", Palatal::Second),
-            (Instrumental, Singular) => ("oj", n),
-            (Nominative | Vocative | Accusative, Dual) => ("i", Palatal::Second),
-            (Genitive | Locative, Dual) => ("u", n),
-            (Dative | Instrumental | Ablative, Dual) => ("ama", n),
-            (Nominative | Vocative | Accusative, Plural) => ("y", n),
-            (Genitive, Plural) => ("ov", n),
-            (Dative | Ablative, Plural) => ("am", n),
-            (Instrumental, Plural) => ("ami", n),
-            (Locative, Plural) => ("ah", n),
-        },
-
-        // ---- §3.6, declension III --------------------------------------------
-        // The inherited PIE i-stem, which has no hard/soft pair: its endings are
-        // its own, and `soften` is never applied to them.
-        Set::Iii => match (case, number) {
-            (Nominative | Accusative, Singular) => ("j", n),
-            (Vocative, Singular) => ("i", n),
-            (Genitive | Ablative, Singular) => ("i", n),
-            (Dative, Singular) => ("i", Palatal::Second),
-            (Instrumental, Singular) => ("jju", n),
-            (Locative, Singular) => ("i", Palatal::Second),
-            (Nominative | Vocative | Accusative, Dual) => ("i", Palatal::Second),
-            (Genitive | Locative, Dual) => ("ju", n),
-            (Dative | Instrumental | Ablative, Dual) => ("jma", n),
-            (Nominative | Vocative | Accusative, Plural) => ("i", n),
-            (Genitive, Plural) => ("jev", n),
-            (Dative | Ablative, Plural) => ("jam", n),
-            (Instrumental, Plural) => ("jami", n),
-            (Locative, Plural) => ("jah", n),
-        },
+        Set::IiMasculine => &II_MASCULINE,
+        Set::IiNeuter => &II_NEUTER,
+        Set::I => &I,
+        Set::Iii => &III,
     }
 }
 
 /// The ending for one cell, hard or soft.
 ///
-/// §3.1's soft vocatives are the only cells [`soften`] cannot reach.
-fn ending(set: Set, soft: bool, case: Case, number: Number) -> (String, Palatal) {
-    let (hard, palatal) = hard_ending(set, case, number);
+/// §3.1's soft vocatives are the only cells [`soften`] cannot reach. `None` is
+/// a resolved case landing on a `-` cell, which the `paradigm_totality` guard
+/// proves never happens — the caller's fallback is declared, not exercised.
+fn ending(set: Set, soft: bool, case: Case, number: Number) -> Option<(String, Palatal)> {
+    let (hard, palatal) = table(set).cell(case, number)?;
     if !soft || set == Set::Iii {
-        return (hard.to_string(), palatal);
+        return Some((hard.to_string(), palatal));
     }
     if case == Case::Vocative && number == Number::Singular {
         let voc = match set {
             Set::IiMasculine => "ju",
             Set::I => "jo",
             // The neuter vocative is the nominative, so it never arrives here.
-            _ => return (soften(hard), palatal),
+            _ => return Some((soften(hard), palatal)),
         };
-        return (voc.to_string(), Palatal::None);
+        return Some((voc.to_string(), Palatal::None));
     }
-    (soften(hard), palatal)
+    Some((soften(hard), palatal))
 }
 
 /// The nominal declension, keyed by the gender it agrees in.
@@ -272,13 +264,13 @@ pub(crate) fn nominal(
     case: Case,
     number: Number,
     animacy: Animacy,
-) -> (&'static str, crate::spelling::Palatal) {
+) -> Option<(&'static str, crate::spelling::Palatal)> {
     let set = match gender {
         Gender::Masculine => Set::IiMasculine,
         Gender::Neuter => Set::IiNeuter,
         Gender::Feminine => Set::I,
     };
-    hard_ending(set, resolve(set, case, number, animacy), number)
+    table(set).cell(resolve(set, case, number, animacy), number)
 }
 
 /// A noun with its lexical facts bound, so the per-call signature is the grammar

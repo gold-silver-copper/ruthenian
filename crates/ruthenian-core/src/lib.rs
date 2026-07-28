@@ -47,12 +47,14 @@
 #![forbid(unsafe_code)]
 
 pub mod adjective;
+pub(crate) mod dsl;
 pub mod fallback;
 pub mod grammar;
 mod lemma;
 pub mod noun;
 pub mod numeral;
 pub mod pronoun;
+pub mod render;
 pub mod spelling;
 pub mod verb;
 

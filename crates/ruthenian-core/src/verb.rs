@@ -175,26 +175,34 @@ fn present(v: &Verb, person: Person, number: Number) -> String {
         return join(&stem, "ju");
     }
 
-    let ending = match (v.class.second_conjugation(), person, number) {
-        (false, Second, Singular) => "jeszj",
-        (false, Third, Singular) => "jet",
-        (false, First, Dual) => "jevje",
-        (false, Second, Dual) => "jeta",
-        (false, Third, Dual) => "jetje",
-        (false, First, Plural) => "jem",
-        (false, Second, Plural) => "jetje",
-        (false, Third, Plural) => "ut",
-        (true, Second, Singular) => "iszj",
-        (true, Third, Singular) => "it",
-        (true, First, Dual) => "ivje",
-        (true, Second, Dual) => "ita",
-        (true, Third, Dual) => "itje",
-        (true, First, Plural) => "im",
-        (true, Second, Plural) => "itje",
-        (true, Third, Plural) => "jat",
-        (_, First, Singular) => unreachable!("handled above"),
+    let col = usize::from(v.class.second_conjugation());
+    let Some((ending, _)) = crate::dsl::lookup(NON_PAST, (person, number), col) else {
+        // The 1sg row is deliberately absent — handled above — so this is
+        // unreachable for every real query; UNREADABLE is the declared
+        // fallback, and the corpus walks all nine cells of both conjugations.
+        return UNREADABLE.to_string();
     };
     join(&stem, ending)
+}
+
+crate::dsl::table! {
+    /// §7.3/§7.4 — the non-past endings, one column per conjugation.
+    ///
+    /// The theme vowel is the whole difference: `-je-` against `-i-`, with the
+    /// third plural `-ut` against `-jat`. The 1sg row is **absent by design**:
+    /// it is `-u`/`-ju` decided by the stem's own mutation (§7.4), which is
+    /// logic about the stem, not a cell of this table.
+    pub const NON_PAST: [(Person, Number); 2] = [
+        //                                        1st        2nd
+        (Person::Second, Number::Singular) =>  "jeszj",   "iszj";
+        (Person::Third,  Number::Singular) =>  "jet",     "it";
+        (Person::First,  Number::Dual)     =>  "jevje",   "ivje";
+        (Person::Second, Number::Dual)     =>  "jeta",    "ita";
+        (Person::Third,  Number::Dual)     =>  "jetje",   "itje";
+        (Person::First,  Number::Plural)   =>  "jem",     "im";
+        (Person::Second, Number::Plural)   =>  "jetje",   "itje";
+        (Person::Third,  Number::Plural)   =>  "ut",      "jat";
+    ];
 }
 
 /// The imperative (§7.10): the present stem plus `-i`, or the bare stem after
@@ -252,14 +260,27 @@ pub fn imperative(word: &str, person: Person, number: Number) -> String {
         true => stem,
         false => join(&stem, "i"),
     };
-    let ending = match (person, number) {
-        (Second, Singular) => "",
-        (Second, Dual) => "ta",
-        (Second, Plural) => "tje",
-        (First, Dual) => "vje",
-        _ => "m",
+    let Some((ending, _)) = crate::dsl::lookup(IMPERATIVE, (person, number), 0) else {
+        // Third persons and the 1sg returned above as the present indicative.
+        return UNREADABLE.to_string();
     };
     format!("{base}{ending}")
+}
+
+crate::dsl::table! {
+    /// §7.10 — the five synthetic imperative cells, on the imperative base.
+    ///
+    /// The base is the present stem plus `-i`, or the bare stem after `j`. The
+    /// third persons and the 1sg have no row: no Slavic language builds them,
+    /// and the declared fallback is the present indicative the particle
+    /// attaches to (`da idjet`).
+    pub const IMPERATIVE: [(Person, Number); 1] = [
+        (Person::Second, Number::Singular) =>  "";
+        (Person::Second, Number::Dual)     =>  "ta";
+        (Person::Second, Number::Plural)   =>  "tje";
+        (Person::First,  Number::Dual)     =>  "vje";
+        (Person::First,  Number::Plural)   =>  "m";
+    ];
 }
 
 /// The infinitive: the citation form itself, less its class mark.

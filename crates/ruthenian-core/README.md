@@ -19,9 +19,15 @@ Everything is computed from rules. **No dictionary, no data files, no lookup
 tables of word facts, no network, no I/O.** A word the crate has never seen
 inflects exactly as well as one it has.
 
-The language is [`docs/RUTHENIAN.md`](../../docs/RUTHENIAN.md), which is
-normative; the crate's design is [`DIRECTION.md`](../../DIRECTION.md). Section
-references throughout the source are to the specification.
+The language is [`docs/RUTHENIAN.md`](../../docs/RUTHENIAN.md), whose **prose**
+is normative; its paradigm **tables** run the other way — they sit between
+`<!-- render:ID -->` markers and are generated from this crate by
+`cargo run -p ruthenian-core --example render_spec`, so the spec and the engine
+cannot drift on anything tabular. The crate's design is
+[`DIRECTION.md`](../../DIRECTION.md); the grammar itself is written in
+`src/dsl.rs`'s notation — SPE rewrite rules (`"y" => "i" / [k g h] _ ;`) and
+declension tables laid out exactly as the spec prints them. Section references
+throughout the source are to the specification.
 
 ## State
 
@@ -37,10 +43,10 @@ references throughout the source are to the specification.
 
 | | Result |
 |---|---|
-| Corpus cells reproduced (`tests/corpus/paradigms.tsv`) | **646 of 646** |
+| Corpus cells reproduced (`tests/corpus/paradigms.tsv`) | **637 of 637** |
 | Cells matching Russian where Russian has one | `cargo run --example against_russian` |
 | Sample for review | `cargo run --example review` — 35 paradigms |
-| Guards, each verified to fail under its stated mutation | **11 core, 20 orthography** |
+| Guards, each verified to fail under its stated mutation | **14 core, 20 orthography** |
 | Third-party dependencies | **0** |
 
 ## Totality
@@ -88,6 +94,8 @@ stale and is deleted, not left in place looking reassuring.
 | 10 | `no_stored_derivable_state` — law 3 | add a `gender` field to `Noun` |
 | 11 | `every_public_fn_has_a_doctest` | strip an example block |
 | 12 | `grammar_types_are_exhaustive` | drop a variant from `Case::ALL` |
+| 13 | `paradigm_totality` — no `-` cell is reachable | blank declension I's accusative |
+| 14 | `spec_tables_current` — the spec's tables are fresh engine output | edit a cell inside a render block |
 
 Guard 7 is the one that finds real bugs, because it is the only one that does not
 know what the answer should be — only that there must be one. It is what caught
@@ -122,7 +130,8 @@ specification does not contain (the script's verification).
 ## Running it
 
 ```bash
-cargo test -p ruthenian-core                  # 67 tests (94 across the workspace)
+cargo test -p ruthenian-core                  # 70 tests (97 across the workspace)
 cargo clippy -p ruthenian-core --all-targets  # clean
+cargo run -p ruthenian-core --example render_spec  # republish the spec's tables
 python3 tools/extract_paradigms.py            # regenerate the corpus after a spec edit
 ```

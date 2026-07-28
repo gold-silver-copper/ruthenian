@@ -380,7 +380,9 @@ pub fn pronominal(
                 _ => "oj",
             },
             g => match case {
-                Accusative if animacy == Animacy::Animate => "oga",
+                // Masculine only: an animate *neuter* keeps its nominative
+                // accusative, agreeing with its noun (§3.7).
+                Accusative if animacy == Animacy::Animate && g == Gender::Masculine => "oga",
                 Nominative | Accusative => {
                     if g == Gender::Neuter {
                         "o"

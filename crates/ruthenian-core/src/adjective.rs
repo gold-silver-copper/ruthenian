@@ -67,7 +67,9 @@ pub fn short_adjective(
     let Some(s) = stem(word) else {
         return UNREADABLE.to_string();
     };
-    let (ending, palatal) = crate::noun::nominal(gender, case, number, animacy);
+    let Some((ending, palatal)) = crate::noun::nominal(gender, case, number, animacy) else {
+        return crate::fallback::UNREADABLE.to_string();
+    };
     join(&palatalize(&s, palatal), ending)
 }
 
@@ -106,73 +108,77 @@ pub fn adjective(
     let Some(s) = stem(word) else {
         return UNREADABLE.to_string();
     };
-    join(&s, pronominal(case, number, gender, animacy))
+    let Some(ending) = pronominal(case, number, gender, animacy) else {
+        return crate::fallback::UNREADABLE.to_string();
+    };
+    join(&s, ending)
 }
 
-/// §4.2's endings. The pronominal declension takes **no** palatalization: every
-/// ending begins with a vowel that is not the yat-derived `-i`, so §3.8's rules 4
-/// and 5 have no environment here.
+crate::dsl::table! {
+    /// §4.2's endings — a case row, five agreement columns.
+    ///
+    /// The pronominal declension takes **no** palatalization: every ending
+    /// begins with a vowel that is not the yat-derived `-i`, so §3.8's rules 4
+    /// and 5 have no environment here. Gender is a distinction in the singular
+    /// only — §4.2 and §5.4 both give one dual column and one plural column.
+    ///
+    /// The feminine oblique singular is one form, `-oj`, across five cases.
+    /// The dual genitive/locative is `-oju`, not the nominal `-u`: every
+    /// o-initial ending is shared with the pronominal declension, and this was
+    /// the one cell where the two disagreed — the nominal dual `domu`,
+    /// borrowed by mistake, until the corpus caught it.
+    pub const LONG_ADJECTIVE: [Case; 5] = [
+        //                     m sg    n sg    f sg    dual    plural
+        Case::Nominative   =>  "yj",   "oje",  "aja",  "aja",  "yje";
+        Case::Accusative   =>  -,      -,      "uju",  -,      -;
+        Case::Genitive     =>  "ogo",  "ogo",  "oj",   "oju",  "yh";
+        Case::Ablative     =>  "a",    "a",    "oj",   -,      -;
+        Case::Dative       =>  "omu",  "omu",  "oj",   "yma",  "ym";
+        Case::Instrumental =>  "ym",   "ym",   "oj",   "yma",  "ymi";
+        Case::Locative     =>  "om",   "om",   "oj",   "oju",  "yh";
+    ];
+}
+
+/// Resolve §4.2's syncretisms, then look the cell up.
 ///
-/// Gender is a distinction in the singular only — §4.2 and §5.4 both give one
-/// dual column and one plural column.
-fn pronominal(case: Case, number: Number, gender: Gender, animacy: Animacy) -> &'static str {
+/// The long adjective has no vocative (the nominative is used), the ablative
+/// is distinct only in the singular, and the accusative is §3.7's: its own
+/// form only in the feminine singular (`-uju`), otherwise the nominative,
+/// ablative or genitive by number and animacy. §4.2's note: the animate
+/// masculine accusative `-a` is the one cell where long and short coincide,
+/// both giving `dobra`.
+fn pronominal(
+    case: Case,
+    number: Number,
+    gender: Gender,
+    animacy: Animacy,
+) -> Option<&'static str> {
     use Case::*;
     use Number::*;
 
-    // §4.2: long adjectives have no vocative, the nominative is used.
-    let case = if case == Vocative { Nominative } else { case };
-    // §3.1: the ablative is distinct only in the singular.
-    let case = if case == Ablative && number != Singular {
-        Dative
-    } else {
-        case
+    let column = match (number, gender) {
+        (Singular, Gender::Masculine) => 0,
+        (Singular, Gender::Neuter) => 1,
+        (Singular, Gender::Feminine) => 2,
+        (Dual, _) => 3,
+        (Plural, _) => 4,
     };
-
-    match number {
-        Dual => match case {
-            Nominative | Accusative => "aja",
-            // `-oju`, not `-u`: every o-initial ending is shared with the
-            // pronominal declension, and this was the one cell where the two
-            // disagreed — the nominal dual `domu`, borrowed by mistake.
-            Genitive | Locative => "oju",
-            _ => "yma",
+    let case = match case {
+        Vocative => Nominative,
+        Ablative if number != Singular => Dative,
+        Accusative => match (number, gender, animacy) {
+            (Singular, Gender::Feminine, _) => Accusative,
+            // The neuter never takes the singular oblique accusative: it must
+            // agree with a noun whose accusative is the nominative (§3.7).
+            (Singular, Gender::Neuter, _) => Nominative,
+            (Dual, _, _) => Nominative,
+            (Singular, Gender::Masculine, Animacy::Animate) => Ablative,
+            (Plural, _, Animacy::Animate) => Genitive,
+            _ => Nominative,
         },
-        Plural => match case {
-            // §3.7: animate accusative plural = genitive.
-            Accusative if animacy == Animacy::Animate => "yh",
-            Nominative | Accusative => "yje",
-            Genitive | Locative => "yh",
-            Instrumental => "ymi",
-            _ => "ym",
-        },
-        Singular => match gender {
-            Gender::Feminine => match case {
-                Nominative => "aja",
-                Accusative => "uju",
-                // One form for the genitive, ablative, dative, instrumental and
-                // locative — the pronominal feminine's whole oblique singular.
-                _ => "oj",
-            },
-            g => match case {
-                // §3.7: animate accusative singular = ablative, which for this
-                // declension is `-a`. §4.2's note: the long and short forms
-                // coincide in exactly this cell, both giving `dobra`.
-                Accusative if animacy == Animacy::Animate => "a",
-                Nominative | Accusative => {
-                    if g == Gender::Neuter {
-                        "oje"
-                    } else {
-                        "yj"
-                    }
-                }
-                Genitive => "ogo",
-                Ablative => "a",
-                Dative => "omu",
-                Instrumental => "ym",
-                _ => "om",
-            },
-        },
-    }
+        c => c,
+    };
+    crate::dsl::lookup(LONG_ADJECTIVE, case, column).map(|(e, _)| e)
 }
 
 /// The comparative stem (§4.3): `-jejsz-`, triggering the **first**

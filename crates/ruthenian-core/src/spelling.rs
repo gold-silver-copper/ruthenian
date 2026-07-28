@@ -7,75 +7,65 @@
 //! the velar, sibilant, `c` and vowel stem-classes are not separate paradigms
 //! but the same endings under the rules below (§3.2, §3.8).
 //!
+//! Rules are declared in the SPE notation of `dsl.rs` and applied by the two
+//! interpreters below ([`spell_ending`] for the seam, [`palatalize`] and
+//! [`mutate_present_stem`] for the stem edge). The declarations are the
+//! normative statement of the rules; the interpreters hold no linguistics.
+//!
 //! Nothing here reads or places stress. §2.1 makes stress real, lexical and
 //! **unwritten**, so no rule may condition on it — see §3.8's note on why rule 2
 //! dropped its stress clause.
 
-/// `k g h` — the velar stems.
-pub const VELARS: &[&str] = &["k", "g", "h"];
-
-/// `ж ш ч щ` in Ruthenian — the hushing consonants.
-pub const SIBILANTS: &[&str] = &["zz", "sz", "cz", "szcz"];
-
-/// The labials that take an epenthetic `l` in the present stem (§7.11).
-pub const LABIALS: &[&str] = &["p", "b", "v", "m"];
-
-/// The present-stem mutations of §7.11.
-///
-/// **A stop keeps its place before its reflex; a fricative merges with its own.**
-///
-/// | | |
-/// |---|---|
-/// | stops `t d k g`, and the labials | additive — `letcz`, `vidzz`, `iskcz`, `ljublj` |
-/// | fricatives `s z h` | replacive — `pisz`, `vozz`, `masz` |
-///
-/// The split is phonetic rather than arbitrary. A stop stays audible in front of
-/// its reflex, so writing it costs nothing and keeps the root legible: `vidzz`
-/// [vidʒ] shows `vid-` where Russian's `вижу` does not. Two fricatives in
-/// sequence do not survive: `s` + `sz` would be [sʃ], which is no Slavic sound
-/// and collapses to [ʃː], so only the reflex is written.
-///
-/// The labial rules were always additive — `p` → `plj` keeps the `p` — so this
-/// is the rule they already followed, extended to the other stops.
-///
-/// Two homographs the fully replacive version created are gone: `voditj` and
-/// `vozitj` both gave `vozzu`, and `letjetj` "fly" collided with `leczitj` "heal"
-/// at `leczu`. Both pairs separate here, and precisely because `d`/`t` are stops
-/// while `z` is a fricative — `vodzzu` against `vozzu`, `letczu` against `leczu`.
-///
-/// No output needs the separator `'`: `tcz`, `dzz`, `kcz` and `gzz` are each
-/// unambiguous under the greedy reader, and the one form that did need it —
-/// additive `z` → `z'zz` — is not taken.
-///
-/// Applied **by class**, never by stem shape: a class-1 verb with a
-/// labial-final stem takes no mutation at all, verified across 1 977 Russian
-/// verbs without exception (`COMPARATIVE_GRAMMAR.md`, Method). A rule keyed on
-/// "ends in a labial" would corrupt all 1 977, which is why
-/// [`mutate_present_stem`] is only ever called for the classes that mutate.
-///
-/// `ov` → `u` is class 2's stem formation rather than iotation (§7.3), and it
-/// replaces. It is listed first because `njegodov` ends in `v` and would
-/// otherwise take the labial rule, coming out `njegodovlj`.
-///
-/// §7.11's `st` → `szcz` and `sk` → `szcz` are **gone**: the general rule applies
-/// to the cluster's last consonant, both of which are stops, so `krjest` →
-/// `krjestcz` and `isk` → `iskcz` need no rules of their own.
-pub const MUTATIONS: &[(&str, &str)] = &[
-    ("ov", "u"),
-    // stops — additive
-    ("t", "tcz"),
-    ("d", "dzz"),
-    ("k", "kcz"),
-    ("g", "gzz"),
-    ("p", "plj"),
-    ("b", "blj"),
-    ("v", "vlj"),
-    ("m", "mlj"),
-    // fricatives — replacive
-    ("s", "sz"),
-    ("z", "zz"),
-    ("h", "sz"),
-];
+crate::dsl::letters! {
+    /// The present-stem mutations of §7.11.
+    ///
+    /// **A stop keeps its place before its reflex; a fricative merges with its own.**
+    ///
+    /// | | |
+    /// |---|---|
+    /// | stops `t d k g`, and the labials | additive — `letcz`, `vidzz`, `iskcz`, `ljublj` |
+    /// | fricatives `s z h` | replacive — `pisz`, `vozz`, `masz` |
+    ///
+    /// The split is phonetic rather than arbitrary. A stop stays audible in front of
+    /// its reflex, so writing it costs nothing and keeps the root legible: `vidzz`
+    /// [vidʒ] shows `vid-` where Russian's `вижу` does not. Two fricatives in
+    /// sequence do not survive: `s` + `sz` would be [sʃ], which is no Slavic sound
+    /// and collapses to [ʃː], so only the reflex is written.
+    ///
+    /// The labial rules were always additive — `p` → `plj` keeps the `p` — so this
+    /// is the rule they already followed, extended to the other stops.
+    ///
+    /// Two homographs the fully replacive version created are gone: `voditj` and
+    /// `vozitj` both gave `vozzu`, and `letjetj` "fly" collided with `leczitj` "heal"
+    /// at `leczu`. Both pairs separate here, and precisely because `d`/`t` are stops
+    /// while `z` is a fricative — `vodzzu` against `vozzu`, `letczu` against `leczu`.
+    ///
+    /// No output needs the separator `'`: `tcz`, `dzz`, `kcz` and `gzz` are each
+    /// unambiguous under the greedy reader, and the one form that did need it —
+    /// additive `z` → `z'zz` — is not taken.
+    ///
+    /// Applied **by class**, never by stem shape: a class-1 verb with a
+    /// labial-final stem takes no mutation at all, verified across 1 977 Russian
+    /// verbs without exception (`COMPARATIVE_GRAMMAR.md`, Method). A rule keyed on
+    /// "ends in a labial" would corrupt all 1 977, which is why
+    /// [`mutate_present_stem`] is only ever called for the classes that mutate.
+    ///
+    /// `ov` → `u` is class 2's stem formation rather than iotation (§7.3), and it
+    /// replaces. It is listed first because `njegodov` ends in `v` and would
+    /// otherwise take the labial rule, coming out `njegodovlj`.
+    ///
+    /// §7.11's `st` → `szcz` and `sk` → `szcz` are **gone**: the general rule applies
+    /// to the cluster's last consonant, both of which are stops, so `krjest` →
+    /// `krjestcz` and `isk` → `iskcz` need no rules of their own.
+    pub const MUTATIONS = [
+        ov => u,
+        // stops — additive
+        t => tcz, d => dzz, k => kcz, g => gzz,
+        p => plj, b => blj, v => vlj, m => mlj,
+        // fricatives — replacive
+        s => sz, z => zz, h => sz,
+    ];
+}
 
 /// Which palatalization an ending triggers (§2.4).
 ///
@@ -95,6 +85,21 @@ pub enum Palatal {
     /// Before yat-derived `-i` — the locative singular, the feminine dative
     /// singular, the neuter and feminine dual. `k`→`c`, `g`→`z`, `h`→`s`.
     Second,
+}
+
+crate::dsl::letters! {
+    /// §2.4 — the **first** palatalization, before front vowels and `j`.
+    ///
+    /// `c` is here because it is itself the output of an earlier
+    /// palatalization and reverts before a front vowel, exactly as OCS
+    /// `otьcь` -> `otьče`; it governs the whole `-jec` class.
+    pub const FIRST_PALATALIZATION = [ k => cz, g => zz, h => sz, c => cz ];
+
+    /// §2.4 — the **second** palatalization, before a yat-derived `-i`.
+    ///
+    /// No `dz`: OCS had it as the output of `g`, and Ruthenian gives `z`
+    /// instead, following East Slavic.
+    pub const SECOND_PALATALIZATION = [ k => c, g => z, h => s ];
 }
 
 /// Apply a palatalization to a stem's final consonant. A stem with no eligible
@@ -120,14 +125,10 @@ pub enum Palatal {
 /// assert_eq!(palatalize("zzen", Palatal::Second), "zzen");
 /// ```
 pub fn palatalize(stem: &str, which: Palatal) -> String {
-    let table: &[(&str, &str)] = match which {
+    let table = match which {
         Palatal::None => return stem.to_string(),
-        // `c` is itself the output of an earlier palatalization and reverts
-        // before a front vowel, exactly as OCS `otьcь` -> `otьče` (§2.4).
-        Palatal::First => &[("k", "cz"), ("g", "zz"), ("h", "sz"), ("c", "cz")],
-        // No `dz`: OCS had it as the second-palatalization output of `g`, and
-        // Ruthenian gives `z` instead, following East Slavic (§2.4).
-        Palatal::Second => &[("k", "c"), ("g", "z"), ("h", "s")],
+        Palatal::First => FIRST_PALATALIZATION,
+        Palatal::Second => SECOND_PALATALIZATION,
     };
     for (from, to) in table {
         if ends_with_letter(stem, from) {
@@ -179,16 +180,6 @@ pub fn mutate_present_stem(stem: &str) -> String {
     stem.to_string()
 }
 
-/// True when the stem ends in a velar (`k g h`).
-fn ends_velar(stem: &str) -> bool {
-    VELARS.iter().any(|v| ends_with_letter(stem, v))
-}
-
-/// True when the stem ends in a hushing consonant (`zz sz cz szcz`).
-fn ends_sibilant(stem: &str) -> bool {
-    SIBILANTS.iter().any(|v| ends_with_letter(stem, v))
-}
-
 /// `ends_with` that does not mistake the tail of a digraph for a letter: `sz`
 /// ends in the letter `sz`, not in the letter `z`.
 ///
@@ -215,15 +206,8 @@ fn ends_with_letter(stem: &str, letter: &str) -> bool {
     }
 }
 
-/// The spelling adjustments of §3.8 that apply at a stem/ending seam.
-///
-/// Two rules:
-///
-/// 1. after `k g h` and `zz sz cz szcz`, `y` is written `i` (`knigi`, not
-///    `*knigy`);
-/// 2. after `cz szcz zz sz`, an ending's initial `j` is **not written** — §2.2
-///    gives none of the four a hard/soft contrast, so the glide has nothing to
-///    mark.
+/// Apply [`SEAM`] — §3.8's seam rules, in the list's order. This function is
+/// an interpreter and holds no linguistics; the rules are the declaration.
 ///
 /// Rule 2 covers the vocative (`otjecze`, `druzze`), the present endings
 /// (`piszeszj`, §7.3) and the `-jem`/`-jego` series, which after these stems is
@@ -251,36 +235,54 @@ fn ends_with_letter(stem: &str, letter: &str) -> bool {
 /// assert_eq!(spell_ending("dom", "om"), "om");       // domom
 /// // and rule 2 does not touch a soft sign: §3.6 keeps both
 /// assert_eq!(spell_ending("nocz", "jju"), "jju");    // noczjju
+/// // rule 3b
+/// assert_eq!(spell_ending("czitaj", "jeszj"), "eszj"); // czitajeszj
 /// ```
 pub fn spell_ending(stem: &str, ending: &str) -> String {
     let mut out = ending.to_string();
-    // Rule 2 drops a **glide**, which is `j` before a vowel. A `j` that is not
-    // before a vowel is rule 3's soft sign and stays: declension III's
-    // nominative is the bare `-j` (`noczj`), its instrumental `-jju` keeps the
-    // sign and takes the ending both (`noczjju`), and `-jma` is the sign before
-    // a consonant (`noczjma`). Dropping those gives `nocz`, `noczju`, `noczma`.
-    if ends_sibilant(stem) && is_glide(&out) {
-        out.replace_range(0..1, "");
-    }
-    // Rule 1 runs **after** rule 2, because rule 2 can expose the vowel rule 1
-    // governs. §3.2's soft series contains `-jy` (the nominative plural), so a
-    // soft hushing stem reaches rule 1 only once the glide is gone: `nozzj` +
-    // `-jy` is `nozz` + `-y` is `nozzi`, the same plural the hard `nozz` has.
-    // In the other order it stays `nozzy`, which rule 1 forbids outright.
-    if (ends_velar(stem) || ends_sibilant(stem)) && out.starts_with('y') {
-        out.replace_range(0..1, "i");
+    for rule in SEAM {
+        if !out.starts_with(rule.from) {
+            continue;
+        }
+        if !rule.after.iter().any(|l| ends_with_letter(stem, l)) {
+            continue;
+        }
+        if rule.only_before_vowel {
+            let next = out[rule.from.len()..].chars().next();
+            if !matches!(next, Some(v) if VOWELS.contains(&v)) {
+                continue;
+            }
+        }
+        out.replace_range(0..rule.from.len(), rule.to);
     }
     out
 }
 
-/// Does this ending begin with a glide — `j` immediately before a vowel, and not
-/// doubled?
-fn is_glide(ending: &str) -> bool {
-    let mut c = ending.chars();
-    if c.next() != Some('j') {
-        return false;
-    }
-    matches!(c.next(), Some(v) if VOWELS.contains(&v))
+crate::dsl::rewrites! {
+    /// §3.8's seam rules, **in application order** — the list is the ordering.
+    ///
+    /// Rule 2 precedes rule 1 because its output feeds it: §3.2's soft series
+    /// contains `-jy`, and a soft hushing stem reaches rule 1 only once the
+    /// glide is gone — `nozzj` + `-jy` is `nozz` + `-y` is `nozzi`, the plural
+    /// the hard `nozz` has. In the other order it stays `nozzy`, which rule 1
+    /// forbids outright. No other pair of rules interacts.
+    ///
+    /// The `V` on rule 2 is what tells a glide from a soft sign: a `j` not
+    /// before a vowel is §3.8 rule 3's soft sign and stays, so declension III
+    /// keeps `noczj`, `noczjju`, `noczjma` while `nozz` + `-je` loses its glide.
+    ///
+    /// Rule 3b closes the list: a stem-final `j` and an ending-initial `j` are
+    /// written once. A class-1 present stem ends in `j` by construction (§7.3),
+    /// so this is every form of every such verb — `czitaj` + `-jeszj` is
+    /// `czitajeszj`.
+    pub const SEAM = [
+        // rule 2 — a glide is unwritable after a hushing consonant
+        "j" => ""  / [zz sz cz szcz] _ V ;
+        // rule 1 — `y` is written `i` after a velar or hushing consonant
+        "y" => "i" / [k g h zz sz cz szcz] _ ;
+        // rule 3b — `jj` across the seam is written once
+        "j" => ""  / [j] _ ;
+    ];
 }
 
 /// The plain vowels (§2.3).
@@ -305,12 +307,5 @@ const VOWELS: [char; 6] = ['a', 'e', 'i', 'o', 'u', 'y'];
 /// assert_eq!(join("czitaj", "jeszj"), "czitajeszj"); // rule 3b: jj is one ja
 /// ```
 pub fn join(stem: &str, ending: &str) -> String {
-    let ending = spell_ending(stem, ending);
-    // Rule 3b: a stem-final `j` and an ending-initial `j` are written once.
-    // A class-1 present stem ends in `j` by construction (§7.3), so this is
-    // every form of every such verb: `czitaj` + `-jeszj` is `czitajeszj`.
-    if ending.starts_with('j') && stem.ends_with('j') {
-        return format!("{stem}{}", &ending[1..]);
-    }
-    format!("{stem}{ending}")
+    format!("{stem}{}", spell_ending(stem, ending))
 }
