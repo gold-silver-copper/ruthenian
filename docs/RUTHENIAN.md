@@ -1335,11 +1335,13 @@ houses", `s pjatju domami` "with five houses".
 
 ## 6.2 Cardinals 1–10
 
+<!-- render:num-cardinals -->
 | | | | |
 |---|---|---|---|
 | 0 `nolj` | 1 `odin` | 2 `dva` | 3 `tri` |
 | 4 `czetyrje` | 5 `pjatj` | 6 `szestj` | 7 `sjedmj` |
-| 8 `osmj` | 9 `djevjatj` | 10 `djesjatj` | |
+| 8 `osmj` | 9 `djevjatj` | 10 `djesjatj` |  |
+<!-- /render:num-cardinals -->
 
 `nolj` is a soft masculine of declension II and governs the genitive plural,
 `nolj domov`.
@@ -1356,10 +1358,12 @@ szestnadjesjat, sjedmnadjesjat, osmnadjesjat, djevjatnadjesjat`
 
 Tens are "N tens", on the unit whole:
 
+<!-- render:num-tens -->
 | | | | |
 |---|---|---|---|
 | 20 `dvadjesjat` | 30 `tridjesjat` | 40 `czetyrjedjesjat` | 50 `pjatjdjesjat` |
 | 60 `szestjdjesjat` | 70 `sjedmjdjesjat` | 80 `osmjdjesjat` | 90 `djevjatjdjesjat` |
+<!-- /render:num-tens -->
 
 Hundreds are "N hundred", likewise:
 
@@ -1375,10 +1379,12 @@ than `dva`, because `sto` was historically a dual there.
 Above that the scale words are **nouns**, and the short scale is used, as in
 English: each step is a thousand times the last.
 
+<!-- render:num-scales -->
 | | | | |
 |---|---|---|---|
 | 10³ `tysjacza` (fem. I) | 10⁶ `miljon` | 10⁹ `biljon` | 10¹² `triljon` |
-| 10¹⁵ `kvadriljon` | 10¹⁸ `kvintiljon` | | |
+| 10¹⁵ `kvadriljon` | 10¹⁸ `kvintiljon` |  |  |
+<!-- /render:num-scales -->
 
 There is no `miljard`: it belongs to the long scale, where `biljon` would be
 10¹². `q` is not a letter (§2.1), so *quadrillion* is `kvadriljon`.
@@ -1411,20 +1417,24 @@ against `один` is exactly the alternation `son`/`sona` no longer has.
 `dva` is a **dual** form and has only dual endings — the plain nominal ones, so
 it declines exactly as `dom` does in the dual (`doma` / `domu` / `domoma`):
 
+<!-- render:num-dva -->
 | | Masc/neut | Fem |
 |---|---|---|
 | nom / acc | `dva` | `dvje` |
 | gen / loc | `dvu` | `dvu` |
 | dat / ins / abl | `dvoma` | `dvoma` |
+<!-- /render:num-dva -->
 
 `tri` and `czetyrje` decline as plurals:
 
+<!-- render:num-tri-czetyrje -->
 | | `tri` | `czetyrje` |
 |---|---|---|
 | nominative | `tri` | `czetyrje` |
 | genitive / locative | `trjeh` | `czetyrjeh` |
 | dative | `trjem` | `czetyrjem` |
 | instrumental | `trjemi` | `czetyrjmi` |
+<!-- /render:num-tri-czetyrje -->
 
 `pjatj` and above decline as **declension III** nouns (`noczj`): `pjatj`,
 `pjati`, `pjati`, `pjatj`, `pjatjju`, `pjati`. This is inherited — the higher

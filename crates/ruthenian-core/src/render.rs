@@ -60,7 +60,125 @@ pub fn blocks() -> Vec<(&'static str, String)> {
         ("verb-l-participle", l_participle_table()),
         ("verb-bytj", bytj_table()),
         ("verb-imperative", imperative_table()),
+        ("num-cardinals", cardinals_table()),
+        ("num-tens", tens_table()),
+        ("num-scales", scales_table()),
+        ("num-dva", dva_table()),
+        ("num-tri-czetyrje", tri_czetyrje_table()),
     ]
+}
+
+/// The nominative citation form of a number.
+fn cite(value: u64) -> String {
+    crate::numeral(
+        value,
+        Case::Nominative,
+        Gender::Masculine,
+        Animacy::Inanimate,
+    )
+}
+
+/// Lay labelled forms out as §6's four-column grids.
+fn grid(cells: Vec<String>) -> String {
+    let mut rows = vec!["| | | | |".to_string(), "|---|---|---|---|".to_string()];
+    for chunk in cells.chunks(4) {
+        let mut padded: Vec<&str> = chunk.iter().map(String::as_str).collect();
+        padded.resize(4, "");
+        rows.push(format!("| {} |", padded.join(" | ")));
+    }
+    rows.join("\n")
+}
+
+/// §6.2 — the cardinals 0–10.
+fn cardinals_table() -> String {
+    grid((0..=10).map(|n| format!("{n} `{}`", cite(n))).collect())
+}
+
+/// §6.3 — the tens, "N tens" on the unit whole.
+fn tens_table() -> String {
+    grid(
+        (2..=9)
+            .map(|n| format!("{} `{}`", n * 10, cite(n * 10)))
+            .collect(),
+    )
+}
+
+/// §6.3 — the scale nouns, short scale: each step a thousand times the last.
+fn scales_table() -> String {
+    grid(
+        [
+            ("10³", 1_000, " (fem. I)"),
+            ("10⁶", 1_000_000, ""),
+            ("10⁹", 1_000_000_000, ""),
+            ("10¹²", 1_000_000_000_000, ""),
+            ("10¹⁵", 1_000_000_000_000_000, ""),
+            ("10¹⁸", 1_000_000_000_000_000_000, ""),
+        ]
+        .map(|(rank, value, note)| format!("{rank} `{}`{note}", cite(value)))
+        .to_vec(),
+    )
+}
+
+/// §6.4 — `dva`, the one word with only dual endings.
+fn dva_table() -> String {
+    let d = |case, gender| code(&crate::numeral(2, case, gender, Animacy::Inanimate));
+    [
+        "| | Masc/neut | Fem |".to_string(),
+        "|---|---|---|".to_string(),
+        format!(
+            "| nom / acc | {} | {} |",
+            d(Case::Nominative, Gender::Masculine),
+            d(Case::Nominative, Gender::Feminine)
+        ),
+        format!(
+            "| gen / loc | {} | {} |",
+            d(Case::Genitive, Gender::Masculine),
+            d(Case::Genitive, Gender::Feminine)
+        ),
+        format!(
+            "| dat / ins / abl | {} | {} |",
+            d(Case::Dative, Gender::Masculine),
+            d(Case::Dative, Gender::Feminine)
+        ),
+    ]
+    .join("\n")
+}
+
+/// §6.4 — `tri` and `czetyrje`, declining as plurals.
+fn tri_czetyrje_table() -> String {
+    let f = |n, case| {
+        code(&crate::numeral(
+            n,
+            case,
+            Gender::Masculine,
+            Animacy::Inanimate,
+        ))
+    };
+    [
+        "| | `tri` | `czetyrje` |".to_string(),
+        "|---|---|---|".to_string(),
+        format!(
+            "| nominative | {} | {} |",
+            f(3, Case::Nominative),
+            f(4, Case::Nominative)
+        ),
+        format!(
+            "| genitive / locative | {} | {} |",
+            f(3, Case::Genitive),
+            f(4, Case::Genitive)
+        ),
+        format!(
+            "| dative | {} | {} |",
+            f(3, Case::Dative),
+            f(4, Case::Dative)
+        ),
+        format!(
+            "| instrumental | {} | {} |",
+            f(3, Case::Instrumental),
+            f(4, Case::Instrumental)
+        ),
+    ]
+    .join("\n")
 }
 
 /// Replace every marked block in `spec` with its fresh rendering.
