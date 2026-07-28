@@ -27,12 +27,12 @@ const DEFAULT: &[(&str, &str)] = &[
     ("zzena", "I hard"),
     ("kniga", "I velar: knigi against knizi"),
     ("zjemlja", "I soft"),
-    ("nacija", "I soft, vowel-final stem: nacii"),
+    ("nacija", "I soft, vowel-final stem: nacijy, naciji"),
     ("Sluga'", "masc in -a, animate"),
     ("noczj'", "III feminine"),
     ("universitet", "a Latin loan, masc II by its ending"),
     ("museum", "a Latin loan keeping its -um"),
-    ("nozz", "a hushing stem: rule 2 gives -jem"),
+    ("nozz", "a hushing stem: rule 1 gives the plural nozzi"),
 ];
 
 fn main() {

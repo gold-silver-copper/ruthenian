@@ -640,6 +640,25 @@ Feminine `zzen-`: vocative `-o` (OCS 42 %, Ukrainian 25 %), dual NAV `-i` — OC
 vocative = nominative throughout, as in OCS (45 % `-o` = the nominative ending)
 and Sanskrit (84 % ∅).
 
+**The soft declension is not a second ending set.** `RUTHENIAN.md` §3.2 derives
+it as `j` + the hard ending, with `o` written `e` after the `j`, and the whole
+soft series follows — `konji`, `konjy`, `zjemljy`, `zjemlji`, `polji`. This is
+where Ruthenian follows OCS against Russian rather than the other way round.
+Russian's soft locatives are `земле`, `коне`, `поле`; OCS has `земли`, `кони`,
+`поли`, because the soft stems took the *jo*-stem locative `-i` and not the
+*o*-stem yat. Ruthenian takes OCS, which §1 asks for on any question of grammar,
+and the reward is that the soft paradigm becomes cell-for-cell parallel to the
+hard one — `zjemljy`/`zjemlji` against `zzeny`/`zzeni` — where every other
+arrangement had one series distinguishing a pair the other merged.
+
+The cost is a written distinction that is not a spoken one: `-jy` and `-ji` are
+pronounced alike, since no Slavic variety has a palatalized consonant before a
+back vowel. Ruthenian writes both anyway, which is the same morphophonemic
+choice §2.5 makes in leaving final devoicing unspelled — with the sign reversed.
+There, the orthography declines to write a distinction the phonology loses; here
+it declines to *lose* a distinction the phonology has already merged. Both follow
+from spelling the morphology and letting the reader apply the automatic rules.
+
 ## 13.4 Where the regularity comes from
 
 Conservative in *inventory*, regular in *realization*. Ruthenian keeps more

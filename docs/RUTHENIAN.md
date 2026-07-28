@@ -184,8 +184,17 @@ text never does, and the marked and unmarked spellings are different strings.
 
 Every consonant except `j`, `cz`, `szcz`, `zz` and `sz` has a **hard** and a
 **soft** (palatalized) value; softness before a vowel is written with the
-`j`-digraphs (`ja je jo ju`) and word-finally or before a consonant with `j`
-alone (`konj`).
+`j`-digraphs — **`ja je ji jo ju jy`**, one for each vowel of §2.3 — and
+word-finally or before a consonant with `j` alone (`konj`).
+
+Two of the six carry no sound of their own. `ji` is redundant, since `i` implies
+a soft consonant before it anyway; `jy` is worse than redundant, since Slavic has
+no palatalized consonant before a back vowel and `jy` is therefore pronounced
+exactly as `ji` is. Both are written all the same, because §3.2 builds the soft
+endings as `j` + the hard ones and a digraph that vanished in two cells would put
+the genitive `zjemljy` and the dative `zjemlji` back together. The orthography
+is morphophonemic: it spells the ending and leaves the merger to the reader, as
+§2.5 does for final devoicing and §3.9 for invariant stems.
 
 **The five exceptions are exceptions for two different reasons.** `j` is itself
 the palatal; `cz` and `szcz` are inherently palatal, so there is no hard value to
@@ -468,8 +477,28 @@ same endings with automatic spelling adjustments (§3.8).
 | **II** | masculine, and neuter | `dom` (house), `konj` (horse), `okno` (window), `polje` (field) |
 | **III** | feminine ending in a consonant | `noczj` (night), `kostj` (bone) |
 
-Each has a **hard** and a **soft** variant; the soft variant substitutes `je` for
-`o`, `ju` for `u`, `i` for `y` — a single alternation, applied everywhere.
+Each has a **hard** and a **soft** variant, and the soft one is not a second set
+of endings. It is **`j` + the hard ending, with `o` written `e` after the `j`**:
+
+```
+""      -> j        ogo -> jego     oj -> jej      y -> jy
+a       -> ja       om  -> jem      i  -> ji       ov -> jev
+u       -> ju       oma -> jema     o  -> je       am -> jam
+```
+
+One operation, applied to every cell of every declension that has a soft
+variant. The vocative singular is the only exception, and §3.1 states it: `konju`
+and `zjemljo`, neither of which the rule reaches.
+
+The `o`-to-`e` clause is not an extra rule but §2.2's: `jo` is written `je`
+except where a following hard consonant demands otherwise, which no ending has.
+And note that the rule leaves `-jy` alone. `jy` and `ji` are pronounced alike —
+Slavic has no palatalized consonant before a back vowel, which is precisely why
+Russian writes `и` after a soft one — so the genitive `zjemljy` and the dative
+`zjemlji` differ on paper and not in speech. **That is intended.** Ruthenian
+spells the morphology and lets the reader apply the mergers, the same choice
+§2.5 makes for final devoicing and §3.9 for invariant stems; a soft declension
+that wrote what was said would lose a case distinction the hard one keeps.
 
 ### Declension, hardness and gender are all read off the citation form
 
@@ -512,14 +541,14 @@ whether the form ends in `j`, `ja` or `je`.**
 
 | Case | Singular | Dual | Plural |
 |---|---|---|---|
-| nominative | `konj` | `konja` | `konji` |
+| nominative | `konj` | `konja` | `konjy` |
 | vocative | `konju` | = nom | = nom |
 | accusative | `konja` (anim.) | = nom | `konjev` |
 | genitive | `konjego` | `konju` | `konjev` |
 | **ablative** | `konja` | = dat | = dat |
 | dative | `konju` | `konjema` | `konjem` |
 | instrumental | `konjem` | `konjema` | `konjami` |
-| locative | `konje` | `konju` | `konjah` |
+| locative | `konji` | `konju` | `konjah` |
 
 ### Velar: `drug` "friend" (animate, stem `drug-`)
 
@@ -562,8 +591,15 @@ noun takes dual modifiers and a dual verb.
 ### Soft: `polje` "field" (stem `pol-`)
 
 Nominative `polje`, genitive `poljego`, ablative `polja`, dative `polju`,
-instrumental `poljem`, locative `polje`; dual `polje` / `polju` / `poljema`;
+instrumental `poljem`, locative `polji`; dual `polji` / `polju` / `poljema`;
 plural `polja` / `poljev` / `poljem` / `poljami` / `poljah`.
+
+The locative and the dual are `polji`, not `polje`, and this is where §3.2's
+rule earns its keep. Both are the yat `-i`, so both soften to `-ji`; had they
+softened to `-je` they would have merged with the nominative, and `polje` would
+have covered seven cells — nominative, vocative and accusative singular, all
+three dual cells, and the locative singular. The hard neuter keeps `okno` apart
+from `okni`, and the soft one now keeps `polje` apart from `polji`.
 
 The neuter dual `-i` continues OCS `-ě` (`dvě selě`), and the neuter vocative is
 the nominative in every language measured — Sanskrit 84 % ∅, OCS 45 %.
@@ -603,8 +639,8 @@ Ukrainian pattern (`knyhy` / `knyzi`) and is lost in Russian, where both are
 ### Soft: `zjemlja` "earth" (stem `zjeml-`)
 
 Nominative `zjemlja`, vocative `zjemljo`, accusative `zjemlju`, genitive/ablative
-`zjemli`, dative/locative `zjemlje`, instrumental `zjemljej`; dual
-`zjemlje` / `zjemlju` / `zjemljama`; plural `zjemli` / `zjemljev` / `zjemljam` /
+`zjemljy`, dative/locative `zjemlji`, instrumental `zjemljej`; dual
+`zjemlji` / `zjemlju` / `zjemljama`; plural `zjemljy` / `zjemljev` / `zjemljam` /
 `zjemljami` / `zjemljah`.
 
 ### Vowel-final stems: `nacija` "nation" (stem `naci-`)
@@ -614,40 +650,63 @@ rule 3 puts the soft sign in the ending rather than the stem, so `nacija` is
 `naci-` plus the same endings `zjemlja` takes:
 
 Nominative `nacija`, vocative `nacijo`, accusative `naciju`, genitive/ablative
-`nacii`, dative/locative `nacije`, instrumental `nacijej`; dual
-`nacije` / `naciju` / `nacijama`; plural `nacii` / `nacijev` / `nacijam` /
+`nacijy`, dative/locative `naciji`, instrumental `nacijej`; dual
+`naciji` / `naciju` / `nacijama`; plural `nacijy` / `nacijev` / `nacijam` /
 `nacijami` / `nacijah`.
 
-**The instrumental is `-jej` and the vocative `-jo`, and the difference is
-deliberate.** §3.2's soft substitution writes `je` for `o`, which gives the
-instrumental `zjemljej` — Russian's `землёй` is stressed `землей`, and §2.3 does
-not spell the shift, so the two agree. The vocative is the one cell where the
-substitution is blocked: `-je` there would merge the vocative with the dative
-and locative, and the soft declension would lose a category §3.1 exists to
-restore. So `zjemljo`, and the collision is avoided rather than accepted.
+**The soft declension is exactly parallel to the hard one, cell for cell.**
+That is the test §3.2's rule has to pass, and it does:
 
-**The yat ending is `-i` after a hard stem and `-je` after a soft one.** That is
-why the dative and locative coincide here as they do in `zzena` — `zjemlje`,
-`nacije` — which is what footnote ³ above requires and what Russian's `земле`
-has. It holds in **every** yat cell, not only these two: the locative singular
-of `konj` is `konje` and of `polje` is `polje`, and the feminine and neuter
-duals are `zjemlje`, `nacije` and `polje`.
+| | genitive sg | dative/locative sg | dual | nominative pl |
+|---|---|---|---|---|
+| hard `zzena` | `zzeny` | `zzeni` | `zzeni` | `zzeny` |
+| soft `zjemlja` | `zjemljy` | `zjemlji` | `zjemlji` | `zjemljy` |
+| soft `nacija` | `nacijy` | `naciji` | `naciji` | `nacijy` |
 
-It also pulls two cells apart that used to be one. `konj`'s locative singular
-and nominative plural were both `konji`; the locative is yat, so it is `konje`,
-while the plural is rule 1's `y` written `i` and stays `konji`. Russian draws
-the same line in the same place, `коне` against `кони`. An earlier revision gave the dative `-ji` and the locative `-i`, breaking
-the one syncretism §3.5 goes out of its way to justify. §3.2's soft substitution
-(`je` for `o`, `ju` for `u`, `i` for `y`) does not reach this ending; it is
-listed for the soft series rather than derived from the hard one.
+The dative and locative coincide as footnote ³ requires, the genitive stands
+apart from them, and the plural groups with the genitive — the same four-cell
+arrangement in both series, because the soft endings *are* the hard ones with a
+`j`. No cell had to be chosen; every one falls out.
 
-**The doubled `i` of `nacii` is regular and is not repaired.** It is simply
-`naci-` + `-i`, and Ruthenian has no rule contracting a vowel sequence. Russian
-gives this class a sub-pattern of its own (`нация`, `нации`, `нацией`), and
-Ruthenian does not: that would be a fourth declension to learn, for a class the
-third already handles. The class is not marginal — §12.3's `-cija` and `-ija`
-borrowings are large and productive — which is the reason to state it here
-rather than leave it to be inferred at each loan.
+Earlier revisions decided these cells one at a time and kept trading one
+collision for another. Giving the dative `-ji` and the locative `-i` broke the
+syncretism this section exists to justify; making the yat ending `-je` after a
+soft stem repaired that, but then `polje` swallowed its own locative and dual,
+and the softened `-y` ended up written `-i` in this section and `-ji` in §3.3
+without either being wrong on its own terms. A single derivation settles all of
+them at once, which is the argument for having one.
+
+**Ruthenian and Russian part company here, in favour of Old Church Slavonic.**
+Russian has `земле`, `коне`, `поле` where Ruthenian has `zjemlji`, `konji`,
+`polji`. OCS has `земли`, `кони`, `поли` — the soft stems took the *jo*-stem
+locative `-i`, not the *o*-stem yat — so the older language is on Ruthenian's
+side, and §1 takes grammar from OCS and phonology from Russian. This is grammar.
+
+**The soft vocatives are stated, not derived, and that is now a choice rather
+than a repair.** §3.2's rule would give `zjemlje` from the hard `-o` and `konje`
+from the hard `-je`, and — since the dative and locative moved to `-ji` — neither
+would collide with anything. The exception survives on its own merits: `-jo`
+keeps the hard vocative `-o` visible where `-je` would hide it, and `konju` is
+OCS's `коню` directly. §3.1 gives both endings, and they stay given.
+
+This is worth flagging because the earlier justification is gone. While the
+dative was `zjemlje`, the vocative *had* to avoid `-je` or lose a category §3.1
+exists to restore; that pressure no longer exists, and the two endings are kept
+because they are the better forms, not because the alternative is unavailable.
+
+**The instrumental `-jej` is not an exception.** It is `oj` with the `o` written
+`e` after the `j`, exactly as `ogo` gives `jego`. Russian's `землёй` is stressed
+`землей` and §2.3 does not spell the shift, so the two agree without a rule of
+their own.
+
+**`nacija` needs nothing beyond a vowel-final stem.** §3.8's rule 3 puts the
+soft sign in the ending, so `naci-` takes the same endings `zjeml-` does and the
+sequences `ija`, `ijy`, `iji` simply occur. Russian gives this class a
+sub-pattern of its own (`нация`, `нации`, `нацией`); Ruthenian does not, because
+that would be a fourth declension to learn for a class the third already
+handles. The class is not marginal — §12.3's `-cija` and `-ija` borrowings are
+large and productive — which is the reason to state it here rather than leave it
+to be inferred at each loan.
 
 ### Masculine nouns in `-a`
 
@@ -761,7 +820,8 @@ the paradigm gives.
 
 Not declensions — a single set of rules applied to every ending:
 
-1. after `k g h` and `zz sz cz szcz`, `y` is written `i` (`knigi`, not `*knigy`);
+1. after `k g h` and `zz sz cz szcz`, `y` is written `i` (`knigi`, not `*knigy`)
+   — applied **after** rule 2, since rule 2 can expose the `y` it governs;
 2. **`j` is never written after `cz szcz zz sz`** — §2.2 gives none of the four
    a hard/soft contrast, so the glide has nothing to mark. This is a fact about
    the alphabet rather than about endings, and it holds inside a root as much as
@@ -802,6 +862,13 @@ Its one bound is that it applies to an ending's **initial** `j` and not to a `j`
 anywhere in an ending: everywhere else a leading `j` is rule 3's soft sign rather
 than a glide, so §3.6's instrumental `-jju` keeps both, and a wider rule makes
 `noczjju` into `noczju`.
+
+**Rule 2 runs before rule 1, and the order is load-bearing.** §3.2's soft series
+contains `-jy`, so a soft hushing stem meets rule 1 only after rule 2 has taken
+the glide off: `nozzj` + `-jy` → `nozz` + `-y` → `nozzi`, which is the plural the
+hard `nozz` has. Run the other way round, rule 1 never sees the `y` and the form
+stays `nozzy` — a spelling rule 1 forbids outright. No other pair of these rules
+interacts, and this pair did not either until the soft endings gained a `y`.
 
 These replace Russian's velar-, sibilant-, `ц`- and vowel-stem declensions, which
 differ from the hard type *only* by these automatic effects.
@@ -2161,8 +2228,8 @@ International vocabulary is adapted by rule rather than borrowed ad hoc, so that
 The Latin **oblique** stem is the base, not the nominative — *natio* borrows
 from *natiōn-* and not from *natio*, exactly as Slavic has always done it,
 giving the citation form `nacija`. Once adapted, a loan declines as a native
-word of its class, and **strictly**: `nacija`, genitive `nacii`, dative
-`naciji`, instrumental `nacijoj` — soft declension I on the vowel-final stem
+word of its class, and **strictly**: `nacija`, genitive `nacijy`, dative
+`naciji`, instrumental `nacijej` — soft declension I on the vowel-final stem
 `naci-` (§3.5). Russian's `-ия` sub-pattern is not imported; the endings are the
 ones `zjemlja` takes.
 

@@ -65,14 +65,14 @@ fn nouns() {
         ),
         (
             "Konj",
-            "declension II masculine, soft. Yat makes the locative -je where rule 1's respelt -y keeps the plural -ji",
-            &["konje", "konji"],
+            "declension II masculine, soft. Every ending is j + the hard one, so the locative -ji and the plural -jy stay apart",
+            &["konji", "konjy"],
         ),
         ("okno", "declension II neuter, hard", &[]),
         (
             "polje",
-            "declension II neuter, soft. The locative and the nominative fall together, as Russian's поле does",
-            &["polje"],
+            "declension II neuter, soft. The locative is -ji, so polje covers three cells rather than seven",
+            &["polje", "polji"],
         ),
         ("zzena", "declension I, hard", &[]),
         (
@@ -82,13 +82,13 @@ fn nouns() {
         ),
         (
             "zjemlja",
-            "declension I, soft. Yat gives -je after a soft stem, so the dative and locative coincide as §3.5 requires",
-            &["zjemlje", "zjemljej"],
+            "declension I, soft. Cell for cell parallel to zzena — zjemljy/zjemlji against zzeny/zzeni",
+            &["zjemljy", "zjemlji", "zjemljej"],
         ),
         (
             "nacija",
-            "a vowel-final stem. The doubled i is regular and is not contracted",
-            &["nacii"],
+            "a vowel-final stem, taking zjemlja's endings unchanged. ija, ijy and iji simply occur",
+            &["nacijy", "naciji"],
         ),
         (
             "Sluga'",

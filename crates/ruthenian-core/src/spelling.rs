@@ -254,9 +254,6 @@ fn ends_with_letter(stem: &str, letter: &str) -> bool {
 /// ```
 pub fn spell_ending(stem: &str, ending: &str) -> String {
     let mut out = ending.to_string();
-    if (ends_velar(stem) || ends_sibilant(stem)) && out.starts_with('y') {
-        out.replace_range(0..1, "i");
-    }
     // Rule 2 drops a **glide**, which is `j` before a vowel. A `j` that is not
     // before a vowel is rule 3's soft sign and stays: declension III's
     // nominative is the bare `-j` (`noczj`), its instrumental `-jju` keeps the
@@ -264,6 +261,14 @@ pub fn spell_ending(stem: &str, ending: &str) -> String {
     // a consonant (`noczjma`). Dropping those gives `nocz`, `noczju`, `noczma`.
     if ends_sibilant(stem) && is_glide(&out) {
         out.replace_range(0..1, "");
+    }
+    // Rule 1 runs **after** rule 2, because rule 2 can expose the vowel rule 1
+    // governs. §3.2's soft series contains `-jy` (the nominative plural), so a
+    // soft hushing stem reaches rule 1 only once the glide is gone: `nozzj` +
+    // `-jy` is `nozz` + `-y` is `nozzi`, the same plural the hard `nozz` has.
+    // In the other order it stays `nozzy`, which rule 1 forbids outright.
+    if (ends_velar(stem) || ends_sibilant(stem)) && out.starts_with('y') {
+        out.replace_range(0..1, "i");
     }
     out
 }
@@ -291,6 +296,10 @@ const VOWELS: [char; 6] = ['a', 'e', 'i', 'o', 'u', 'y'];
 /// assert_eq!(join("dom", "ogo"), "domogo");
 /// assert_eq!(join("knig", "y"), "knigi");     // rule 1
 /// assert_eq!(join("otjecz", "je"), "otjecze"); // rule 2
+/// // Rule 2 before rule 1: the glide comes off, and *then* the `y` it uncovers
+/// // is respelled. The other order leaves `nozzy`, which rule 1 forbids.
+/// assert_eq!(join("nozz", "y"), "nozzi");
+/// assert_eq!(join("nozz", "jy"), "nozzi");
 /// assert_eq!(join("sj", "im"), "sjim");       // the stem is invariant (§2.5)
 /// assert_eq!(join("kon", "ji"), "konji");
 /// assert_eq!(join("czitaj", "jeszj"), "czitajeszj"); // rule 3b: jj is one ja

@@ -106,9 +106,9 @@ KONJ = noun(
     "Konj",
     "3.3",
     spread(nom="konj", voc="konju", acc_abl="konja", gen="konjego", dat="konju",
-           ins="konjem", loc="konje"),
+           ins="konjem", loc="konji"),
     spread(nom_voc_acc="konja", gen_loc="konju", dat_ins_abl="konjema"),
-    spread(nom_voc="konji", acc_gen="konjev", dat_abl="konjem", ins="konjami",
+    spread(nom_voc="konjy", acc_gen="konjev", dat_abl="konjem", ins="konjami",
            loc="konjah"),
 )
 
@@ -137,8 +137,8 @@ POLJE = noun(
     "polje",
     "3.4",
     spread(nom_voc_acc="polje", gen="poljego", abl="polja", dat="polju",
-           ins="poljem", loc="polje"),
-    spread(nom_voc_acc="polje", gen_loc="polju", dat_ins_abl="poljema"),
+           ins="poljem", loc="polji"),
+    spread(nom_voc_acc="polji", gen_loc="polju", dat_ins_abl="poljema"),
     spread(nom_voc_acc="polja", gen="poljev", dat_abl="poljem", ins="poljami",
            loc="poljah"),
 )
@@ -167,22 +167,24 @@ KNIGA = noun(
 ZJEMLJA = noun(
     "zjemlja",
     "3.5",
-    spread(nom="zjemlja", voc="zjemljo", acc="zjemlju", gen_abl="zjemli",
-           dat_loc="zjemlje", ins="zjemljej"),
-    spread(nom_voc_acc="zjemlje", gen_loc="zjemlju", dat_ins_abl="zjemljama"),
-    spread(nom_voc_acc="zjemli", gen="zjemljev", dat_abl="zjemljam",
+    spread(nom="zjemlja", voc="zjemljo", acc="zjemlju", gen_abl="zjemljy",
+           dat_loc="zjemlji", ins="zjemljej"),
+    spread(nom_voc_acc="zjemlji", gen_loc="zjemlju", dat_ins_abl="zjemljama"),
+    spread(nom_voc_acc="zjemljy", gen="zjemljev", dat_abl="zjemljam",
            ins="zjemljami", loc="zjemljah"),
 )
 
-# The vowel-final stem `naci-`. Its genitive `nacii` is the doubled vowel that a
-# contraction rule would silently eat, which is why it is in the corpus.
+# The vowel-final stem `naci-`. Nothing about it is special — §3.8 rule 3 puts
+# the soft sign in the ending, so it takes `zjemlja`'s endings unchanged — and
+# that is exactly why it is in the corpus: the sequences `ija`, `ijy`, `iji` are
+# what a contraction rule would silently eat.
 NACIJA = noun(
     "nacija",
     "3.5",
-    spread(nom="nacija", voc="nacijo", acc="naciju", gen_abl="nacii",
-           dat_loc="nacije", ins="nacijej"),
-    spread(nom_voc_acc="nacije", gen_loc="naciju", dat_ins_abl="nacijama"),
-    spread(nom_voc_acc="nacii", gen="nacijev", dat_abl="nacijam",
+    spread(nom="nacija", voc="nacijo", acc="naciju", gen_abl="nacijy",
+           dat_loc="naciji", ins="nacijej"),
+    spread(nom_voc_acc="naciji", gen_loc="naciju", dat_ins_abl="nacijama"),
+    spread(nom_voc_acc="nacijy", gen="nacijev", dat_abl="nacijam",
            ins="nacijami", loc="nacijah"),
 )
 

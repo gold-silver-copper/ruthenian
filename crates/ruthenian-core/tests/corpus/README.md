@@ -25,7 +25,7 @@ failure names where to look rather than only what broke.
 | `zzena` | 3.5 | declension I, hard |
 | `kniga` | 3.5 | velar feminine: genitive `knigi` against dative `knizi`, distinguished by the palatalization alone |
 | `zjemlja` | 3.5 | declension I, soft |
-| `nacija` | 3.5 | the **vowel-final** stem `naci-`; its genitive `nacii` is the doubled vowel a contraction rule would silently eat |
+| `nacija` | 3.5 | the **vowel-final** stem `naci-`, taking `zjemlja`'s endings unchanged; `ija`, `ijy` and `iji` are the sequences a contraction rule would silently eat |
 | `sluga'` | 3.5 | masculine in agreement, declension I in form — and its accusative is `slugu`, *not* the ablative |
 | `noczj'` | 3.6 | declension III, and the mark that separates it from a soft masculine II |
 
