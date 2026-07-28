@@ -208,8 +208,8 @@ throughout: `zzeltyj`, `njes` beside `njesu`, `czetvjertyj`.
 
 Russian's own orthography prints `е` for `ё` outside dictionaries, so this is
 also what a Russian text mostly looks like already. The sequence `jo` is
-therefore free to be `j` + `o`, which is what `bataljon` and the soft endings
-`-jo` and `-joj` (§3.5's `zjemljo`, `zjemljoj`) need it to be.
+therefore free to be `j` + `o`, which is what `bataljon` and the soft vocative
+`-jo` (§3.5's `zjemljo`) need it to be.
 
 ## 2.4 The three palatalizations
 
