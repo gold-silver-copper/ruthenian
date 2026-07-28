@@ -65,7 +65,95 @@ pub fn blocks() -> Vec<(&'static str, String)> {
         ("num-scales", scales_table()),
         ("num-dva", dva_table()),
         ("num-tri-czetyrje", tri_czetyrje_table()),
+        ("paradigm-sizes", sizes_table()),
     ]
+}
+
+/// §11 — distinct surface forms after syncretism, **counted, not typed**.
+///
+/// The hand-written version of this table carried two wrong rows: the
+/// adjective's "24" was the cell count 8 × 3, not a count of distinct forms —
+/// the long adjective's heavy syncretism (`-oj` alone covers the feminine
+/// oblique singular) yields 15 — and the verb's "9 present" ignored that
+/// `czitajetje` serves the 3du and 2pl at once. Counting is precisely what a
+/// table of counts should have been doing all along.
+fn sizes_table() -> String {
+    use std::collections::BTreeSet;
+    let mut rows = vec![
+        "| Word class | Singular | Dual | Plural | Total |".to_string(),
+        "|---|---:|---:|---:|---:|".to_string(),
+    ];
+    for (name, lemma) in [
+        ("noun, declension II masculine (`dom`)", "dom"),
+        ("noun, declension II neuter (`okno`)", "okno"),
+        ("noun, declension I feminine (`zzena`)", "zzena"),
+        ("noun, declension III (`noczj`)", "noczj'"),
+    ] {
+        let counts: Vec<usize> = Number::ALL
+            .map(|number| {
+                Case::ALL
+                    .iter()
+                    .map(|&case| noun(lemma, case, number))
+                    .collect::<BTreeSet<_>>()
+                    .len()
+            })
+            .to_vec();
+        rows.push(format!(
+            "| {name} | {} | {} | {} | **{}** |",
+            counts[0],
+            counts[1],
+            counts[2],
+            counts.iter().sum::<usize>()
+        ));
+    }
+    let a = Adjective::new("dobr");
+    for (name, long) in [
+        ("adjective, long (`dobryj`)", true),
+        ("adjective, short (`dobr`)", false),
+    ] {
+        let mut forms = BTreeSet::new();
+        for case in Case::ALL {
+            for number in Number::ALL {
+                for gender in Gender::ALL {
+                    for animacy in [Animacy::Animate, Animacy::Inanimate] {
+                        forms.insert(match long {
+                            true => a.long(case, number, gender, animacy),
+                            false => a.short(case, number, gender, animacy),
+                        });
+                    }
+                }
+            }
+        }
+        rows.push(format!(
+            "| {name} | — | — | — | **{}** across all genders |",
+            forms.len()
+        ));
+    }
+    let non_past: BTreeSet<String> = verb_paradigm("czitatj")
+        .into_iter()
+        .map(|(_, _, form)| form)
+        .collect();
+    let imper: BTreeSet<String> = [
+        (Person::Second, Number::Singular),
+        (Person::Second, Number::Dual),
+        (Person::Second, Number::Plural),
+        (Person::First, Number::Dual),
+        (Person::First, Number::Plural),
+    ]
+    .iter()
+    .map(|&(person, number)| imperative("czitatj", person, number))
+    .collect();
+    let l_forms: BTreeSet<String> = Gender::ALL
+        .iter()
+        .flat_map(|&gender| Number::ALL.map(|number| l_participle("czitatj", gender, number)))
+        .collect();
+    rows.push(format!(
+        "| verb, one aspect (`czitatj`) | — | — | — | **{}** non-past + **{}** imperative + **{}** `l`-participle, six participle/gerund stems, every past periphrastic |",
+        non_past.len(),
+        imper.len(),
+        l_forms.len()
+    ));
+    rows.join("\n")
 }
 
 /// The nominative citation form of a number.

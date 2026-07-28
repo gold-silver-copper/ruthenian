@@ -2170,14 +2170,17 @@ permanent) against `on byl vraczom` (instrumental, temporary or past role).
 Distinct **surface forms**, after syncretism — 24 nominal cells (8 cases × 3
 numbers) never yield 24 forms:
 
+<!-- render:paradigm-sizes -->
 | Word class | Singular | Dual | Plural | Total |
 |---|---:|---:|---:|---:|
 | noun, declension II masculine (`dom`) | 7 | 3 | 5 | **15** |
 | noun, declension II neuter (`okno`) | 6 | 3 | 5 | **14** |
 | noun, declension I feminine (`zzena`) | 6 | 3 | 5 | **14** |
 | noun, declension III (`noczj`) | 3 | 3 | 5 | **11** |
-| adjective (`dobryj`) | — | — | — | 24 across all genders |
-| verb, one aspect | 9 present + 3 imperative + 6 participles, and every past periphrastic |
+| adjective, long (`dobryj`) | — | — | — | **15** across all genders |
+| adjective, short (`dobr`) | — | — | — | **16** across all genders |
+| verb, one aspect (`czitatj`) | — | — | — | **8** non-past + **5** imperative + **4** `l`-participle, six participle/gerund stems, every past periphrastic |
+<!-- /render:paradigm-sizes -->
 
 Compare Russian, which has 12 nominal cells and typically 9–11 distinct forms.
 Ruthenian doubles the categories and adds four to six forms, because the added
