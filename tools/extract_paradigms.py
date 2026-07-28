@@ -168,7 +168,7 @@ ZJEMLJA = noun(
     "zjemlja",
     "3.5",
     spread(nom="zjemlja", voc="zjemljo", acc="zjemlju", gen_abl="zjemli",
-           dat="zjemlji", ins="zjemljoj", loc="zjemli"),
+           dat_loc="zjemlje", ins="zjemljoj"),
     spread(nom_voc_acc="zjemlji", gen_loc="zjemlju", dat_ins_abl="zjemljama"),
     spread(nom_voc_acc="zjemli", gen="zjemljev", dat_abl="zjemljam",
            ins="zjemljami", loc="zjemljah"),
@@ -180,7 +180,7 @@ NACIJA = noun(
     "nacija",
     "3.5",
     spread(nom="nacija", voc="nacijo", acc="naciju", gen_abl="nacii",
-           dat="naciji", ins="nacijoj", loc="nacii"),
+           dat_loc="nacije", ins="nacijoj"),
     spread(nom_voc_acc="naciji", gen_loc="naciju", dat_ins_abl="nacijama"),
     spread(nom_voc_acc="nacii", gen="nacijev", dat_abl="nacijam",
            ins="nacijami", loc="nacijah"),
@@ -361,7 +361,7 @@ REFLEXIVE = [
 DEMONSTRATIVE = [
     ("pronominal", "t", f"{case}.{number}.{gender}", form, "5.4")
     for case, number, gender, form in [
-        ("Nominative", "Singular", "Masculine", "toj"),
+        ("Nominative", "Singular", "Masculine", "toj"),  # the declension itself
         ("Accusative", "Singular", "Masculine", "toj"),
         ("Genitive", "Singular", "Masculine", "togo"),
         ("Ablative", "Singular", "Masculine", "toga"),
@@ -385,6 +385,20 @@ DEMONSTRATIVE = [
     for case, form in [
         ("Nominative", "sjej"), ("Genitive", "sjego"), ("Dative", "sjemu"),
         ("Instrumental", "sjim"), ("Locative", "sjem"),
+    ]
+]
+
+# §5.4's `tot`: the declension with its one reduplicated cell.
+DEMONSTRATIVE += [
+    ("that", "-", f"{case}.{number}.{gender}", form, "5.4")
+    for case, number, gender, form in [
+        ("Nominative", "Singular", "Masculine", "tot"),
+        ("Accusative", "Singular", "Masculine", "tot"),
+        ("Genitive", "Singular", "Masculine", "togo"),
+        ("Ablative", "Singular", "Masculine", "toga"),
+        ("Nominative", "Singular", "Neuter", "to"),
+        ("Nominative", "Singular", "Feminine", "ta"),
+        ("Nominative", "Plural", "Masculine", "tje"),
     ]
 ]
 

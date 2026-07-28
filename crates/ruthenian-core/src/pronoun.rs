@@ -412,6 +412,71 @@ pub fn pronominal(
     format!("{s}{ending}")
 }
 
+/// `tot` "that" (§5.4), the far demonstrative.
+///
+/// **Its nominative is reduplicated and everything else is regular.** The
+/// pronominal declension would give `toj` — and `toj` is what OCS `тъи` and
+/// Ukrainian `той` have — but Russian doubled `тъ` onto itself, and `tot` is the
+/// form a reader knows. The doubling reaches one cell only: the neuter is `to`
+/// and the feminine `ta`, not `*toto` or `*tota`, and `sjej` is untouched by it.
+///
+/// So this is not a second declension; it is [`pronominal`] on the stem `t-`
+/// with one irregular cell, the same shape as [`who`] and [`what`], which are
+/// tabulated for the same reason.
+///
+/// ```
+/// use ruthenian_core::{that, pronominal, Case, Gender, Number, Animacy};
+/// use Gender::Masculine as M;
+/// use Animacy::Inanimate as In;
+///
+/// assert_eq!(that(Case::Nominative, Number::Singular, M, In), "tot");
+/// // The inanimate accusative is the nominative, so it doubles too.
+/// assert_eq!(that(Case::Accusative, Number::Singular, M, In), "tot");
+///
+/// // One cell. Everything else is the plain declension.
+/// assert_eq!(that(Case::Genitive, Number::Singular, M, In), "togo");
+/// assert_eq!(that(Case::Ablative, Number::Singular, M, In), "toga");
+/// assert_eq!(that(Case::Nominative, Number::Singular, Gender::Neuter, In), "to");
+/// assert_eq!(that(Case::Nominative, Number::Singular, Gender::Feminine, In), "ta");
+/// assert_eq!(that(Case::Nominative, Number::Plural, M, In), "tje");
+///
+/// // The animate accusative is the ablative (§3.7), so it is not the doubled
+/// // form either.
+/// assert_eq!(that(Case::Accusative, Number::Singular, M, Animacy::Animate), "toga");
+///
+/// // And the rule itself still says what the rule says.
+/// assert_eq!(pronominal("t", Case::Nominative, Number::Singular, M, In), "toj");
+/// ```
+pub fn that(case: Case, number: Number, gender: Gender, animacy: Animacy) -> String {
+    let regular = pronominal("t", case, number, gender, animacy);
+    let doubled = matches!(case, Case::Nominative | Case::Vocative | Case::Accusative)
+        && number == Number::Singular
+        && gender == Gender::Masculine
+        && regular == "toj";
+    match doubled {
+        true => "tot".to_string(),
+        false => regular,
+    }
+}
+
+/// `sjej` "this" (§5.4), the near demonstrative — the one Russian lost.
+///
+/// Wholly regular, unlike [`that`]: it is [`pronominal`] on the soft stem `sj-`
+/// and nothing more. Two degrees of deixis is what OCS had, and keeping the near
+/// one is why §5.4 has two words where Russian has `этот` alone.
+///
+/// ```
+/// use ruthenian_core::{this, Case, Gender, Number, Animacy::Inanimate};
+/// use Gender::Masculine as M;
+///
+/// assert_eq!(this(Case::Nominative, Number::Singular, M, Inanimate), "sjej");
+/// assert_eq!(this(Case::Genitive, Number::Singular, M, Inanimate), "sjego");
+/// assert_eq!(this(Case::Dative, Number::Singular, M, Inanimate), "sjemu");
+/// ```
+pub fn this(case: Case, number: Number, gender: Gender, animacy: Animacy) -> String {
+    pronominal("sj", case, number, gender, animacy)
+}
+
 /// A **bound** stem, as opposed to a lemma.
 ///
 /// `t-` and `sj-` are the demonstratives' stems and neither contains a vowel, so

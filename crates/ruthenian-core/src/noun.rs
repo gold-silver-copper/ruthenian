@@ -221,9 +221,13 @@ pub(crate) fn ending(set: Set, soft: bool, case: Case, number: Number) -> (&'sta
             (Vocative, Singular) => ("jo", n),
             (Accusative, Singular) => ("ju", n),
             (Genitive | Ablative, Singular) => ("i", n),
-            (Dative, Singular) => ("ji", n),
+            // The yat ending is `-i` after a hard stem and `-je` after a soft
+            // one, so the dative and locative coincide here exactly as §3.5's
+            // footnote says they must — `zjemlje`, and Russian's `земле`. They
+            // were `-ji` and `-i`, which broke the syncretism the hard
+            // paradigm has and the footnote justifies.
+            (Dative | Locative, Singular) => ("je", n),
             (Instrumental, Singular) => ("joj", n),
-            (Locative, Singular) => ("i", n),
             (Nominative | Vocative | Accusative, Dual) => ("ji", n),
             (Genitive | Locative, Dual) => ("ju", n),
             (Dative | Instrumental | Ablative, Dual) => ("jama", n),

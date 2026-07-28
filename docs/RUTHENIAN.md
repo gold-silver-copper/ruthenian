@@ -587,7 +587,7 @@ Ukrainian pattern (`knyhy` / `knyzi`) and is lost in Russian, where both are
 ### Soft: `zjemlja` "earth" (stem `zjeml-`)
 
 Nominative `zjemlja`, vocative `zjemljo`, accusative `zjemlju`, genitive/ablative
-`zjemli`, dative `zjemlji`, instrumental `zjemljoj`, locative `zjemli`; dual
+`zjemli`, dative/locative `zjemlje`, instrumental `zjemljoj`; dual
 `zjemlji` / `zjemlju` / `zjemljama`; plural `zjemli` / `zjemljev` / `zjemljam` /
 `zjemljami` / `zjemljah`.
 
@@ -598,9 +598,17 @@ rule 3 puts the soft sign in the ending rather than the stem, so `nacija` is
 `naci-` plus the same endings `zjemlja` takes:
 
 Nominative `nacija`, vocative `nacijo`, accusative `naciju`, genitive/ablative
-`nacii`, dative `naciji`, instrumental `nacijoj`, locative `nacii`; dual
+`nacii`, dative/locative `nacije`, instrumental `nacijoj`; dual
 `naciji` / `naciju` / `nacijama`; plural `nacii` / `nacijev` / `nacijam` /
 `nacijami` / `nacijah`.
+
+**The yat ending is `-i` after a hard stem and `-je` after a soft one.** That is
+why the dative and locative coincide here as they do in `zzena` — `zjemlje`,
+`nacije` — which is what footnote ³ above requires and what Russian's `земле`
+has. An earlier revision gave the dative `-ji` and the locative `-i`, breaking
+the one syncretism §3.5 goes out of its way to justify. §3.2's soft substitution
+(`je` for `o`, `ju` for `u`, `i` for `y`) does not reach this ending; it is
+listed for the soft series rather than derived from the hard one.
 
 **The doubled `i` of `nacii` is regular and is not repaired.** It is simply
 `naci-` + `-i`, and Ruthenian has no rule contracting a vowel sequence. Russian
@@ -1082,8 +1090,8 @@ lost the near deixis; Ruthenian keeps it.
 
 | | Masc sg | Neut sg | Fem sg | Dual | Plural |
 |---|---|---|---|---|---|
-| nominative | `toj` | `to` | `ta` | `ta` | `tje` |
-| accusative | `toj` / `toga` ¹ | `to` | `tu` | `ta` | `tje` / `tjeh` ¹ |
+| nominative | **`tot`** ² | `to` | `ta` | `ta` | `tje` |
+| accusative | **`tot`** ² / `toga` ¹ | `to` | `tu` | `ta` | `tje` / `tjeh` ¹ |
 | genitive | `togo` | `togo` | `toj` | `toju` | `tjeh` |
 | **ablative** | `toga` | `toga` | `toj` | = dat | = dat |
 | dative | `tomu` | `tomu` | `toj` | `tjema` | `tjem` |
@@ -1108,6 +1116,14 @@ split the two cases apart, and §4.2's `dobra` had it right already.
 | dative | `komu` | `czjemu` |
 | instrumental | `kjem` | `czjem` |
 | locative | `kom` | `czjom` |
+
+² **The masculine nominative is reduplicated, and that one cell is the whole
+irregularity.** The declension gives `toj`, which is what OCS `тъи` and
+Ukrainian `той` have; Russian doubled `тъ` onto itself and `tot` is the form a
+reader knows. It reaches nothing else — the neuter is `to` and the feminine
+`ta`, not `*toto` or `*tota` — and `sjej` does not share it, exactly as Russian's
+`сей` does not. `sjej` is therefore wholly regular and `tot` is a one-cell
+exception, the same shape as §5.5's `kto` and `czto`.
 
 The plural nominative is `tje` and not `ti`: the rest of the plural is built on
 `tje-` — `tjeh`, `tjem`, `tjemi` — and the nominative was the one cell that was

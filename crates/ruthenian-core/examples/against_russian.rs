@@ -12,7 +12,9 @@
 //! cargo run -p ruthenian-core --example against_russian
 //! ```
 
-use ruthenian_core::{Animacy::Inanimate, Case, Gender, Number, pronominal, relative, what, who};
+use ruthenian_core::{
+    Animacy::Inanimate, Case, Gender, Number, pronominal, relative, that, what, who,
+};
 use ruthenian_orthography::{Cyrillic, to_latin};
 
 fn ru(cyrillic: &str) -> String {
@@ -33,13 +35,9 @@ fn main() {
     let pl = Number::Plural;
     println!("  cell                       ruthenian    russian      cyrillic");
 
-    println!("\ntoj  — against Russian тот");
+    println!("\ntot  — against Russian тот");
     println!("{}", "-".repeat(70));
-    row(
-        "nom sg m",
-        pronominal("t", Case::Nominative, sg, m, Inanimate),
-        "тот",
-    );
+    row("nom sg m", that(Case::Nominative, sg, m, Inanimate), "тот");
     row(
         "gen sg m",
         pronominal("t", Case::Genitive, sg, m, Inanimate),
@@ -99,6 +97,34 @@ fn main() {
         "ins pl",
         pronominal("t", Case::Instrumental, pl, m, Inanimate),
         "теми",
+    );
+
+    println!("\nzjemlja — against Russian земля (soft declension I)");
+    println!("{}", "-".repeat(70));
+    row(
+        "nom sg",
+        ruthenian_core::noun("zjemlja", Case::Nominative, sg),
+        "земля",
+    );
+    row(
+        "gen sg",
+        ruthenian_core::noun("zjemlja", Case::Genitive, sg),
+        "земли",
+    );
+    row(
+        "dat sg",
+        ruthenian_core::noun("zjemlja", Case::Dative, sg),
+        "земле",
+    );
+    row(
+        "loc sg",
+        ruthenian_core::noun("zjemlja", Case::Locative, sg),
+        "земле",
+    );
+    row(
+        "acc sg",
+        ruthenian_core::noun("zjemlja", Case::Accusative, sg),
+        "землю",
     );
 
     println!("\nsjej — against Russian сей (archaic; the everyday word is этот)");

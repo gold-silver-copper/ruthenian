@@ -59,5 +59,5 @@ pub use grammar::{Animacy, Case, FiniteTense, Gender, Number, Person};
 pub use noun::{Noun, noun};
 pub use pronoun::{
     clitic_pronoun, clitic_reflexive, pronominal, pronoun, pronoun_paradigm, reflexive, relative,
-    what, who,
+    that, this, what, who,
 };

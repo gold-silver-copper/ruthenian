@@ -10,7 +10,7 @@
 
 use ruthenian_core::{
     Animacy, Case, Gender, Number, Person, adjective, clitic_pronoun, clitic_reflexive, noun,
-    pronominal, pronoun, reflexive, relative, short_adjective, what, who,
+    pronominal, pronoun, reflexive, relative, short_adjective, that, what, who,
 };
 
 mod support;
@@ -134,6 +134,15 @@ fn conformance() {
                 assert_eq!(f.len(), 3, "pronominal features are Case.Number.Gender");
                 pronominal(
                     lemma,
+                    case_of(f[0]),
+                    number_of(f[1]),
+                    gender_of(f[2]),
+                    Animacy::Inanimate,
+                )
+            }
+            "that" => {
+                let f: Vec<&str> = features.split('.').collect();
+                that(
                     case_of(f[0]),
                     number_of(f[1]),
                     gender_of(f[2]),
