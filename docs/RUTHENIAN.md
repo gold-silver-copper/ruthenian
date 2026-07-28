@@ -768,12 +768,6 @@ Not declensions — a single set of rules applied to every ending:
    at a seam: `zzena`, `czelovjek`, `szestj`, and `otjecz` + `-je` → `otjecze`,
    `pisz` + `-jeszj` → `piszeszj`;
 3. a stem-final soft sign belongs to the ending, not the stem (`kon` + `j`);
-3a. **a stem-final `j` is not written before `i`**: a front vowel palatalizes on
-   its own, so a stem already ending in the palatal has nothing left to mark —
-   `sj` + `-im` → `sim`. This is about the *stem's* `j` and not the ending's,
-   because rule 3 puts the soft sign in the ending: the soft series is uniformly
-   `-ja -je -ji -ju -jego -jem -jev -jami -jah`, and `-ji` is one of them, so
-   `kon` + `-ji` is `konji`;
 4. **first palatalization** before the vocative `-je`: `k`→`cz`, `g`→`zz`,
    `h`→`sz`, `c`→`cz` (`drug` → `druzze`, `otjec` → `otjecze`);
 5. **second palatalization** before any yat-derived `-i` — the locative
@@ -1141,7 +1135,10 @@ animate accusative singular on the ablative, because the `-a` form every Slavic
 language uses there continues PIE `*-ōd`; `togo` was a leftover from before §3.1
 split the two cases apart, and §4.2's `dobra` had it right already.
 
-`sjej` declines identically on the stem `sj-`: `sjego`, `sjemu`, `sim`, `sjem`.
+`sjej` declines identically on the stem `sj-`: `sjego`, `sjemu`, `sjim`, `sjem`,
+`sji`, `sjih`, `sjimi`. The stem is invariant across the whole paradigm, as §2.5
+requires of every word — Russian's `сим` and `сии` write `с-` there, but that
+would truncate a stem Ruthenian keeps whole.
 
 ## 5.5 Interrogative and relative
 

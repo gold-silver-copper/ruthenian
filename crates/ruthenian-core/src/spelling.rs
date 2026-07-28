@@ -291,23 +291,12 @@ const VOWELS: [char; 6] = ['a', 'e', 'i', 'o', 'u', 'y'];
 /// assert_eq!(join("dom", "ogo"), "domogo");
 /// assert_eq!(join("knig", "y"), "knigi");     // rule 1
 /// assert_eq!(join("otjecz", "je"), "otjecze"); // rule 2
-/// assert_eq!(join("sj", "im"), "sim");         // rule 3a: a stem-final j
-/// assert_eq!(join("kon", "ji"), "konji");      // but not the ending's
+/// assert_eq!(join("sj", "im"), "sjim");       // the stem is invariant (§2.5)
+/// assert_eq!(join("kon", "ji"), "konji");
 /// assert_eq!(join("czitaj", "jeszj"), "czitajeszj"); // rule 3b: jj is one ja
 /// ```
 pub fn join(stem: &str, ending: &str) -> String {
     let ending = spell_ending(stem, ending);
-    // Rule 3a: a **stem-final** `j` is not written before `i`. A front vowel
-    // palatalizes on its own, so a stem that already ends in the palatal has
-    // nothing left to mark — `sj` + `-im` is `sim`.
-    //
-    // It is deliberately about the stem's `j` and not the ending's. Rule 3
-    // assigns the soft sign to the *ending*, so the soft series is uniformly
-    // `-ja -je -ji -ju -jego -jem -jev -jami -jah`, and `-ji` is one of them:
-    // `konji`, not `koni`, or the series has a single exception in one cell.
-    if ending.starts_with('i') && stem.ends_with('j') {
-        return format!("{}{ending}", &stem[..stem.len() - 1]);
-    }
     // Rule 3b: a stem-final `j` and an ending-initial `j` are written once.
     // A class-1 present stem ends in `j` by construction (§7.3), so this is
     // every form of every such verb: `czitaj` + `-jeszj` is `czitajeszj`.

@@ -332,7 +332,7 @@ pub fn pronoun_paradigm(person: Person, number: Number, gender: Gender) -> Vec<(
 /// assert_eq!(pronominal("sj", Case::Nominative, Number::Singular, M, In), "sjej");
 /// assert_eq!(pronominal("sj", Case::Genitive, Number::Singular, M, In), "sjego");
 /// assert_eq!(pronominal("sj", Case::Dative, Number::Singular, M, In), "sjemu");
-/// assert_eq!(pronominal("sj", Case::Instrumental, Number::Singular, M, In), "sim");
+/// assert_eq!(pronominal("sj", Case::Instrumental, Number::Singular, M, In), "sjim");
 /// assert_eq!(pronominal("sj", Case::Locative, Number::Singular, M, In), "sjem");
 /// ```
 pub fn pronominal(

@@ -384,7 +384,7 @@ DEMONSTRATIVE = [
     ("pronominal", "sj", f"{case}.Singular.Masculine", form, "5.4")
     for case, form in [
         ("Nominative", "sjej"), ("Genitive", "sjego"), ("Dative", "sjemu"),
-        ("Instrumental", "sim"), ("Locative", "sjem"),
+        ("Instrumental", "sjim"), ("Locative", "sjem"),
     ]
 ]
 
