@@ -446,18 +446,13 @@ VERB = (
         "czitaju", "czitajeszj", "czitajet",
         "czitajevje", "czitajeta", "czitajetje",
         "czitajem", "czitajetje", "czitajut"])
-    # §7.5, the sigmatic aorist.
-    + finite("verb", "czitatj", "7.5", "Aorist", [
-        "czitah", "czita", "czita",
-        "czitahovje", "czitasta", "czitastje",
-        "czitahom", "czitastje", "czitasza"])
-    # §7.6 elides the dual with an ellipsis, so only the six it gives.
-    + [("verb", "czitatj", f"{p}.{n}.Imperfect", form, "7.6")
-       for (p, n), form in zip(
-           [("First", "Singular"), ("Second", "Singular"), ("Third", "Singular"),
-            ("First", "Plural"), ("Second", "Plural"), ("Third", "Plural")],
-           ["czitajah", "czitajasze", "czitajasze",
-            "czitajahom", "czitajaszetje", "czitajahu"])]
+    # §7.5, the one synthetic past, on the present stem.
+    + finite("verb", "czitatj", "7.5", "Imperfect", [
+        "czitajah", "czitajasze", "czitajasze",
+        "czitajahovje", "czitajaszeta", "czitajaszetje",
+        "czitajahom", "czitajaszetje", "czitajahu"])
+    + [("verb", lemma, "First.Singular.Imperfect", form, "7.5") for lemma, form in [
+        ("govoritj", "govorjah"), ("vidjetj", "vidjah"), ("pisatj'", "piszah")]]
     # §7.3's class-6 example, which the word-final mark selects.
     + finite("verb", "pisatj'", "7.3", "NonPast", [
         "piszu", "piszeszj", "piszet", "", "", "", "", "", ""])[:3]
@@ -471,9 +466,6 @@ VERB = (
     + finite("byti", "-", "7.9", "NonPast", [
         "jesmj", "jesi", "jestj", "jesvje", "jesta", "jestje",
         "jesm", "jestje", "sutj"])
-    + finite("byti", "-", "7.9", "Aorist", [
-        "byh", "by", "by", "byhovje", "bysta", "bystje",
-        "byhom", "bystje", "bysza"])
     + finite("byti", "-", "7.9", "Imperfect", [
         "bjah", "bjasze", "bjasze", "bjahovje", "bjaszeta", "bjaszetje",
         "bjahom", "bjaszetje", "bjahu"])
@@ -492,7 +484,8 @@ VERB = (
            ("Second", "Singular", "czitaj"), ("Second", "Dual", "czitajta"),
            ("Second", "Plural", "czitajtje"),
            ("First", "Dual", "czitajvje"), ("First", "Plural", "czitajm")]]
-    + [("infinitive", "bytj", "-", "bytj", "7.9")]
+    + [("infinitive", "bytj", "-", "bytj", "7.9"),
+       ("imperative", "bytj", "Second.Singular", "budj", "7.9")]
     # §7.12. The participles return an adjective *stem*, so the corpus holds the
     # stem and the long form the stem declines to; the gerunds are indeclinable
     # and are finished forms.

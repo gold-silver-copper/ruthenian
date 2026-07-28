@@ -80,10 +80,10 @@ fn corpus_row_count() {
     // accusatives); §5.1's 11 pronouns × 8; §5.1a's 14 clitics; §5.2's 6
     // reflexives and 2 clitic reflexives; §5.4's 18 `toj` cells and 5 `sjej`;
     // §5.4's 7 `tot` cells; §5.5's 7 + 7 interrogatives and 4 relative forms;
-    // §7's 78 verb cells; §7.12's 8 derivations with 6 long forms; and §6's 71.
+    // §7's 67 verb cells; §7.12's 8 derivations with 6 long forms; and §6's 71.
     assert_eq!(
         recorded,
-        11 * 24 + 2 * 42 + 11 * 8 + 14 + 6 + 2 + 18 + 5 + 7 + 7 + 7 + 4 + 78 + 14 + 71,
+        11 * 24 + 2 * 42 + 11 * 8 + 14 + 6 + 2 + 18 + 5 + 7 + 7 + 7 + 4 + 67 + 14 + 71,
         "the corpus is 11 nouns + 2 adjectives + §5"
     );
     let nouns = corpus().iter().filter(|r| r.pos == "noun").count();
@@ -234,7 +234,7 @@ fn paradigm_is_form() {
     // Every verb's table.
     for w in ["czitatj", "pisatj'", "govoritj", "vidjetj"] {
         let table = verb_paradigm(w);
-        assert_eq!(table.len(), 27, "{w}: 3 persons × 3 numbers × 3 tenses");
+        assert_eq!(table.len(), 18, "{w}: 3 persons × 3 numbers × 2 tenses");
         for (person, number, tense, form) in table {
             assert_eq!(form, verb(w, person, number, tense));
         }
@@ -389,7 +389,7 @@ fn totality_no_panic() {
         ] {
             assert!(!f(w).is_empty(), "{w}");
         }
-        assert_eq!(verb_paradigm(w).len(), 27);
+        assert_eq!(verb_paradigm(w).len(), 18);
     }
     for number in Number::ALL {
         for person in Person::ALL {
@@ -602,11 +602,7 @@ fn grammar_types_are_exhaustive() {
     assert_eq!(Gender::ALL.len(), 3);
     assert_eq!(Animacy::ALL.len(), 2);
     assert_eq!(Person::ALL.len(), 3);
-    assert_eq!(
-        FiniteTense::ALL.len(),
-        3,
-        "§7.1 gives three synthetic tenses"
-    );
+    assert_eq!(FiniteTense::ALL.len(), 2, "§7.1 gives two synthetic tenses");
 
     // No duplicates, which a copy-paste edit to an ALL list would introduce.
     let mut cases = Case::ALL.to_vec();

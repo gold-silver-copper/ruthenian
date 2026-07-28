@@ -63,16 +63,19 @@ pub enum Person {
     Third,
 }
 
-/// The three **synthetic** tenses (§7.1, §7.8).
+/// The two **synthetic** tenses (§7.1, §7.8).
 ///
 /// `NonPast` is the present for an imperfective and the future for a
 /// perfective: the morphology is identical and only the sense differs, which is
 /// why there is no `Present` and no `Future`. The perfect, pluperfect and
 /// imperfective future are periphrastic and are composed by the caller.
+///
+/// There is no aorist. §7.1 once had three past tenses and now has two — the
+/// synthetic past below and the periphrastic perfect — which is where
+/// Interslavic also arrived, and for the same reason.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum FiniteTense {
     NonPast,
-    Aorist,
     Imperfect,
 }
 
@@ -112,9 +115,5 @@ impl Person {
 
 impl FiniteTense {
     /// Every synthetic tense.
-    pub const ALL: [FiniteTense; 3] = [
-        FiniteTense::NonPast,
-        FiniteTense::Aorist,
-        FiniteTense::Imperfect,
-    ];
+    pub const ALL: [FiniteTense; 2] = [FiniteTense::NonPast, FiniteTense::Imperfect];
 }

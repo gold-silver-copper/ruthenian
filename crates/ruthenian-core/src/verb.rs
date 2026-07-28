@@ -134,16 +134,13 @@ impl Verb {
 /// // Without the mark it is class 1 and a different verb.
 /// assert_eq!(verb("pisatj", First, Singular, NonPast), "pisaju");
 ///
-/// // §7.5's aorist: the 2nd and 3rd singular are the bare stem, which is what
-/// // makes an aorist recognizable at sight.
-/// assert_eq!(verb("czitatj", First, Singular, Aorist), "czitah");
-/// assert_eq!(verb("czitatj", Second, Singular, Aorist), "czita");
-/// assert_eq!(verb("czitatj", Third, Plural, Aorist), "czitasza");
-///
-/// // §7.6's imperfect.
+/// // §7.6's imperfect, on the present stem so the ending contracts.
 /// assert_eq!(verb("czitatj", First, Singular, Imperfect), "czitajah");
 /// assert_eq!(verb("czitatj", Second, Singular, Imperfect), "czitajasze");
 /// assert_eq!(verb("czitatj", Third, Plural, Imperfect), "czitajahu");
+/// assert_eq!(verb("govoritj", First, Singular, Imperfect), "govorjah");
+/// assert_eq!(verb("vidjetj", First, Singular, Imperfect), "vidjah");
+/// assert_eq!(verb("pisatj'", First, Singular, Imperfect), "piszah");
 /// ```
 pub fn verb(word: &str, person: Person, number: Number, tense: FiniteTense) -> String {
     let Some(v) = Verb::read(word) else {
@@ -151,8 +148,13 @@ pub fn verb(word: &str, person: Person, number: Number, tense: FiniteTense) -> S
     };
     match tense {
         FiniteTense::NonPast => present(&v, person, number),
-        FiniteTense::Aorist => join(&v.infinitive, aorist_ending(person, number)),
-        FiniteTense::Imperfect => join(&v.infinitive, imperfect_ending(person, number)),
+        // On the **present** stem, which is what makes the ending contract.
+        // §7.6 only ever exemplifies `czitatj`, whose present stem `czitaj-`
+        // and infinitive stem `czita-` both give `czitajah`, so its one example
+        // could not distinguish them — but every other class can. On the
+        // infinitive stem the vowels stack (`govorijah`, `vidjejah`); on the
+        // present stem rules 3b and 2 do the contracting for free.
+        FiniteTense::Imperfect => join(&v.present(), imperfect_ending(person, number)),
     }
 }
 
@@ -200,25 +202,7 @@ fn present(v: &Verb, person: Person, number: Number) -> String {
     join(&stem, ending)
 }
 
-/// §7.5, the OCS sigmatic aorist, on the infinitive stem.
-fn aorist_ending(person: Person, number: Number) -> &'static str {
-    use Number::*;
-    use Person::*;
-    match (person, number) {
-        (First, Singular) => "h",
-        // The bare stem — the inherited shape, and the reason an aorist is
-        // recognizable at sight.
-        (Second | Third, Singular) => "",
-        (First, Dual) => "hovje",
-        (Second, Dual) => "sta",
-        (Third, Dual) => "stje",
-        (First, Plural) => "hom",
-        (Second, Plural) => "stje",
-        (Third, Plural) => "sza",
-    }
-}
-
-/// §7.6, the imperfect, on the infinitive stem.
+/// §7.6, the imperfect.
 fn imperfect_ending(person: Person, number: Number) -> &'static str {
     use Number::*;
     use Person::*;
@@ -269,6 +253,19 @@ pub fn imperative(word: &str, person: Person, number: Number) -> String {
     let Some(v) = Verb::read(word) else {
         return UNREADABLE.to_string();
     };
+    // §7.9's imperative is `bud-`, a root the present stem `byj-` cannot reach:
+    // `byti` is suppletive, and this is the one cell of it the general path
+    // would otherwise get wrong (`byj` for `budj`).
+    if v.infinitive == "by" {
+        return match (person, number) {
+            (Second, Singular) => "budj".to_string(),
+            (Second, Dual) => "budjta".to_string(),
+            (Second, Plural) => "budjtje".to_string(),
+            (First, Dual) => "budjvje".to_string(),
+            (First, Plural) => "budjm".to_string(),
+            _ => byti(person, number, FiniteTense::NonPast),
+        };
+    }
     // §7.10 gives no synthetic form here; the present indicative is what the
     // particle attaches to.
     if matches!((person, number), (Third, _) | (First, Singular)) {
@@ -365,29 +362,19 @@ pub fn l_participle(word: &str, gender: Gender, number: Number) -> String {
 /// assert_eq!(byti(First, Dual, NonPast), "jesvje");
 /// assert_eq!(byti(Third, Plural, NonPast), "sutj");
 ///
-// The aorist is regular, so it is the general path on `bytj` rather than a
-/// // second table.
-/// assert_eq!(byti(First, Singular, Aorist), "byh");
-/// assert_eq!(byti(Second, Singular, Aorist), "by");
-/// assert_eq!(byti(Third, Plural, Aorist), "bysza");
-/// assert_eq!(byti(First, Singular, Aorist), verb("bytj", First, Singular, Aorist));
+/// // The `l`-participle is regular — §7.7's rule on `by-` — so it is the
+/// // general path on `bytj` rather than a second table.
 /// assert_eq!(l_participle("bytj", ruthenian_core::Gender::Masculine, Singular), "byl");
 ///
 /// assert_eq!(byti(First, Singular, Imperfect), "bjah");
+/// // and the imperative, which `bud-` supplies and the present stem cannot
+/// assert_eq!(ruthenian_core::imperative("bytj", Second, Singular), "budj");
 /// assert_eq!(byti(Third, Plural, Imperfect), "bjahu");
 /// ```
 pub fn byti(person: Person, number: Number, tense: FiniteTense) -> String {
     use FiniteTense::*;
     use Number::*;
     use Person::*;
-    // §7.9's own table marks the aorist and the `l`-participle **regular** —
-    // §7.5's endings on the stem `by-` — so they are not tabulated here. They go
-    // through the general path on the lemma `bytj`, and law 2's second-path
-    // exemption is spent only on the present and the imperfect, which are the
-    // two rows that table marks irregular.
-    if tense == Aorist {
-        return verb("bytj", person, number, tense);
-    }
     match (tense, person, number) {
         (NonPast, First, Singular) => "jesmj",
         (NonPast, Second, Singular) => "jesi",
@@ -398,7 +385,6 @@ pub fn byti(person: Person, number: Number, tense: FiniteTense) -> String {
         (NonPast, First, Plural) => "jesm",
         (NonPast, Second, Plural) => "jestje",
         (NonPast, Third, Plural) => "sutj",
-        (Aorist, ..) => unreachable!("delegated to the general path above"),
         (Imperfect, First, Singular) => "bjah",
         (Imperfect, Second | Third, Singular) => "bjasze",
         (Imperfect, First, Dual) => "bjahovje",
@@ -447,16 +433,16 @@ pub fn future_auxiliary(person: Person, number: Number) -> String {
     .to_string()
 }
 
-/// Every synthetic cell of one verb: 3 persons × 3 numbers × 3 tenses.
+/// Every synthetic cell of one verb: 3 persons × 3 numbers × 2 tenses.
 ///
 /// Law 2 — this calls [`verb`] rather than computing anything.
 ///
 /// ```
 /// use ruthenian_core::verb_paradigm;
-/// assert_eq!(verb_paradigm("czitatj").len(), 27);
+/// assert_eq!(verb_paradigm("czitatj").len(), 18);
 /// ```
 pub fn verb_paradigm(word: &str) -> Vec<(Person, Number, FiniteTense, String)> {
-    let mut out = Vec::with_capacity(27);
+    let mut out = Vec::with_capacity(18);
     for tense in FiniteTense::ALL {
         for number in Number::ALL {
             for person in Person::ALL {

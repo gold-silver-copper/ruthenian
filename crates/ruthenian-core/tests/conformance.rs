@@ -45,7 +45,6 @@ fn person_of(name: &str) -> Person {
 fn tense_of(name: &str) -> FiniteTense {
     match name {
         "NonPast" => FiniteTense::NonPast,
-        "Aorist" => FiniteTense::Aorist,
         "Imperfect" => FiniteTense::Imperfect,
         other => panic!("unknown tense in corpus: {other}"),
     }

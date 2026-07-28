@@ -31,7 +31,7 @@ references throughout the source are to the specification.
 | **adjectives** (§4) | complete — both declensions × 3 genders, plus §4.3's degrees |
 | **pronouns** (§5.1, §5.1a, §5.2) | complete — personal, clitic and reflexive. §5.4–§5.6's non-personal series have **no entry point yet** |
 | **numerals** (§6) | complete — cardinals to `u64::MAX`, one rule per rank, and §6.5's ordinals |
-| **verbs** (§7.3–§7.12) | complete — six classes, three synthetic tenses, the imperative, `byti`, `budu`, the `l`-participle, four participles and two gerunds |
+| **verbs** (§7.3–§7.12) | complete — six classes, two synthetic tenses, the imperative, `byti`, `budu`, the `l`-participle, four participles and two gerunds |
 
 ## Measurements
 

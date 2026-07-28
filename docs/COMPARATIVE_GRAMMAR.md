@@ -683,11 +683,12 @@ Keep the two-stem model and Zaliznyak classes 1–6, add the **dual** from OCS �
 | 2 | `-jeszj` | `-jeta` | `-jetje` |
 | 3 | `-jet` | `-jetje` | `-ut` |
 
-The aorist and imperfect are **core tenses**, not an optional register. This is
-where Ruthenian parts company with Interslavic most sharply, and the comparison
-is instructive.
+**Ruthenian ends up where Interslavic did, by a different road.** An earlier
+version of this part argued the opposite — that the aorist and imperfect are
+core tenses and that keeping them is what a conservative standard is for — so
+the reversal is worth setting out.
 
-**Interslavic merges them away.** From its verbs page, verbatim:
+Interslavic merges the two. From its verbs page, verbatim:
 
 > Old Church Slavonic, as well as most South Slavic languages … distinguish[es]
 > between the imperfect, perfect, pluperfect and aorist tenses. Interslavic
@@ -703,22 +704,25 @@ The result is one "simple past", with a linking vowel for consonant stems:
 | `dělati` | `dělah, dělaše, dělaše, dělahmo, dělaste, dělahu` | |
 | `nesti` | | `neseh, neseše, neseše, nesehmo, neseste, nesehu` |
 
-Two observations follow. First, **the merged form is really an imperfect**: its
-2/3sg is `-še`. The diagnostic aorist shape — the *bare stem* in 2sg and 3sg — is
-exactly what merging discards. Ruthenian keeps it (`czita`, `czita`), which is
-the single most recognisable feature of a real aorist.
+Interslavic's stated reason is comprehension: *"For a vast majority of Slavs,
+the endings of the simple past are not understandable at all."* That is the
+right ground for an auxiliary language and the wrong one for this project, which
+optimises for conservatism and accepts costs of exactly that kind elsewhere.
 
-Second, Interslavic warns against the whole area: *"For a vast majority of Slavs,
-the endings of the simple past are not understandable at all. In communication
-with Poles, Russians etc. it is wiser to avoid them altogether."* That is the
-correct advice for an auxiliary language optimising for comprehension across
-living speakers. Ruthenian optimises for conservatism instead, so the warning
-identifies a cost it accepts rather than a reason to change course.
+Ruthenian's reason is different, and it is internal. Note what the merged form
+is: **an imperfect**, its 2/3sg being `-še`. What merging discards is the
+diagnostic aorist shape, the *bare stem* in the second and third singular — and
+that shape does not survive contact with Ruthenian's own paradigms. `dvinutj`
+gives `dvinu` for the first singular present *and* for the aorist second and
+third singular, and so does every verb of class 3. A tense whose one recognisable
+form is a homograph of another tense's is not carrying the distinction it was
+restored for.
 
-Ruthenian takes **one** aorist formation — OCS's productive new sigmatic
-(`-xъ`, `-xomъ`, `-šę` → `-h`, `-hom`, `-sza`) — rather than OCS's three. The
-root and sigmatic aorists are stem-specific and partly irregular, which is the
-kind of class-by-class irregularity §13.7 removes elsewhere.
+So the aorist goes (`RUTHENIAN.md` §7.1) and the imperfect stays, which is the
+same outcome Interslavic reached — but reached here by finding that the
+conservative option was not paying for itself, rather than by weighing
+comprehension. Ruthenian's past is built on the **present** stem, so its endings
+contract without a linking vowel: `govorjah`, not Interslavic's `-eh` device.
 
 ## 13.6 The payoff: numeral agreement stops being a fossil
 

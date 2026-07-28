@@ -29,7 +29,7 @@ All forms below are in the Ruthenian Latin alphabet, specified in §2.1.
 | verb classes | **6** | 16 | 13 | 5 | 10 |
 | stress | fixed, **not written** | 10 patterns | mobile | mobile | pitch |
 | adjective long/short | **both** | both | both | both | n/a |
-| past tenses | **3** (aorist, imperfect, perfect) | 1 | 1 | 3 | 4 |
+| past tenses | **2** (past, perfect) | 1 | 1 | 3 | 4 |
 | copula | **full, with dual** | invariant, omitted | full | full | full |
 | clitic pronouns | **kept** | lost | relics | full | full |
 | aspect | lexical + derived | lexical | lexical | emerging | n/a |
@@ -37,7 +37,7 @@ All forms below are in the Ruthenian Latin alphabet, specified in §2.1.
 | yat distinction | **kept** (as `-i`) | lost | kept (as `i`) | kept (as `ě`) | n/a |
 
 **Restored:** the ablative, the vocative, the dual, dual pronouns, dual verb
-agreement, the aorist, the imperfect, the OCS long/short adjective, the full
+agreement, the OCS long/short adjective, the full
 copula, and the **full/clitic pronoun opposition** with second-position
 placement.
 **Removed:** mobile stress, heteroclitics, marginal cases, soft adjective stems,
@@ -1341,25 +1341,40 @@ ordinal — `pjataja czastj` (⅕). `poltora` "one and a half" takes the dual.
 | Category | Values |
 |---|---|
 | aspect | imperfective, perfective — **derived, never listed** |
-| tense | present, **aorist**, **imperfect**, perfect, pluperfect, future |
+| tense | present, **past**, perfect, pluperfect, future |
 | mood | indicative, imperative, conditional |
 | voice | active, passive |
 | person | 1, 2, 3 |
 | number | singular, **dual**, plural |
 
-Ruthenian has **three past tenses**, as OCS did, and they divide by function
-rather than by aspect:
+Ruthenian has **two past tenses**:
 
 | Tense | Function | Formation |
 |---|---|---|
-| **aorist** | a single completed event — narrative past | synthetic, `-h-`/`-s-` |
-| **imperfect** | ongoing or repeated past | synthetic, `-jah-` |
+| **past** | the synthetic past | synthetic, `-jah-` (§7.5) |
 | **perfect** | a past state still relevant now | `l`-participle + copula |
 | pluperfect | past before the past | `l`-participle + past copula |
 
-Aspect and the past tenses are **independent** axes, as in OCS: a perfective verb
-has an imperfect (`poczitajasze` "he kept finishing"), an imperfective has an
-aorist (`czita` "he read, once"). This is a large grammar, deliberately.
+**There is no aorist.** OCS had one and an earlier revision of this document
+restored it, on the argument that the aorist/imperfect opposition is what makes
+a conservative Slavic standard conservative. It is dropped for two reasons.
+
+The distinction it draws is one no living Slavic language maintains, and
+Interslavic — which faced the same choice — reports that "for a vast majority of
+Slavs, the endings of the simple past are not understandable at all". Ruthenian
+optimises for conservatism rather than for comprehension, so that alone would
+not settle it.
+
+What settles it is that the aorist earns nothing here. Its distinguishing shape
+is the bare stem in the second and third singular, and that shape **collides**:
+`dvinutj` gives `dvinu` for both the first singular present and the aorist
+second and third singular, in every verb of class 3. A tense whose diagnostic
+form is a homograph of another tense's is not carrying the distinction it was
+restored for. Aspect already marks completedness on every verb, which is what
+Slavic exchanged the old tense system for in the first place.
+
+Aspect and the past are **independent** axes, as in OCS: a perfective verb has a
+past (`poczitajasze` "he kept finishing") and so does an imperfective.
 
 ## 7.2 Aspect: mostly derived, with two stored classes
 
@@ -1518,23 +1533,16 @@ are the only verbs where the class plus the infinitive is not enough.
 `czitatj`: `czitaju, czitajeszj, czitajet` · `czitajevje, czitajeta, czitajetje` ·
 `czitajem, czitajetje, czitajut`.
 
-## 7.5 Aorist
+## 7.5 The past
 
-The OCS sigmatic aorist. Built on the **infinitive** stem.
+The one synthetic past. It is built on the **present stem**, which is what makes
+its ending contract: `govorjah` and not `*govorijah`, `vidjah` and not
+`*vidjejah`.
 
-| | Singular | Dual | Plural |
-|---|---|---|---|
-| 1 | `-h` | `-hovje` | `-hom` |
-| 2 | `-∅` | `-sta` | `-stje` |
-| 3 | `-∅` | `-stje` | `-sza` |
-
-`czitatj`: `czitah, czita, czita` · `czitahovje, czitasta, czitastje` ·
-`czitahom, czitastje, czitasza`.
-
-The second and third singular are bare stem — the inherited shape, and the reason
-the aorist is instantly recognizable.
-
-## 7.6 Imperfect
+An earlier revision built it on the infinitive stem, which happens to give the
+same answer for `czitatj` — `czitaj-` and `czita-` both yield `czitajah` — and a
+different one for every class whose theme vowel is not `-a`. §7.6's single
+example could not tell them apart.
 
 | | Singular | Dual | Plural |
 |---|---|---|---|
@@ -1542,8 +1550,11 @@ the aorist is instantly recognizable.
 | 2 | `-jasze` | `-jaszeta` | `-jaszetje` |
 | 3 | `-jasze` | `-jaszetje` | `-jahu` |
 
-`czitatj`: `czitajah, czitajasze, czitajasze` · … · `czitajahom, czitajaszetje,
-czitajahu`.
+`czitatj`: `czitajah, czitajasze, czitajasze` · `czitajahovje, czitajaszeta,
+czitajaszetje` · `czitajahom, czitajaszetje, czitajahu`.
+
+`govoritj` gives `govorjah`, `vidjetj` gives `vidjah` and `pisatj'` gives
+`piszah` — the last by §3.8's rule 2, with no rule of its own.
 
 ## 7.7 Perfect and pluperfect
 
@@ -1554,23 +1565,14 @@ The `l`-participle, agreeing in gender and number, with the copula:
 | | `czital` | `czitala` | `czitalo` | `czitala` | `czitali` |
 
 - **perfect**: `jesmj czital` "I have read"
-- **pluperfect**: `byh czital` / `bjah czital` — see below
+- **pluperfect**: `bjah czital` "I had read"
 
 Unlike Russian, the copula is **not** dropped: `jesmj czital`, not `*czital`.
 
-**Two pluperfects, and the auxiliary chooses between them.** OCS formed the
-pluperfect with either the aorist or the imperfect of `byti`, and the two are not
-synonymous. Ruthenian keeps both, with the auxiliary's own tense doing exactly
-the work it does elsewhere:
-
-| | Auxiliary | Sense |
-|---|---|---|
-| `byh czital` | aorist of `byti` | "I had read" — the anterior state is a completed point |
-| `bjah czital` | imperfect of `byti` | "I had been reading" — the anterior state was ongoing |
-
-This costs nothing: both auxiliaries already exist in §7.9's paradigm, and the
-contrast is the same aorist/imperfect opposition the language draws everywhere
-else, applied one layer up.
+There is **one** pluperfect, not two. An earlier revision had `byh czital`
+beside `bjah czital`, the aorist auxiliary against the imperfect one; with the
+aorist gone (§7.1) only the second remains, and the contrast it drew went with
+the tense that carried it.
 
 ## 7.8 Future
 
@@ -1589,22 +1591,22 @@ dual included, and **never omitted**.
 | | Singular | Dual | Plural |
 |---|---|---|---|
 | **present** | `jesmj`, `jesi`, `jestj` | `jesvje`, `jesta`, `jestje` | `jesm`, `jestje`, `sutj` |
-| **aorist** | `byh`, `by`, `by` | `byhovje`, `bysta`, `bystje` | `byhom`, `bystje`, `bysza` |
-| **imperfect** | `bjah`, `bjasze`, `bjasze` | `bjahovje`, `bjaszeta`, `bjaszetje` | `bjahom`, `bjaszetje`, `bjahu` |
+| **past** | `bjah`, `bjasze`, `bjasze` | `bjahovje`, `bjaszeta`, `bjaszetje` | `bjahom`, `bjaszetje`, `bjahu` |
 | **future** | `budu`, `budjeszj`, `budjet` | `budjevje`, `budjeta`, `budjetje` | `budjem`, `budjetje`, `budut` |
 
-Participle `byl/byla/bylo/byli`; infinitive `bytj`; imperative `budi`.
+Participle `byl/byla/bylo/byli`; infinitive `bytj`; imperative `budj`.
 
 The infinitive is `bytj` and not `byti`: §7.3's classes make `-tj` the ending of
 every Ruthenian infinitive, and §7.2 already writes `bytj` when it lists the
 verbs shaped like `pitj` and `mytj`. `byti` was the OCS citation form left
 standing.
 
-**Two of these rows are regular and are not stored anywhere.** The aorist is
-§7.5's endings on `by-` and the participle is §7.7's rule on the same stem, so
-both come out of the ordinary machinery given the lemma `bytj`. What is
-genuinely suppletive is the present, the imperfect, the future and the
-imperative.
+**One of these rows is regular and is not stored anywhere.** The participle is
+§7.7's rule on the stem `by-`, so it comes out of the ordinary machinery given
+the lemma `bytj`. What is genuinely suppletive is the present, the past, the
+future and the imperative — and the imperative is the one cell the general path
+would get wrong on its own, since `bud-` is a root the present stem `byj-`
+cannot reach.
 
 Russian's zero copula (`он врач`) is an East Slavic innovation. Ruthenian follows
 OCS, Polish and Ukrainian: `on jestj vracz`.
@@ -1621,9 +1623,8 @@ The stems, and their sources:
 | slot | stem | from | regular? |
 |---|---|---|---|
 | present | `jes-`, 3pl `s-` | PIE `*h₁es-` "be, exist" | no — athematic |
-| aorist | `by-` | PIE `*bʰuH-` | **yes** — §7.5's endings on the infinitive stem |
 | l-participle | `by-` | `*bʰuH-` | **yes** — §7.7's rule on the same stem |
-| imperfect | `bja-` | `*bʰuH-` | no — regular would be `byja-` |
+| past | `bja-` | `*bʰuH-` | no — regular would be `byja-` |
 | future | `bud-` | `*bʰuH-`, nasal present | no |
 | imperative | `bud-` | `*bʰuH-` | no |
 
@@ -1638,7 +1639,7 @@ It was declined because the split does not actually remove the suppletion — th
 `*bʰuH-` verb is itself `by-` against `bud-` — so paying for it would mean
 regularizing onto one of them, and either choice loses pan-Slavic material that
 every Slavic speaker knows on sight: onto `bud-` costs `byti`, `byl` and the
-aorist, giving a past `budjel`; onto `by-` costs `budu`, the most recognizable
+past, giving `budjel`; onto `by-` costs `budu`, the most recognizable
 future marker in Slavic. One suppletive verb is cheaper than either.
 
 ## 7.10 Imperative and conditional
@@ -2058,7 +2059,7 @@ numbers) never yield 24 forms:
 | noun, declension I feminine (`zzena`) | 6 | 3 | 5 | **14** |
 | noun, declension III (`noczj`) | 3 | 3 | 5 | **11** |
 | adjective (`dobryj`) | — | — | — | 24 across all genders |
-| verb, one aspect | 9 present + 5 past + 3 imperative + 6 participles |
+| verb, one aspect | 9 present + 9 past + 3 imperative + 6 participles |
 
 Compare Russian, which has 12 nominal cells and typically 9–11 distinct forms.
 Ruthenian doubles the categories and adds four to six forms, because the added
@@ -2105,7 +2106,7 @@ Measured lemma inventories, each from a full scan:
 Czech and Serbo-Croatian are added for **lexical breadth**, not for a feature:
 the arguments that once justified them — Czech vowel length, Serbo-Croatian pitch
 accent and a living aorist — are all moot, since Ruthenian marks neither length
-nor pitch (§2.1) and takes its aorist from OCS (§7.5). They supply attested
+nor pitch (§2.1) and has no aorist at all (§7.1). They supply attested
 cognates where East Slavic has gaps, and nothing else. Their counts must be
 measured by a full scan before they appear here.
 
@@ -2129,7 +2130,7 @@ Russian, adjusted wherever Russian destroyed something the grammar needs:
    | yat | Ukrainian, Polish, OCS |
    | the nasals (etymology only) | Polish |
    | the second palatalization | Ukrainian, OCS |
-   | the dual, the aorist, the imperfect | OCS |
+   | the dual, the past tense | OCS |
    | the vocative | Ukrainian, OCS |
 
 3. **Apply §2.6's correspondences** to derive the Ruthenian form.
@@ -2279,13 +2280,13 @@ not, by rule rather than by taste.
 
 # 13. Open questions
 
-**Settled in this revision.** What "conservative" means (§1: grammar from OCS,
+**Settled in this revision.** The aorist, dropped (§7.1). What "conservative" means (§1: grammar from OCS,
 phonology from Russian, vocabulary East Slavic with an OCS learned layer); the
 sound correspondences (§2.6) and the productive learned layer (§2.6a); the
 fleeting vowel, abolished (§3.9); the animate accusative (§3.7); the predicate
 adjective (§4); the clitic pronoun series and Wackernagel placement (§5.1a,
 §10.1a); the reflexive as a free clitic (§5.2); aspect, with its two stored
-classes (§7.2, §7.2a); one aorist formation (§7.5); the two pluperfects (§7.7);
+classes (§7.2, §7.2a); the one synthetic past (§7.5); the single pluperfect (§7.7);
 the third-person imperative (§7.10); seven lexical sources with tiers (§12.1);
 and the Russian-anchored reconstruction method (§12.2).
 
@@ -2350,7 +2351,7 @@ Not decisions — prose this document is missing, listed so it is not forgotten.
 - **Worked example texts.** The spec has paradigms and no connected prose, and
   nothing tests a grammar like translating a page into it. Suggested: the OCS
   Lord's Prayer, attested in every source language so all columns can stand side
-  by side; a narrative passage for the aorist/imperfect contrast; and a technical
+  by side; a narrative passage for the past tenses; and a technical
   paragraph to exercise derivation and borrowing. **This will surface gaps no
   paradigm table can** — it is the highest-value item here.
 
