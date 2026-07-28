@@ -9,8 +9,9 @@
 //! load-bearing.
 
 use ruthenian_core::{
-    Animacy, Case, Gender, Number, Person, adjective, clitic_pronoun, clitic_reflexive, noun,
-    pronominal, pronoun, reflexive, relative, short_adjective, that, what, who,
+    Animacy, Case, FiniteTense, Gender, Number, Person, adjective, byti, clitic_pronoun,
+    clitic_reflexive, future_auxiliary, imperative, infinitive, l_participle, noun, pronominal,
+    pronoun, reflexive, relative, short_adjective, that, verb, what, who,
 };
 
 mod support;
@@ -36,6 +37,15 @@ fn person_of(name: &str) -> Person {
         "Second" => Person::Second,
         "Third" => Person::Third,
         other => panic!("unknown person in corpus: {other}"),
+    }
+}
+
+fn tense_of(name: &str) -> FiniteTense {
+    match name {
+        "NonPast" => FiniteTense::NonPast,
+        "Aorist" => FiniteTense::Aorist,
+        "Imperfect" => FiniteTense::Imperfect,
+        other => panic!("unknown tense in corpus: {other}"),
     }
 }
 
@@ -149,6 +159,31 @@ fn conformance() {
                     Animacy::Inanimate,
                 )
             }
+            // Person.Number.Tense
+            "verb" | "byti" => {
+                let f: Vec<&str> = features.split('.').collect();
+                assert_eq!(f.len(), 3, "verb features are Person.Number.Tense");
+                let (p, n, t) = (person_of(f[0]), number_of(f[1]), tense_of(f[2]));
+                match pos.as_str() {
+                    "verb" => verb(lemma, p, n, t),
+                    _ => byti(p, n, t),
+                }
+            }
+            // Person.Number.Future — §7.8's auxiliary has no tense parameter.
+            "future_auxiliary" => {
+                let f: Vec<&str> = features.split('.').collect();
+                future_auxiliary(person_of(f[0]), number_of(f[1]))
+            }
+            "imperative" => {
+                let f: Vec<&str> = features.split('.').collect();
+                imperative(lemma, person_of(f[0]), number_of(f[1]))
+            }
+            // Gender.Number
+            "l_participle" => {
+                let f: Vec<&str> = features.split('.').collect();
+                l_participle(lemma, gender_of(f[0]), number_of(f[1]))
+            }
+            "infinitive" => infinitive(lemma),
             "who" => who(case_of(features)),
             "what" => what(case_of(features)),
             "relative" => {

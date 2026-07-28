@@ -10,8 +10,8 @@
 //! ```
 
 use ruthenian_core::{
-    Adjective, Animacy, Case, Gender, Noun, Number, Person, clitic_pronoun, comparative, pronoun,
-    reflexive, superlative,
+    Adjective, Animacy, Case, FiniteTense, Gender, Noun, Number, Person, clitic_pronoun,
+    comparative, imperative, infinitive, l_participle, pronoun, reflexive, superlative, verb,
 };
 
 /// Lemmas that exercise something distinct, one per line of interest.
@@ -62,7 +62,43 @@ fn main() {
     }
     adjectives();
     pronouns();
+    verbs();
     println!();
+}
+
+/// §7's classes, one verb each, in all three synthetic tenses.
+fn verbs() {
+    let lemmas = [
+        ("czitatj", "1 — theme stays, -j- added"),
+        ("mytj", "1 — monosyllabic, so no theme to drop"),
+        ("njegodovatj", "2 — ova -> uj"),
+        ("dvinutj", "3 — theme drops"),
+        ("govoritj", "4 — nothing to mutate, so -ju"),
+        ("ljubitj", "4 — b -> blj, so the bare -u"),
+        ("vidjetj", "5 — d -> dzz"),
+        ("ljetjetj", "5 — t -> tcz, against leczitj's leczu"),
+        ("ljeczitj", "4 — cz is already palatal"),
+        ("pisatj'", "6 — the mark selects it; mutates throughout"),
+    ];
+    for (lemma, note) in lemmas {
+        println!("\n{lemma}  — class {note}");
+        println!("{}", "-".repeat(74));
+        for tense in FiniteTense::ALL {
+            let row: Vec<String> = Number::ALL
+                .iter()
+                .flat_map(|&n| Person::ALL.map(move |p| verb(lemma, p, n, tense)))
+                .collect();
+            println!("  {:<10} {}", format!("{tense:?}"), row.join("  "));
+        }
+        println!(
+            "  {:<10} {}  ·  l-part {}  ·  inf {}",
+            "imperative",
+            imperative(lemma, Person::Second, Number::Singular),
+            l_participle(lemma, Gender::Masculine, Number::Singular),
+            infinitive(lemma),
+        );
+    }
+    println!("\n  order: 1sg 2sg 3sg  1du 2du 3du  1pl 2pl 3pl");
 }
 
 /// §5's personal series, with the clitic beside the full form.

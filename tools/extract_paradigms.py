@@ -424,10 +424,81 @@ INTERROGATIVE = [
     ]
 ]
 
+
+
+# --- §7 verbs ---------------------------------------------------------------
+PNS = [("First", "Singular"), ("Second", "Singular"), ("Third", "Singular"),
+       ("First", "Dual"), ("Second", "Dual"), ("Third", "Dual"),
+       ("First", "Plural"), ("Second", "Plural"), ("Third", "Plural")]
+
+
+def finite(pos, lemma, section, tense, forms):
+    """Nine person/number cells of one tense."""
+    return [
+        (pos, lemma, f"{p}.{n}.{tense}", form, section)
+        for (p, n), form in zip(PNS, forms)
+    ]
+
+
+VERB = (
+    # §7.4, class 1 — the paradigm §7.3 and §7.4 both spell out.
+    finite("verb", "czitatj", "7.4", "NonPast", [
+        "czitaju", "czitajeszj", "czitajet",
+        "czitajevje", "czitajeta", "czitajetje",
+        "czitajem", "czitajetje", "czitajut"])
+    # §7.5, the sigmatic aorist.
+    + finite("verb", "czitatj", "7.5", "Aorist", [
+        "czitah", "czita", "czita",
+        "czitahovje", "czitasta", "czitastje",
+        "czitahom", "czitastje", "czitasza"])
+    # §7.6 elides the dual with an ellipsis, so only the six it gives.
+    + [("verb", "czitatj", f"{p}.{n}.Imperfect", form, "7.6")
+       for (p, n), form in zip(
+           [("First", "Singular"), ("Second", "Singular"), ("Third", "Singular"),
+            ("First", "Plural"), ("Second", "Plural"), ("Third", "Plural")],
+           ["czitajah", "czitajasze", "czitajasze",
+            "czitajahom", "czitajaszetje", "czitajahu"])]
+    # §7.3's class-6 example, which the word-final mark selects.
+    + finite("verb", "pisatj'", "7.3", "NonPast", [
+        "piszu", "piszeszj", "piszet", "", "", "", "", "", ""])[:3]
+    # §7.8's auxiliary.
+    + finite("future_auxiliary", "-", "7.8", "Future", [
+        "budu", "budjeszj", "budjet",
+        "budjevje", "budjeta", "budjetje",
+        "budjem", "budjetje", "budut"])
+    # §7.9's copula: the present and the imperfect are suppletive and tabulated;
+    # the aorist is regular and comes out of the general path on `bytj`.
+    + finite("byti", "-", "7.9", "NonPast", [
+        "jesmj", "jesi", "jestj", "jesvje", "jesta", "jestje",
+        "jesm", "jestje", "sutj"])
+    + finite("byti", "-", "7.9", "Aorist", [
+        "byh", "by", "by", "byhovje", "bysta", "bystje",
+        "byhom", "bystje", "bysza"])
+    + finite("byti", "-", "7.9", "Imperfect", [
+        "bjah", "bjasze", "bjasze", "bjahovje", "bjaszeta", "bjaszetje",
+        "bjahom", "bjaszetje", "bjahu"])
+    # §7.7's l-participle, and §7.9's for `bytj`.
+    + [("l_participle", "czitatj", f"{g}.{n}", form, "7.7")
+       for g, n, form in [
+           ("Masculine", "Singular", "czital"), ("Feminine", "Singular", "czitala"),
+           ("Neuter", "Singular", "czitalo"), ("Masculine", "Dual", "czitala"),
+           ("Masculine", "Plural", "czitali")]]
+    + [("l_participle", "bytj", f"{g}.Singular", form, "7.9")
+       for g, form in [("Masculine", "byl"), ("Feminine", "byla"), ("Neuter", "bylo")]]
+    + [("l_participle", "bytj", "Masculine.Plural", "byli", "7.9")]
+    # §7.10's imperative.
+    + [("imperative", "czitatj", f"{p}.{n}", form, "7.10")
+       for p, n, form in [
+           ("Second", "Singular", "czitaj"), ("Second", "Dual", "czitajta"),
+           ("Second", "Plural", "czitajtje"),
+           ("First", "Dual", "czitajvje"), ("First", "Plural", "czitajm")]]
+    + [("infinitive", "bytj", "-", "bytj", "7.9")]
+)
+
 ROWS = (
     DOM + KONJ + DRUG + OKNO + POLJE + ZZENA + KNIGA + ZJEMLJA + NACIJA
     + SLUGA + NOCZJ + SHORT + LONG + PERSONAL + CLITICS + REFLEXIVE
-    + DEMONSTRATIVE + INTERROGATIVE
+    + DEMONSTRATIVE + INTERROGATIVE + VERB
 )
 
 
@@ -454,6 +525,16 @@ def main() -> None:
         if line.startswith("```"):
             in_fence = not in_fence
             open_span = False
+            continue
+        if in_fence:
+            # A fenced block is a *display* of forms and carries no backticks,
+            # so every word in it counts as attested. Without this the check
+            # cannot see §7.3's `piszu, piszeszj, piszet` at all — it tracked
+            # the fence state and then never used it, which made every
+            # fence-only form look unattested.
+            for word in re.split(r"[\s/,;()>—…-]+", line):
+                if word:
+                    attested.add(word.strip("*`."))
             continue
         if not line.strip():
             # A span cannot cross a blank line, so this is where an imbalance

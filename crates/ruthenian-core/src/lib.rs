@@ -53,6 +53,7 @@ mod lemma;
 pub mod noun;
 pub mod pronoun;
 pub mod spelling;
+pub mod verb;
 
 pub use adjective::{Adjective, adjective, comparative, short_adjective, superlative};
 pub use grammar::{Animacy, Case, FiniteTense, Gender, Number, Person};
@@ -61,3 +62,4 @@ pub use pronoun::{
     clitic_pronoun, clitic_reflexive, pronominal, pronoun, pronoun_paradigm, reflexive, relative,
     that, this, what, who,
 };
+pub use verb::{byti, future_auxiliary, imperative, infinitive, l_participle, verb, verb_paradigm};

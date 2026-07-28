@@ -16,7 +16,9 @@
 //! cargo run -p ruthenian-core --example against_russian
 //! ```
 
-use ruthenian_core::{Animacy, Case, Gender, Number, noun, relative, that, this, what, who};
+use ruthenian_core::{
+    Animacy, Case, FiniteTense, Gender, Number, Person, noun, relative, that, this, verb, what, who,
+};
 use ruthenian_orthography::{Cyrillic, to_latin};
 
 /// The six cases Russian kept, in a fixed order.
@@ -148,6 +150,46 @@ fn main() {
         &|c| noun("polje", c, sg),
         ["поле", "поле", "поля", "полю", "полем", "поле"],
     );
+
+    println!("\nthe present, where Russian has one (§7.4)");
+    let pns = [
+        ("1sg", Person::First, Number::Singular),
+        ("2sg", Person::Second, Number::Singular),
+        ("3sg", Person::Third, Number::Singular),
+        ("1pl", Person::First, Number::Plural),
+        ("3pl", Person::Third, Number::Plural),
+    ];
+    for (lemma, ru) in [
+        (
+            "czitatj",
+            ["читаю", "читаешь", "читает", "читаем", "читают"],
+        ),
+        (
+            "njegodovatj",
+            ["негодую", "негодуешь", "негодует", "негодуем", "негодуют"],
+        ),
+        (
+            "dvinutj",
+            ["двину", "двинешь", "двинет", "двинем", "двинут"],
+        ),
+        (
+            "govoritj",
+            ["говорю", "говоришь", "говорит", "говорим", "говорят"],
+        ),
+        ("ljubitj", ["люблю", "любишь", "любит", "любим", "любят"]),
+        ("vidjetj", ["вижу", "видишь", "видит", "видим", "видят"]),
+        ("ljetjetj", ["лечу", "летишь", "летит", "летим", "летят"]),
+        ("ljeczitj", ["лечу", "лечишь", "лечит", "лечим", "лечат"]),
+        ("pisatj'", ["пишу", "пишешь", "пишет", "пишем", "пишут"]),
+    ] {
+        for (i, (name, p, n)) in pns.iter().enumerate() {
+            t.row(
+                &format!("{lemma} {name}"),
+                &verb(lemma, *p, *n, FiniteTense::NonPast),
+                ru[i],
+            );
+        }
+    }
 
     let total = t.same + t.diff;
     println!(

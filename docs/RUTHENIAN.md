@@ -1523,7 +1523,18 @@ dual included, and **never omitted**.
 | **imperfect** | `bjah`, `bjasze`, `bjasze` | `bjahovje`, `bjaszeta`, `bjaszetje` | `bjahom`, `bjaszetje`, `bjahu` |
 | **future** | `budu`, `budjeszj`, `budjet` | `budjevje`, `budjeta`, `budjetje` | `budjem`, `budjetje`, `budut` |
 
-Participle `byl/byla/bylo/byli`; infinitive `byti`; imperative `budi`.
+Participle `byl/byla/bylo/byli`; infinitive `bytj`; imperative `budi`.
+
+The infinitive is `bytj` and not `byti`: §7.3's classes make `-tj` the ending of
+every Ruthenian infinitive, and §7.2 already writes `bytj` when it lists the
+verbs shaped like `pitj` and `mytj`. `byti` was the OCS citation form left
+standing.
+
+**Two of these rows are regular and are not stored anywhere.** The aorist is
+§7.5's endings on `by-` and the participle is §7.7's rule on the same stem, so
+both come out of the ordinary machinery given the lemma `bytj`. What is
+genuinely suppletive is the present, the imperfect, the future and the
+imperative.
 
 Russian's zero copula (`он врач`) is an East Slavic innovation. Ruthenian follows
 OCS, Polish and Ukrainian: `on jestj vracz`.

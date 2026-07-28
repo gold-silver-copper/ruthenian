@@ -11,9 +11,10 @@
 
 use ruthenian_core::fallback::{UNREADABLE, is_unreadable};
 use ruthenian_core::{
-    Adjective, Animacy, Case, FiniteTense, Gender, Noun, Number, Person, adjective, clitic_pronoun,
-    clitic_reflexive, comparative, noun, pronominal, pronoun, pronoun_paradigm, reflexive,
-    relative, short_adjective, superlative, that, this, what, who,
+    Adjective, Animacy, Case, FiniteTense, Gender, Noun, Number, Person, adjective, byti,
+    clitic_pronoun, clitic_reflexive, comparative, future_auxiliary, imperative, infinitive,
+    l_participle, noun, pronominal, pronoun, pronoun_paradigm, reflexive, relative,
+    short_adjective, superlative, that, this, verb, verb_paradigm, what, who,
 };
 
 mod support;
@@ -76,10 +77,11 @@ fn corpus_row_count() {
     // (three genders singular, a masculine dual and plural, two animate
     // accusatives); §5.1's 11 pronouns × 8; §5.1a's 14 clitics; §5.2's 6
     // reflexives and 2 clitic reflexives; §5.4's 18 `toj` cells and 5 `sjej`;
-    // §5.4's 7 `tot` cells; §5.5's 7 + 7 interrogatives and 4 relative forms.
+    // §5.4's 7 `tot` cells; §5.5's 7 + 7 interrogatives and 4 relative forms;
+    // and §7's 78 verb cells.
     assert_eq!(
         recorded,
-        11 * 24 + 2 * 42 + 11 * 8 + 14 + 6 + 2 + 18 + 5 + 7 + 7 + 7 + 4,
+        11 * 24 + 2 * 42 + 11 * 8 + 14 + 6 + 2 + 18 + 5 + 7 + 7 + 7 + 4 + 78,
         "the corpus is 11 nouns + 2 adjectives + §5"
     );
     let nouns = corpus().iter().filter(|r| r.pos == "noun").count();
@@ -169,6 +171,21 @@ fn every_fallback_exercised() {
             }
         }
     }
+    // §7.10 builds the third person and the first singular with a particle, so
+    // the imperative there is the present indicative the particle attaches to.
+    for w in ["czitatj", "govoritj"] {
+        for number in Number::ALL {
+            assert_eq!(
+                imperative(w, Person::Third, number),
+                verb(w, Person::Third, number, FiniteTense::NonPast),
+            );
+        }
+        assert_eq!(
+            imperative(w, Person::First, Number::Singular),
+            verb(w, Person::First, Number::Singular, FiniteTense::NonPast),
+        );
+    }
+
     // §5.2's clitic reflexive is `sja` and `si` and nothing else.
     assert_eq!(clitic_reflexive(Case::Genitive), reflexive(Case::Genitive));
 
@@ -209,6 +226,15 @@ fn paradigm_is_form() {
                 "{lemma} {case:?}.{number:?}: paradigm() disagrees with form()"
             );
             assert_eq!(form, noun(lemma, case, number), "{lemma}: and with noun()");
+        }
+    }
+
+    // Every verb's table.
+    for w in ["czitatj", "pisatj'", "govoritj", "vidjetj"] {
+        let table = verb_paradigm(w);
+        assert_eq!(table.len(), 27, "{w}: 3 persons × 3 numbers × 3 tenses");
+        for (person, number, tense, form) in table {
+            assert_eq!(form, verb(w, person, number, tense));
         }
     }
 
@@ -332,6 +358,33 @@ fn totality_no_panic() {
     for case in Case::ALL {
         assert!(!who(case).is_empty());
         assert!(!what(case).is_empty());
+    }
+
+    // Verbs, over hostile lemmas and real ones.
+    for w in [
+        "czitatj", "pisatj'", "govoritj", "", "'", "дом", "tj", "atj", "!",
+    ] {
+        for number in Number::ALL {
+            for person in Person::ALL {
+                for tense in FiniteTense::ALL {
+                    assert!(!verb(w, person, number, tense).is_empty());
+                }
+                assert!(!imperative(w, person, number).is_empty());
+            }
+            for gender in Gender::ALL {
+                assert!(!l_participle(w, gender, number).is_empty());
+            }
+        }
+        assert!(!infinitive(w).is_empty());
+        assert_eq!(verb_paradigm(w).len(), 27);
+    }
+    for number in Number::ALL {
+        for person in Person::ALL {
+            assert!(!future_auxiliary(person, number).is_empty());
+            for tense in FiniteTense::ALL {
+                assert!(!byti(person, number, tense).is_empty());
+            }
+        }
     }
 
     // The pronouns take no word at all, so their totality is over the enums.
