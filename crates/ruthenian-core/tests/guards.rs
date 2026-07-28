@@ -11,12 +11,12 @@
 
 use ruthenian_core::fallback::{UNREADABLE, is_unreadable};
 use ruthenian_core::{
-    Adjective, Animacy, Case, Gender, Noun, Number, Person, adjective, byti, byti_past,
-    clitic_pronoun, clitic_reflexive, comparative, future_auxiliary, imperative, infinitive,
-    l_participle, noun, numeral, ordinal, past_active_participle, past_gerund,
-    past_passive_participle, present_active_participle, present_gerund, present_passive_participle,
-    pronominal, pronoun, pronoun_paradigm, reflexive, relative, short_adjective, superlative, that,
-    this, verb, verb_paradigm, what, who,
+    Adjective, Animacy, Case, Gender, Noun, Number, Person, adjective, bytj, clitic_pronoun,
+    clitic_reflexive, comparative, future_auxiliary, imperative, infinitive, l_participle, noun,
+    numeral, ordinal, past_active_participle, past_gerund, past_passive_participle,
+    present_active_participle, present_gerund, present_passive_participle, pronominal, pronoun,
+    pronoun_paradigm, reflexive, relative, short_adjective, superlative, that, this, verb,
+    verb_paradigm, what, who,
 };
 
 mod support;
@@ -79,14 +79,13 @@ fn corpus_row_count() {
     // a deliberate edit here. §3: 11 nouns × 24. §4: 48 long + 42 short (the
     // long has no vocative, so six fewer). §5: 88 personal, 14 clitics, 6 + 2
     // reflexive, 23 pronominal, 7 `tot`, 7 + 7 interrogative, 4 relative.
-    // §6: 59 cardinals, 12 ordinals. §7: 12 non-past, 9 + 9 for `byti`'s two
-    // stems, 9 future, 6 imperative, 9 `l`-participle, 1 infinitive, and 8
+    // §6: 59 cardinals, 12 ordinals. §7: 12 non-past, 9 for the copula, 9 future, 6 imperative, 9 `l`-participle, 1 infinitive, and 8
     // derivations from §7.12.
     let want = 11 * 24 // §3
         + 48 + 42 // §4
         + 88 + 14 + 6 + 2 + 23 + 7 + 7 + 7 + 4 // §5
         + 59 + 12 // §6
-        + 12 + 9 + 9 + 9 + 6 + 9 + 1 + 8; // §7
+        + 12 + 9 + 9 + 6 + 9 + 1 + 8; // §7
     assert_eq!(recorded, want, "the corpus lost or gained a paradigm");
     let nouns = corpus().iter().filter(|r| r.pos == "noun").count();
     assert_eq!(nouns % 24, 0, "a nominal paradigm is 8 cases × 3 numbers");
@@ -394,8 +393,7 @@ fn totality_no_panic() {
     for number in Number::ALL {
         for person in Person::ALL {
             assert!(!future_auxiliary(person, number).is_empty());
-            assert!(!byti(person, number).is_empty());
-            assert!(!byti_past(person, number).is_empty());
+            assert!(!bytj(person, number).is_empty());
         }
     }
 

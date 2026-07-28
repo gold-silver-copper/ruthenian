@@ -9,11 +9,11 @@
 //! load-bearing.
 
 use ruthenian_core::{
-    Animacy, Case, Gender, Number, Person, adjective, byti, byti_past, clitic_pronoun,
-    clitic_reflexive, future_auxiliary, imperative, infinitive, l_participle, noun, numeral,
-    ordinal, past_active_participle, past_gerund, past_passive_participle,
-    present_active_participle, present_gerund, present_passive_participle, pronominal, pronoun,
-    reflexive, relative, short_adjective, that, verb, what, who,
+    Animacy, Case, Gender, Number, Person, adjective, bytj, clitic_pronoun, clitic_reflexive,
+    future_auxiliary, imperative, infinitive, l_participle, noun, numeral, ordinal,
+    past_active_participle, past_gerund, past_passive_participle, present_active_participle,
+    present_gerund, present_passive_participle, pronominal, pronoun, reflexive, relative,
+    short_adjective, that, verb, what, who,
 };
 
 mod support;
@@ -153,14 +153,13 @@ fn conformance() {
                 )
             }
             // Person.Number — there is one synthetic tense, so no third field.
-            "verb" | "byti" | "byti_past" => {
+            "verb" | "bytj" => {
                 let f: Vec<&str> = features.split('.').collect();
                 assert_eq!(f.len(), 2, "verb features are Person.Number");
                 let (p, n) = (person_of(f[0]), number_of(f[1]));
                 match pos.as_str() {
                     "verb" => verb(lemma, p, n),
-                    "byti" => byti(p, n),
-                    _ => byti_past(p, n),
+                    _ => bytj(p, n),
                 }
             }
             // Person.Number.Future — §7.8's auxiliary has no tense parameter.

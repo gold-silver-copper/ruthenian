@@ -429,7 +429,7 @@ Past: 1sg `*-om`, 2sg `*-es`.
 | 2 | `-eši` 40 %, `-iši` 22 % | `-eta` 40 % | `-ete` 40 % |
 | 3 | `-etъ` 40 %, `-itъ` 22 % | `-ete` 40 % | `-ǫtъ` 40 %, `-ętъ` 22 % |
 
-OCS aorist (`byti`): 1sg `-běxъ`, 2/3sg `-bě`, 1du `-běxově`, 2du `-běsta`, 3du
+OCS aorist (`bytj`): 1sg `-běxъ`, 2/3sg `-bě`, 1du `-běxově`, 2du `-běsta`, 3du
 `-běste`, 1pl `-běxomъ`, 2pl `-běste`, 3pl `-běšę`. Imperfect: 1sg `-ěaxъ`, 2/3sg
 `-ěaše`, 1pl `-ěaxomъ`, 3pl `-ěaxǫ`.
 
@@ -718,16 +718,16 @@ contract, while the `l`-participle stayed on the infinitive stem, so one verb ha
 two pasts on two stems — `dvinjah` beside `dvinul`, `govorjah` beside `govoril`,
 the theme vowel present in one and absent from the other.
 
-So Ruthenian keeps **no** synthetic past. Every past is periphrastic: the perfect
-is the `l`-participle with the copula, the pluperfect the same participle with
-`bjah`. That is one step past Interslavic, which keeps a synthetic simple past,
-and it is the same step Russian took — but arrived at by finding that the
-conservative option was not paying for itself, rather than by weighing
-comprehension.
+So Ruthenian keeps **no** synthetic past, and the copula is not exempt either.
+Every past is periphrastic: the perfect is the `l`-participle with the copula,
+the pluperfect the same with `byl` — the copula's own participle — between them.
+That is one step past Interslavic, which keeps a synthetic simple past, and it is
+further than Russian went too: Russian's past *is* the `l`-participle, but with
+the copula dropped, and Ruthenian keeps the copula (`RUTHENIAN.md` §7.9).
 
-`bjah` survives as `byti`'s own past (`RUTHENIAN.md` §7.9). It is a suppletive
-relic rather than a tense: nothing else conjugates that way, and it stays
-because the pluperfect is built on it.
+The result is a verb with one synthetic tense and three periphrastic ones, which
+is a smaller inventory than any column in the table above — the one place this
+document's Ruthenian is less conservative than modern Russian rather than more.
 
 ## 13.6 The payoff: numeral agreement stops being a fossil
 

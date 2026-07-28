@@ -453,8 +453,8 @@ fn verbs() {
 
     table(
         "§7 Verbs",
-        "byti, the one suppletive verb",
-        "three roots and three functions. Its past is the only synthetic past left in the language; the l-participle is §7.7's rule on by- and comes out of the general path",
+        "bytj, the one suppletive verb",
+        "two roots and two functions, jes- and bud-. It has no past form at all — the pluperfect puts its own l-participle byl between the copula and the verb's",
     );
     header(&[
         "", "1 sg", "2 sg", "3 sg", "1 du", "2 du", "3 du", "1 pl", "2 pl", "3 pl",
@@ -462,17 +462,10 @@ fn verbs() {
     let mut cells = Vec::new();
     for number in Number::ALL {
         for person in Person::ALL {
-            cells.push(cell(&byti(person, number), &["jesmj", "sutj"]));
+            cells.push(cell(&bytj(person, number), &["jesmj", "sutj"]));
         }
     }
     row("present", &cells);
-    let mut past = Vec::new();
-    for number in Number::ALL {
-        for person in Person::ALL {
-            past.push(cell(&byti_past(person, number), &["bjah"]));
-        }
-    }
-    row("past", &past);
     let mut fut = Vec::new();
     for number in Number::ALL {
         for person in Person::ALL {

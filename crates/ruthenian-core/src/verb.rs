@@ -116,14 +116,14 @@ impl Verb {
 /// morphology is the same and only the sense differs (§7.8), which is why there
 /// is no `Present` and no `Future`, and no tense parameter either.
 ///
-/// **Every past is periphrastic.** The perfect is [`byti`] plus
-/// [`l_participle`], the pluperfect [`byti_past`] plus the same, and the
+/// **Every past is periphrastic.** The perfect is [`bytj`] plus
+/// [`l_participle`], the pluperfect the same with `byl` between them, and the
 /// imperfective future [`future_auxiliary`] plus [`infinitive`] — all composed
 /// by the caller, since composing them here would mean doing agreement and word
 /// order, which is syntax.
 ///
 /// ```
-/// use ruthenian_core::{verb, byti, l_participle, Gender, Number::*, Person::*};
+/// use ruthenian_core::{verb, bytj, l_participle, Gender, Number::*, Person::*};
 ///
 /// // §7.4, class 1: the theme vowel stays and `-j-` is added.
 /// assert_eq!(verb("czitatj", First, Singular), "czitaju");
@@ -141,7 +141,7 @@ impl Verb {
 /// // The past is two words, and the caller joins them.
 /// let perfect = format!(
 ///     "{} {}",
-///     byti(First, Singular),
+///     bytj(First, Singular),
 ///     l_participle("czitatj", Gender::Masculine, Singular)
 /// );
 /// assert_eq!(perfect, "jesmj czital");
@@ -230,7 +230,7 @@ pub fn imperative(word: &str, person: Person, number: Number) -> String {
         return UNREADABLE.to_string();
     };
     // §7.9's imperative is `bud-`, a root the present stem `byj-` cannot reach:
-    // `byti` is suppletive, and this is the one cell of it the general path
+    // `bytj` is suppletive, and this is the one cell of it the general path
     // would otherwise get wrong (`byj` for `budj`).
     if v.infinitive == "by" {
         return match (person, number) {
@@ -239,7 +239,7 @@ pub fn imperative(word: &str, person: Person, number: Number) -> String {
             (Second, Plural) => "budjtje".to_string(),
             (First, Dual) => "budjvje".to_string(),
             (First, Plural) => "budjm".to_string(),
-            _ => byti(person, number),
+            _ => bytj(person, number),
         };
     }
     // §7.10 gives no synthetic form here; the present indicative is what the
@@ -283,7 +283,7 @@ pub fn infinitive(word: &str) -> String {
 /// The `l`-participle (§7.7), which agrees in gender and number.
 ///
 /// It is half of the perfect and the pluperfect, both of which the caller
-/// composes: `jesmj czital`, `byh czital`, `bjah czital`. Unlike Russian, the
+/// composes: `jesmj czital`, and `jesmj byl czital`. Unlike Russian, the
 /// copula is **not** dropped.
 ///
 /// ```
@@ -312,32 +312,48 @@ pub fn l_participle(word: &str, gender: Gender, number: Number) -> String {
     join(&v.infinitive, ending)
 }
 
-/// `byti`, the copula (§7.9) — the language's **one** suppletive verb, in the
+/// `bytj`, the copula (§7.9) — the language's **one** suppletive verb, in the
 /// present.
 ///
 /// It gets functions of its own rather than an escape hatch in the general path,
 /// because its irregularity would otherwise be spread across every stage of that
 /// path and nothing would tell a reader there were five sites to find.
 ///
-/// **Three roots, three functions.** `jes-` is the present, `bja-` the past
-/// ([`byti_past`]) and `bud-` the future ([`future_auxiliary`]). They are
-/// suppletively unified rather than one stem inflected three ways, so naming
-/// them separately reflects what they are — and with the synthetic past gone
-/// (§7.1) there is no tense parameter left for them to share.
+/// **Two roots, two functions.** `jes-` is the present and `bud-` the future
+/// ([`future_auxiliary`]). They are suppletively unified rather than one stem
+/// inflected two ways, so naming them separately reflects what they are — and
+/// with no synthetic past left in the language (§7.1) there is no tense
+/// parameter for them to share.
+///
+/// There is no past form. `bjah` went with the rest of the synthetic past, and
+/// the pluperfect is composed instead from this verb's own `l`-participle:
 ///
 /// Russian's zero copula (`он врач`) is an East Slavic innovation. Ruthenian
 /// follows OCS, Polish and Ukrainian: `on jestj vracz`.
 ///
 /// ```
-/// use ruthenian_core::{byti, Number::*, Person::*};
+/// use ruthenian_core::{bytj, l_participle, Gender::Masculine, Number::*, Person::*};
 ///
-/// assert_eq!(byti(First, Singular), "jesmj");
-/// assert_eq!(byti(Second, Singular), "jesi");
-/// assert_eq!(byti(Third, Singular), "jestj");
-/// assert_eq!(byti(First, Dual), "jesvje");
-/// assert_eq!(byti(Third, Plural), "sutj");
+/// assert_eq!(bytj(First, Singular), "jesmj");
+/// assert_eq!(bytj(Second, Singular), "jesi");
+/// assert_eq!(bytj(Third, Singular), "jestj");
+/// assert_eq!(bytj(First, Dual), "jesvje");
+/// assert_eq!(bytj(Third, Plural), "sutj");
+///
+/// // perfect: the copula and the verb's participle
+/// let perfect = format!("{} {}", bytj(First, Singular), l_participle("czitatj", Masculine, Singular));
+/// assert_eq!(perfect, "jesmj czital");
+///
+/// // pluperfect: this verb's own participle stands between them
+/// let pluperfect = format!(
+///     "{} {} {}",
+///     bytj(First, Singular),
+///     l_participle("bytj", Masculine, Singular),
+///     l_participle("czitatj", Masculine, Singular),
+/// );
+/// assert_eq!(pluperfect, "jesmj byl czital");
 /// ```
-pub fn byti(person: Person, number: Number) -> String {
+pub fn bytj(person: Person, number: Number) -> String {
     use Number::*;
     use Person::*;
     match (person, number) {
@@ -354,49 +370,11 @@ pub fn byti(person: Person, number: Number) -> String {
     .to_string()
 }
 
-/// `bjah` (§7.9) — `byti`'s past, and the **only** synthetic past left in the
-/// language.
-///
-/// §7.1 removed the synthetic past from every other verb, which leaves the
-/// copula's as a suppletive relic rather than a tense: nothing conjugates this
-/// way, and it exists because the pluperfect is built on it.
-///
-/// ```
-/// use ruthenian_core::{byti_past, l_participle, Gender, Number::*, Person::*};
-///
-/// assert_eq!(byti_past(First, Singular), "bjah");
-/// assert_eq!(byti_past(Second, Singular), "bjasze");
-/// assert_eq!(byti_past(Third, Plural), "bjahu");
-///
-/// // The pluperfect, which the caller composes.
-/// let pluperfect = format!(
-///     "{} {}",
-///     byti_past(First, Singular),
-///     l_participle("czitatj", Gender::Masculine, Singular)
-/// );
-/// assert_eq!(pluperfect, "bjah czital");
-/// ```
-pub fn byti_past(person: Person, number: Number) -> String {
-    use Number::*;
-    use Person::*;
-    match (person, number) {
-        (First, Singular) => "bjah",
-        (Second | Third, Singular) => "bjasze",
-        (First, Dual) => "bjahovje",
-        (Second, Dual) => "bjaszeta",
-        (Third, Dual) => "bjaszetje",
-        (First, Plural) => "bjahom",
-        (Second, Plural) => "bjaszetje",
-        (Third, Plural) => "bjahu",
-    }
-    .to_string()
-}
-
 /// `budu` (§7.8) — the auxiliary that builds the imperfective future.
 ///
-/// Its own function rather than a fourth tense of [`byti`], because `bud-` is a
+/// Its own function rather than a second tense of [`bytj`], because `bud-` is a
 /// different root from `jes-`: the two are suppletively unified, not one stem
-/// inflected two ways. `FiniteTense` has no `Future` variant because a regular
+/// inflected two ways. There is no `Future` tense because a regular
 /// verb's future is either identical to its `NonPast` (perfective) or two words
 /// (imperfective), and neither needs a slot.
 ///

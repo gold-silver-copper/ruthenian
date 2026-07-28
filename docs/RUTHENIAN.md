@@ -1349,7 +1349,7 @@ ordinal — `pjataja czastj` (⅕). `poltora` "one and a half" takes the dual.
 | Tense | Function | Formation |
 |---|---|---|
 | **perfect** | the past | `l`-participle + the copula — `jesmj czital` |
-| **pluperfect** | past before the past | `l`-participle + `bjah` |
+| **pluperfect** | past before the past | the copula + `byl` + the `l`-participle |
 
 OCS had three synthetic pasts and an earlier revision of this document restored
 two of them, on the argument that the aorist/imperfect opposition is what makes a
@@ -1370,9 +1370,10 @@ two pasts of one verb were built on different stems, so `dvinutj` had `dvinjah`
 beside `dvinul` and `govoritj` had `govorjah` beside `govoril`, with the theme
 vowel showing in one and not the other.
 
-What remains is `bjah`, `byti`'s own past (§7.9). It is a suppletive relic
-rather than a tense — nothing else conjugates that way — and it stays because
-the pluperfect is built on it.
+Nothing remains of it, not even for the copula. `bjah` was `bytj`'s own past and
+went with the rest; the pluperfect is built instead from `bytj`'s `l`-participle
+`byl`, which the ordinary machinery already produces (§7.9). So the language has
+**one** synthetic tense — the non-past — and everything else is composed.
 
 Aspect and the past are **independent** axes, as in OCS: a perfective verb has a
 perfect and so does an imperfective.
@@ -1548,14 +1549,16 @@ The `l`-participle, agreeing in gender and number, with the copula:
 | | `czital` | `czitala` | `czitalo` | `czitala` | `czitali` |
 
 - **perfect**: `jesmj czital` "I have read"
-- **pluperfect**: `bjah czital` "I had read"
+- **pluperfect**: `jesmj byl czital` "I had read"
 
 Unlike Russian, the copula is **not** dropped: `jesmj czital`, not `*czital`.
 
-There is **one** pluperfect, not two. An earlier revision had `byh czital`
-beside `bjah czital`, the aorist auxiliary against the imperfect one; with both
-synthetic pasts gone (§7.1) only `bjah` remains, and the contrast the pair drew
-went with the tenses that carried it.
+The pluperfect stacks the same device on itself: `byl` is `bytj`'s
+`l`-participle, so `jesmj byl czital` is "I am having-been having-read". An
+earlier revision had `byh czital` beside `bjah czital`, an aorist auxiliary
+against an imperfect one; both auxiliaries went with the synthetic pasts that
+carried them (§7.1), and what replaces them needs no form the language did not
+already have.
 
 ## 7.8 Future
 
@@ -1566,7 +1569,7 @@ went with the tenses that carried it.
 `budu, budjeszj, budjet` · `budjevje, budjeta, budjetje` · `budjem, budjetje,
 budut`.
 
-## 7.9 The copula `byti`
+## 7.9 The copula `bytj`
 
 Irregular, and the most frequent verb in the language. The full OCS paradigm,
 dual included, and **never omitted**.
@@ -1574,31 +1577,31 @@ dual included, and **never omitted**.
 | | Singular | Dual | Plural |
 |---|---|---|---|
 | **present** | `jesmj`, `jesi`, `jestj` | `jesvje`, `jesta`, `jestje` | `jesm`, `jestje`, `sutj` |
-| **past** | `bjah`, `bjasze`, `bjasze` | `bjahovje`, `bjaszeta`, `bjaszetje` | `bjahom`, `bjaszetje`, `bjahu` |
 
-The past row is the **only** synthetic past in the language (§7.1). Nothing else
-conjugates this way; it survives because the pluperfect is built on it.
+**There is no past row.** `bjah` went with the synthetic past (§7.1), and the
+copula is not exempt from a rule the rest of the language keeps. The pluperfect
+that used to rest on it now rests on `byl`, this verb's own `l`-participle.
 | **future** | `budu`, `budjeszj`, `budjet` | `budjevje`, `budjeta`, `budjetje` | `budjem`, `budjetje`, `budut` |
 
 Participle `byl/byla/bylo/byli`; infinitive `bytj`; imperative `budj`.
 
-The infinitive is `bytj` and not `byti`: §7.3's classes make `-tj` the ending of
+The infinitive is `bytj` and not `bytj`: §7.3's classes make `-tj` the ending of
 every Ruthenian infinitive, and §7.2 already writes `bytj` when it lists the
-verbs shaped like `pitj` and `mytj`. `byti` was the OCS citation form left
+verbs shaped like `pitj` and `mytj`. `bytj` was the OCS citation form left
 standing.
 
 **One of these rows is regular and is not stored anywhere.** The participle is
 §7.7's rule on the stem `by-`, so it comes out of the ordinary machinery given
-the lemma `bytj`. What is genuinely suppletive is the present, the past, the
-future and the imperative — three roots and a fourth stem, and with no tense
+the lemma `bytj`. What is genuinely suppletive is the present, the
+future and the imperative — two roots and a third stem, and with no tense
 parameter left in the language each takes a function of its own.
 
 Russian's zero copula (`он врач`) is an East Slavic innovation. Ruthenian follows
 OCS, Polish and Ukrainian: `on jestj vracz`.
 
-### `byti` is the language's one suppletive verb, deliberately
+### `bytj` is the language's one suppletive verb, deliberately
 
-§1 removes suppletion everywhere else. `byti` keeps it, because it is the most
+§1 removes suppletion everywhere else. `bytj` keeps it, because it is the most
 frequent verb in the language and every Indo-European language tolerates
 suppletion in exactly this word — Latin `sum`/`fui`, English `is`/`was`/`been`,
 OCS `jesmь`/`byxъ`/`bǫdǫ`.
@@ -1609,7 +1612,6 @@ The stems, and their sources:
 |---|---|---|---|
 | present | `jes-`, 3pl `s-` | PIE `*h₁es-` "be, exist" | no — athematic |
 | l-participle | `by-` | `*bʰuH-` | **yes** — §7.7's rule on the same stem |
-| past | `bja-` | `*bʰuH-` | no — regular would be `byja-` |
 | future | `bud-` | `*bʰuH-`, nasal present | no |
 | imperative | `bud-` | `*bʰuH-` | no |
 
@@ -1623,7 +1625,7 @@ stative copula, the pluperfect the dynamic verb.
 It was declined because the split does not actually remove the suppletion — the
 `*bʰuH-` verb is itself `by-` against `bud-` — so paying for it would mean
 regularizing onto one of them, and either choice loses pan-Slavic material that
-every Slavic speaker knows on sight: onto `bud-` costs `byti`, `byl` and the
+every Slavic speaker knows on sight: onto `bud-` costs `bytj`, `byl` and the
 past, giving `budjel`; onto `by-` costs `budu`, the most recognizable
 future marker in Slavic. One suppletive verb is cheaper than either.
 
@@ -2021,7 +2023,7 @@ against `idǫ loviti` — which Ruthenian does not keep (§13).
 | genitive | possession; the object of negation; after 5+ | absence, relation |
 | **ablative** | standard of comparison; cause | **source, motion away** |
 | dative | indirect object; the logical subject of impersonals | goal |
-| instrumental | means; the predicate of `byti` in the past | accompaniment |
+| instrumental | means; the predicate of `bytj` in the past | accompaniment |
 | locative | — (never bare) | location, topic |
 
 The locative is the only case that **cannot** occur without a preposition —

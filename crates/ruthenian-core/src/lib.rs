@@ -65,7 +65,7 @@ pub use pronoun::{
     that, this, what, who,
 };
 pub use verb::{
-    byti, byti_past, future_auxiliary, imperative, infinitive, l_participle,
-    past_active_participle, past_gerund, past_passive_participle, present_active_participle,
-    present_gerund, present_passive_participle, verb, verb_paradigm,
+    bytj, future_auxiliary, imperative, infinitive, l_participle, past_active_participle,
+    past_gerund, past_passive_participle, present_active_participle, present_gerund,
+    present_passive_participle, verb, verb_paradigm,
 };
