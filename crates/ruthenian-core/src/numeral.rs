@@ -19,7 +19,6 @@
 //! structure, and `-дцать` is a second tens formation beside `-десят`; Ruthenian
 //! keeps neither.
 
-use crate::adjective::adjective;
 use crate::fallback::UNREADABLE;
 use crate::grammar::{Animacy, Case, Gender, Number};
 use crate::noun::noun;
@@ -107,10 +106,10 @@ fn governs(count: u64) -> (Case, Number) {
 
 /// A cardinal numeral (§6).
 ///
-/// **Only the last word of a compound declines.** §6.1 makes the *government* of
-/// a compound its last word's, and the declension follows it: `dvadjesjat pjati`
-/// rather than Russian's `двадцати пяти`, where every part inflects. That is the
-/// same trade §6.3 makes with `сорок` — a rule instead of a table.
+/// **Every word of a compound inflects**, each by its own declension, so the
+/// genitive of `sto tridjesjat dva` is `stogo tridjesjati dvu`. What a word
+/// declines as is read off its shape the way §3.2 reads a noun's, so no part of
+/// a compound is a special case.
 ///
 /// ```
 /// use ruthenian_core::{numeral, Case, Gender::Masculine as M, Animacy::Inanimate as In};
@@ -132,7 +131,7 @@ fn governs(count: u64) -> (Case, Number) {
 /// // compounds are spaced, and the last word alone declines
 /// assert_eq!(numeral(132, Nominative, M, In), "sto tridjesjat dva");
 /// assert_eq!(numeral(25, Nominative, M, In), "dvadjesjat pjatj");
-/// assert_eq!(numeral(25, Genitive, M, In), "dvadjesjat pjati");
+/// assert_eq!(numeral(25, Genitive, M, In), "dvadjesjati pjati");
 ///
 /// // `dva` alone agrees in gender
 /// assert_eq!(numeral(2, Nominative, ruthenian_core::Gender::Feminine, In), "dvje");
@@ -160,20 +159,27 @@ pub fn numeral(value: u64, case: Case, gender: Gender, animacy: Animacy) -> Stri
         }
         rest %= unit;
         // `tysjacza` and `miljon` are nouns: the count governs them (§6.1), and
-        // a count of exactly one is left implicit, as `сто` and `тысяча` are.
+        // a count of exactly one is left implicit, as `sto` and `tysjacza` are.
         if count > 1 {
-            words.extend(under_thousand(count, scale_gender(name)));
+            for w in under_thousand(count, scale_gender(name)) {
+                words.push(decline(&w, case, scale_gender(name), animacy));
+            }
         }
-        let (c, n) = governs(count);
-        words.push(noun(name, c, n));
+        let (governed, number) = governs(count);
+        // §6.1: "in oblique cases the numeral and noun simply agree". So the
+        // government decides the case only where the phrase is itself direct;
+        // elsewhere the scale noun takes the case asked for, keeping the number
+        // the count gave it.
+        let noun_case = match case {
+            Case::Nominative | Case::Vocative | Case::Accusative => governed,
+            other => other,
+        };
+        words.push(noun(name, noun_case, number));
     }
     if rest > 0 {
-        words.extend(under_thousand(rest, gender));
-    }
-
-    // Only the last word inflects.
-    if let Some(last) = words.pop() {
-        words.push(decline(&last, value, case, gender, animacy));
+        for w in under_thousand(rest, gender) {
+            words.push(decline(&w, case, gender, animacy));
+        }
     }
     words.join(" ")
 }
@@ -187,21 +193,29 @@ fn scale_gender(name: &str) -> Gender {
 }
 
 /// Decline one numeral word.
-fn decline(word: &str, value: u64, case: Case, gender: Gender, animacy: Animacy) -> String {
+///
+/// **Every word of a compound inflects**, so `sto tridjesjat dva` has the
+/// genitive `stogo tridjesjati dvu`. Which declension each takes is read off its
+/// own shape, exactly as §3.2 reads a noun's: a word in `-o` is a neuter of
+/// declension II, and one ending in a consonant is a declension III numeral —
+/// which is what §6.4 says everything from five up is.
+fn decline(word: &str, case: Case, gender: Gender, animacy: Animacy) -> String {
     use Case::*;
-    // The scale nouns decline as the nouns they are.
-    if SCALES.iter().any(|(_, n)| word.starts_with(n)) {
-        let (_, n) = governs(value / scale_of(word));
-        return noun(name_of(word), case, n);
-    }
     match word {
-        // §6.4: `odin` declines as a long adjective and agrees throughout. Its
-        // masculine nominative is the bare stem, the way `tot`'s is — see the
-        // note in `README.md` on the invariant stem.
+        // §6.4 calls this "a long adjective", but the two declensions differ in
+        // thirteen of seventeen endings and the forms §6.4 actually cites —
+        // `odinogo`, `odinoj` — are among the four they share. The cell that
+        // separates them is the feminine nominative: the long adjective gives
+        // `odinaja`, the pronominal `odina`, and Russian has `одна`. So it is
+        // the pronominal declension, as §5's own words take.
+        //
+        // The masculine nominative is the bare stem, the way `tot`'s is, and
+        // the stem is `odin-` and not `odn-` — §3.9 left no fleeting vowel
+        // anywhere, and a numeral is not an exception to it.
         "odin" => match (case, gender) {
-            (Nominative, Gender::Masculine) => "odin".to_string(),
+            (Nominative | Vocative, Gender::Masculine) => "odin".to_string(),
             (Accusative, Gender::Masculine) if animacy == Animacy::Inanimate => "odin".to_string(),
-            _ => adjective("odin", case, Number::Singular, gender, animacy),
+            _ => crate::pronoun::pronominal(word, case, Number::Singular, gender, animacy),
         },
         // §6.4: `dva` is a dual form and takes the dual endings — the plain
         // nominal ones, so `dva` / `dvu` / `dvoma` exactly as `dom` has
@@ -214,9 +228,11 @@ fn decline(word: &str, value: u64, case: Case, gender: Gender, animacy: Animacy)
         },
         "tri" => plural_numeral("tri", "trj", case, animacy),
         "czetyrje" => plural_numeral("czetyrje", "czetyrj", case, animacy),
-        // Everything else — five and up, and every built rank — is a
-        // declension III noun (§6.4), which is what the higher numerals were in
-        // OCS and still behave like.
+        // A hundred is a neuter in `-o`, so it declines as `okno` does.
+        w if w.ends_with("sto") => noun(w, case, Number::Singular),
+        // Everything else — five and up, and every teen and ten — is a
+        // declension III numeral (§6.4), which is what the higher numerals were
+        // in OCS and still behave like.
         other => third_declension(other, case),
     }
 }
@@ -248,22 +264,6 @@ fn third_declension(nom: &str, case: Case) -> String {
         Instrumental => format!("{stem}jju"),
         _ => format!("{stem}i"),
     }
-}
-
-fn scale_of(word: &str) -> u64 {
-    SCALES
-        .iter()
-        .find(|(_, n)| word.starts_with(n))
-        .map(|(u, _)| *u)
-        .unwrap_or(1)
-}
-
-fn name_of(word: &str) -> &'static str {
-    SCALES
-        .iter()
-        .find(|(_, n)| word.starts_with(n))
-        .map(|(_, n)| *n)
-        .unwrap_or("nolj")
 }
 
 /// An ordinal's **adjective stem** (§6.5).

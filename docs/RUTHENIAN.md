@@ -1283,9 +1283,15 @@ part inflects.
 
 ## 6.4 Declension
 
-`odin` declines as a **long adjective** and agrees in gender, number and case:
-`odin dom`, `odinogo doma`, `odinoj zzeny`. Its masculine nominative is the bare
-stem, as `tot`'s is.
+`odin` declines **pronominally** and agrees in gender, number and case:
+`odin dom`, `odina tysjacza`, `odinogo doma`, `odinoj zzeny`. Its masculine
+nominative is the bare stem, as `tot`'s is.
+
+An earlier revision said "as a long adjective". The two declensions differ in
+thirteen of their seventeen endings (§4.2), and both forms this paragraph cites
+are among the four they share, so the citation did not decide it. The cell that
+does is the feminine nominative — the long adjective would give `odinaja` where
+the pronominal gives `odina`, and `odina tysjacza` is the form Russian has.
 
 The stem is `odin-` throughout and not `odn-`: §3.9 abolished the fleeting vowel
 for every word, and a numeral is not an exception to it. Russian's `одного`
