@@ -432,10 +432,10 @@ PNS = [("First", "Singular"), ("Second", "Singular"), ("Third", "Singular"),
        ("First", "Plural"), ("Second", "Plural"), ("Third", "Plural")]
 
 
-def finite(pos, lemma, section, tense, forms):
-    """Nine person/number cells of one tense."""
+def finite(pos, lemma, section, _tense, forms):
+    """Nine person/number cells."""
     return [
-        (pos, lemma, f"{p}.{n}.{tense}", form, section)
+        (pos, lemma, f"{p}.{n}", form, section)
         for (p, n), form in zip(PNS, forms)
     ]
 
@@ -446,13 +446,6 @@ VERB = (
         "czitaju", "czitajeszj", "czitajet",
         "czitajevje", "czitajeta", "czitajetje",
         "czitajem", "czitajetje", "czitajut"])
-    # §7.5, the one synthetic past, on the present stem.
-    + finite("verb", "czitatj", "7.5", "Imperfect", [
-        "czitajah", "czitajasze", "czitajasze",
-        "czitajahovje", "czitajaszeta", "czitajaszetje",
-        "czitajahom", "czitajaszetje", "czitajahu"])
-    + [("verb", lemma, "First.Singular.Imperfect", form, "7.5") for lemma, form in [
-        ("govoritj", "govorjah"), ("vidjetj", "vidjah"), ("pisatj'", "piszah")]]
     # §7.3's class-6 example, which the word-final mark selects.
     + finite("verb", "pisatj'", "7.3", "NonPast", [
         "piszu", "piszeszj", "piszet", "", "", "", "", "", ""])[:3]
@@ -463,10 +456,10 @@ VERB = (
         "budjem", "budjetje", "budut"])
     # §7.9's copula: the present and the imperfect are suppletive and tabulated;
     # the aorist is regular and comes out of the general path on `bytj`.
-    + finite("byti", "-", "7.9", "NonPast", [
+    + finite("byti", "-", "7.9", "Present", [
         "jesmj", "jesi", "jestj", "jesvje", "jesta", "jestje",
         "jesm", "jestje", "sutj"])
-    + finite("byti", "-", "7.9", "Imperfect", [
+    + finite("byti_past", "-", "7.9", "Past", [
         "bjah", "bjasze", "bjasze", "bjahovje", "bjaszeta", "bjaszetje",
         "bjahom", "bjaszetje", "bjahu"])
     # §7.7's l-participle, and §7.9's for `bytj`.

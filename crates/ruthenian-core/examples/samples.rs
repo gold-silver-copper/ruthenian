@@ -10,8 +10,8 @@
 //! ```
 
 use ruthenian_core::{
-    Adjective, Animacy, Case, FiniteTense, Gender, Noun, Number, Person, clitic_pronoun,
-    comparative, imperative, infinitive, l_participle, past_active_participle, past_gerund,
+    Adjective, Animacy, Case, Gender, Noun, Number, Person, clitic_pronoun, comparative,
+    imperative, infinitive, l_participle, past_active_participle, past_gerund,
     past_passive_participle, present_active_participle, present_gerund, present_passive_participle,
     pronoun, reflexive, superlative, verb,
 };
@@ -68,7 +68,8 @@ fn main() {
     println!();
 }
 
-/// §7's classes, one verb each, in all three synthetic tenses.
+/// §7's classes, one verb each. There is one synthetic tense; every past is
+/// periphrastic and is composed by the caller.
 fn verbs() {
     let lemmas = [
         ("czitatj", "1 — theme stays, -j- added"),
@@ -85,13 +86,11 @@ fn verbs() {
     for (lemma, note) in lemmas {
         println!("\n{lemma}  — class {note}");
         println!("{}", "-".repeat(74));
-        for tense in FiniteTense::ALL {
-            let row: Vec<String> = Number::ALL
-                .iter()
-                .flat_map(|&n| Person::ALL.map(move |p| verb(lemma, p, n, tense)))
-                .collect();
-            println!("  {:<10} {}", format!("{tense:?}"), row.join("  "));
-        }
+        let row: Vec<String> = Number::ALL
+            .iter()
+            .flat_map(|&n| Person::ALL.map(move |p| verb(lemma, p, n)))
+            .collect();
+        println!("  {:<10} {}", "non-past", row.join("  "));
         println!(
             "  {:<10} {}  {}  {}  {}  {}  {}",
             "§7.12",

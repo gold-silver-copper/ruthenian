@@ -29,19 +29,18 @@ references throughout the source are to the specification.
 |---|---|
 | **nouns** (§3.3–§3.6) | complete — all 8 cases × 3 numbers, three declensions, hard and soft |
 | **adjectives** (§4) | complete — both declensions × 3 genders, plus §4.3's degrees |
-| **pronouns** (§5.1, §5.1a, §5.2) | complete — personal, clitic and reflexive. §5.4–§5.6's non-personal series have **no entry point yet** |
+| **pronouns** (§5) | complete — personal, clitic, reflexive, the pronominal declension, the interrogatives and the relative |
 | **numerals** (§6) | complete — cardinals to `u64::MAX`, one rule per rank, and §6.5's ordinals |
-| **verbs** (§7.3–§7.12) | complete — six classes, two synthetic tenses, the imperative, `byti`, `budu`, the `l`-participle, four participles and two gerunds |
+| **verbs** (§7.3–§7.12) | complete — six classes, the one synthetic tense, the imperative, `byti`'s three stems, the `l`-participle, four participles and two gerunds |
 
 ## Measurements
 
 | | Result |
 |---|---|
-| Corpus cells reproduced (`tests/corpus/paradigms.tsv`) | **458 of 458** |
-| Nominal paradigms covered | 11 — `dom`, `Konj`, `Drug`, `okno`, `polje`, `zzena`, `kniga`, `zjemlja`, `nacija`, `sluga'`, `noczj'` |
-| Adjective paradigms covered | 2 — `dobr` long and short, all three genders |
-| Pronoun paradigms covered | 11 personal + 14 clitics + the reflexive |
-| Guards, each verified to fail under its stated mutation | **12 of 12** |
+| Corpus cells reproduced (`tests/corpus/paradigms.tsv`) | **646 of 646** |
+| Cells matching Russian where Russian has one | `cargo run --example against_russian` |
+| Sample for review | `cargo run --example review` — 35 paradigms |
+| Guards, each verified to fail under its stated mutation | **11 core, 20 orthography** |
 | Third-party dependencies | **0** |
 
 ## Totality
@@ -60,7 +59,7 @@ is the only place one may be introduced.
 | `clitic_reflexive` outside acc/dat | the full reflexive | §5.2 gives `sja` and `si` and nothing else. |
 | `imperative(w, First \| Third, Singular)` | the present indicative | §7.10 builds these with a particle; this is the form it attaches to. |
 
-All but the last are implemented; the imperative's arrives with M6. The
+All are implemented. The
 `every_fallback_exercised` guard counts the rows in this table against the tests,
 so a substitute cannot be added without being both written down and exercised.
 
@@ -123,7 +122,7 @@ specification does not contain (the script's verification).
 ## Running it
 
 ```bash
-cargo test -p ruthenian-core                  # 45 tests: 4 unit, 1 corpus, 11 guards, 29 doc
+cargo test -p ruthenian-core                  # 67 tests (94 across the workspace)
 cargo clippy -p ruthenian-core --all-targets  # clean
 python3 tools/extract_paradigms.py            # regenerate the corpus after a spec edit
 ```

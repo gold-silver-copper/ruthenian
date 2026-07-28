@@ -10,7 +10,7 @@
 //! decides is whether `NonPast` is a present or a future (§7.8).
 
 use crate::fallback::UNREADABLE;
-use crate::grammar::{FiniteTense, Gender, Number, Person};
+use crate::grammar::{Gender, Number, Person};
 use crate::spelling::{join, mutate_present_stem};
 
 /// §7.3's six classes, named by what they do to the stem.
@@ -110,51 +110,46 @@ impl Verb {
     }
 }
 
-/// Inflect a verb in one of the three **synthetic** tenses (§7.1).
+/// Inflect a verb in the **non-past**, the language's one synthetic tense (§7.1).
 ///
-/// `NonPast` is the present for an imperfective and the future for a perfective;
-/// the morphology is the same and only the sense differs (§7.8). The perfect,
-/// pluperfect and imperfective future are periphrastic and are composed by the
-/// caller from [`byti`], [`future_auxiliary`], [`l_participle`] and
-/// [`infinitive`].
+/// It is the present for an imperfective and the future for a perfective: the
+/// morphology is the same and only the sense differs (§7.8), which is why there
+/// is no `Present` and no `Future`, and no tense parameter either.
+///
+/// **Every past is periphrastic.** The perfect is [`byti`] plus
+/// [`l_participle`], the pluperfect [`byti_past`] plus the same, and the
+/// imperfective future [`future_auxiliary`] plus [`infinitive`] — all composed
+/// by the caller, since composing them here would mean doing agreement and word
+/// order, which is syntax.
 ///
 /// ```
-/// use ruthenian_core::{verb, FiniteTense::*, Number::*, Person::*};
+/// use ruthenian_core::{verb, byti, l_participle, Gender, Number::*, Person::*};
 ///
 /// // §7.4, class 1: the theme vowel stays and `-j-` is added.
-/// assert_eq!(verb("czitatj", First, Singular, NonPast), "czitaju");
-/// assert_eq!(verb("czitatj", Second, Singular, NonPast), "czitajeszj");
-/// assert_eq!(verb("czitatj", Third, Singular, NonPast), "czitajet");
-/// assert_eq!(verb("czitatj", First, Dual, NonPast), "czitajevje");
-/// assert_eq!(verb("czitatj", Third, Plural, NonPast), "czitajut");
+/// assert_eq!(verb("czitatj", First, Singular), "czitaju");
+/// assert_eq!(verb("czitatj", Second, Singular), "czitajeszj");
+/// assert_eq!(verb("czitatj", Third, Singular), "czitajet");
+/// assert_eq!(verb("czitatj", First, Dual), "czitajevje");
+/// assert_eq!(verb("czitatj", Third, Plural), "czitajut");
 ///
 /// // Class 6, which the word-final mark selects.
-/// assert_eq!(verb("pisatj'", First, Singular, NonPast), "piszu");
-/// assert_eq!(verb("pisatj'", Second, Singular, NonPast), "piszeszj");
+/// assert_eq!(verb("pisatj'", First, Singular), "piszu");
+/// assert_eq!(verb("pisatj'", Second, Singular), "piszeszj");
 /// // Without the mark it is class 1 and a different verb.
-/// assert_eq!(verb("pisatj", First, Singular, NonPast), "pisaju");
+/// assert_eq!(verb("pisatj", First, Singular), "pisaju");
 ///
-/// // §7.6's imperfect, on the present stem so the ending contracts.
-/// assert_eq!(verb("czitatj", First, Singular, Imperfect), "czitajah");
-/// assert_eq!(verb("czitatj", Second, Singular, Imperfect), "czitajasze");
-/// assert_eq!(verb("czitatj", Third, Plural, Imperfect), "czitajahu");
-/// assert_eq!(verb("govoritj", First, Singular, Imperfect), "govorjah");
-/// assert_eq!(verb("vidjetj", First, Singular, Imperfect), "vidjah");
-/// assert_eq!(verb("pisatj'", First, Singular, Imperfect), "piszah");
+/// // The past is two words, and the caller joins them.
+/// let perfect = format!(
+///     "{} {}",
+///     byti(First, Singular),
+///     l_participle("czitatj", Gender::Masculine, Singular)
+/// );
+/// assert_eq!(perfect, "jesmj czital");
 /// ```
-pub fn verb(word: &str, person: Person, number: Number, tense: FiniteTense) -> String {
-    let Some(v) = Verb::read(word) else {
-        return UNREADABLE.to_string();
-    };
-    match tense {
-        FiniteTense::NonPast => present(&v, person, number),
-        // On the **present** stem, which is what makes the ending contract.
-        // §7.6 only ever exemplifies `czitatj`, whose present stem `czitaj-`
-        // and infinitive stem `czita-` both give `czitajah`, so its one example
-        // could not distinguish them — but every other class can. On the
-        // infinitive stem the vowels stack (`govorijah`, `vidjejah`); on the
-        // present stem rules 3b and 2 do the contracting for free.
-        FiniteTense::Imperfect => join(&v.present(), imperfect_ending(person, number)),
+pub fn verb(word: &str, person: Person, number: Number) -> String {
+    match Verb::read(word) {
+        Some(v) => present(&v, person, number),
+        None => UNREADABLE.to_string(),
     }
 }
 
@@ -202,22 +197,6 @@ fn present(v: &Verb, person: Person, number: Number) -> String {
     join(&stem, ending)
 }
 
-/// §7.6, the imperfect.
-fn imperfect_ending(person: Person, number: Number) -> &'static str {
-    use Number::*;
-    use Person::*;
-    match (person, number) {
-        (First, Singular) => "jah",
-        (Second | Third, Singular) => "jasze",
-        (First, Dual) => "jahovje",
-        (Second, Dual) => "jaszeta",
-        (Third, Dual) => "jaszetje",
-        (First, Plural) => "jahom",
-        (Second, Plural) => "jaszetje",
-        (Third, Plural) => "jahu",
-    }
-}
-
 /// The imperative (§7.10): the present stem plus `-i`, or the bare stem after
 /// `j`.
 ///
@@ -229,7 +208,7 @@ fn imperfect_ending(person: Person, number: Number) -> &'static str {
 /// [`crate::fallback`].
 ///
 /// ```
-/// use ruthenian_core::{imperative, verb, FiniteTense, Number::*, Person::*};
+/// use ruthenian_core::{imperative, verb, Number::*, Person::*};
 ///
 /// assert_eq!(imperative("czitatj", Second, Singular), "czitaj");
 /// assert_eq!(imperative("czitatj", Second, Dual), "czitajta");
@@ -242,10 +221,7 @@ fn imperfect_ending(person: Person, number: Number) -> &'static str {
 /// assert_eq!(imperative("pisatj'", Second, Singular), "piszi");
 ///
 /// // The two cells the language builds with a particle instead.
-/// assert_eq!(
-///     imperative("czitatj", Third, Singular),
-///     verb("czitatj", Third, Singular, FiniteTense::NonPast)
-/// );
+/// assert_eq!(imperative("czitatj", Third, Singular), verb("czitatj", Third, Singular));
 /// ```
 pub fn imperative(word: &str, person: Person, number: Number) -> String {
     use Number::*;
@@ -263,7 +239,7 @@ pub fn imperative(word: &str, person: Person, number: Number) -> String {
             (Second, Plural) => "budjtje".to_string(),
             (First, Dual) => "budjvje".to_string(),
             (First, Plural) => "budjm".to_string(),
-            _ => byti(person, number, FiniteTense::NonPast),
+            _ => byti(person, number),
         };
     }
     // §7.10 gives no synthetic form here; the present indicative is what the
@@ -336,63 +312,82 @@ pub fn l_participle(word: &str, gender: Gender, number: Number) -> String {
     join(&v.infinitive, ending)
 }
 
-/// `byti`, the copula (§7.9) — the language's **one** suppletive verb.
+/// `byti`, the copula (§7.9) — the language's **one** suppletive verb, in the
+/// present.
 ///
-/// It gets a function of its own rather than an escape hatch in the general
-/// path, because its irregularity would otherwise be spread across every stage
-/// of that path and nothing would tell a reader there were five sites to find.
-/// The cost is a second generation path, which law 2 otherwise forbids; it is
-/// tolerable only because this is a closed nine-cell paradigm the specification
-/// tabulates in full, checked against §7.9 by the same corpus as everything
-/// else.
+/// It gets functions of its own rather than an escape hatch in the general path,
+/// because its irregularity would otherwise be spread across every stage of that
+/// path and nothing would tell a reader there were five sites to find.
 ///
-/// `NonPast` is the present `jesmj`, not a present/future blend: the future uses
-/// a different root altogether (`bud-` against `jes-`), which is suppletion
-/// rather than a tense of one stem, and it lives in [`future_auxiliary`].
+/// **Three roots, three functions.** `jes-` is the present, `bja-` the past
+/// ([`byti_past`]) and `bud-` the future ([`future_auxiliary`]). They are
+/// suppletively unified rather than one stem inflected three ways, so naming
+/// them separately reflects what they are — and with the synthetic past gone
+/// (§7.1) there is no tense parameter left for them to share.
 ///
 /// Russian's zero copula (`он врач`) is an East Slavic innovation. Ruthenian
 /// follows OCS, Polish and Ukrainian: `on jestj vracz`.
 ///
 /// ```
-/// use ruthenian_core::{byti, l_participle, verb, FiniteTense::*, Number::*, Person::*};
+/// use ruthenian_core::{byti, Number::*, Person::*};
 ///
-/// assert_eq!(byti(First, Singular, NonPast), "jesmj");
-/// assert_eq!(byti(Second, Singular, NonPast), "jesi");
-/// assert_eq!(byti(Third, Singular, NonPast), "jestj");
-/// assert_eq!(byti(First, Dual, NonPast), "jesvje");
-/// assert_eq!(byti(Third, Plural, NonPast), "sutj");
-///
-/// // The `l`-participle is regular — §7.7's rule on `by-` — so it is the
-/// // general path on `bytj` rather than a second table.
-/// assert_eq!(l_participle("bytj", ruthenian_core::Gender::Masculine, Singular), "byl");
-///
-/// assert_eq!(byti(First, Singular, Imperfect), "bjah");
-/// // and the imperative, which `bud-` supplies and the present stem cannot
-/// assert_eq!(ruthenian_core::imperative("bytj", Second, Singular), "budj");
-/// assert_eq!(byti(Third, Plural, Imperfect), "bjahu");
+/// assert_eq!(byti(First, Singular), "jesmj");
+/// assert_eq!(byti(Second, Singular), "jesi");
+/// assert_eq!(byti(Third, Singular), "jestj");
+/// assert_eq!(byti(First, Dual), "jesvje");
+/// assert_eq!(byti(Third, Plural), "sutj");
 /// ```
-pub fn byti(person: Person, number: Number, tense: FiniteTense) -> String {
-    use FiniteTense::*;
+pub fn byti(person: Person, number: Number) -> String {
     use Number::*;
     use Person::*;
-    match (tense, person, number) {
-        (NonPast, First, Singular) => "jesmj",
-        (NonPast, Second, Singular) => "jesi",
-        (NonPast, Third, Singular) => "jestj",
-        (NonPast, First, Dual) => "jesvje",
-        (NonPast, Second, Dual) => "jesta",
-        (NonPast, Third, Dual) => "jestje",
-        (NonPast, First, Plural) => "jesm",
-        (NonPast, Second, Plural) => "jestje",
-        (NonPast, Third, Plural) => "sutj",
-        (Imperfect, First, Singular) => "bjah",
-        (Imperfect, Second | Third, Singular) => "bjasze",
-        (Imperfect, First, Dual) => "bjahovje",
-        (Imperfect, Second, Dual) => "bjaszeta",
-        (Imperfect, Third, Dual) => "bjaszetje",
-        (Imperfect, First, Plural) => "bjahom",
-        (Imperfect, Second, Plural) => "bjaszetje",
-        (Imperfect, Third, Plural) => "bjahu",
+    match (person, number) {
+        (First, Singular) => "jesmj",
+        (Second, Singular) => "jesi",
+        (Third, Singular) => "jestj",
+        (First, Dual) => "jesvje",
+        (Second, Dual) => "jesta",
+        (Third, Dual) => "jestje",
+        (First, Plural) => "jesm",
+        (Second, Plural) => "jestje",
+        (Third, Plural) => "sutj",
+    }
+    .to_string()
+}
+
+/// `bjah` (§7.9) — `byti`'s past, and the **only** synthetic past left in the
+/// language.
+///
+/// §7.1 removed the synthetic past from every other verb, which leaves the
+/// copula's as a suppletive relic rather than a tense: nothing conjugates this
+/// way, and it exists because the pluperfect is built on it.
+///
+/// ```
+/// use ruthenian_core::{byti_past, l_participle, Gender, Number::*, Person::*};
+///
+/// assert_eq!(byti_past(First, Singular), "bjah");
+/// assert_eq!(byti_past(Second, Singular), "bjasze");
+/// assert_eq!(byti_past(Third, Plural), "bjahu");
+///
+/// // The pluperfect, which the caller composes.
+/// let pluperfect = format!(
+///     "{} {}",
+///     byti_past(First, Singular),
+///     l_participle("czitatj", Gender::Masculine, Singular)
+/// );
+/// assert_eq!(pluperfect, "bjah czital");
+/// ```
+pub fn byti_past(person: Person, number: Number) -> String {
+    use Number::*;
+    use Person::*;
+    match (person, number) {
+        (First, Singular) => "bjah",
+        (Second | Third, Singular) => "bjasze",
+        (First, Dual) => "bjahovje",
+        (Second, Dual) => "bjaszeta",
+        (Third, Dual) => "bjaszetje",
+        (First, Plural) => "bjahom",
+        (Second, Plural) => "bjaszetje",
+        (Third, Plural) => "bjahu",
     }
     .to_string()
 }
@@ -433,21 +428,19 @@ pub fn future_auxiliary(person: Person, number: Number) -> String {
     .to_string()
 }
 
-/// Every synthetic cell of one verb: 3 persons × 3 numbers × 2 tenses.
+/// Every synthetic cell of one verb: 3 persons × 3 numbers.
 ///
 /// Law 2 — this calls [`verb`] rather than computing anything.
 ///
 /// ```
 /// use ruthenian_core::verb_paradigm;
-/// assert_eq!(verb_paradigm("czitatj").len(), 18);
+/// assert_eq!(verb_paradigm("czitatj").len(), 9);
 /// ```
-pub fn verb_paradigm(word: &str) -> Vec<(Person, Number, FiniteTense, String)> {
-    let mut out = Vec::with_capacity(18);
-    for tense in FiniteTense::ALL {
-        for number in Number::ALL {
-            for person in Person::ALL {
-                out.push((person, number, tense, verb(word, person, number, tense)));
-            }
+pub fn verb_paradigm(word: &str) -> Vec<(Person, Number, String)> {
+    let mut out = Vec::with_capacity(9);
+    for number in Number::ALL {
+        for person in Person::ALL {
+            out.push((person, number, verb(word, person, number)));
         }
     }
     out

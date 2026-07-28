@@ -9,7 +9,7 @@
 //! load-bearing.
 
 use ruthenian_core::{
-    Animacy, Case, FiniteTense, Gender, Number, Person, adjective, byti, clitic_pronoun,
+    Animacy, Case, Gender, Number, Person, adjective, byti, byti_past, clitic_pronoun,
     clitic_reflexive, future_auxiliary, imperative, infinitive, l_participle, noun, numeral,
     ordinal, past_active_participle, past_gerund, past_passive_participle,
     present_active_participle, present_gerund, present_passive_participle, pronominal, pronoun,
@@ -39,14 +39,6 @@ fn person_of(name: &str) -> Person {
         "Second" => Person::Second,
         "Third" => Person::Third,
         other => panic!("unknown person in corpus: {other}"),
-    }
-}
-
-fn tense_of(name: &str) -> FiniteTense {
-    match name {
-        "NonPast" => FiniteTense::NonPast,
-        "Imperfect" => FiniteTense::Imperfect,
-        other => panic!("unknown tense in corpus: {other}"),
     }
 }
 
@@ -160,14 +152,15 @@ fn conformance() {
                     Animacy::Inanimate,
                 )
             }
-            // Person.Number.Tense
-            "verb" | "byti" => {
+            // Person.Number — there is one synthetic tense, so no third field.
+            "verb" | "byti" | "byti_past" => {
                 let f: Vec<&str> = features.split('.').collect();
-                assert_eq!(f.len(), 3, "verb features are Person.Number.Tense");
-                let (p, n, t) = (person_of(f[0]), number_of(f[1]), tense_of(f[2]));
+                assert_eq!(f.len(), 2, "verb features are Person.Number");
+                let (p, n) = (person_of(f[0]), number_of(f[1]));
                 match pos.as_str() {
-                    "verb" => verb(lemma, p, n, t),
-                    _ => byti(p, n, t),
+                    "verb" => verb(lemma, p, n),
+                    "byti" => byti(p, n),
+                    _ => byti_past(p, n),
                 }
             }
             // Person.Number.Future — §7.8's auxiliary has no tense parameter.

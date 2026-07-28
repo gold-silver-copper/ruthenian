@@ -11,7 +11,7 @@
 
 use ruthenian_core::fallback::{UNREADABLE, is_unreadable};
 use ruthenian_core::{
-    Adjective, Animacy, Case, FiniteTense, Gender, Noun, Number, Person, adjective, byti,
+    Adjective, Animacy, Case, Gender, Noun, Number, Person, adjective, byti, byti_past,
     clitic_pronoun, clitic_reflexive, comparative, future_auxiliary, imperative, infinitive,
     l_participle, noun, numeral, ordinal, past_active_participle, past_gerund,
     past_passive_participle, present_active_participle, present_gerund, present_passive_participle,
@@ -75,17 +75,19 @@ fn corpus_row_count() {
     // Spelled out as a sum so that adding a paradigm is a deliberate edit here
     // rather than a number that moves on its own.
     //
-    // 11 nominal paradigms × 24 cells; §4's two adjective tables at 42 each
-    // (three genders singular, a masculine dual and plural, two animate
-    // accusatives); §5.1's 11 pronouns × 8; §5.1a's 14 clitics; §5.2's 6
-    // reflexives and 2 clitic reflexives; §5.4's 18 `toj` cells and 5 `sjej`;
-    // §5.4's 7 `tot` cells; §5.5's 7 + 7 interrogatives and 4 relative forms;
-    // §7's 67 verb cells; §7.12's 8 derivations with 6 long forms; and §6's 71.
-    assert_eq!(
-        recorded,
-        11 * 24 + 2 * 42 + 11 * 8 + 14 + 6 + 2 + 18 + 5 + 7 + 7 + 7 + 4 + 67 + 14 + 71,
-        "the corpus is 11 nouns + 2 adjectives + §5"
-    );
+    // Counted by part of speech, so a paradigm cannot be added or lost without
+    // a deliberate edit here. §3: 11 nouns × 24. §4: 48 long + 42 short (the
+    // long has no vocative, so six fewer). §5: 88 personal, 14 clitics, 6 + 2
+    // reflexive, 23 pronominal, 7 `tot`, 7 + 7 interrogative, 4 relative.
+    // §6: 59 cardinals, 12 ordinals. §7: 12 non-past, 9 + 9 for `byti`'s two
+    // stems, 9 future, 6 imperative, 9 `l`-participle, 1 infinitive, and 8
+    // derivations from §7.12.
+    let want = 11 * 24 // §3
+        + 48 + 42 // §4
+        + 88 + 14 + 6 + 2 + 23 + 7 + 7 + 7 + 4 // §5
+        + 59 + 12 // §6
+        + 12 + 9 + 9 + 9 + 6 + 9 + 1 + 8; // §7
+    assert_eq!(recorded, want, "the corpus lost or gained a paradigm");
     let nouns = corpus().iter().filter(|r| r.pos == "noun").count();
     assert_eq!(nouns % 24, 0, "a nominal paradigm is 8 cases × 3 numbers");
 }
@@ -179,12 +181,12 @@ fn every_fallback_exercised() {
         for number in Number::ALL {
             assert_eq!(
                 imperative(w, Person::Third, number),
-                verb(w, Person::Third, number, FiniteTense::NonPast),
+                verb(w, Person::Third, number),
             );
         }
         assert_eq!(
             imperative(w, Person::First, Number::Singular),
-            verb(w, Person::First, Number::Singular, FiniteTense::NonPast),
+            verb(w, Person::First, Number::Singular),
         );
     }
 
@@ -234,9 +236,9 @@ fn paradigm_is_form() {
     // Every verb's table.
     for w in ["czitatj", "pisatj'", "govoritj", "vidjetj"] {
         let table = verb_paradigm(w);
-        assert_eq!(table.len(), 18, "{w}: 3 persons × 3 numbers × 2 tenses");
-        for (person, number, tense, form) in table {
-            assert_eq!(form, verb(w, person, number, tense));
+        assert_eq!(table.len(), 9, "{w}: 3 persons × 3 numbers");
+        for (person, number, form) in table {
+            assert_eq!(form, verb(w, person, number));
         }
     }
 
@@ -368,9 +370,7 @@ fn totality_no_panic() {
     ] {
         for number in Number::ALL {
             for person in Person::ALL {
-                for tense in FiniteTense::ALL {
-                    assert!(!verb(w, person, number, tense).is_empty());
-                }
+                assert!(!verb(w, person, number).is_empty());
                 assert!(!imperative(w, person, number).is_empty());
             }
             for gender in Gender::ALL {
@@ -389,14 +389,13 @@ fn totality_no_panic() {
         ] {
             assert!(!f(w).is_empty(), "{w}");
         }
-        assert_eq!(verb_paradigm(w).len(), 18);
+        assert_eq!(verb_paradigm(w).len(), 9);
     }
     for number in Number::ALL {
         for person in Person::ALL {
             assert!(!future_auxiliary(person, number).is_empty());
-            for tense in FiniteTense::ALL {
-                assert!(!byti(person, number, tense).is_empty());
-            }
+            assert!(!byti(person, number).is_empty());
+            assert!(!byti_past(person, number).is_empty());
         }
     }
 
@@ -602,7 +601,6 @@ fn grammar_types_are_exhaustive() {
     assert_eq!(Gender::ALL.len(), 3);
     assert_eq!(Animacy::ALL.len(), 2);
     assert_eq!(Person::ALL.len(), 3);
-    assert_eq!(FiniteTense::ALL.len(), 2, "§7.1 gives two synthetic tenses");
 
     // No duplicates, which a copy-paste edit to an ALL list would introduce.
     let mut cases = Case::ALL.to_vec();

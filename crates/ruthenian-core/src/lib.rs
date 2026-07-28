@@ -57,7 +57,7 @@ pub mod spelling;
 pub mod verb;
 
 pub use adjective::{Adjective, adjective, comparative, short_adjective, superlative};
-pub use grammar::{Animacy, Case, FiniteTense, Gender, Number, Person};
+pub use grammar::{Animacy, Case, Gender, Number, Person};
 pub use noun::{Noun, noun};
 pub use numeral::{numeral, ordinal};
 pub use pronoun::{
@@ -65,7 +65,7 @@ pub use pronoun::{
     that, this, what, who,
 };
 pub use verb::{
-    byti, future_auxiliary, imperative, infinitive, l_participle, past_active_participle,
-    past_gerund, past_passive_participle, present_active_participle, present_gerund,
-    present_passive_participle, verb, verb_paradigm,
+    byti, byti_past, future_auxiliary, imperative, infinitive, l_participle,
+    past_active_participle, past_gerund, past_passive_participle, present_active_participle,
+    present_gerund, present_passive_participle, verb, verb_paradigm,
 };

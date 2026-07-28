@@ -17,7 +17,7 @@
 //! ```
 
 use ruthenian_core::{
-    Animacy, Case, FiniteTense, Gender, Number, Person, noun, relative, that, this, verb, what, who,
+    Animacy, Case, Gender, Number, Person, noun, relative, that, this, verb, what, who,
 };
 use ruthenian_orthography::{Cyrillic, to_latin};
 
@@ -187,11 +187,7 @@ fn main() {
         ("pisatj'", ["пишу", "пишешь", "пишет", "пишем", "пишут"]),
     ] {
         for (i, (name, p, n)) in pns.iter().enumerate() {
-            t.row(
-                &format!("{lemma} {name}"),
-                &verb(lemma, *p, *n, FiniteTense::NonPast),
-                ru[i],
-            );
+            t.row(&format!("{lemma} {name}"), &verb(lemma, *p, *n), ru[i]);
         }
     }
 

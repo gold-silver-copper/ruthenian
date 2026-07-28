@@ -683,12 +683,13 @@ Keep the two-stem model and Zaliznyak classes 1–6, add the **dual** from OCS �
 | 2 | `-jeszj` | `-jeta` | `-jetje` |
 | 3 | `-jet` | `-jetje` | `-ut` |
 
-**Ruthenian ends up where Interslavic did, by a different road.** An earlier
-version of this part argued the opposite — that the aorist and imperfect are
-core tenses and that keeping them is what a conservative standard is for — so
-the reversal is worth setting out.
+**Ruthenian ends past Interslavic, on the same road.** An earlier version of
+this part argued the opposite — that the aorist and imperfect are core tenses and
+that keeping them is what a conservative standard is for — so the reversal is
+worth setting out.
 
-Interslavic merges the two. From its verbs page, verbatim:
+Interslavic merges the two into one "simple past". From its verbs page,
+verbatim:
 
 > Old Church Slavonic, as well as most South Slavic languages … distinguish[es]
 > between the imperfect, perfect, pluperfect and aorist tenses. Interslavic
@@ -696,33 +697,37 @@ Interslavic merges the two. From its verbs page, verbatim:
 > we **simplify this system somewhat by merging the imperfect with the aorist**,
 > a solution that is justified by their similarity in endings.
 
-The result is one "simple past", with a linking vowel for consonant stems:
+Its stated reason is comprehension: *"For a vast majority of Slavs, the endings
+of the simple past are not understandable at all."* That is the right ground for
+an auxiliary language and the wrong one for this project, which optimises for
+conservatism and accepts costs of exactly that kind elsewhere.
 
-| | vowel stem | consonant stem |
-|---|---|---|
-| endings | `-h, -še, -še, -hmo, -ste, -hu` | `-eh, -eše, -eše, -ehmo, -este, -ehu` |
-| `dělati` | `dělah, dělaše, dělaše, dělahmo, dělaste, dělahu` | |
-| `nesti` | | `neseh, neseše, neseše, nesehmo, neseste, nesehu` |
+Ruthenian's reasons are internal, and they arrived one at a time.
 
-Interslavic's stated reason is comprehension: *"For a vast majority of Slavs,
-the endings of the simple past are not understandable at all."* That is the
-right ground for an auxiliary language and the wrong one for this project, which
-optimises for conservatism and accepts costs of exactly that kind elsewhere.
+**The aorist went first.** What the Interslavic merge discards is the diagnostic
+aorist shape, the *bare stem* in the second and third singular — and that shape
+does not survive contact with Ruthenian's own paradigms. `dvinutj` gives `dvinu`
+for the first singular present *and* for the aorist second and third singular,
+and so does every verb of class 3. A tense whose one recognisable form is a
+homograph of another tense's is not carrying the distinction it was restored for.
 
-Ruthenian's reason is different, and it is internal. Note what the merged form
-is: **an imperfect**, its 2/3sg being `-še`. What merging discards is the
-diagnostic aorist shape, the *bare stem* in the second and third singular — and
-that shape does not survive contact with Ruthenian's own paradigms. `dvinutj`
-gives `dvinu` for the first singular present *and* for the aorist second and
-third singular, and so does every verb of class 3. A tense whose one recognisable
-form is a homograph of another tense's is not carrying the distinction it was
-restored for.
+**The imperfect followed.** With the aorist gone it was not an imperfect any
+more — only "the synthetic past", contrasting with nothing. And its cost showed
+in the paradigms: it was built on the present stem so that its ending would
+contract, while the `l`-participle stayed on the infinitive stem, so one verb had
+two pasts on two stems — `dvinjah` beside `dvinul`, `govorjah` beside `govoril`,
+the theme vowel present in one and absent from the other.
 
-So the aorist goes (`RUTHENIAN.md` §7.1) and the imperfect stays, which is the
-same outcome Interslavic reached — but reached here by finding that the
+So Ruthenian keeps **no** synthetic past. Every past is periphrastic: the perfect
+is the `l`-participle with the copula, the pluperfect the same participle with
+`bjah`. That is one step past Interslavic, which keeps a synthetic simple past,
+and it is the same step Russian took — but arrived at by finding that the
 conservative option was not paying for itself, rather than by weighing
-comprehension. Ruthenian's past is built on the **present** stem, so its endings
-contract without a linking vowel: `govorjah`, not Interslavic's `-eh` device.
+comprehension.
+
+`bjah` survives as `byti`'s own past (`RUTHENIAN.md` §7.9). It is a suppletive
+relic rather than a tense: nothing else conjugates that way, and it stays
+because the pluperfect is built on it.
 
 ## 13.6 The payoff: numeral agreement stops being a fossil
 
