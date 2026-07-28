@@ -603,7 +603,7 @@ Ukrainian pattern (`knyhy` / `knyzi`) and is lost in Russian, where both are
 ### Soft: `zjemlja` "earth" (stem `zjeml-`)
 
 Nominative `zjemlja`, vocative `zjemljo`, accusative `zjemlju`, genitive/ablative
-`zjemli`, dative/locative `zjemlje`, instrumental `zjemljoj`; dual
+`zjemli`, dative/locative `zjemlje`, instrumental `zjemljej`; dual
 `zjemlje` / `zjemlju` / `zjemljama`; plural `zjemli` / `zjemljev` / `zjemljam` /
 `zjemljami` / `zjemljah`.
 
@@ -614,9 +614,17 @@ rule 3 puts the soft sign in the ending rather than the stem, so `nacija` is
 `naci-` plus the same endings `zjemlja` takes:
 
 Nominative `nacija`, vocative `nacijo`, accusative `naciju`, genitive/ablative
-`nacii`, dative/locative `nacije`, instrumental `nacijoj`; dual
+`nacii`, dative/locative `nacije`, instrumental `nacijej`; dual
 `nacije` / `naciju` / `nacijama`; plural `nacii` / `nacijev` / `nacijam` /
 `nacijami` / `nacijah`.
+
+**The instrumental is `-jej` and the vocative `-jo`, and the difference is
+deliberate.** §3.2's soft substitution writes `je` for `o`, which gives the
+instrumental `zjemljej` — Russian's `землёй` is stressed `землей`, and §2.3 does
+not spell the shift, so the two agree. The vocative is the one cell where the
+substitution is blocked: `-je` there would merge the vocative with the dative
+and locative, and the soft declension would lose a category §3.1 exists to
+restore. So `zjemljo`, and the collision is avoided rather than accepted.
 
 **The yat ending is `-i` after a hard stem and `-je` after a soft one.** That is
 why the dative and locative coincide here as they do in `zzena` — `zjemlje`,

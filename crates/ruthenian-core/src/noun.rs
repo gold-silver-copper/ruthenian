@@ -231,7 +231,10 @@ pub(crate) fn ending(set: Set, soft: bool, case: Case, number: Number) -> (&'sta
             // were `-ji` and `-i`, which broke the syncretism the hard
             // paradigm has and the footnote justifies.
             (Dative | Locative, Singular) => ("je", n),
-            (Instrumental, Singular) => ("joj", n),
+            // §3.2's soft substitution writes `je` for `o`, so the hard `-oj`
+            // is `-jej` here. The vocative below is the one cell where that
+            // substitution is blocked.
+            (Instrumental, Singular) => ("jej", n),
             // Yat: the feminine dual, as the dative and locative above.
             (Nominative | Vocative | Accusative, Dual) => ("je", n),
             (Genitive | Locative, Dual) => ("ju", n),
