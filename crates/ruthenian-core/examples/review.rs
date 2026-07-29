@@ -433,7 +433,7 @@ fn verbs() {
         (
             "pisatj'",
             "class 6, which the word-final mark selects. The stem mutates throughout and rule 2 drops the ending's glide",
-            &["piszu", "piszeszj", "piszah"],
+            &["piszu", "piszesz", "piszah"],
         ),
     ];
     for (lemma, note, diag) in sample {

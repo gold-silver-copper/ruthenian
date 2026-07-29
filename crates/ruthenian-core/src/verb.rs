@@ -127,14 +127,14 @@ impl Verb {
 ///
 /// // §7.4, class 1: the theme vowel stays and `-j-` is added.
 /// assert_eq!(verb("czitatj", First, Singular), "czitaju");
-/// assert_eq!(verb("czitatj", Second, Singular), "czitajeszj");
+/// assert_eq!(verb("czitatj", Second, Singular), "czitajesz");
 /// assert_eq!(verb("czitatj", Third, Singular), "czitajet");
 /// assert_eq!(verb("czitatj", First, Dual), "czitajevje");
 /// assert_eq!(verb("czitatj", Third, Plural), "czitajut");
 ///
 /// // Class 6, which the word-final mark selects.
 /// assert_eq!(verb("pisatj'", First, Singular), "piszu");
-/// assert_eq!(verb("pisatj'", Second, Singular), "piszeszj");
+/// assert_eq!(verb("pisatj'", Second, Singular), "piszesz");
 /// // Without the mark it is class 1 and a different verb.
 /// assert_eq!(verb("pisatj", First, Singular), "pisaju");
 ///
@@ -194,7 +194,7 @@ crate::dsl::table! {
     /// logic about the stem, not a cell of this table.
     pub const NON_PAST: [(Person, Number); 2] = [
         //                                        1st        2nd
-        (Person::Second, Number::Singular) =>  "jeszj",   "iszj";
+        (Person::Second, Number::Singular) =>  "jesz",   "isz";
         (Person::Third,  Number::Singular) =>  "jet",     "it";
         (Person::First,  Number::Dual)     =>  "jevje",   "ivje";
         (Person::Second, Number::Dual)     =>  "jeta",    "ita";
@@ -403,7 +403,7 @@ pub fn bytj(person: Person, number: Number) -> String {
 /// use ruthenian_core::{future_auxiliary, infinitive, Number::*, Person::*};
 ///
 /// assert_eq!(future_auxiliary(First, Singular), "budu");
-/// assert_eq!(future_auxiliary(Second, Singular), "budjeszj");
+/// assert_eq!(future_auxiliary(Second, Singular), "budjesz");
 /// assert_eq!(future_auxiliary(Third, Plural), "budut");
 ///
 /// // The imperfective future is two words, and the caller joins them.
@@ -415,7 +415,7 @@ pub fn future_auxiliary(person: Person, number: Number) -> String {
     use Person::*;
     match (person, number) {
         (First, Singular) => "budu",
-        (Second, Singular) => "budjeszj",
+        (Second, Singular) => "budjesz",
         (Third, Singular) => "budjet",
         (First, Dual) => "budjevje",
         (Second, Dual) => "budjeta",

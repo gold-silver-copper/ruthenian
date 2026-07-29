@@ -223,7 +223,7 @@ pub(crate) fn lookup<K: PartialEq, const N: usize>(
 /// table! {
 ///     pub const NON_PAST: [(Person, Number); 2] = [
 ///         //                              1st       2nd
-///         (Person::Second, Number::Singular) => "jeszj", "iszj";
+///         (Person::Second, Number::Singular) => "jesz", "isz";
 ///     ];
 /// }
 /// ```

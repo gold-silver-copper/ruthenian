@@ -699,7 +699,7 @@ Keep the two-stem model and Zaliznyak classes 1â€“6, add the **dual** from OCS â
 | | Singular | Dual | Plural |
 |---|---|---|---|
 | 1 | `-u` | `-jevje` | `-jem` |
-| 2 | `-jeszj` | `-jeta` | `-jetje` |
+| 2 | `-jesz` | `-jeta` | `-jetje` |
 | 3 | `-jet` | `-jetje` | `-ut` |
 
 **Ruthenian ends past Interslavic, on the same road.** An earlier version of

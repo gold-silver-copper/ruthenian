@@ -710,8 +710,8 @@ fn kto_czto_table() -> String {
 ///
 /// The endings are recovered by subtracting the shared stem from each form of
 /// a mutation-free exemplar (`czitatj`, `govoritj`), then restoring the seam
-/// spelling the subtraction loses: `czitajeszj` minus `czitaj-` is `-eszj` on
-/// the surface, but the ending is `-jeszj` with rule 3b writing `jj` once.
+/// spelling the subtraction loses: `czitajesz` minus `czitaj-` is `-eszj` on
+/// the surface, but the ending is `-jesz` with rule 3b writing `jj` once.
 fn nonpast_table() -> String {
     let mut rows = vec![
         "| | Singular | **Dual** | Plural |".to_string(),

@@ -154,7 +154,7 @@ pub fn palatalize(stem: &str, which: Palatal) -> String {
 /// assert_eq!(mutate_present_stem("ljub"), "ljublj"); // ljubitj -> ljublju
 ///
 /// // A fricative merges with its reflex: [s] + [sz] is no Slavic sound.
-/// assert_eq!(mutate_present_stem("pis"), "pisz");    // pisatj' -> piszeszj
+/// assert_eq!(mutate_present_stem("pis"), "pisz");    // pisatj' -> piszesz
 /// assert_eq!(mutate_present_stem("voz"), "vozz");    // vozitj  -> vozzu
 /// assert_eq!(mutate_present_stem("mah"), "masz");    // mahatj' -> maszu
 ///
@@ -210,7 +210,7 @@ fn ends_with_letter(stem: &str, letter: &str) -> bool {
 /// an interpreter and holds no linguistics; the rules are the declaration.
 ///
 /// Rule 2 covers the vocative (`otjecze`, `druzze`), the present endings
-/// (`piszeszj`, §7.3) and the `-jem`/`-jego` series, which after these stems is
+/// (`piszesz`, §7.3) and the `-jem`/`-jego` series, which after these stems is
 /// simply `-om` and `-ogo`.
 ///
 /// **There used to be a third rule and its deletion is why this one is simple.**
@@ -228,7 +228,7 @@ fn ends_with_letter(stem: &str, letter: &str) -> bool {
 /// // rule 2, across all four hard-or-inherently-palatal consonants
 /// assert_eq!(spell_ending("otjecz", "je"), "e");     // otjecze
 /// assert_eq!(spell_ending("druzz", "je"), "e");      // druzze
-/// assert_eq!(spell_ending("pisz", "jeszj"), "eszj"); // piszeszj
+/// assert_eq!(spell_ending("pisz", "jesz"), "esz");  // piszesz
 /// // the deleted rule's cells: the ending is simply invariant now
 /// assert_eq!(spell_ending("nozz", "om"), "om");      // nozzom
 /// assert_eq!(spell_ending("otjec", "ogo"), "ogo");   // otjecogo
@@ -236,7 +236,7 @@ fn ends_with_letter(stem: &str, letter: &str) -> bool {
 /// // and rule 2 does not touch a soft sign: §3.6 keeps both
 /// assert_eq!(spell_ending("nocz", "jju"), "jju");    // noczjju
 /// // rule 3b
-/// assert_eq!(spell_ending("czitaj", "jeszj"), "eszj"); // czitajeszj
+/// assert_eq!(spell_ending("czitaj", "jesz"), "esz");  // czitajesz
 /// ```
 pub fn spell_ending(stem: &str, ending: &str) -> String {
     let mut out = ending.to_string();
@@ -273,8 +273,8 @@ crate::dsl::rewrites! {
     ///
     /// Rule 3b closes the list: a stem-final `j` and an ending-initial `j` are
     /// written once. A class-1 present stem ends in `j` by construction (§7.3),
-    /// so this is every form of every such verb — `czitaj` + `-jeszj` is
-    /// `czitajeszj`.
+    /// so this is every form of every such verb — `czitaj` + `-jesz` is
+    /// `czitajesz`.
     pub const SEAM = [
         // rule 2 — a glide is unwritable after a hushing consonant
         "j" => ""  / [zz sz cz szcz] _ V ;
@@ -304,7 +304,7 @@ const VOWELS: [char; 6] = ['a', 'e', 'i', 'o', 'u', 'y'];
 /// assert_eq!(join("nozz", "jy"), "nozzi");
 /// assert_eq!(join("sj", "im"), "sjim");       // the stem is invariant (§2.5)
 /// assert_eq!(join("kon", "ji"), "konji");
-/// assert_eq!(join("czitaj", "jeszj"), "czitajeszj"); // rule 3b: jj is one ja
+/// assert_eq!(join("czitaj", "jesz"), "czitajesz"); // rule 3b: jj is one ja
 /// ```
 pub fn join(stem: &str, ending: &str) -> String {
     format!("{stem}{}", spell_ending(stem, ending))

@@ -852,7 +852,7 @@ Not declensions — a single set of rules applied to every ending:
    a hard/soft contrast, so the glide has nothing to mark. This is a fact about
    the alphabet rather than about endings, and it holds inside a root as much as
    at a seam: `zzena`, `czelovjek`, `szestj`, and `otjecz` + `-je` → `otjecze`,
-   `pisz` + `-jeszj` → `piszeszj`;
+   `pisz` + `-jesz` → `piszesz`;
 3. a stem-final soft sign belongs to the ending, not the stem (`kon` + `j`);
 4. **first palatalization** before the vocative `-je`: `k`→`cz`, `g`→`zz`,
    `h`→`sz`, `c`→`cz` (`drug` → `druzze`, `otjec` → `otjecze`);
@@ -879,7 +879,7 @@ is precisely the part Ruthenian cannot see.
 
 **Rule 2 is what remains, and it is now one statement about four consonants.**
 An ending never marks softness on a consonant that has no soft value. That
-covers the vocative (`otjecze`, `druzze`), the present endings (`piszeszj`,
+covers the vocative (`otjecze`, `druzze`), the present endings (`piszesz`,
 §7.3), and the `-jem`/`-jego` series, which after these stems is simply `-om`
 and `-ogo` — there was never a `j` to drop, because rule 2 no longer puts one
 there.
@@ -1595,9 +1595,9 @@ A verb whose stem is **one syllable** has no theme vowel to drop — the vowel *
 the root — so it takes class 1's operation regardless of which vowel it is:
 
 ```
-mytj   → myj-    myju, myjeszj, myjet …      (OCS myti, myjǫ)
-pitj   → pij-    piju, pijeszj, pijet …      (OCS piti, pijǫ)
-bitj   → bij-    biju, bijeszj, bijet …      (OCS biti, bijǫ)
+mytj   → myj-    myju, myjesz, myjet …      (OCS myti, myjǫ)
+pitj   → pij-    piju, pijesz, pijet …      (OCS piti, pijǫ)
+bitj   → bij-    biju, bijesz, bijet …      (OCS biti, bijǫ)
 krytj  → kryj-   kryju …                     (OCS kryti, kryjǫ)
 grjetj → grjej-  grjeju …                    (OCS grěti, grějǫ)
 ```
@@ -1624,8 +1624,8 @@ mark (§2.1) supplies exactly the one bit needed, so **the citation form alone
 determines the class** and nothing has to be told to the inflection engine:
 
 ```
-czitatj   → czitaj-   czitaju, czitajeszj, czitajet …
-pisatj'   → pisz-     piszu, piszeszj, piszet …
+czitatj   → czitaj-   czitaju, czitajesz, czitajet …
+pisatj'   → pisz-     piszu, piszesz, piszet …
 ```
 
 The mark is part of the lemma, not an argument, so it travels with the word
@@ -1655,14 +1655,14 @@ are the only verbs where the class plus the infinitive is not enough.
 |---|---|---|---|
 | **1st conjugation** | | | |
 | 1 | `-u` | `-jevje` | `-jem` |
-| 2 | `-jeszj` | `-jeta` | `-jetje` |
+| 2 | `-jesz` | `-jeta` | `-jetje` |
 | 3 | `-jet` | `-jetje` | `-ut` |
 | **2nd conjugation** | | | |
 | 1 | `-ju` | `-ivje` | `-im` |
-| 2 | `-iszj` | `-ita` | `-itje` |
+| 2 | `-isz` | `-ita` | `-itje` |
 | 3 | `-it` | `-itje` | `-jat` |
 
-`czitatj`: `czitaju, czitajeszj, czitajet` · `czitajevje, czitajeta, czitajetje` · `czitajem, czitajetje, czitajut`.
+`czitatj`: `czitaju, czitajesz, czitajet` · `czitajevje, czitajeta, czitajetje` · `czitajem, czitajetje, czitajut`.
 <!-- /render:verb-nonpast -->
 
 ## 7.7 Perfect and pluperfect
@@ -1693,7 +1693,7 @@ already have.
 |---|---|---|
 | | present endings, future sense — `poczitaju` | `budu` + infinitive — `budu czitatj` |
 
-`budu, budjeszj, budjet` · `budjevje, budjeta, budjetje` · `budjem, budjetje,
+`budu, budjesz, budjet` · `budjevje, budjeta, budjetje` · `budjem, budjetje,
 budut`.
 
 ## 7.9 The copula `bytj`
@@ -1705,7 +1705,7 @@ dual included, and **never omitted**.
 | | Singular | Dual | Plural |
 |---|---|---|---|
 | **present** | `jesmj`, `jesi`, `jestj` | `jesvje`, `jesta`, `jestje` | `jesm`, `jestje`, `sutj` |
-| **future** | `budu`, `budjeszj`, `budjet` | `budjevje`, `budjeta`, `budjetje` | `budjem`, `budjetje`, `budut` |
+| **future** | `budu`, `budjesz`, `budjet` | `budjevje`, `budjeta`, `budjetje` | `budjem`, `budjetje`, `budut` |
 <!-- /render:verb-bytj -->
 
 **There is no past row.** `bjah` went with the synthetic past (§7.1), and the
@@ -2115,11 +2115,11 @@ grammatical.
 
 Three devices, in ascending formality:
 
-1. **Intonation alone** — `ty czitajeszj?`
-2. **The clitic `li`**, in second position — `czitajeszj li ty?` This is the
+1. **Intonation alone** — `ty czitajesz?`
+2. **The clitic `li`**, in second position — `czitajesz li ty?` This is the
    neutral written question. `li` is a clitic and shares the second-position
    cluster with the pronoun clitics, standing first within it (§10.1a).
-3. **An interrogative word**, fronted — `czto ty czitajeszj?`
+3. **An interrogative word**, fronted — `czto ty czitajesz?`
 
 ## 10.5 Subordination
 
@@ -2432,11 +2432,11 @@ implementing §3 is what settled it.
 
 Rule 2a used to admit `cz` and `szcz` only, on the strength of §2.2's exception
 list, which made `otjecze` and `druzzje` both derivable but left §7.3's
-`piszeszj` underivable. The resolution was that §2.2's list was wrong: `zz` and
+`piszesz` underivable. The resolution was that §2.2's list was wrong: `zz` and
 `sz` are inherently **hard**, as `ж` and `ш` are in Russian, so they have no soft
 value for a `j` to mark either. Both kinds of consonant reject the glide, for
 opposite reasons, and one rule now covers all four — `otjecze`, `druzze`,
-`piszeszj`.
+`piszesz`.
 
 Three consequences fell out, and each turned out to move *towards* Russian rather
 than away:

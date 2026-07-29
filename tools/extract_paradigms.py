@@ -445,15 +445,15 @@ def finite(pos, lemma, section, _tense, forms):
 VERB = (
     # §7.4, class 1 — the paradigm §7.3 and §7.4 both spell out.
     finite("verb", "czitatj", "7.4", "NonPast", [
-        "czitaju", "czitajeszj", "czitajet",
+        "czitaju", "czitajesz", "czitajet",
         "czitajevje", "czitajeta", "czitajetje",
         "czitajem", "czitajetje", "czitajut"])
     # §7.3's class-6 example, which the word-final mark selects.
     + finite("verb", "pisatj'", "7.3", "NonPast", [
-        "piszu", "piszeszj", "piszet", "", "", "", "", "", ""])[:3]
+        "piszu", "piszesz", "piszet", "", "", "", "", "", ""])[:3]
     # §7.8's auxiliary.
     + finite("future_auxiliary", "-", "7.8", "Future", [
-        "budu", "budjeszj", "budjet",
+        "budu", "budjesz", "budjet",
         "budjevje", "budjeta", "budjetje",
         "budjem", "budjetje", "budut"])
     # §7.9's copula: the present and the imperfect are suppletive and tabulated;
@@ -578,7 +578,7 @@ def main() -> None:
         if in_fence:
             # A fenced block is a *display* of forms and carries no backticks,
             # so every word in it counts as attested. Without this the check
-            # cannot see §7.3's `piszu, piszeszj, piszet` at all — it tracked
+            # cannot see §7.3's `piszu, piszesz, piszet` at all — it tracked
             # the fence state and then never used it, which made every
             # fence-only form look unattested.
             for word in re.split(r"[\s/,;()>—…-]+", line):
