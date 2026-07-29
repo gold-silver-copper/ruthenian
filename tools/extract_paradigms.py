@@ -459,7 +459,7 @@ VERB = (
     # §7.9's copula: the present and the imperfect are suppletive and tabulated;
     # the aorist is regular and comes out of the general path on `bytj`.
     + finite("bytj", "-", "7.9", "Present", [
-        "jesm", "jesesz", "jest", "jesvje", "jesta", "jestje",
+        "jesm", "jesi", "jest", "jesvje", "jesta", "jestje",
         "jesmy", "jestje", "jesut"])
     # §7.7's l-participle, and §7.9's for `bytj`.
     + [("l_participle", "czitatj", f"{g}.{n}", form, "7.7")

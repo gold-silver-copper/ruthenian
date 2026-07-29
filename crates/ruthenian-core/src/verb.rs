@@ -356,7 +356,7 @@ pub fn l_participle(word: &str, gender: Gender, number: Number) -> String {
 /// use ruthenian_core::{bytj, l_participle, Gender::Masculine, Number::*, Person::*};
 ///
 /// assert_eq!(bytj(First, Singular), "jesm");
-/// assert_eq!(bytj(Second, Singular), "jesesz");
+/// assert_eq!(bytj(Second, Singular), "jesi");
 /// assert_eq!(bytj(Third, Singular), "jest");
 /// assert_eq!(bytj(First, Dual), "jesvje");
 /// assert_eq!(bytj(Third, Plural), "jesut");
@@ -379,7 +379,7 @@ pub fn bytj(person: Person, number: Number) -> String {
     use Person::*;
     match (person, number) {
         (First, Singular) => "jesm",
-        (Second, Singular) => "jesesz",
+        (Second, Singular) => "jesi",
         (Third, Singular) => "jest",
         (First, Dual) => "jesvje",
         (Second, Dual) => "jesta",

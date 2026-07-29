@@ -1704,7 +1704,7 @@ dual included, and **never omitted**.
 <!-- render:verb-bytj -->
 | | Singular | Dual | Plural |
 |---|---|---|---|
-| **present** | `jesm`, `jesesz`, `jest` | `jesvje`, `jesta`, `jestje` | `jesmy`, `jestje`, `jesut` |
+| **present** | `jesm`, `jesi`, `jest` | `jesvje`, `jesta`, `jestje` | `jesmy`, `jestje`, `jesut` |
 | **future** | `budu`, `budjesz`, `budjet` | `budjevje`, `budjeta`, `budjetje` | `budjemy`, `budjetje`, `budut` |
 <!-- /render:verb-bytj -->
 
@@ -1735,15 +1735,27 @@ frequent verb in the language and every Indo-European language tolerates
 suppletion in exactly this word — Latin `sum`/`fui`, English `is`/`was`/`been`,
 OCS `jesmь`/`byxъ`/`bǫdǫ`.
 
-The stems, and their sources. The present used to carry a third stem — OCS's
-3pl `sǫtъ` gave `sutj` — until the cell was rebuilt as `jes-` + the regular
-`-ut`: `jesut`. One row left the table, and the present became a single stem
-with near-regular endings (`jesm`, `jesesz`, `jest`, `jesvje`, `jesta`,
-`jestje`, `jesmy`, `jestje`, `jesut`):
+The stems, and their sources. The present is `jes-` in every cell, carrying
+the **athematic** endings — `-m`, `-si`, `-t`, then the shared `-vje`, `-ta`,
+`-tje`, `-my`, `-tje`, `-ut` — and nearly every form is the attested one in
+Ruthenian orthography: `jesmь` and `estь` lose their yers to give `jesm` and
+`jest`, `esvě` writes its yat to give `jesvje`, and Church Slavonic attests
+`есмы` for `jesmy` directly. `jesi` is `jes` + `-si` with `ss` written once —
+a merger that is not an exception here but the oldest rule in the paradigm:
+PIE `*h₁és-si` already degeminated to `*h₁ési`, so `jesi` has been the output
+of this derivation, unchanged, from PIE through OCS (`ѥси`) to Old Russian
+(`еси`).
+
+Two cells only are Ruthenian's own. The 3pl was `sǫtъ` — the PIE **zero
+grade** `*h₁s-énti`, an ablaut alternation of exactly the kind §2.5 and §3.9
+remove everywhere else — and is levelled to `jes-` + `-ut`: `jesut`, as
+Serbo-Croatian levelled its own to `jesu`. And OCS's 1pl `ѥсмъ` would merge
+with the 1sg once the yers drop (`jesmь`/`jesmъ` differed by nothing else),
+which the attested medieval `есмы` already repairs:
 
 | slot | stem | from | regular? |
 |---|---|---|---|
-| present | `jes-`, in every cell | PIE `*h₁es-` "be, exist" | half — athematic endings on one stem |
+| present | `jes-`, in every cell | PIE `*h₁es-` "be, exist" | **yes** — athematic endings on one stem |
 | l-participle | `by-` | `*bʰuH-` | **yes** — §7.7's rule on the same stem |
 | future | `bud-` | `*bʰuH-`, nasal present | no |
 | imperative | `bud-` | `*bʰuH-` | no |
