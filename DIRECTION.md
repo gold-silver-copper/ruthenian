@@ -18,7 +18,7 @@ assert_eq!(noun("dom", Nominative, Dual),    "doma");     // two houses
 // Everything a shape cannot predict is in the lemma itself:
 assert_eq!(noun("Drug", Locative, Singular), "druzi");    // capital = animate
 assert_eq!(noun("noczj'", Genitive, Singular), "noczi");  // ' = not the predicted gender
-assert_eq!(verb("pisatj'", First, Singular, NonPast), "piszu");  // ' = class 6
+assert_eq!(verb("pisatj'", First, Singular), "piszu");           // ' = class 6
 
 // Output is always lowercase; sentence capitalisation is the caller's business.
 assert_eq!(noun("Drug", Nominative, Singular), "drug");
@@ -26,8 +26,8 @@ assert_eq!(noun("Drug", Nominative, Singular), "drug");
 
 The goal is complete coverage: **every form of every word.** Given a citation
 form and the grammatical facts a citation form cannot carry, the crate produces
-any cell of any paradigm — eight cases, three numbers, three genders, six verb
-classes, three synthetic tenses — and can enumerate all of them.
+any cell of any paradigm — eight cases, three numbers, three genders and six
+verb classes — and can enumerate all of them.
 
 Everything is computed from rules. There is no dictionary here, no data files, no
 lookup tables, no network, no I/O of any kind. A word the crate has never seen
@@ -58,16 +58,17 @@ pub fn comparative(word: &str) -> String;    // "dobr" -> "dobrjejsz"
 pub fn superlative(word: &str) -> String;    // "dobr" -> "najdobrjejsz"
 
 // ---- verbs -----------------------------------------------------------------
-pub fn verb(word: &str, person: Person, number: Number,
-            tense: FiniteTense) -> String;
+pub fn verb(word: &str, person: Person, number: Number) -> String;
 pub fn imperative(word: &str, person: Person, number: Number) -> String;
 pub fn infinitive(word: &str) -> String;
 pub fn l_participle(word: &str, gender: Gender, number: Number) -> String;
 
-// `byti` is suppletive (§7.9) and belongs to no class, so it gets its own
+// `bytj` is suppletive (§7.9) and belongs to no class, so it gets its own
 // function rather than an irregular-class escape hatch that every other call
-// site would have to handle and could never hit.
-pub fn byti(person: Person, number: Number, tense: FiniteTense) -> String;
+// site would have to handle and could never hit. It has no tense parameter
+// because the language has one synthetic tense (§7.1) — and no past form,
+// since the copula is not exempt from that.
+pub fn bytj(person: Person, number: Number) -> String;
 
 // `budu` is a different root from `jes-` — suppletion, not a tense of one stem —
 // and its only job is to build the imperfective future, so it is named for that.
@@ -131,8 +132,12 @@ On, Ona, Ono, My, Vy, Oni, Vje, Va }` was the one type here that was not a
 dimension of anything, and its own justification said so: *which pronoun, the
 way `word: &str` says which noun.*
 
-What survives is six types, each a genuine dimension of a paradigm: `Case`,
-`Number`, `Gender`, `Animacy`, `Person`, `FiniteTense`.
+What survives is five types, each a genuine dimension of a paradigm: `Case`,
+`Number`, `Gender`, `Animacy`, `Person`.
+
+`FiniteTense` was a sixth until §7.1 dropped both synthetic pasts. With one
+synthetic tense left it indexed nothing, so the same rule that removed `Pronoun`
+removed it: an enum with one value is not a dimension.
 
 ### A pronoun has no name
 
@@ -162,16 +167,11 @@ so law 5 is untouched — and neither `Gender::Unspecified` nor an `Option` is
 added to say what the table already says.
 
 This is the one place the crate names a closed class by feature rather than by
-string, and it is worth being clear why that is not a precedent for `byti` or
+string, and it is worth being clear why that is not a precedent for `bytj` or
 the reflexive: those are single words, so there is nothing to index. §5's other
 series — `toj`, `sjej`, `kto`, `czto`, `izzje` and the §5.6 prefixed forms —
 have no entry point at all yet, which is an open hole rather than a decision;
 see "What this crate is not".
-
-`FiniteTense` stays a parameter deliberately. Person × number × tense is one
-table, so tense indexes within a paradigm rather than selecting between them —
-and splitting it would force the same three-way split on `byti` and lose the
-ability to walk the tenses when building a full paradigm.
 
 **Every function is total.** No `Option`, no `Result`, no panic: any combination
 of arguments the types permit returns a string. Where the language has no form
@@ -244,31 +244,31 @@ a participle plus a copula. This crate returns **words**, so it provides the
 parts and the caller composes:
 
 ```rust
-// perfect: jesmj czital
-format!("{} {}", byti(First, Singular, NonPast),
+// perfect: jesm czital
+format!("{} {}", bytj(First, Singular),
                  l_participle("czitatj", Masculine, Singular));
 
-// pluperfect: byh czital (aorist aux) / bjah czital (imperfect aux) — §7.7
-format!("{} {}", byti(First, Singular, Aorist),
-                 l_participle("czitatj", Masculine, Singular));
+// pluperfect: jesm byl czital — the copula's own participle between them
+format!("{} {} {}", bytj(First, Singular),
+                    l_participle("bytj", Masculine, Singular),
+                    l_participle("czitatj", Masculine, Singular));
 
 // imperfective future: budu czitatj
 format!("{} {}", future_auxiliary(First, Singular), infinitive("czitatj"));
 ```
 
-`byti`'s `NonPast` is the present (`jesmj`), not a present/future blend: the
-future uses a different root altogether (`bǫd-` against `jes-`), which is
-suppletion rather than a tense of one stem. That is why `future_auxiliary` is its
-own function and there is no fourth tense variant for one verb's sake.
+`bytj` returns the present (`jesm`), not a present/future blend: the future uses
+a different root altogether (`bǫd-` against `jes-`), which is suppletion rather
+than a tense of one stem. That is why `future_auxiliary` is its own function.
 
-### Why `byti` is a function and not five special cases
+### Why `bytj` is a function and not five special cases
 
 It is the language's only suppletive verb (§7.9), so it has to be handled
 somewhere. The alternative — threading it through the general path with checks at
 each stage — is what `interslavic-rs` does, and it is worth knowing how that
 turned out.
 
-There, `byti` has no entry point of its own. Its irregularity is spread across
+There, `bytj` has no entry point of its own. Its irregularity is spread across
 **five** places in one file: the prefix splitter carries it in a `NON_REGULAR`
 list; the stem deriver swaps `by` → `jes` with a string comparison; a hardcoded
 six-slot table supplies the present; the future builder special-cases it to emit
@@ -278,11 +278,11 @@ ja | vě` and **does not include `jes`** — so the most irregular verb in the
 language bypasses the crate's irregular-verb mechanism entirely.
 
 None of that is wrong, and it produces correct forms. But a reader asking "how
-does `byti` work" has to find all five sites, and nothing tells them there are
+does `bytj` work" has to find all five sites, and nothing tells them there are
 five. A dedicated function collects the same facts where they can be read at
 once.
 
-The cost is real and is accepted deliberately: **`byti` is a second generation
+The cost is real and is accepted deliberately: **`bytj` is a second generation
 path**, which law 2 otherwise forbids. It is tolerable only because the verb is a
 closed, nine-cell paradigm that the specification tabulates in full, so the
 function is checked against §7.9 by the same conformance corpus as everything
@@ -290,24 +290,24 @@ else. If it ever grows a rule rather than a table, that exemption stops holding.
 
 ### Where `budu` lives, and why it is a choice rather than a constraint
 
-`interslavic-rs` gets `byti`'s future for free: its future is periphrastic for
-*every* verb, so `bųdų byti` is emitted with the lexical verb elided and comes
+`interslavic-rs` gets `bytj`'s future for free: its future is periphrastic for
+*every* verb, so `bųdų bytj` is emitted with the lexical verb elided and comes
 out as `bųdų`. One table serves both the auxiliary and the verb's own future.
 
-**That trick transfers to Ruthenian.** `byti` is imperfective, and Ruthenian's
-imperfective future *is* periphrastic — `budu` + infinitive (§7.8) — so `byti`'s
+**That trick transfers to Ruthenian.** `bytj` is imperfective, and Ruthenian's
+imperfective future *is* periphrastic — `budu` + infinitive (§7.8) — so `bytj`'s
 future is the same rule with the infinitive elided. §7.8's synthetic *perfective*
-future is irrelevant here, because `byti` is not perfective; what it prevents is
+future is irrelevant here, because `bytj` is not perfective; what it prevents is
 a single universal future rule for regular verbs, which is a different claim.
 
 So the `budu…` forms are one table, and the only question is what to call the
-function that holds it. `future_auxiliary` rather than `byti(.., Future)` because
-`FiniteTense` has no `Future` variant, and it has none because a regular verb's
+function that holds it. `future_auxiliary` rather than `bytj(.., Future)` because
+there is no `Future` tense, and none is needed because a regular verb's
 future is either **identical to its `NonPast`** (perfective) or **two words**
-(imperfective) — neither needs a slot of its own. `byti`'s future is the one
+(imperfective) — neither needs a slot of its own. `bytj`'s future is the one
 one-word future form with nowhere else to live.
 
-That is a naming decision, not a structural one. Putting the table inside `byti`
+That is a naming decision, not a structural one. Putting the table inside `bytj`
 under a fourth tense value would work equally well and would cost one enum
 variant that only one verb can use; putting it in its own function costs one
 function name. Either is defensible, and `bǫd-` being a different root from
@@ -335,10 +335,9 @@ pub enum Person { First, Second, Third }
 // The three SYNTHETIC tenses. NonPast is present for an imperfective and future
 // for a perfective (§7.8). The perfect, pluperfect and imperfective future are
 // periphrastic and are composed by the caller.
-pub enum FiniteTense { NonPast, Aorist, Imperfect }
 ```
 
-**Six types, and every one is a dimension of a paradigm.** Each is exhaustive
+**Five types, and every one is a dimension of a paradigm.** Each is exhaustive
 and each maps to a numbered section of the specification.
 
 A category the language does not have does not appear: there is no
@@ -437,10 +436,23 @@ will carry §5.4's rows with nothing to check them against.
 
 Short, and each falsifiable by a test.
 
-1. **The specification decides; the code conforms.** Where `docs/RUTHENIAN.md`
-   states a form, that form is correct by definition and a disagreeing engine is
-   wrong. Where the spec is silent, the gap is reported as a **spec** gap and
-   closed there — never patched with a guess in code.
+1. **The specification's prose decides; the code conforms — and the code
+   decides the specification's tables.** Where `docs/RUTHENIAN.md` *states* a
+   rule or a form in prose, it is correct by definition and a disagreeing
+   engine is wrong; where the spec is silent, the gap is reported as a **spec**
+   gap and closed there — never patched with a guess in code. But the spec's
+   paradigm **tables** are not hand-written: every table of inflected forms
+   sits between `<!-- render:ID -->` markers and is generated by
+   `render::blocks()` through the public API, republished by
+   `cargo run -p ruthenian-core --example render_spec`, and held current by
+   the `spec_tables_current` guard. The split follows what each side is good
+   at holding still. Prose states rules, and the corpus catches an engine that
+   breaks them; a table of forms is *output*, and three separate drifts
+   (`nacijoj` after the instrumental moved, a softened `-y` spelled two ways
+   in two sections, a stale cell count) showed that a hand-maintained copy of
+   engine output is a bug that has not happened yet. The engine cannot
+   redefine the language through this door: a table it renders is still
+   checked against the corpus, and the corpus is transcribed from prose.
 2. **One generation path.** `paradigm()` calls `form()`. A convenience wrapper
    that computes a form its own way is two implementations that will disagree.
 3. **Derive state; never store it.** No field duplicating something computable.
@@ -472,8 +484,14 @@ ever will.
 
 `docs/RUTHENIAN.md`'s paradigm tables — `dom`, `konj`, `drug`, `okno`, `polje`,
 `zzena`, `zjemlja`, `noczj`, `kostj`, the adjective, the pronouns, the numerals,
-`byti` and the verb tables — are extracted **once** into a committed corpus, and
+`bytj` and the verb tables — are extracted **once** into a committed corpus, and
 the conformance test asserts the engine against that file.
+
+The tables inside `render:` markers are generated from the engine (law 1),
+so for them the corpus check runs spec-ward: the corpus was transcribed before
+the markers existed, and a rendered table that dropped or changed a form would
+break `spec_currency`'s transcription check. Prose examples remain the
+hand-transcribed half.
 
 Extraction is deliberately a separate step from assertion. Parsing the
 specification inside the test was tried and failed silently: a heading match
@@ -496,3 +514,34 @@ quietly checks less, and a currency check fails when the two drift.
 - Zero third-party dependencies; `#![forbid(unsafe_code)]`; no panic on any
   public path, for any input including empty and non-Ruthenian strings.
 - Every guard demonstrated to fail under its stated witness.
+- The spec's marked tables regenerate byte-identically from the engine
+  (`spec_tables_current`), and every renderer's block exists in the spec.
+
+## The notation
+
+The grammar is written in `dsl.rs`'s notation, not in open-coded Rust:
+
+- **`rewrites!`** — ordered seam rules in SPE notation
+  (`"y" => "i" / [k g h] _ ;`). The list order **is** the application order,
+  so an ordering dependency is a visible two-line swap in a diff, not a fact
+  buried in control flow. §3.8's rules 1 and 2 are order-dependent and were
+  once wrong silently; they cannot be again without the diff showing it.
+- **`letters!`** — stem-edge letter maps (`k => cz`): the palatalizations and
+  the present-stem mutations.
+- **`paradigm!`** — noun ending tables in the spec's own orientation, one row
+  per case, one column per number. Only the **hard** series is tabulated;
+  `soften` derives the soft one, which is what §3.2 says and what stops the
+  two series drifting (they did drift while both were written out). A `-`
+  cell claims "case resolution never sends a query here", and the
+  `paradigm_totality` guard walks every grammatical combination to keep the
+  claim honest.
+- **`table!`** — the general shape for everything not case-by-number: the
+  long adjective (five agreement columns), the non-past verb (a column per
+  conjugation), the imperative.
+
+The interpreters (`spell_ending`, `palatalize`, `Paradigm::cell`, `lookup`)
+hold no linguistics; the declarations are the statement of the rules. What
+stays *outside* the notation stays out for a reason: suppletive words (`bytj`,
+the personal pronouns) are stated forms, not tables — an enum that names a
+word is neither a function nor a parameter, and a table that is mostly
+exceptions is a match arm, not a paradigm.

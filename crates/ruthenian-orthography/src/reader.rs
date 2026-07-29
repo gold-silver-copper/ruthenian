@@ -6,7 +6,9 @@
 //! so the round-trip property holds by construction rather than by patching
 //! cases as they are discovered.
 
-use crate::alphabet::{Class, DIGRAPHS, Letter, SEP, STRESS, find_cyrillic, is_neutral};
+use crate::alphabet::{
+    Class, DIGRAPHS, Letter, SEP, STRESS, find_cyrillic, is_hushing, is_neutral,
+};
 
 /// One unit of a read Ruthenian string.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -50,6 +52,11 @@ fn single(c: char) -> Option<&'static Letter> {
 pub fn tokenize(s: &str, before: Option<Class>) -> Vec<Grapheme> {
     let mut out = Vec::new();
     let mut prev_class = before;
+    // The previous Cyrillic letter, for the hushing rule. `before` gives a class
+    // and not a letter, so a probe that begins mid-word cannot use this — which
+    // is right: the writer only ever asks about a two-letter window it supplies
+    // in full.
+    let mut prev_cyr: Option<char> = None;
     let mut i = 0;
 
     while i < s.len() {
@@ -62,7 +69,21 @@ pub fn tokenize(s: &str, before: Option<Class>) -> Vec<Grapheme> {
         if is_neutral(c) {
             out.push(Grapheme::Neutral(c));
             prev_class = None; // a word boundary resets the j-context
+            prev_cyr = None;
             i += c.len_utf8();
+            continue;
+        }
+
+        // `e` after `ж ш ч щ` is `е`, not `э`. The alphabet declares that no
+        // hushing consonant is followed by `э`, so this is exact.
+        if (c == 'e' || c == 'E') && prev_cyr.is_some_and(is_hushing) {
+            let upper = c.is_uppercase();
+            let (cyr, class) = cased('е', upper);
+            i += c.len_utf8();
+            let stress = eat_stress(s, &mut i);
+            out.push(Grapheme::Letter { cyr, upper, stress });
+            prev_class = Some(class);
+            prev_cyr = Some(cyr);
             continue;
         }
 
@@ -79,12 +100,14 @@ pub fn tokenize(s: &str, before: Option<Class>) -> Vec<Grapheme> {
                 // precedes. The alphabet requires the two to agree, so this is
                 // exact rather than a guess.
                 let upper = next.is_some_and(char::is_uppercase);
+                let cyr = if upper { 'Ъ' } else { 'ъ' };
                 out.push(Grapheme::Letter {
-                    cyr: if upper { 'Ъ' } else { 'ъ' },
+                    cyr,
                     upper,
                     stress: false,
                 });
                 prev_class = Some(Class::HardSign);
+                prev_cyr = Some(cyr);
             } else {
                 out.push(Grapheme::Separator);
                 // A separator does not reset the j-context: in `batalj'on` the
@@ -111,6 +134,7 @@ pub fn tokenize(s: &str, before: Option<Class>) -> Vec<Grapheme> {
             let stress = eat_stress(s, &mut i);
             out.push(Grapheme::Letter { cyr, upper, stress });
             prev_class = Some(class);
+            prev_cyr = Some(cyr);
             continue;
         }
 
@@ -126,6 +150,7 @@ pub fn tokenize(s: &str, before: Option<Class>) -> Vec<Grapheme> {
             let stress = eat_stress(s, &mut i);
             out.push(Grapheme::Letter { cyr, upper, stress });
             prev_class = Some(class);
+            prev_cyr = Some(cyr);
             continue;
         }
 
@@ -136,6 +161,7 @@ pub fn tokenize(s: &str, before: Option<Class>) -> Vec<Grapheme> {
             let stress = eat_stress(s, &mut i);
             out.push(Grapheme::Letter { cyr, upper, stress });
             prev_class = Some(class);
+            prev_cyr = Some(cyr);
             continue;
         }
 

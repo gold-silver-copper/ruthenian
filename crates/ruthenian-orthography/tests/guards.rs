@@ -8,6 +8,13 @@ use ruthenian_orthography::{
     to_latin_mixed,
 };
 
+/// `ё` is not in the declared alphabet — it is stressed `е` (see `Unmapped::Yo`)
+/// — so a Russian text is normalized before conversion, which is what Russian
+/// orthography mostly does already.
+fn normalize(s: &str) -> String {
+    s.replace('ё', "е").replace('Ё', "Е")
+}
+
 fn roundtrip(s: &str) -> Result<String, String> {
     let c = Cyrillic::parse(s).map_err(|e| format!("parse: {e}"))?;
     let latin = to_latin(&c);
@@ -35,9 +42,12 @@ fn legal(seq: &[char]) -> bool {
 /// `Alphabet::letters()`, which is derived from the mapping table, so deleting a
 /// row from the table merely stopped the guard from testing that letter. A guard
 /// must not source its expectations from the thing it is checking.
-const RUSSIAN: [char; 33] = [
-    'а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с',
-    'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я',
+/// `ё` is deliberately absent: it is a letter of Russian but not of the declared
+/// alphabet, being stressed `е` (see `Unmapped::Yo`). `yo_is_not_a_letter` below
+/// asserts it is refused rather than quietly mapped.
+const RUSSIAN: [char; 32] = [
+    'а', 'б', 'в', 'г', 'д', 'е', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т',
+    'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я',
 ];
 
 // --------------------------------------------------------------------------
@@ -73,7 +83,7 @@ fn roundtrip_exhaustive_singles() {
         }
     }
     println!("singles: {checked} well-formed");
-    assert_eq!(checked, 62, "expected 31 letters x 2 cases");
+    assert_eq!(checked, 60, "expected 31 letters x 2 cases");
 }
 
 // --------------------------------------------------------------------------
@@ -135,7 +145,8 @@ fn roundtrip_corpus_sample() {
             continue;
         };
         lines += 1;
-        match roundtrip(text) {
+        let text = normalize(text);
+        match roundtrip(&text) {
             Ok(back) if back == text => {}
             Ok(_) => failures.push(no.to_string()),
             Err(e) => failures.push(format!("{no} ({e})")),
@@ -184,7 +195,8 @@ fn roundtrip_corpus_full() {
             continue;
         }
         nonempty += 1;
-        match roundtrip(line) {
+        let line = normalize(line);
+        match roundtrip(&line) {
             Ok(back) if back == line => {}
             Ok(_) => failures.push(i + 1),
             Err(e) => {
@@ -210,11 +222,17 @@ fn reference_defect_witnesses() {
     let latin = |s: &str| to_latin(&Cyrillic::parse(s).unwrap()).as_str().to_string();
 
     // D1: й + vowel collided with the iotified vowel.
-    assert_eq!(latin("Ийон"), "Ij'on");
-    assert_eq!(latin("Иён"), "Ijon");
-    assert_eq!(latin("Йод"), "J'od");
-    assert_eq!(latin("ёд"), "jod");
-    for w in ["Ийон", "Иён", "Йод", "ёд", "майор", "батальон"] {
+    // D1 was `й`+vowel colliding with the iotated vowel. Removing `ё` from the
+    // alphabet dissolves half of it outright: `jo` is now `j` + `o` and nothing
+    // else, so `Ийон` and `Йод` need no separator and `батальон` — the README's
+    // worked example — is plainly `bataljon`.
+    assert_eq!(latin("Ийон"), "Ijon");
+    assert_eq!(latin("Йод"), "Jod");
+    assert_eq!(latin("батальон"), "bataljon");
+    // The half that remains is `й` before a *surviving* iotated vowel.
+    // `j` + `je` needs no separator either: the reader takes `j`, then `je`.
+    assert_eq!(latin("Ийе"), "Ijje");
+    for w in ["Ийон", "Йод", "майор", "батальон", "Ийе"] {
         assert_roundtrip(w);
     }
 
@@ -345,7 +363,7 @@ fn context_rules_declared() {
 fn case_restoration() {
     let latin = |s: &str| to_latin(&Cyrillic::parse(s).unwrap()).as_str().to_string();
     // An all-caps token contains no lowercase letter.
-    for w in ["ЩУКА", "СЗАДИ", "ЖЖЁТ", "ПРЕДЪИДЕШЬ"] {
+    for w in ["ЩУКА", "СЗАДИ", "ЖЖЕТ", "ПРЕДЪИДЕШЬ"] {
         let out = latin(w);
         assert!(
             !out.chars().any(|c| c.is_lowercase()),
@@ -483,7 +501,7 @@ fn property_roundtrip() {
                 } else {
                     s.push(c);
                 }
-                if next() % 20 == 0 && "аеёиоуыэюя".contains(c) {
+                if next() % 20 == 0 && "аеиоуыэюя".contains(c) {
                     s.push(STRESS);
                 }
             }
@@ -639,4 +657,89 @@ fn transliteration_never_emits_a_mark() {
         Cyrillic::parse("писатьъ").unwrap_err().kind,
         Unmapped::HardSignContext
     );
+}
+
+// --------------------------------------------------------------------------
+// 14. hushing_takes_e
+//     Witness: delete the `is_hushing` branch in `writer::spelling`, or the
+//     `э`-after-hushing check in `Cyrillic::parse`.
+// --------------------------------------------------------------------------
+/// `ж ш ч щ` take `e`, never `je`, and the reading inverts it exactly.
+///
+/// The four are all outputs of palatalization, so none of them has a hard/soft
+/// contrast for a `j` to mark (`RUTHENIAN.md` §2.2). This is what makes
+/// transliteration produce a *Ruthenian* spelling rather than one a lexicon
+/// step would have to correct: `жена` is `zzena`, which is the word §3.5
+/// declines.
+///
+/// The inverse is exact rather than a guess because the alphabet declares that
+/// no hushing consonant is followed by `э` — measured at **zero** occurrences
+/// in the 41 462-line corpus, the same standard as the other context rules.
+#[test]
+fn hushing_takes_e() {
+    for (cyr, lat) in [
+        ("жена", "zzena"),
+        ("пишешь", "piszeszj"),
+        ("шесть", "szestj"),
+        ("четыре", "czetyrje"),
+        ("человек", "czelovjek"),
+        ("иже", "izze"),
+        ("чего", "czego"),
+        ("щека", "szczeka"),
+    ] {
+        let c = Cyrillic::parse(cyr).expect("well-formed");
+        let r = to_latin(&c);
+        assert_eq!(r.as_str(), lat, "{cyr}");
+        assert_eq!(to_cyrillic(&r).as_str(), cyr, "{cyr} does not round-trip");
+    }
+
+    // Not after anything else: `e` is `э` and `je` is `е` as before.
+    let c = Cyrillic::parse("это").expect("well-formed");
+    assert_eq!(to_latin(&c).as_str(), "eto");
+    let c = Cyrillic::parse("небо").expect("well-formed");
+    assert_eq!(to_latin(&c).as_str(), "njebo");
+
+    // And the rule is *declared*, so the sequence it rules out is refused
+    // rather than silently mapped.
+    assert_eq!(
+        Cyrillic::parse("жэ").unwrap_err().kind,
+        Unmapped::HushingContext
+    );
+}
+
+// --------------------------------------------------------------------------
+// 15. yo_is_not_a_letter
+//     Witness: put `('ё', 'Ё', "jo", Vowel)` back in the letter table.
+// --------------------------------------------------------------------------
+/// `ё` is refused, and `jo` is `j` + `o`.
+///
+/// `ё` is not a vowel of its own: it is stressed `е` after the East Slavic
+/// `*e > o` shift, so `нёс` and `несу` are one root. The shift is conditioned
+/// entirely by stress and `RUTHENIAN.md` §2.1 does not write stress, so
+/// spelling it would encode an alternation the language cannot see and the stem
+/// would stop being invariant (§2.5).
+///
+/// Declaring it out rather than folding it silently is what keeps the
+/// round-trip exact: a caller normalizes `ё` to `е` first, which Russian
+/// orthography mostly does anyway — the corpus has 89 of them against 286 468
+/// plain `е`.
+///
+/// It also frees the sequence `jo`, which the soft endings need. `zjemljo` is
+/// `zjeml` + the soft `-o` (`RUTHENIAN.md` §3.5), and while `ё` held the
+/// digraph that read back as `землё`.
+#[test]
+fn yo_is_not_a_letter() {
+    assert_eq!(Cyrillic::parse("ёж").unwrap_err().kind, Unmapped::Yo);
+    assert_eq!(Cyrillic::parse("нёс").unwrap_err().kind, Unmapped::Yo);
+
+    // `jo` is two letters now, and round-trips as such.
+    for w in ["бульон", "батальон", "майор", "почтальон"] {
+        assert_roundtrip(w);
+    }
+    let latin = |s: &str| to_latin(&Cyrillic::parse(s).unwrap()).as_str().to_string();
+    assert_eq!(latin("батальон"), "bataljon");
+
+    // Which is what lets the soft endings mean what §3.5 says they mean.
+    let r = Ruthenian::parse("zjemljo").unwrap();
+    assert_eq!(to_cyrillic(&r).as_str(), "земльо");
 }

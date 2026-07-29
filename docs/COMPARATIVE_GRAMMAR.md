@@ -429,7 +429,7 @@ Past: 1sg `*-om`, 2sg `*-es`.
 | 2 | `-eši` 40 %, `-iši` 22 % | `-eta` 40 % | `-ete` 40 % |
 | 3 | `-etъ` 40 %, `-itъ` 22 % | `-ete` 40 % | `-ǫtъ` 40 %, `-ętъ` 22 % |
 
-OCS aorist (`byti`): 1sg `-běxъ`, 2/3sg `-bě`, 1du `-běxově`, 2du `-běsta`, 3du
+OCS aorist (`bytj`): 1sg `-běxъ`, 2/3sg `-bě`, 1du `-běxově`, 2du `-běsta`, 3du
 `-běste`, 1pl `-běxomъ`, 2pl `-běste`, 3pl `-běšę`. Imperfect: 1sg `-ěaxъ`, 2/3sg
 `-ěaše`, 1pl `-ěaxomъ`, 3pl `-ěaxǫ`.
 
@@ -633,12 +633,31 @@ different PIE endings — `*-oi`, which became yat, against the bare `*-e` — a
 Ruthenian keeps them apart by taking the Ukrainian reflex of yat (`RUTHENIAN.md`
 §3.1). Collapsing them here would discard the distinction §2.6's yat row exists
 to preserve, and would take the velar stems' second palatalization with it
-(`druzi` against `druzzje`).
+(`druzi` against `druzze`).
 
 Feminine `zzen-`: vocative `-o` (OCS 42 %, Ukrainian 25 %), dual NAV `-i` — OCS
 `-ě`, and yat is `-i` in Ruthenian throughout — GL `-u`, DAT/INS `-ama`. Neuter:
 vocative = nominative throughout, as in OCS (45 % `-o` = the nominative ending)
 and Sanskrit (84 % ∅).
+
+**The soft declension is not a second ending set.** `RUTHENIAN.md` §3.2 derives
+it as `j` + the hard ending, with `o` written `e` after the `j`, and the whole
+soft series follows — `konji`, `konjy`, `zjemljy`, `zjemlji`, `polji`. This is
+where Ruthenian follows OCS against Russian rather than the other way round.
+Russian's soft locatives are `земле`, `коне`, `поле`; OCS has `земли`, `кони`,
+`поли`, because the soft stems took the *jo*-stem locative `-i` and not the
+*o*-stem yat. Ruthenian takes OCS, which §1 asks for on any question of grammar,
+and the reward is that the soft paradigm becomes cell-for-cell parallel to the
+hard one — `zjemljy`/`zjemlji` against `zzeny`/`zzeni` — where every other
+arrangement had one series distinguishing a pair the other merged.
+
+The cost is a written distinction that is not a spoken one: `-jy` and `-ji` are
+pronounced alike, since no Slavic variety has a palatalized consonant before a
+back vowel. Ruthenian writes both anyway, which is the same morphophonemic
+choice §2.5 makes in leaving final devoicing unspelled — with the sign reversed.
+There, the orthography declines to write a distinction the phonology loses; here
+it declines to *lose* a distinction the phonology has already merged. Both follow
+from spelling the morphology and letting the reader apply the automatic rules.
 
 ## 13.4 Where the regularity comes from
 
@@ -680,14 +699,16 @@ Keep the two-stem model and Zaliznyak classes 1–6, add the **dual** from OCS �
 | | Singular | Dual | Plural |
 |---|---|---|---|
 | 1 | `-u` | `-jevje` | `-jem` |
-| 2 | `-jeszj` | `-jeta` | `-jetje` |
+| 2 | `-jesz` | `-jeta` | `-jetje` |
 | 3 | `-jet` | `-jetje` | `-ut` |
 
-The aorist and imperfect are **core tenses**, not an optional register. This is
-where Ruthenian parts company with Interslavic most sharply, and the comparison
-is instructive.
+**Ruthenian ends past Interslavic, on the same road.** An earlier version of
+this part argued the opposite — that the aorist and imperfect are core tenses and
+that keeping them is what a conservative standard is for — so the reversal is
+worth setting out.
 
-**Interslavic merges them away.** From its verbs page, verbatim:
+Interslavic merges the two into one "simple past". From its verbs page,
+verbatim:
 
 > Old Church Slavonic, as well as most South Slavic languages … distinguish[es]
 > between the imperfect, perfect, pluperfect and aorist tenses. Interslavic
@@ -695,30 +716,37 @@ is instructive.
 > we **simplify this system somewhat by merging the imperfect with the aorist**,
 > a solution that is justified by their similarity in endings.
 
-The result is one "simple past", with a linking vowel for consonant stems:
+Its stated reason is comprehension: *"For a vast majority of Slavs, the endings
+of the simple past are not understandable at all."* That is the right ground for
+an auxiliary language and the wrong one for this project, which optimises for
+conservatism and accepts costs of exactly that kind elsewhere.
 
-| | vowel stem | consonant stem |
-|---|---|---|
-| endings | `-h, -še, -še, -hmo, -ste, -hu` | `-eh, -eše, -eše, -ehmo, -este, -ehu` |
-| `dělati` | `dělah, dělaše, dělaše, dělahmo, dělaste, dělahu` | |
-| `nesti` | | `neseh, neseše, neseše, nesehmo, neseste, nesehu` |
+Ruthenian's reasons are internal, and they arrived one at a time.
 
-Two observations follow. First, **the merged form is really an imperfect**: its
-2/3sg is `-še`. The diagnostic aorist shape — the *bare stem* in 2sg and 3sg — is
-exactly what merging discards. Ruthenian keeps it (`czita`, `czita`), which is
-the single most recognisable feature of a real aorist.
+**The aorist went first.** What the Interslavic merge discards is the diagnostic
+aorist shape, the *bare stem* in the second and third singular — and that shape
+does not survive contact with Ruthenian's own paradigms. `dvinutj` gives `dvinu`
+for the first singular present *and* for the aorist second and third singular,
+and so does every verb of class 3. A tense whose one recognisable form is a
+homograph of another tense's is not carrying the distinction it was restored for.
 
-Second, Interslavic warns against the whole area: *"For a vast majority of Slavs,
-the endings of the simple past are not understandable at all. In communication
-with Poles, Russians etc. it is wiser to avoid them altogether."* That is the
-correct advice for an auxiliary language optimising for comprehension across
-living speakers. Ruthenian optimises for conservatism instead, so the warning
-identifies a cost it accepts rather than a reason to change course.
+**The imperfect followed.** With the aorist gone it was not an imperfect any
+more — only "the synthetic past", contrasting with nothing. And its cost showed
+in the paradigms: it was built on the present stem so that its ending would
+contract, while the `l`-participle stayed on the infinitive stem, so one verb had
+two pasts on two stems — `dvinjah` beside `dvinul`, `govorjah` beside `govoril`,
+the theme vowel present in one and absent from the other.
 
-Ruthenian takes **one** aorist formation — OCS's productive new sigmatic
-(`-xъ`, `-xomъ`, `-šę` → `-h`, `-hom`, `-sza`) — rather than OCS's three. The
-root and sigmatic aorists are stem-specific and partly irregular, which is the
-kind of class-by-class irregularity §13.7 removes elsewhere.
+So Ruthenian keeps **no** synthetic past, and the copula is not exempt either.
+Every past is periphrastic: the perfect is the `l`-participle with the copula,
+the pluperfect the same with `byl` — the copula's own participle — between them.
+That is one step past Interslavic, which keeps a synthetic simple past, and it is
+further than Russian went too: Russian's past *is* the `l`-participle, but with
+the copula dropped, and Ruthenian keeps the copula (`RUTHENIAN.md` §7.9).
+
+The result is a verb with one synthetic tense and three periphrastic ones, which
+is a smaller inventory than any column in the table above — the one place this
+document's Ruthenian is less conservative than modern Russian rather than more.
 
 ## 13.6 The payoff: numeral agreement stops being a fossil
 

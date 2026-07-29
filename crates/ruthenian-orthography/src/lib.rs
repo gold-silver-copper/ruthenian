@@ -29,7 +29,13 @@
 //! * `ъ` is followed by `е ё ю я и` — so `'` before `j`/`i` is the hard sign and
 //!   `'` elsewhere is a pure separator;
 //! * `ь` follows a consonant and `й` does not — both are written `j`, and this
-//!   is how the reader tells them apart.
+//!   is how the reader tells them apart;
+//! * `ж ш ч щ` are not followed by `э` — they take `e` rather than `je`, so `e`
+//!   after one of them reads back as `е`.
+//!
+//! And one letter is declared **out**: `ё` is stressed `е` (`Unmapped::Yo`), so
+//! a text is normalized before conversion. That is what frees `jo` to be `j` +
+//! `o`, which `батальон` and the soft endings both need.
 //!
 //! # Stress
 //!
@@ -48,7 +54,7 @@ pub use alphabet::{AlphabetError, STRESS, Unmapped};
 pub use reader::Grapheme;
 
 use alphabet::{
-    AFTER_HARD_SIGN, Class, SEP, classify_foreign, find_cyrillic, is_neutral,
+    AFTER_HARD_SIGN, Class, SEP, classify_foreign, find_cyrillic, is_hushing, is_neutral,
     ruthenian_char_allowed,
 };
 
@@ -118,6 +124,13 @@ impl Cyrillic {
                 prev_char = None;
                 continue;
             }
+            if c == 'ё' || c == 'Ё' {
+                return Err(AlphabetError {
+                    offset,
+                    found: c,
+                    kind: Unmapped::Yo,
+                });
+            }
             let Some(l) = find_cyrillic(c) else {
                 return Err(AlphabetError {
                     offset,
@@ -142,6 +155,18 @@ impl Cyrillic {
                     });
                 }
                 _ => {}
+            }
+
+            // `ж ш ч щ` are never followed by `э`. Declared, not assumed: the
+            // sequence occurs zero times in the 41 462-line corpus, and it is
+            // what makes `e` after a hushing consonant read back as `е` rather
+            // than `э` — see `is_hushing`.
+            if (c == 'э' || c == 'Э') && prev_char.is_some_and(is_hushing) {
+                return Err(AlphabetError {
+                    offset,
+                    found: c,
+                    kind: Unmapped::HushingContext,
+                });
             }
 
             // The hard sign constrains what follows it, so it is checked one
@@ -283,11 +308,11 @@ impl Ruthenian {
 ///
 /// assert_eq!(latin("Щука"), "Szczuka");
 /// assert_eq!(latin("ЩУКА"), "SZCZUKA");   // the reference produced "SzczUKA"
-/// assert_eq!(latin("Ийон"), "Ij'on");     // И + й + о, not И + ё
-/// assert_eq!(latin("Иён"), "Ijon");
+/// assert_eq!(latin("Ийон"), "Ijon");      // `jo` is `j` + `o`; there is no `ё`
+/// assert_eq!(latin("батальон"), "bataljon");
 /// assert_eq!(latin("шчи"), "sz'czi");     // ш + ч, not щ
 /// assert_eq!(latin("щи"), "szczi");
-/// assert_eq!(latin("батальон"), "batalj'on");
+/// assert_eq!(latin("жена"), "zzena");     // no `j` after a hushing consonant
 /// ```
 pub fn to_latin(s: &Cyrillic) -> Ruthenian {
     Ruthenian(writer::write(&s.0))
