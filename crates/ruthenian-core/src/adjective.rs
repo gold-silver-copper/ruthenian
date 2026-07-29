@@ -6,7 +6,7 @@
 //!
 //! The opposition is **definiteness**, the only one Ruthenian has — there is no
 //! article. Unlike Russian, the short form is not restricted to the predicate:
-//! `on jestj dobr` "he is good" against `on jestj dobryj` "he is the good one".
+//! `on jest dobr` "he is good" against `on jest dobryj` "he is the good one".
 //!
 //! The word passed in is the **stem**, which is also the short masculine
 //! nominative — `dobr`. That is the same convention as nouns, where §2.5 makes

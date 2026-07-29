@@ -949,8 +949,8 @@ Because the opposition is definiteness rather than syntactic position, both form
 are grammatical after the copula and they mean different things:
 
 ```
-on jestj dobr        he is good            (indefinite predication)
-on jestj dobryj      he is the good one    (definite, identifying)
+on jest dobr        he is good            (indefinite predication)
+on jest dobryj      he is the good one    (definite, identifying)
 ```
 
 OCS put the short form in the predicate and Russian restricts it there, but both
@@ -1472,7 +1472,7 @@ ordinal — `pjataja czastj` (⅕). `poltora` "one and a half" takes the dual.
 
 | Tense | Function | Formation |
 |---|---|---|
-| **perfect** | the past | `l`-participle + the copula — `jesmj czital` |
+| **perfect** | the past | `l`-participle + the copula — `jesm czital` |
 | **pluperfect** | past before the past | the copula + `byl` + the `l`-participle |
 
 OCS had three synthetic pasts and an earlier revision of this document restored
@@ -1654,15 +1654,15 @@ are the only verbs where the class plus the infinitive is not enough.
 | | Singular | **Dual** | Plural |
 |---|---|---|---|
 | **1st conjugation** | | | |
-| 1 | `-u` | `-jevje` | `-jem` |
+| 1 | `-u` | `-jevje` | `-jemy` |
 | 2 | `-jesz` | `-jeta` | `-jetje` |
 | 3 | `-jet` | `-jetje` | `-ut` |
 | **2nd conjugation** | | | |
-| 1 | `-ju` | `-ivje` | `-im` |
+| 1 | `-ju` | `-ivje` | `-imy` |
 | 2 | `-isz` | `-ita` | `-itje` |
 | 3 | `-it` | `-itje` | `-jat` |
 
-`czitatj`: `czitaju, czitajesz, czitajet` · `czitajevje, czitajeta, czitajetje` · `czitajem, czitajetje, czitajut`.
+`czitatj`: `czitaju, czitajesz, czitajet` · `czitajevje, czitajeta, czitajetje` · `czitajemy, czitajetje, czitajut`.
 <!-- /render:verb-nonpast -->
 
 ## 7.7 Perfect and pluperfect
@@ -1675,13 +1675,13 @@ The `l`-participle, agreeing in gender and number, with the copula:
 | | `czital` | `czitala` | `czitalo` | `czitala` | `czitali` |
 <!-- /render:verb-l-participle -->
 
-- **perfect**: `jesmj czital` "I have read"
-- **pluperfect**: `jesmj byl czital` "I had read"
+- **perfect**: `jesm czital` "I have read"
+- **pluperfect**: `jesm byl czital` "I had read"
 
-Unlike Russian, the copula is **not** dropped: `jesmj czital`, not `*czital`.
+Unlike Russian, the copula is **not** dropped: `jesm czital`, not `*czital`.
 
 The pluperfect stacks the same device on itself: `byl` is `bytj`'s
-`l`-participle, so `jesmj byl czital` is "I am having-been having-read". An
+`l`-participle, so `jesm byl czital` is "I am having-been having-read". An
 earlier revision had `byh czital` beside `bjah czital`, an aorist auxiliary
 against an imperfect one; both auxiliaries went with the synthetic pasts that
 carried them (§7.1), and what replaces them needs no form the language did not
@@ -1693,7 +1693,7 @@ already have.
 |---|---|---|
 | | present endings, future sense — `poczitaju` | `budu` + infinitive — `budu czitatj` |
 
-`budu, budjesz, budjet` · `budjevje, budjeta, budjetje` · `budjem, budjetje,
+`budu, budjesz, budjet` · `budjevje, budjeta, budjetje` · `budjemy, budjetje,
 budut`.
 
 ## 7.9 The copula `bytj`
@@ -1704,8 +1704,8 @@ dual included, and **never omitted**.
 <!-- render:verb-bytj -->
 | | Singular | Dual | Plural |
 |---|---|---|---|
-| **present** | `jesmj`, `jesi`, `jestj` | `jesvje`, `jesta`, `jestje` | `jesm`, `jestje`, `sutj` |
-| **future** | `budu`, `budjesz`, `budjet` | `budjevje`, `budjeta`, `budjetje` | `budjem`, `budjetje`, `budut` |
+| **present** | `jesm`, `jesesz`, `jest` | `jesvje`, `jesta`, `jestje` | `jesmy`, `jestje`, `jesut` |
+| **future** | `budu`, `budjesz`, `budjet` | `budjevje`, `budjeta`, `budjetje` | `budjemy`, `budjetje`, `budut` |
 <!-- /render:verb-bytj -->
 
 **There is no past row.** `bjah` went with the synthetic past (§7.1), and the
@@ -1726,7 +1726,7 @@ future and the imperative — two roots and a third stem, and with no tense
 parameter left in the language each takes a function of its own.
 
 Russian's zero copula (`он врач`) is an East Slavic innovation. Ruthenian follows
-OCS, Polish and Ukrainian: `on jestj vracz`.
+OCS, Polish and Ukrainian: `on jest vracz`.
 
 ### `bytj` is the language's one suppletive verb, deliberately
 
@@ -1735,11 +1735,15 @@ frequent verb in the language and every Indo-European language tolerates
 suppletion in exactly this word — Latin `sum`/`fui`, English `is`/`was`/`been`,
 OCS `jesmь`/`byxъ`/`bǫdǫ`.
 
-The stems, and their sources:
+The stems, and their sources. The present used to carry a third stem — OCS's
+3pl `sǫtъ` gave `sutj` — until the cell was rebuilt as `jes-` + the regular
+`-ut`: `jesut`. One row left the table, and the present became a single stem
+with near-regular endings (`jesm`, `jesesz`, `jest`, `jesvje`, `jesta`,
+`jestje`, `jesmy`, `jestje`, `jesut`):
 
 | slot | stem | from | regular? |
 |---|---|---|---|
-| present | `jes-`, 3pl `s-` | PIE `*h₁es-` "be, exist" | no — athematic |
+| present | `jes-`, in every cell | PIE `*h₁es-` "be, exist" | half — athematic endings on one stem |
 | l-participle | `by-` | `*bʰuH-` | **yes** — §7.7's rule on the same stem |
 | future | `bud-` | `*bʰuH-`, nasal present | no |
 | imperative | `bud-` | `*bʰuH-` | no |
@@ -1766,7 +1770,7 @@ Imperative: present stem + `-i`, or the bare stem after `j`.
 | | Singular | Dual | Plural |
 |---|---|---|---|
 | 2 | `czitaj` | `czitajta` | `czitajtje` |
-| 1 (hortative) | — | `czitajvje` | `czitajm` |
+| 1 (hortative) | — | `czitajvje` | `czitajmy` |
 <!-- /render:verb-imperative -->
 
 **Third person: particle + present indicative.** No Slavic language builds a
@@ -1859,7 +1863,7 @@ outputs and are not the same rule.
 
 Participles decline as adjectives and have **both long and short forms**, like
 any adjective — the short passive participle is how the passive is built:
-`dom jestj poczitan` "the house is read".
+`dom jest poczitan` "the house is read".
 
 **The past passive `n` is single, not doubled.** Russian writes `-nnyj` long
 against `-n` short (`прочитанный` / `прочитан`), which gives the long and short
@@ -2102,8 +2106,8 @@ verb: `ta dobraja knizi jesta` "those two good books are".
 The long/short adjective (§4) is the only definiteness marker:
 
 ```
-dobr czelovjek jestj zdjesj.     A good man is here.
-dobryj czelovjek jestj zdjesj.   The good man is here.
+dobr czelovjek jest zdjesj.     A good man is here.
+dobryj czelovjek jest zdjesj.   The good man is here.
 ```
 
 Where a noun phrase has no adjective, definiteness is unmarked — as in every
@@ -2160,7 +2164,7 @@ against `idǫ loviti` — which Ruthenian does not keep (§13).
 The locative is the only case that **cannot** occur without a preposition —
 inherited, and true of every Slavic language.
 
-The instrumental predicate is worth noting: `on jestj vracz` (nominative,
+The instrumental predicate is worth noting: `on jest vracz` (nominative,
 permanent) against `on byl vraczom` (instrumental, temporary or past role).
 
 ---

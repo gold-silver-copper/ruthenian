@@ -144,7 +144,7 @@ impl Verb {
 ///     bytj(First, Singular),
 ///     l_participle("czitatj", Gender::Masculine, Singular)
 /// );
-/// assert_eq!(perfect, "jesmj czital");
+/// assert_eq!(perfect, "jesm czital");
 /// ```
 pub fn verb(word: &str, person: Person, number: Number) -> String {
     match Verb::read(word) {
@@ -199,7 +199,7 @@ crate::dsl::table! {
         (Person::First,  Number::Dual)     =>  "jevje",   "ivje";
         (Person::Second, Number::Dual)     =>  "jeta",    "ita";
         (Person::Third,  Number::Dual)     =>  "jetje",   "itje";
-        (Person::First,  Number::Plural)   =>  "jem",     "im";
+        (Person::First,  Number::Plural)   =>  "jemy",    "imy";
         (Person::Second, Number::Plural)   =>  "jetje",   "itje";
         (Person::Third,  Number::Plural)   =>  "ut",      "jat";
     ];
@@ -222,7 +222,7 @@ crate::dsl::table! {
 /// assert_eq!(imperative("czitatj", Second, Dual), "czitajta");
 /// assert_eq!(imperative("czitatj", Second, Plural), "czitajtje");
 /// assert_eq!(imperative("czitatj", First, Dual), "czitajvje");
-/// assert_eq!(imperative("czitatj", First, Plural), "czitajm");
+/// assert_eq!(imperative("czitatj", First, Plural), "czitajmy");
 ///
 /// // A stem that does not end in `j` takes the `-i`.
 /// assert_eq!(imperative("govoritj", Second, Singular), "govori");
@@ -246,7 +246,7 @@ pub fn imperative(word: &str, person: Person, number: Number) -> String {
             (Second, Dual) => "budjta".to_string(),
             (Second, Plural) => "budjtje".to_string(),
             (First, Dual) => "budjvje".to_string(),
-            (First, Plural) => "budjm".to_string(),
+            (First, Plural) => "budjmy".to_string(),
             _ => bytj(person, number),
         };
     }
@@ -279,7 +279,7 @@ crate::dsl::table! {
         (Person::Second, Number::Dual)     =>  "ta";
         (Person::Second, Number::Plural)   =>  "tje";
         (Person::First,  Number::Dual)     =>  "vje";
-        (Person::First,  Number::Plural)   =>  "m";
+        (Person::First,  Number::Plural)   =>  "my";
     ];
 }
 
@@ -304,7 +304,7 @@ pub fn infinitive(word: &str) -> String {
 /// The `l`-participle (§7.7), which agrees in gender and number.
 ///
 /// It is half of the perfect and the pluperfect, both of which the caller
-/// composes: `jesmj czital`, and `jesmj byl czital`. Unlike Russian, the
+/// composes: `jesm czital`, and `jesm byl czital`. Unlike Russian, the
 /// copula is **not** dropped.
 ///
 /// ```
@@ -350,20 +350,20 @@ pub fn l_participle(word: &str, gender: Gender, number: Number) -> String {
 /// the pluperfect is composed instead from this verb's own `l`-participle:
 ///
 /// Russian's zero copula (`он врач`) is an East Slavic innovation. Ruthenian
-/// follows OCS, Polish and Ukrainian: `on jestj vracz`.
+/// follows OCS, Polish and Ukrainian: `on jest vracz`.
 ///
 /// ```
 /// use ruthenian_core::{bytj, l_participle, Gender::Masculine, Number::*, Person::*};
 ///
-/// assert_eq!(bytj(First, Singular), "jesmj");
-/// assert_eq!(bytj(Second, Singular), "jesi");
-/// assert_eq!(bytj(Third, Singular), "jestj");
+/// assert_eq!(bytj(First, Singular), "jesm");
+/// assert_eq!(bytj(Second, Singular), "jesesz");
+/// assert_eq!(bytj(Third, Singular), "jest");
 /// assert_eq!(bytj(First, Dual), "jesvje");
-/// assert_eq!(bytj(Third, Plural), "sutj");
+/// assert_eq!(bytj(Third, Plural), "jesut");
 ///
 /// // perfect: the copula and the verb's participle
 /// let perfect = format!("{} {}", bytj(First, Singular), l_participle("czitatj", Masculine, Singular));
-/// assert_eq!(perfect, "jesmj czital");
+/// assert_eq!(perfect, "jesm czital");
 ///
 /// // pluperfect: this verb's own participle stands between them
 /// let pluperfect = format!(
@@ -372,21 +372,21 @@ pub fn l_participle(word: &str, gender: Gender, number: Number) -> String {
 ///     l_participle("bytj", Masculine, Singular),
 ///     l_participle("czitatj", Masculine, Singular),
 /// );
-/// assert_eq!(pluperfect, "jesmj byl czital");
+/// assert_eq!(pluperfect, "jesm byl czital");
 /// ```
 pub fn bytj(person: Person, number: Number) -> String {
     use Number::*;
     use Person::*;
     match (person, number) {
-        (First, Singular) => "jesmj",
-        (Second, Singular) => "jesi",
-        (Third, Singular) => "jestj",
+        (First, Singular) => "jesm",
+        (Second, Singular) => "jesesz",
+        (Third, Singular) => "jest",
         (First, Dual) => "jesvje",
         (Second, Dual) => "jesta",
         (Third, Dual) => "jestje",
-        (First, Plural) => "jesm",
+        (First, Plural) => "jesmy",
         (Second, Plural) => "jestje",
-        (Third, Plural) => "sutj",
+        (Third, Plural) => "jesut",
     }
     .to_string()
 }
@@ -420,7 +420,7 @@ pub fn future_auxiliary(person: Person, number: Number) -> String {
         (First, Dual) => "budjevje",
         (Second, Dual) => "budjeta",
         (Third, Dual) => "budjetje",
-        (First, Plural) => "budjem",
+        (First, Plural) => "budjemy",
         (Second, Plural) => "budjetje",
         (Third, Plural) => "budut",
     }

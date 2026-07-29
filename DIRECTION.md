@@ -244,11 +244,11 @@ a participle plus a copula. This crate returns **words**, so it provides the
 parts and the caller composes:
 
 ```rust
-// perfect: jesmj czital
+// perfect: jesm czital
 format!("{} {}", bytj(First, Singular),
                  l_participle("czitatj", Masculine, Singular));
 
-// pluperfect: jesmj byl czital — the copula's own participle between them
+// pluperfect: jesm byl czital — the copula's own participle between them
 format!("{} {} {}", bytj(First, Singular),
                     l_participle("bytj", Masculine, Singular),
                     l_participle("czitatj", Masculine, Singular));
@@ -257,7 +257,7 @@ format!("{} {} {}", bytj(First, Singular),
 format!("{} {}", future_auxiliary(First, Singular), infinitive("czitatj"));
 ```
 
-`bytj` returns the present (`jesmj`), not a present/future blend: the future uses
+`bytj` returns the present (`jesm`), not a present/future blend: the future uses
 a different root altogether (`bǫd-` against `jes-`), which is suppletion rather
 than a tense of one stem. That is why `future_auxiliary` is its own function.
 

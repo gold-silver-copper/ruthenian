@@ -462,7 +462,7 @@ fn verbs() {
     let mut cells = Vec::new();
     for number in Number::ALL {
         for person in Person::ALL {
-            cells.push(cell(&bytj(person, number), &["jesmj", "sutj"]));
+            cells.push(cell(&bytj(person, number), &["jesm", "jesut"]));
         }
     }
     row("present", &cells);

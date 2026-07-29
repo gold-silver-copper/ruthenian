@@ -140,7 +140,7 @@ them to keep eight cases distinguishable.
   identifies as the ablative. `konjego` would be a form no Slavic language has.
   Scope is unchanged: all animates, both numbers.
 - **§4 — the predicate takes either adjective form**, and the definiteness
-  contrast survives there: `on jestj dobr` "he is good" against `on jestj dobryj`
+  contrast survives there: `on jest dobr` "he is good" against `on jest dobryj`
   "he is the good one". OCS and Russian both state a *positional* rule; Ruthenian
   has made the contrast semantic, so banning a form in a position would discard a
   distinction the system already encodes.

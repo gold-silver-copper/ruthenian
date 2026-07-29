@@ -447,7 +447,7 @@ VERB = (
     finite("verb", "czitatj", "7.4", "NonPast", [
         "czitaju", "czitajesz", "czitajet",
         "czitajevje", "czitajeta", "czitajetje",
-        "czitajem", "czitajetje", "czitajut"])
+        "czitajemy", "czitajetje", "czitajut"])
     # §7.3's class-6 example, which the word-final mark selects.
     + finite("verb", "pisatj'", "7.3", "NonPast", [
         "piszu", "piszesz", "piszet", "", "", "", "", "", ""])[:3]
@@ -455,12 +455,12 @@ VERB = (
     + finite("future_auxiliary", "-", "7.8", "Future", [
         "budu", "budjesz", "budjet",
         "budjevje", "budjeta", "budjetje",
-        "budjem", "budjetje", "budut"])
+        "budjemy", "budjetje", "budut"])
     # §7.9's copula: the present and the imperfect are suppletive and tabulated;
     # the aorist is regular and comes out of the general path on `bytj`.
     + finite("bytj", "-", "7.9", "Present", [
-        "jesmj", "jesi", "jestj", "jesvje", "jesta", "jestje",
-        "jesm", "jestje", "sutj"])
+        "jesm", "jesesz", "jest", "jesvje", "jesta", "jestje",
+        "jesmy", "jestje", "jesut"])
     # §7.7's l-participle, and §7.9's for `bytj`.
     + [("l_participle", "czitatj", f"{g}.{n}", form, "7.7")
        for g, n, form in [
@@ -475,7 +475,7 @@ VERB = (
        for p, n, form in [
            ("Second", "Singular", "czitaj"), ("Second", "Dual", "czitajta"),
            ("Second", "Plural", "czitajtje"),
-           ("First", "Dual", "czitajvje"), ("First", "Plural", "czitajm")]]
+           ("First", "Dual", "czitajvje"), ("First", "Plural", "czitajmy")]]
     + [("infinitive", "bytj", "-", "bytj", "7.9"),
        ("imperative", "bytj", "Second.Singular", "budj", "7.9")]
     # §7.12. The participles return an adjective *stem*, so the corpus holds the
