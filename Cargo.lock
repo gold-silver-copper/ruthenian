@@ -12,7 +12,3 @@ dependencies = [
 [[package]]
 name = "ruthenian-orthography"
 version = "0.1.0"
-
-[[package]]
-name = "sound-law"
-version = "0.1.0"

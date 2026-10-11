@@ -2,7 +2,6 @@
 members = [
     "crates/ruthenian-core",
     "crates/ruthenian-orthography",
-    "crates/sound-law",
 ]
 exclude = ["legacy"]
 resolver = "3"
